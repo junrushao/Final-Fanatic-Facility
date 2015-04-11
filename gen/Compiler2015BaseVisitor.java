@@ -2,7 +2,7 @@
 
 
 package Compiler2015.Parser;
-import Compiler2015.AST.*;
+import Compiler2015.Compiler2015.AST.*;
 
 
 import org.antlr.v4.runtime.misc.NotNull;

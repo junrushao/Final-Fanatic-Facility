@@ -7,7 +7,7 @@ import Compiler2015.AST.*;
 
 }
 
-// Parser
+// Compiler2015.Parser
 
 primaryExpression
 	:	Identifier
