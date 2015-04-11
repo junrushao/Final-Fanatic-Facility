@@ -262,18 +262,6 @@ public class Compiler2015BaseListener implements Compiler2015Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConstantExpression(@NotNull Compiler2015Parser.ConstantExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConstantExpression(@NotNull Compiler2015Parser.ConstantExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterDeclaration(@NotNull Compiler2015Parser.DeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -281,30 +269,6 @@ public class Compiler2015BaseListener implements Compiler2015Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDeclaration(@NotNull Compiler2015Parser.DeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclarationSpecifiers(@NotNull Compiler2015Parser.DeclarationSpecifiersContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclarationSpecifiers(@NotNull Compiler2015Parser.DeclarationSpecifiersContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclarationSpecifiers2(@NotNull Compiler2015Parser.DeclarationSpecifiers2Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclarationSpecifiers2(@NotNull Compiler2015Parser.DeclarationSpecifiers2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -382,18 +346,6 @@ public class Compiler2015BaseListener implements Compiler2015Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStructDeclarationList(@NotNull Compiler2015Parser.StructDeclarationListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStructDeclarationList(@NotNull Compiler2015Parser.StructDeclarationListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterStructDeclaration(@NotNull Compiler2015Parser.StructDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -413,18 +365,6 @@ public class Compiler2015BaseListener implements Compiler2015Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStructDeclaratorList(@NotNull Compiler2015Parser.StructDeclaratorListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStructDeclarator(@NotNull Compiler2015Parser.StructDeclaratorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStructDeclarator(@NotNull Compiler2015Parser.StructDeclaratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -586,42 +526,6 @@ public class Compiler2015BaseListener implements Compiler2015Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDesignation(@NotNull Compiler2015Parser.DesignationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDesignation(@NotNull Compiler2015Parser.DesignationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDesignatorList(@NotNull Compiler2015Parser.DesignatorListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDesignatorList(@NotNull Compiler2015Parser.DesignatorListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDesignator(@NotNull Compiler2015Parser.DesignatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDesignator(@NotNull Compiler2015Parser.DesignatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterStatement(@NotNull Compiler2015Parser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -629,18 +533,6 @@ public class Compiler2015BaseListener implements Compiler2015Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStatement(@NotNull Compiler2015Parser.StatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLabeledStatement(@NotNull Compiler2015Parser.LabeledStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLabeledStatement(@NotNull Compiler2015Parser.LabeledStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -742,18 +634,6 @@ public class Compiler2015BaseListener implements Compiler2015Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTranslationUnit(@NotNull Compiler2015Parser.TranslationUnitContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTranslationUnit(@NotNull Compiler2015Parser.TranslationUnitContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterExternalDeclaration(@NotNull Compiler2015Parser.ExternalDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -773,18 +653,6 @@ public class Compiler2015BaseListener implements Compiler2015Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFunctionDefinition(@NotNull Compiler2015Parser.FunctionDefinitionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclarationList(@NotNull Compiler2015Parser.DeclarationListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclarationList(@NotNull Compiler2015Parser.DeclarationListContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

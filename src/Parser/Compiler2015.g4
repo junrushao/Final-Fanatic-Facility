@@ -125,20 +125,8 @@ expression
 	|	expression ',' assignmentExpression
 	;
 
-constantExpression
-	:	conditionalExpression
-	;
-
 declaration
-	:	declarationSpecifiers initDeclaratorList? ';'
-	;
-
-declarationSpecifiers
-	:	declarationSpecifier+
-	;
-
-declarationSpecifiers2
-	:	declarationSpecifier+
+	:	declarationSpecifier+ initDeclaratorList? ';'
 	;
 
 declarationSpecifier
@@ -165,7 +153,7 @@ typeSpecifier
 	;
 
 structOrUnionSpecifier
-	:	structOrUnion Identifier? '{' structDeclarationList '}'
+	:	structOrUnion Identifier? '{' structDeclaration* '}'
 	|	structOrUnion Identifier
 	;
 
@@ -174,26 +162,13 @@ structOrUnion
 	|	'union'
 	;
 
-structDeclarationList
-	:	structDeclaration
-	|	structDeclarationList structDeclaration
-	;
-
 structDeclaration
 	:	typeSpecifier+ structDeclaratorList? ';'
 	;
 
-//specifierQualifierList
-//	:	typeSpecifier specifierQualifierList?
-//	;
-
 structDeclaratorList
-	:	structDeclarator
-	|	structDeclaratorList ',' structDeclarator
-	;
-
-structDeclarator
 	:	declarator
+	|	structDeclaratorList ',' declarator
 	;
 
 declarator
@@ -203,6 +178,7 @@ declarator
 directDeclarator
 	:	Identifier
 	|	'(' declarator ')'
+	|	directDeclarator '[' ']'
 	|	directDeclarator '[' assignmentExpression? ']'
 	|	directDeclarator '(' parameterTypeList ')'
 	|	directDeclarator '(' identifierList? ')'
@@ -224,8 +200,8 @@ parameterList
 	;
 
 parameterDeclaration
-	:	declarationSpecifiers declarator
-	|	declarationSpecifiers2 abstractDeclarator?
+	:	declarationSpecifier+ declarator
+	|	declarationSpecifier+ abstractDeclarator?
 	;
 
 identifierList
@@ -245,10 +221,8 @@ abstractDeclarator
 directAbstractDeclarator
 	:	'(' abstractDeclarator ')'
 	|	'[' assignmentExpression? ']'
-	|	'[' '*' ']'
 	|	'(' parameterTypeList? ')'
 	|	directAbstractDeclarator '[' ']'
-	|	directAbstractDeclarator '[' '*' ']'
 	|	directAbstractDeclarator '(' parameterTypeList? ')'
 	;
 
@@ -263,35 +237,16 @@ initializer
 	;
 
 initializerList
-	:	designation? initializer
-	|	initializerList ',' designation? initializer
-	;
-
-designation
-	:	designatorList '='
-	;
-
-designatorList
-	:	designator
-	|	designatorList designator
-	;
-
-designator
-	:	'[' constantExpression ']'
-	|	'.' Identifier
+	:	initializer
+	|	initializerList ',' initializer
 	;
 
 statement
-	:	labeledStatement
-	|	compoundStatement
+	:	compoundStatement
 	|	expressionStatement
 	|	selectionStatement
 	|	iterationStatement
 	|	jumpStatement
-	;
-
-labeledStatement
-	:	Identifier ':' statement
 	;
 
 compoundStatement
@@ -328,12 +283,7 @@ jumpStatement
 	;
 
 compilationUnit
-	:	translationUnit? EOF
-	;
-
-translationUnit
-	:	externalDeclaration
-	|	translationUnit externalDeclaration
+	: externalDeclaration* EOF
 	;
 
 externalDeclaration
@@ -343,12 +293,7 @@ externalDeclaration
 	;
 
 functionDefinition
-	:	declarationSpecifiers? declarator declarationList? compoundStatement
-	;
-
-declarationList
-	:	declaration
-	|	declarationList declaration
+	:	declarationSpecifier+? declarator declaration* compoundStatement
 	;
 
 // Lexer

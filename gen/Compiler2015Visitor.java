@@ -137,29 +137,11 @@ public interface Compiler2015Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpression(@NotNull Compiler2015Parser.ExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link Compiler2015Parser#constantExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitConstantExpression(@NotNull Compiler2015Parser.ConstantExpressionContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link Compiler2015Parser#declaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitDeclaration(@NotNull Compiler2015Parser.DeclarationContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link Compiler2015Parser#declarationSpecifiers}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDeclarationSpecifiers(@NotNull Compiler2015Parser.DeclarationSpecifiersContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link Compiler2015Parser#declarationSpecifiers2}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDeclarationSpecifiers2(@NotNull Compiler2015Parser.DeclarationSpecifiers2Context ctx);
 	/**
 	 * Visit a parse tree produced by {@link Compiler2015Parser#declarationSpecifier}.
 	 * @param ctx the parse tree
@@ -197,12 +179,6 @@ public interface Compiler2015Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStructOrUnion(@NotNull Compiler2015Parser.StructOrUnionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link Compiler2015Parser#structDeclarationList}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStructDeclarationList(@NotNull Compiler2015Parser.StructDeclarationListContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link Compiler2015Parser#structDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -214,12 +190,6 @@ public interface Compiler2015Visitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitStructDeclaratorList(@NotNull Compiler2015Parser.StructDeclaratorListContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link Compiler2015Parser#structDeclarator}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStructDeclarator(@NotNull Compiler2015Parser.StructDeclaratorContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link Compiler2015Parser#declarator}.
 	 * @param ctx the parse tree
@@ -299,35 +269,11 @@ public interface Compiler2015Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitInitializerList(@NotNull Compiler2015Parser.InitializerListContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link Compiler2015Parser#designation}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDesignation(@NotNull Compiler2015Parser.DesignationContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link Compiler2015Parser#designatorList}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDesignatorList(@NotNull Compiler2015Parser.DesignatorListContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link Compiler2015Parser#designator}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDesignator(@NotNull Compiler2015Parser.DesignatorContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link Compiler2015Parser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitStatement(@NotNull Compiler2015Parser.StatementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link Compiler2015Parser#labeledStatement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLabeledStatement(@NotNull Compiler2015Parser.LabeledStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link Compiler2015Parser#compoundStatement}.
 	 * @param ctx the parse tree
@@ -377,12 +323,6 @@ public interface Compiler2015Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCompilationUnit(@NotNull Compiler2015Parser.CompilationUnitContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link Compiler2015Parser#translationUnit}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTranslationUnit(@NotNull Compiler2015Parser.TranslationUnitContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link Compiler2015Parser#externalDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -394,10 +334,4 @@ public interface Compiler2015Visitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFunctionDefinition(@NotNull Compiler2015Parser.FunctionDefinitionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link Compiler2015Parser#declarationList}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDeclarationList(@NotNull Compiler2015Parser.DeclarationListContext ctx);
 }

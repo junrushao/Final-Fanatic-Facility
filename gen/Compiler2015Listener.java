@@ -214,16 +214,6 @@ public interface Compiler2015Listener extends ParseTreeListener {
 	 */
 	void exitExpression(@NotNull Compiler2015Parser.ExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link Compiler2015Parser#constantExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterConstantExpression(@NotNull Compiler2015Parser.ConstantExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Compiler2015Parser#constantExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitConstantExpression(@NotNull Compiler2015Parser.ConstantExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link Compiler2015Parser#declaration}.
 	 * @param ctx the parse tree
 	 */
@@ -233,26 +223,6 @@ public interface Compiler2015Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDeclaration(@NotNull Compiler2015Parser.DeclarationContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link Compiler2015Parser#declarationSpecifiers}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeclarationSpecifiers(@NotNull Compiler2015Parser.DeclarationSpecifiersContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Compiler2015Parser#declarationSpecifiers}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeclarationSpecifiers(@NotNull Compiler2015Parser.DeclarationSpecifiersContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link Compiler2015Parser#declarationSpecifiers2}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeclarationSpecifiers2(@NotNull Compiler2015Parser.DeclarationSpecifiers2Context ctx);
-	/**
-	 * Exit a parse tree produced by {@link Compiler2015Parser#declarationSpecifiers2}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeclarationSpecifiers2(@NotNull Compiler2015Parser.DeclarationSpecifiers2Context ctx);
 	/**
 	 * Enter a parse tree produced by {@link Compiler2015Parser#declarationSpecifier}.
 	 * @param ctx the parse tree
@@ -314,16 +284,6 @@ public interface Compiler2015Listener extends ParseTreeListener {
 	 */
 	void exitStructOrUnion(@NotNull Compiler2015Parser.StructOrUnionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link Compiler2015Parser#structDeclarationList}.
-	 * @param ctx the parse tree
-	 */
-	void enterStructDeclarationList(@NotNull Compiler2015Parser.StructDeclarationListContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Compiler2015Parser#structDeclarationList}.
-	 * @param ctx the parse tree
-	 */
-	void exitStructDeclarationList(@NotNull Compiler2015Parser.StructDeclarationListContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link Compiler2015Parser#structDeclaration}.
 	 * @param ctx the parse tree
 	 */
@@ -343,16 +303,6 @@ public interface Compiler2015Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStructDeclaratorList(@NotNull Compiler2015Parser.StructDeclaratorListContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link Compiler2015Parser#structDeclarator}.
-	 * @param ctx the parse tree
-	 */
-	void enterStructDeclarator(@NotNull Compiler2015Parser.StructDeclaratorContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Compiler2015Parser#structDeclarator}.
-	 * @param ctx the parse tree
-	 */
-	void exitStructDeclarator(@NotNull Compiler2015Parser.StructDeclaratorContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link Compiler2015Parser#declarator}.
 	 * @param ctx the parse tree
@@ -484,36 +434,6 @@ public interface Compiler2015Listener extends ParseTreeListener {
 	 */
 	void exitInitializerList(@NotNull Compiler2015Parser.InitializerListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link Compiler2015Parser#designation}.
-	 * @param ctx the parse tree
-	 */
-	void enterDesignation(@NotNull Compiler2015Parser.DesignationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Compiler2015Parser#designation}.
-	 * @param ctx the parse tree
-	 */
-	void exitDesignation(@NotNull Compiler2015Parser.DesignationContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link Compiler2015Parser#designatorList}.
-	 * @param ctx the parse tree
-	 */
-	void enterDesignatorList(@NotNull Compiler2015Parser.DesignatorListContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Compiler2015Parser#designatorList}.
-	 * @param ctx the parse tree
-	 */
-	void exitDesignatorList(@NotNull Compiler2015Parser.DesignatorListContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link Compiler2015Parser#designator}.
-	 * @param ctx the parse tree
-	 */
-	void enterDesignator(@NotNull Compiler2015Parser.DesignatorContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Compiler2015Parser#designator}.
-	 * @param ctx the parse tree
-	 */
-	void exitDesignator(@NotNull Compiler2015Parser.DesignatorContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link Compiler2015Parser#statement}.
 	 * @param ctx the parse tree
 	 */
@@ -523,16 +443,6 @@ public interface Compiler2015Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStatement(@NotNull Compiler2015Parser.StatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link Compiler2015Parser#labeledStatement}.
-	 * @param ctx the parse tree
-	 */
-	void enterLabeledStatement(@NotNull Compiler2015Parser.LabeledStatementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Compiler2015Parser#labeledStatement}.
-	 * @param ctx the parse tree
-	 */
-	void exitLabeledStatement(@NotNull Compiler2015Parser.LabeledStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link Compiler2015Parser#compoundStatement}.
 	 * @param ctx the parse tree
@@ -614,16 +524,6 @@ public interface Compiler2015Listener extends ParseTreeListener {
 	 */
 	void exitCompilationUnit(@NotNull Compiler2015Parser.CompilationUnitContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link Compiler2015Parser#translationUnit}.
-	 * @param ctx the parse tree
-	 */
-	void enterTranslationUnit(@NotNull Compiler2015Parser.TranslationUnitContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Compiler2015Parser#translationUnit}.
-	 * @param ctx the parse tree
-	 */
-	void exitTranslationUnit(@NotNull Compiler2015Parser.TranslationUnitContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link Compiler2015Parser#externalDeclaration}.
 	 * @param ctx the parse tree
 	 */
@@ -643,14 +543,4 @@ public interface Compiler2015Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFunctionDefinition(@NotNull Compiler2015Parser.FunctionDefinitionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link Compiler2015Parser#declarationList}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeclarationList(@NotNull Compiler2015Parser.DeclarationListContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Compiler2015Parser#declarationList}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeclarationList(@NotNull Compiler2015Parser.DeclarationListContext ctx);
 }
