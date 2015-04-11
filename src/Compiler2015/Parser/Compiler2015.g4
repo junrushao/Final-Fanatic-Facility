@@ -3,11 +3,8 @@ grammar Compiler2015;
 @header {
 
 package Compiler2015.Parser;
-import Compiler2015.AST.*;
 
 }
-
-// Compiler2015.Parser
 
 primaryExpression
 	:	Identifier
@@ -35,13 +32,14 @@ unaryExpression
 	:	postfixExpression
 	|	'++' unaryExpression
 	|	'--' unaryExpression
-	|	unaryOperator castExpression
+	|	'&' castExpression
+	|	'*' castExpression
+	|	'+' castExpression
+	|	'-' castExpression
+	|	'~' castExpression
+	|	'!' castExpression
 	|	'sizeof' unaryExpression
 	|	'sizeof' '(' typeName ')'
-	;
-
-unaryOperator
-	:	'&' | '*' | '+' | '-' | '~' | '!'
 	;
 
 castExpression
@@ -114,10 +112,17 @@ conditionalExpression
 assignmentExpression
 	:	conditionalExpression
 	|	unaryExpression assignmentOperator assignmentExpression
-	;
-
-assignmentOperator
-	:	'=' | '*=' | '/=' | '%=' | '+=' | '-=' | '<<=' | '>>=' | '&=' | '^=' | '|='
+	|	unaryExpression '=' assignmentExpression
+	|	unaryExpression '*=' assignmentExpression
+	|	unaryExpression '/=' assignmentExpression
+	|	unaryExpression '%=' assignmentExpression
+	|	unaryExpression '+=' assignmentExpression
+	|	unaryExpression '-=' assignmentExpression
+	|	unaryExpression '<<=' assignmentExpression
+	|	unaryExpression '>>=' assignmentExpression
+	|	unaryExpression '&=' assignmentExpression
+	|	unaryExpression '^=' assignmentExpression
+	|	unaryExpression '|=' assignmentExpression
 	;
 
 expression
