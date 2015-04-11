@@ -106,7 +106,8 @@ logicalOrExpression
 	;
 
 conditionalExpression
-	:	logicalOrExpression ('?' expression ':' conditionalExpression)?
+	:	logicalOrExpression
+	|	logicalOrExpression '?' expression ':' conditionalExpression
 	;
 
 assignmentExpression
@@ -255,12 +256,7 @@ statement
 	;
 
 compoundStatement
-	:	'{' blockItemList? '}'
-	;
-
-blockItemList
-	:	blockItem
-	|	blockItemList blockItem
+	:	'{' blockItem* '}'
 	;
 
 blockItem
