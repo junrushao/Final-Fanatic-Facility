@@ -4,6 +4,16 @@ grammar Compiler2015;
 
 package Compiler2015.Parser;
 
+import Compiler2015.Symbol.Table;
+import Compiler2015.Symbol.FunctionSymbol;
+import Compiler2015.Symbol.TypeSymbol;
+import Compiler2015.Symbol.VariableSymbol;
+
+}
+
+@members {
+	public int nestedDepth = 0;
+
 }
 
 primaryExpression
