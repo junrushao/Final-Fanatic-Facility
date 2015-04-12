@@ -7,6 +7,11 @@ package Compiler2015.AST.Type;
 public class PointerType extends Type {
 	public boolean isConstant = false;
 	public boolean isCallable = false;
+	public Type pointTo;
+
+	public PointerType(Type pointTo) {
+		this.pointTo = pointTo;
+	}
 
 	@Override
 	public int sizeof() { // TODO

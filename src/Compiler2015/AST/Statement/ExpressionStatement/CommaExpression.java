@@ -13,7 +13,7 @@ public class CommaExpression extends Expression {
 		this.expressions = expressions;
 	}
 	public CommaExpression(ArrayList<Expression> expressions, Expression another) {
-		this.expressions = new ArrayList<Expression>(expressions);
+		this.expressions = expressions; // TODO: Is copy needed here?
 		this.expressions.add(another);
 	}
 }

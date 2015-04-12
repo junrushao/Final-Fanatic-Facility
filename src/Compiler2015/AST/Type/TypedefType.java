@@ -8,6 +8,11 @@ import Compiler2015.AST.SizeMeasurable;
  */
 public class TypedefType extends Declaration implements SizeMeasurable {
 	public Type definedType;
+
+	public TypedefType(Type definedType) {
+		this.definedType = definedType;
+	}
+
 	@Override
 	public int sizeof() {
 		return definedType.sizeof();
