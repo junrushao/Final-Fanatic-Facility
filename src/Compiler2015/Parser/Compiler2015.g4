@@ -112,7 +112,6 @@ conditionalExpression
 
 assignmentExpression
 	:	conditionalExpression
-	|	unaryExpression assignmentOperator assignmentExpression
 	|	unaryExpression '=' assignmentExpression
 	|	unaryExpression '*=' assignmentExpression
 	|	unaryExpression '/=' assignmentExpression
