@@ -7,49 +7,50 @@ import Compiler2015.Environment.IdentifierType;
 
 }
 
-@member {
-/*
-	SymbolTable table = new SymbolTable();
+@parser::members {
 
-	IdentifierType getType(String name) {
-		return table.getType(name);
-	}
+final static String basicTypes[] = {"int", "char", "void"};
 
-	boolean isFunction(String name) {
-		return getType(name) == IdentifierType.FUNCTION;
-	}
+SymbolTable table = new SymbolTable();
 
-	boolean isTypedefName(String name) {
-		return getType(name) == IdentifierType.TYPEDEF_NAME;
-	}
+IdentifierType getType(String name) {
+	return table.getType(name);
+}
 
-	boolean isVariable(String name) {
-		return getType(name) == IdentifierType.VARIABLE;
-	}
+boolean isFunction(String name) {
+	return getType(name) == IdentifierType.FUNCTION;
+}
 
-	boolean isUnused(String name) {
-		return getType(name) == IdentifierType.UNUSED;
-	}
+boolean isTypedefName(String name) {
+	return getType(name) == IdentifierType.TYPEDEF_NAME;
+}
 
-	boolean isStruct(String name) {
-		return getType(name) == IdentifierType.STRUCT;
-	}
+boolean isVariable(String name) {
+	return getType(name) == IdentifierType.VARIABLE;
+}
 
-	boolean isUnion(String name) {
-		return getType(name) == IdentifierType.UNION;
-	}
+boolean isUnused(String name) {
+	return getType(name) == IdentifierType.UNUSED;
+}
 
-	boolean isPlainType(String name) {
-		if  (  name.equals("int")
-			|| name.equals("char")
-			|| name.equals("void"))
+boolean isStruct(String name) {
+	return getType(name) == IdentifierType.STRUCT;
+}
+
+boolean isUnion(String name) {
+	return getType(name) == IdentifierType.UNION;
+}
+
+boolean isPlainType(String name) {
+	for (String type : basicTypes)
+		if (name.equals(type))
 			return true;
-		IdentifierType type = table.getType(name);
-		return type == IdentifierType.TYPEDEF_NAME
-			|| type == IdentifierType.STRUCT
-			|| type == IdentifierType.UNION;
-	}
-*/
+	IdentifierType type = table.getType(name);
+	return type == IdentifierType.TYPEDEF_NAME
+		|| type == IdentifierType.STRUCT
+		|| type == IdentifierType.UNION;
+}
+
 }
 
 primaryExpression
