@@ -1,6 +1,6 @@
-package Compiler2015.Symbol;
+package Compiler2015.Environment;
 
-import Compiler2015.Exception.CompilationException;
+import Compiler2015.Exception.CompilationError;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import java.util.Stack;
  * Created by junrushao on 15-4-12.
  */
 
-public class Symbol {
+public class SymbolTable {
 	public int nestedDepth = 0;
 	public int nextUId = 0;
 	/*
@@ -27,7 +27,7 @@ public class Symbol {
 	 */
 	public ArrayList<Object[]> uId2NameType = new ArrayList<Object[]>();
 
-	public Symbol() {
+	public SymbolTable() {
 	}
 
 	public void beginScope() {
@@ -35,21 +35,21 @@ public class Symbol {
 		scope.push(new HashSet<String>());
 	}
 
-	public void endScope() throws CompilationException {
+	public void endScope() {
 		for (String name : scope.pop()) {
 			int pair[] = name2ScopeUId.get(name).pop();
 			if (pair[0] != nestedDepth)
-				throw new CompilationException("Internal Error!");
+				throw new CompilationError("Internal Error!");
 			// nothing wrong when size = 1
 		}
 		--nestedDepth;
 	}
 
-	public int addName(IdentifierType type, String name) throws CompilationException {
+	public int addName(IdentifierType type, String name) {
 		boolean notAnonymous = name != null && !name.equals("");
 		if (notAnonymous) {
 			if (scope.peek().contains(name))
-				throw new CompilationException(String.format("The identifier %s has been used.", name));
+				throw new CompilationError(String.format("The identifier %s has been used.", name));
 		}
 		int uId = nextUId++;
 		if (notAnonymous) {
@@ -60,5 +60,13 @@ public class Symbol {
 		}
 		uId2NameType.add(new Object[]{(notAnonymous ? name : null), type});
 		return uId;
+	}
+
+	public IdentifierType getType(String name) {
+		if (name == null || name.equals(""))
+			throw new CompilationError("Internal Error");
+		if (!name2ScopeUId.containsKey(name))
+			return IdentifierType.UNUSED;
+		return (IdentifierType) uId2NameType.get(name2ScopeUId.get(name).peek()[1])[1];
 	}
 }

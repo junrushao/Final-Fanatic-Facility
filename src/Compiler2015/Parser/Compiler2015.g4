@@ -2,18 +2,54 @@ grammar Compiler2015;
 
 @header {
 
-package Compiler2015.Parser;
-
-import Compiler2015.Symbol.Table;
-import Compiler2015.Symbol.FunctionSymbol;
-import Compiler2015.Symbol.TypeSymbol;
-import Compiler2015.Symbol.VariableSymbol;
+import Compiler2015.Environment.SymbolTable;
+import Compiler2015.Environment.IdentifierType;
 
 }
 
-@members {
-	public int nestedDepth = 0;
+@member {
+/*
+	SymbolTable table = new SymbolTable();
 
+	IdentifierType getType(String name) {
+		return table.getType(name);
+	}
+
+	boolean isFunction(String name) {
+		return getType(name) == IdentifierType.FUNCTION;
+	}
+
+	boolean isTypedefName(String name) {
+		return getType(name) == IdentifierType.TYPEDEF_NAME;
+	}
+
+	boolean isVariable(String name) {
+		return getType(name) == IdentifierType.VARIABLE;
+	}
+
+	boolean isUnused(String name) {
+		return getType(name) == IdentifierType.UNUSED;
+	}
+
+	boolean isStruct(String name) {
+		return getType(name) == IdentifierType.STRUCT;
+	}
+
+	boolean isUnion(String name) {
+		return getType(name) == IdentifierType.UNION;
+	}
+
+	boolean isPlainType(String name) {
+		if  (  name.equals("int")
+			|| name.equals("char")
+			|| name.equals("void"))
+			return true;
+		IdentifierType type = table.getType(name);
+		return type == IdentifierType.TYPEDEF_NAME
+			|| type == IdentifierType.STRUCT
+			|| type == IdentifierType.UNION;
+	}
+*/
 }
 
 primaryExpression

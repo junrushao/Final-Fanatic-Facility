@@ -1,4 +1,4 @@
-package Compiler2015.Symbol;
+package Compiler2015.Environment;
 
 /**
  * Created by junrushao on 15-4-12.
@@ -8,5 +8,6 @@ public enum IdentifierType {
 	TYPEDEF_NAME,
 	VARIABLE,
 	STRUCT,
-	UNION
+	UNION,
+	UNUSED
 }
