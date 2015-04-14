@@ -6,11 +6,11 @@ package Compiler2015.AST.Statement.ExpressionStatement;
  * a.b
  */
 public class MemberAccess extends Expression {
-	public String identifierName;
+	public Expression memeda;
 	public String memberName;
 
-	public MemberAccess(String identifierName, String memberName) {
-		this.identifierName = identifierName;
+	public MemberAccess(Expression memeda, String memberName) {
+		this.memeda = memeda;
 		this.memberName = memberName;
 	}
 }

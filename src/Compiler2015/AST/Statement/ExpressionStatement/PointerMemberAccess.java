@@ -6,12 +6,11 @@ package Compiler2015.AST.Statement.ExpressionStatement;
  * a->b
  */
 public class PointerMemberAccess extends Expression {
-	public String identifierName;
+	public Expression memeda;
 	public String memberName;
 
-	public PointerMemberAccess(String identifierName, String memberName) {
-		this.identifierName = identifierName;
+	public PointerMemberAccess(Expression memeda, String memberName) {
+		this.memeda = memeda;
 		this.memberName = memberName;
 	}
-
 }

@@ -2,34 +2,20 @@ package Compiler2015.AST.Declaration;
 
 import Compiler2015.AST.Type.Type;
 
-import java.util.ArrayList;
-
 /**
  * Created by junrushao on 15-4-11.
  */
 public class FunctionDeclaration extends Declaration {
+	public int uId;
+	public Type returnType;
+	public Type parameterTypes[];
+	public String parameterNames[];
 
-	String name;
-
-	/**
-	 * IntType if not declared
-	 */
-	Type returnType;
-
-	/**
-	 * Object[0] : Type
-	 * Object[1] : String, name of the parameter, null if abstract
-	 */
-	ArrayList<Object[]> parameters;
-
-	public FunctionDeclaration(String name, Type returnType, ArrayList<Object[]> parameters) {
-		this.name = name;
+	public FunctionDeclaration(int uId, Type returnType, Type[] parameterTypes, String[] parameterNames) {
+		this.uId = uId;
 		this.returnType = returnType;
-		this.parameters = parameters;
+		this.parameterTypes = parameterTypes;
+		this.parameterNames = parameterNames;
 	}
 
-	@Override
-	public int sizeof() { // TODO
-		return 0;
-	}
 }

@@ -9,6 +9,6 @@ public class IntType extends Type {
 
 	@Override
 	public int sizeof() { // TODO
-		return 0;
+		return 4;
 	}
 }

@@ -9,6 +9,6 @@ public class CharType extends Type {
 
 	@Override
 	public int sizeof() { // TODO
-		return 0;
+		return 1;
 	}
 }

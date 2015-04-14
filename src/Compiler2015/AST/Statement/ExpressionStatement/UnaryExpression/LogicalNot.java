@@ -7,5 +7,8 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
  *
  * !e
  */
-public class LogicalNot extends Expression {
+public class LogicalNot extends UnaryExpression {
+	public LogicalNot(Expression e) {
+		super(e);
+	}
 }

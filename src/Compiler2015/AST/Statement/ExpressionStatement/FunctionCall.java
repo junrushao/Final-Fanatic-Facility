@@ -2,8 +2,6 @@ package Compiler2015.AST.Statement.ExpressionStatement;
 
 import Compiler2015.AST.Type.FunctionPointerType;
 
-import java.util.ArrayList;
-
 /**
  * Created by junrushao on 15-4-11.
  *
@@ -11,8 +9,9 @@ import java.util.ArrayList;
  */
 public class FunctionCall extends Expression {
 	public FunctionPointerType function;
-	public ArrayList<Expression> argumentExpressionList;
-	public FunctionCall(FunctionPointerType function, ArrayList<Expression> argumentExpressionList) {
+	public Expression argumentExpressionList[];
+
+	public FunctionCall(FunctionPointerType function, Expression[] argumentExpressionList) {
 		this.function = function;
 		this.argumentExpressionList = argumentExpressionList;
 	}
