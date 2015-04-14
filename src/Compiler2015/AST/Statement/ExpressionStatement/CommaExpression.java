@@ -1,5 +1,7 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
+import Compiler2015.AST.Type.Type;
+
 import java.util.ArrayList;
 
 /**
@@ -9,11 +11,8 @@ import java.util.ArrayList;
  */
 public class CommaExpression extends Expression {
 	public ArrayList<Expression> expressions;
-	public CommaExpression(ArrayList<Expression> expressions) {
+	public CommaExpression(ArrayList<Expression> expressions, Type type, boolean isLValue) {
+		super(type, isLValue);
 		this.expressions = expressions;
-	}
-	public CommaExpression(ArrayList<Expression> expressions, Expression another) {
-		this.expressions = expressions; // TODO: Is copy needed here?
-		this.expressions.add(another);
 	}
 }

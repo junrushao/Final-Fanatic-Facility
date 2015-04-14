@@ -1,6 +1,7 @@
 package Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression;
 
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
+import Compiler2015.AST.Type.Type;
 
 /**
  * Created by junrushao on 15-4-11.
@@ -8,8 +9,8 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
  * *e
  */
 public class PointTo extends UnaryExpression {
-	public PointTo(Expression e) {
-		super(e);
+	public PointTo(Expression e, Type type, boolean isLValue) {
+		super(e, type, isLValue);
 	}
 
 }

@@ -1,25 +1,17 @@
 grammar Compiler2015;
 
 @header {
-
 import Compiler2015.AST.ASTNode;
 import Compiler2015.AST.ASTRoot;
-import Compiler2015.AST.Statement.ExpressionStatement.CharConstant;
-import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
-import Compiler2015.AST.Type.Type;
-import Compiler2015.AST.Type.IntType;
-import Compiler2015.AST.Type.CharType;
-import Compiler2015.Utility.Tokens;
-import Compiler2015.Environment.SymbolTable;
+import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Environment.Environment;
-
+import Compiler2015.Utility.Tokens;
 }
 
 @parser::members {
-
 }
 
-primaryExpression returns [ASTNode ret, boolean isLValue, Type type]
+primaryExpression returns [Expression ret]
 	:	{ Environment.isVariable($Identifier.text) }?
 		Identifier
 									#primaryExpression1
@@ -28,7 +20,7 @@ primaryExpression returns [ASTNode ret, boolean isLValue, Type type]
 	|	'(' expression ')'			#primaryExpression4
 	;
 
-postfixExpression returns [ASTNode ret, boolean isLValue, Type type]
+postfixExpression returns [Expression ret]
 	:	primaryExpression									#postfixExpression1
 	|	postfixExpression '[' expression ']'				#postfixExpression2
 	|	postfixExpression '(' argumentExpressionList? ')'	#postfixExpression3
@@ -38,12 +30,12 @@ postfixExpression returns [ASTNode ret, boolean isLValue, Type type]
 	|	postfixExpression '--'								#postfixExpression7
 	;
 
-argumentExpressionList returns [ArrayList<Semantic> ret]
+argumentExpressionList returns [ArrayList<Expression> ret]
 	:	assignmentExpression								#argumentExpressionList1
 	|	argumentExpressionList ',' assignmentExpression		#argumentExpressionList2
 	;
 
-unaryExpression returns [ASTNode ret, boolean isLValue, Type type]
+unaryExpression returns [Expression ret]
 	:	postfixExpression			#unaryExpression1
 	|	'++' unaryExpression		#unaryExpression2
 	|	'--' unaryExpression		#unaryExpression3
@@ -57,31 +49,31 @@ unaryExpression returns [ASTNode ret, boolean isLValue, Type type]
 	|	'sizeof' '(' typeName ')'	#unaryExpression11
 	;
 
-castExpression returns [ASTNode ret, boolean isLValue, Type type]
+castExpression returns [Expression ret]
 	:	unaryExpression						#castExpression1
 	|	'(' typeName ')' castExpression		#castExpression2
 	;
 
-multiplicativeExpression returns [ASTNode ret, boolean isLValue, Type type]
+multiplicativeExpression returns [Expression ret]
 	:	castExpression									#multiplicativeExpression1
 	|	multiplicativeExpression '*' castExpression		#multiplicativeExpression2
 	|	multiplicativeExpression '/' castExpression		#multiplicativeExpression3
 	|	multiplicativeExpression '%' castExpression		#multiplicativeExpression4
 	;
 
-additiveExpression returns [ASTNode ret, boolean isLValue, Type type]
+additiveExpression returns [Expression ret]
 	:	multiplicativeExpression							#additiveExpression1
 	|	additiveExpression '+' multiplicativeExpression		#additiveExpression2
 	|	additiveExpression '-' multiplicativeExpression		#additiveExpression3
 	;
 
-shiftExpression returns [ASTNode ret, boolean isLValue, Type type]
+shiftExpression returns [Expression ret]
 	:	additiveExpression							#shiftExpression1
 	|	shiftExpression '<<' additiveExpression		#shiftExpression2
 	|	shiftExpression '>>' additiveExpression		#shiftExpression3
 	;
 
-relationalExpression returns [ASTNode ret, boolean isLValue, Type type]
+relationalExpression returns [Expression ret]
 	:	shiftExpression								#relationalExpression1
 	|	relationalExpression '<' shiftExpression	#relationalExpression2
 	|	relationalExpression '>' shiftExpression	#relationalExpression3
@@ -89,43 +81,43 @@ relationalExpression returns [ASTNode ret, boolean isLValue, Type type]
 	|	relationalExpression '>=' shiftExpression	#relationalExpression5
 	;
 
-equalityExpression returns [ASTNode ret, boolean isLValue, Type type]
+equalityExpression returns [Expression ret]
 	:	relationalExpression							#equalityExpression1
 	|	equalityExpression '==' relationalExpression	#equalityExpression2
 	|	equalityExpression '!=' relationalExpression	#equalityExpression3
 	;
 
-andExpression returns [ASTNode ret, boolean isLValue, Type type]
+andExpression returns [Expression ret]
 	:	equalityExpression						#andExpression1
 	|	andExpression '&' equalityExpression	#andExpression2
 	;
 
-exclusiveOrExpression returns [ASTNode ret, boolean isLValue, Type type]
+exclusiveOrExpression returns [Expression ret]
 	:	andExpression								#exclusiveOrExpression1
 	|	exclusiveOrExpression '^' andExpression		#exclusiveOrExpression2
 	;
 
-inclusiveOrExpression returns [ASTNode ret, boolean isLValue, Type type]
+inclusiveOrExpression returns [Expression ret]
 	:	exclusiveOrExpression								#inclusiveOrExpression1
 	|	inclusiveOrExpression '|' exclusiveOrExpression		#inclusiveOrExpression2
 	;
 
-logicalAndExpression returns [ASTNode ret, boolean isLValue, Type type]
+logicalAndExpression returns [Expression ret]
 	:	inclusiveOrExpression								#logicalAndExpression1
 	|	logicalAndExpression '&&' inclusiveOrExpression		#logicalAndExpression2
 	;
 
-logicalOrExpression returns [ASTNode ret, boolean isLValue, Type type]
+logicalOrExpression returns [Expression ret]
 	:	logicalAndExpression							#logicalOrExpression1
 	|	logicalOrExpression '||' logicalAndExpression	#logicalOrExpression2
 	;
 
-conditionalExpression returns [ASTNode ret, boolean isLValue, Type type]
+conditionalExpression returns [Expression ret]
 	:	logicalOrExpression												#conditionalExpression1
 	|	logicalOrExpression '?' expression ':' conditionalExpression	#conditionalExpression2
 	;
 
-assignmentExpression returns [ASTNode ret, boolean isLValue, Type type]
+assignmentExpression returns [Expression ret]
 	:	conditionalExpression						#assignmentExpression1
 	|	unaryExpression '=' assignmentExpression	#assignmentExpression2
 	|	unaryExpression '*=' assignmentExpression	#assignmentExpression3
@@ -140,7 +132,7 @@ assignmentExpression returns [ASTNode ret, boolean isLValue, Type type]
 	|	unaryExpression '|=' assignmentExpression	#assignmentExpression12
 	;
 
-expression returns [ASTNode ret, boolean isLValue, Type type]
+expression returns [Expression ret]
 	:	assignmentExpression					#expression1
 	|	expression ',' assignmentExpression		#expression2
 	;
@@ -312,7 +304,7 @@ functionDefinition returns [ASTNode ret]
 	:	typeSpecifier? declarator compoundStatement
 	;
 
-constant returns [ASTNode ret, Type type, boolean isLValue = false]
+constant returns [Expression ret]
 	:	DecimalConstant				#constant1
 	|	OctalConstant				#constant2
 	|	HexadecimalConstant			#constant3

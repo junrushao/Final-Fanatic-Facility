@@ -70,22 +70,21 @@ public class SymbolTable {
 	}
 
 	public int defineName(Tokens type, String name) {
+		// TODO: warning: wrong here
 		if (name.equals("")) name = null;
 		int uId = 0;
 		if (name != null) {
 			if (scope.peek().contains(name)) {
-				uId = (Integer)name2ScopeUId.get(name).peek()[1];
+				uId = name2ScopeUId.get(name).peek()[1];
 				uId2NameTypeStatus.get(uId)[2] = Tokens.DEFINED;
 			}
 		}
 		else {
 			uId = nextUId++;
-			if (name != null) {
-				scope.peek().add(name);
-				if (!name2ScopeUId.containsKey(name))
-					name2ScopeUId.put(name, new Stack<int[]>());
-				name2ScopeUId.get(name).push(new int[]{nestedDepth, uId});
-			}
+			scope.peek().add(name);
+			if (!name2ScopeUId.containsKey(name))
+				name2ScopeUId.put(name, new Stack<int[]>());
+			name2ScopeUId.get(name).push(new int[]{nestedDepth, uId});
 			uId2NameTypeStatus.add(new Object[]{name, type, Tokens.DEFINED});
 		}
 		return uId;
