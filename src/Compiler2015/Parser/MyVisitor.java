@@ -1,6 +1,6 @@
 package Compiler2015.Parser;
 
-import Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression.ArrayAccess;
+import Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression.*;
 import Compiler2015.AST.Statement.ExpressionStatement.*;
 import Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression.*;
 import Compiler2015.AST.Type.*;
@@ -252,6 +252,8 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 	public Object visitCastExpression2(@NotNull Compiler2015Parser.CastExpression2Context ctx) {
 		Type t = (Type)ctx.typeName().ret;
 		Expression c = ctx.castExpression().ret;
+		if (t instanceof VoidType)
+			throw new CompilationError("Cannot cast to void");
 		if (Type.sameType(t, c.type)) { // no need to cast
 			ctx.ret = c;
 		}
@@ -270,6 +272,91 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 		return super.visitMultiplicativeExpression1(ctx);
 	}
 
+	@Override
+	public Object visitMultiplicativeExpression2(@NotNull Compiler2015Parser.MultiplicativeExpression2Context ctx) {
+		Expression a1 = ctx.multiplicativeExpression().ret;
+		Expression a2 = ctx.castExpression().ret;
+		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
+			throw new CompilationError("This type does not support numeric operation");
+		if (a1.type instanceof CharType && a2.type instanceof IntType)
+			a1 = new CastExpression(new IntType(), a1, new IntType(), false);
+		else if (a1.type instanceof IntType && a2.type instanceof CharType)
+			a2 = new CastExpression(new IntType(), a2, new IntType(), false);
+		ctx.ret = new Multiply(a1, a2, a1.type, false);
+		return super.visitMultiplicativeExpression2(ctx);
+	}
+
+	@Override
+	public Object visitMultiplicativeExpression3(@NotNull Compiler2015Parser.MultiplicativeExpression3Context ctx) {
+		Expression a1 = ctx.multiplicativeExpression().ret;
+		Expression a2 = ctx.castExpression().ret;
+		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
+			throw new CompilationError("This type does not support numeric operation");
+		if (a1.type instanceof CharType && a2.type instanceof IntType)
+			a1 = new CastExpression(new IntType(), a1, new IntType(), false);
+		else if (a1.type instanceof IntType && a2.type instanceof CharType)
+			a2 = new CastExpression(new IntType(), a2, new IntType(), false);
+		ctx.ret = new Divide(a1, a2, a1.type, false);
+		return super.visitMultiplicativeExpression3(ctx);
+	}
+
+	@Override
+	public Object visitMultiplicativeExpression4(@NotNull Compiler2015Parser.MultiplicativeExpression4Context ctx) {
+		Expression a1 = ctx.multiplicativeExpression().ret;
+		Expression a2 = ctx.castExpression().ret;
+		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
+			throw new CompilationError("This type does not support numeric operation");
+		if (a1.type instanceof CharType && a2.type instanceof IntType)
+			a1 = new CastExpression(new IntType(), a1, new IntType(), false);
+		else if (a1.type instanceof IntType && a2.type instanceof CharType)
+			a2 = new CastExpression(new IntType(), a2, new IntType(), false);
+		ctx.ret = new Modulo(a1, a2, a1.type, false);
+		return super.visitMultiplicativeExpression4(ctx);
+	}
+
+	@Override
+	public Object visitAdditiveExpression1(@NotNull Compiler2015Parser.AdditiveExpression1Context ctx) {
+		ctx.ret = ctx.multiplicativeExpression().ret;
+		return super.visitAdditiveExpression1(ctx);
+	}
+
+	@Override
+	public Object visitAdditiveExpression2(@NotNull Compiler2015Parser.AdditiveExpression2Context ctx) {
+		Expression a1 = ctx.additiveExpression().ret;
+		Expression a2 = ctx.multiplicativeExpression().ret;
+		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
+			throw new CompilationError("Cannot operate add on void type.");
+		if (a1.type instanceof FunctionPointerType || a2.type instanceof FunctionPointerType)
+			throw new CompilationError("Cannot operate add on pointer to function.");
+		if (a1.type instanceof StructOrUnionType || a2.type instanceof StructOrUnionType)
+			throw new CompilationError("Cannot operate add on struct or unions.");
+		if (a1.type instanceof Pointer && a2.type instanceof Pointer)
+			throw new CompilationError("Cannot add two pointers.");
+		if (a1.type instanceof CharType && a2.type instanceof IntType)
+			a1 = new CastExpression(new IntType(), a1, new IntType(), false);
+		else if (a1.type instanceof IntType && a2.type instanceof CharType)
+			a2 = new CastExpression(new IntType(), a2, new IntType(), false);
+		ctx.ret = new Add(a1, a2, (a2.type instanceof Pointer) ? a2.type : a1.type, false);
+		return super.visitAdditiveExpression2(ctx);
+	}
+
+	@Override
+	public Object visitAdditiveExpression3(@NotNull Compiler2015Parser.AdditiveExpression3Context ctx) {
+		Expression a1 = ctx.additiveExpression().ret;
+		Expression a2 = ctx.multiplicativeExpression().ret;
+		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
+			throw new CompilationError("Cannot operate minus on void type.");
+		if (a1.type instanceof Pointer && a2.type instanceof Pointer && !Type.sameType(a1.type, a2.type))
+			throw new CompilationError("Cannot operate minus on pointers to different types.");
+		if (a1.type instanceof StructOrUnionType || a2.type instanceof StructOrUnionType)
+			throw new CompilationError("Cannot operate minus on struct or unions.");
+		if (a1.type instanceof CharType && a2.type instanceof IntType)
+			a1 = new CastExpression(new IntType(), a1, new IntType(), false);
+		else if (a1.type instanceof IntType && a2.type instanceof CharType)
+			a2 = new CastExpression(new IntType(), a2, new IntType(), false);
+		ctx.ret = new Subtract(a1, a2, (a2.type instanceof Pointer) ? a2.type : a1.type, false);
+		return super.visitAdditiveExpression3(ctx);
+	}
 
 	@Override
 	public Object visitConstant1(@NotNull Compiler2015Parser.Constant1Context ctx) {
