@@ -236,7 +236,7 @@ directAbstractDeclarator returns [ASTNode ret]
 	;
 
 typedefName returns [String ret]
-	:	Identifier //	TODO isTypedefName
+	:	{ Environment.isTypedefName($Identifier.text) }? Identifier
 	;
 
 initializer returns [ASTNode ret]

@@ -7,7 +7,7 @@ public class VoidType extends Type {
 	}
 
 	@Override
-	public int sizeof() { // TODO
-		return 0;
+	public int sizeof() {
+		return 1;
 	}
 }

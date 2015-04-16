@@ -8,5 +8,8 @@ public enum Tokens {
 	UNUSED,
 
 	DECLARED,
-	DEFINED
+	DEFINED,
+
+	STRUCT,
+	UNION
 }

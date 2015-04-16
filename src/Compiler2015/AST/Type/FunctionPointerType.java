@@ -13,7 +13,7 @@ public class FunctionPointerType extends Pointer {
 	}
 
 	@Override
-	public int sizeof() { // TODO
+	public int sizeof() {
 		return 8;
 	}
 }

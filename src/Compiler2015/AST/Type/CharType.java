@@ -5,7 +5,7 @@ public class CharType extends Type {
 	}
 
 	@Override
-	public int sizeof() { // TODO
+	public int sizeof() {
 		return 1;
 	}
 }
