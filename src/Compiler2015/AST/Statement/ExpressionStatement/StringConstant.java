@@ -11,4 +11,9 @@ public class StringConstant extends Expression {
 		super(type, isLValue);
 		this.c = c;
 	}
+
+	@Override
+	public int sizeof() {
+		return c.length() + 1;
+	}
 }

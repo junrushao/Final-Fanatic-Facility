@@ -1,6 +1,6 @@
 grammar Compiler2015;
 
-@header {
+@parser::header {
 import Compiler2015.AST.ASTNode;
 import Compiler2015.AST.ASTRoot;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;

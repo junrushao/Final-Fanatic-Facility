@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
 
-class Entry {
+public class Entry {
 	public int uId;
 	public String name;
 	public int scope;
