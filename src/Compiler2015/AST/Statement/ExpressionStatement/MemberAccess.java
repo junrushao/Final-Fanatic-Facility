@@ -3,8 +3,6 @@ package Compiler2015.AST.Statement.ExpressionStatement;
 import Compiler2015.AST.Type.Type;
 
 /**
- * Created by junrushao on 15-4-11.
- *
  * a.b
  */
 public class MemberAccess extends Expression {

@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Stack;
 
 /**
- * Created by junrushao on 15-4-12.
+ * TODO: Totally wrong, re-designation is needed
  *
  * Record the symbols that have been declared ( **not necessary defined** )
  *

@@ -1,7 +1,10 @@
 package Compiler2015.AST.Type;
 
 /**
- * Created by junrushao on 15-4-11.
+ * int a[][3];
+ *
+ * a is an ArrayPointerType
+ * TODO: a[1] returns a pointer type
  */
 public class ArrayPointerType extends Pointer {
 	public Type pointTo;
@@ -15,5 +18,5 @@ public class ArrayPointerType extends Pointer {
 	@Override
 	public int sizeof() { // TODO
 		return 8;
-	}
+	} // TODO: error, not 8 but the size of array
 }

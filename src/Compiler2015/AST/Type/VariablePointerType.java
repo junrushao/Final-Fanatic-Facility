@@ -1,7 +1,6 @@
 package Compiler2015.AST.Type;
 
 /**
- * Created by junrushao on 15-4-13.
  */
 public class VariablePointerType extends Pointer {
 	public Type pointTo;

@@ -8,9 +8,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.io.IOException;
 
-/**
- * Created by junrushao on 15-4-12.
- */
 public class Main {
 	public static void main(String args[]) throws IOException {
 		ANTLRInputStream input = new ANTLRInputStream(System.in);

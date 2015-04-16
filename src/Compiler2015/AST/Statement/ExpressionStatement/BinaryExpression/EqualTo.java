@@ -4,8 +4,6 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Type.Type;
 
 /**
- * Created by junrushao on 15-4-11.
- *
  * a == b
  */
 public class EqualTo extends BinaryExpression {

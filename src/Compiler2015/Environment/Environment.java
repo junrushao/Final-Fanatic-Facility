@@ -3,7 +3,6 @@ package Compiler2015.Environment;
 import Compiler2015.Utility.Tokens;
 
 /**
- * Created by junrushao on 15-4-13.
  */
 public class Environment {
 	public static SymbolTable structUnion = new SymbolTable();

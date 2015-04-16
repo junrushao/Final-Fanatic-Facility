@@ -5,9 +5,6 @@ import Compiler2015.AST.Type.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by junrushao on 15-4-11.
- */
 public class StructOrUnionDeclaration extends Declaration {
 	public int uId;
 	boolean isUnion;

@@ -5,8 +5,6 @@ import Compiler2015.AST.Type.Type;
 import java.util.ArrayList;
 
 /**
- * Created by junrushao on 15-4-11.
- *
  * a, b, c
  */
 public class CommaExpression extends Expression {

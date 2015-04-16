@@ -3,8 +3,6 @@ package Compiler2015.AST.Statement;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 
 /**
- * Created by junrushao on 15-4-11.
- *
  * for (a; b; c) d
  */
 public class ForStatement extends Statement {

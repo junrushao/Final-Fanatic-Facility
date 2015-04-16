@@ -4,9 +4,6 @@ import Compiler2015.AST.SizeMeasurable;
 import Compiler2015.AST.Statement.Statement;
 import Compiler2015.AST.Type.Type;
 
-/**
- * Created by junrushao on 15-4-11.
- */
 public class Expression extends Statement implements SizeMeasurable {
 	public Type type;
 	public boolean isLValue;

@@ -14,7 +14,10 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitPrimaryExpression1(@NotNull Compiler2015Parser.PrimaryExpression1Context ctx) {
-		ctx.ret = new Identifier(ctx.Identifier().getText(), new IntType(), true);
+		String name = ctx.Identifier.getText();
+		boolean isLValue = true;
+
+		ctx.ret = new Identifier(name, new IntType(), true);
 		return super.visitPrimaryExpression1(ctx);
 	}
 
@@ -182,14 +185,14 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 		Expression e = ctx.castExpression().ret;
 		if (!e.isLValue)
 			throw new CompilationError("Not LValue.");
-		ctx.ret = new AddressAccess(e, new VariablePointerType(e.type), false);
+		ctx.ret = new AddressFetch(e, new VariablePointerType(e.type), false);
 		return super.visitUnaryExpression4(ctx);
 	}
 
 	@Override
 	public Object visitUnaryExpression5(@NotNull Compiler2015Parser.UnaryExpression5Context ctx) {
 		Expression e = ctx.castExpression().ret;
-		ctx.ret = new PointTo(e, Pointer.getPointTo(e.type), true);
+		ctx.ret = new AddressAccess(e, Pointer.getPointTo(e.type), true);
 		return super.visitUnaryExpression5(ctx);
 	}
 
@@ -346,6 +349,8 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 		Expression a2 = ctx.multiplicativeExpression().ret;
 		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
 			throw new CompilationError("Cannot operate minus on void type.");
+//		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
+//			throw new CompilationError("Cannot operate minus on void type.");
 		if (a1.type instanceof Pointer && a2.type instanceof Pointer && !Type.sameType(a1.type, a2.type))
 			throw new CompilationError("Cannot operate minus on pointers to different types.");
 		if (a1.type instanceof StructOrUnionType || a2.type instanceof StructOrUnionType)
@@ -356,6 +361,317 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 			a2 = new CastExpression(new IntType(), a2, new IntType(), false);
 		ctx.ret = new Subtract(a1, a2, (a2.type instanceof Pointer) ? a2.type : a1.type, false);
 		return super.visitAdditiveExpression3(ctx);
+	}
+
+	@Override
+	public Object visitShiftExpression1(@NotNull Compiler2015Parser.ShiftExpression1Context ctx) {
+		ctx.ret = ctx.additiveExpression().ret;
+		return super.visitShiftExpression1(ctx);
+	}
+
+	@Override
+	public Object visitShiftExpression2(@NotNull Compiler2015Parser.ShiftExpression2Context ctx) {
+		Expression a1 = ctx.shiftExpression().ret;
+		Expression a2 = ctx.additiveExpression().ret;
+		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
+			throw new CompilationError("<< must be operated on numeric types");
+		if (!(a1.type instanceof IntType))
+			a1 = new CastExpression(new IntType(), a1, new IntType(), false);
+		if (!(a2.type instanceof IntType))
+			a2 = new CastExpression(new IntType(), a2, new IntType(), false);
+		ctx.ret = new ShiftLeft(a1, a2, new IntType(), false);
+		return super.visitShiftExpression2(ctx);
+	}
+
+	@Override
+	public Object visitShiftExpression3(@NotNull Compiler2015Parser.ShiftExpression3Context ctx) {
+		Expression a1 = ctx.shiftExpression().ret;
+		Expression a2 = ctx.additiveExpression().ret;
+		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
+			throw new CompilationError(">> must be operated on numeric types");
+		if (!(a1.type instanceof IntType))
+			a1 = new CastExpression(new IntType(), a1, new IntType(), false);
+		if (!(a2.type instanceof IntType))
+			a2 = new CastExpression(new IntType(), a2, new IntType(), false);
+		ctx.ret = new ShiftRight(a1, a2, new IntType(), false);
+		return super.visitShiftExpression3(ctx);
+	}
+
+	@Override
+	public Object visitRelationalExpression1(@NotNull Compiler2015Parser.RelationalExpression1Context ctx) {
+		ctx.ret = ctx.shiftExpression().ret;
+		return super.visitRelationalExpression1(ctx);
+	}
+
+	@Override
+	public Object visitRelationalExpression2(@NotNull Compiler2015Parser.RelationalExpression2Context ctx) {
+		Expression a1 = ctx.relationalExpression().ret;
+		Expression a2 = ctx.shiftExpression().ret;
+		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
+			throw new CompilationError("Cannot compare void");
+		if ((a1.type instanceof StructOrUnionType) || (a2.type instanceof StructOrUnionType))
+			throw new CompilationError("Cannot compare struct/union");
+		// comparision between pointer and integer is allowed
+		ctx.ret = new LessThan(a1, a2, new IntType(), false);
+		return super.visitRelationalExpression2(ctx);
+	}
+
+	@Override
+	public Object visitRelationalExpression3(@NotNull Compiler2015Parser.RelationalExpression3Context ctx) {
+		Expression a1 = ctx.relationalExpression().ret;
+		Expression a2 = ctx.shiftExpression().ret;
+		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
+			throw new CompilationError("Cannot compare void");
+		if ((a1.type instanceof StructOrUnionType) || (a2.type instanceof StructOrUnionType))
+			throw new CompilationError("Cannot compare struct/union");
+		// comparision between pointer and integer is allowed
+		ctx.ret = new GreaterThan(a1, a2, new IntType(), false);
+		return super.visitRelationalExpression3(ctx);
+	}
+
+	@Override
+	public Object visitRelationalExpression4(@NotNull Compiler2015Parser.RelationalExpression4Context ctx) {
+		Expression a1 = ctx.relationalExpression().ret;
+		Expression a2 = ctx.shiftExpression().ret;
+		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
+			throw new CompilationError("Cannot compare void");
+		if ((a1.type instanceof StructOrUnionType) || (a2.type instanceof StructOrUnionType))
+			throw new CompilationError("Cannot compare struct/union");
+		// comparision between pointer and integer is allowed
+		ctx.ret = new LE(a1, a2, new IntType(), false);
+		return super.visitRelationalExpression4(ctx);
+	}
+
+	@Override
+	public Object visitRelationalExpression5(@NotNull Compiler2015Parser.RelationalExpression5Context ctx) {
+		Expression a1 = ctx.relationalExpression().ret;
+		Expression a2 = ctx.shiftExpression().ret;
+		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
+			throw new CompilationError("Cannot compare void");
+		if ((a1.type instanceof StructOrUnionType) || (a2.type instanceof StructOrUnionType))
+			throw new CompilationError("Cannot compare struct/union");
+		// Comparison between pointer and integer is allowed
+		ctx.ret = new GE(a1, a2, new IntType(), false);
+		return super.visitRelationalExpression5(ctx);
+	}
+
+	@Override
+	public Object visitEqualityExpression1(@NotNull Compiler2015Parser.EqualityExpression1Context ctx) {
+		ctx.ret = ctx.relationalExpression().ret;
+		return super.visitEqualityExpression1(ctx);
+	}
+
+	@Override
+	public Object visitEqualityExpression2(@NotNull Compiler2015Parser.EqualityExpression2Context ctx) {
+		Expression a1 = ctx.equalityExpression().ret;
+		Expression a2 = ctx.relationalExpression().ret;
+		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
+			throw new CompilationError("Cannot compare void");
+		if ((a1.type instanceof StructOrUnionType) || (a2.type instanceof StructOrUnionType))
+			throw new CompilationError("Cannot compare struct/union");
+		// Comparison between pointer and integer is allowed
+		ctx.ret = new EqualTo(a1, a2, new IntType(), false);
+		return super.visitEqualityExpression2(ctx);
+	}
+
+	@Override
+	public Object visitEqualityExpression3(@NotNull Compiler2015Parser.EqualityExpression3Context ctx) {
+		Expression a1 = ctx.equalityExpression().ret;
+		Expression a2 = ctx.relationalExpression().ret;
+		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
+			throw new CompilationError("Cannot compare void");
+		if ((a1.type instanceof StructOrUnionType) || (a2.type instanceof StructOrUnionType))
+			throw new CompilationError("Cannot compare struct/union");
+		// Comparison between pointer and integer is allowed
+		ctx.ret = new NotEqualTo(a1, a2, new IntType(), false);
+		return super.visitEqualityExpression3(ctx);
+	}
+
+	@Override
+	public Object visitAndExpression1(@NotNull Compiler2015Parser.AndExpression1Context ctx) {
+		ctx.ret = ctx.equalityExpression().ret;
+		return super.visitAndExpression1(ctx);
+	}
+
+	@Override
+	public Object visitAndExpression2(@NotNull Compiler2015Parser.AndExpression2Context ctx) {
+		Expression a1 = ctx.andExpression().ret;
+		Expression a2 = ctx.equalityExpression().ret;
+		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
+			throw new CompilationError("& must be operated on numeric types");
+		if (!(a1.type instanceof IntType))
+			a1 = new CastExpression(new IntType(), a1, new IntType(), false);
+		if (!(a2.type instanceof IntType))
+			a2 = new CastExpression(new IntType(), a2, new IntType(), false);
+		ctx.ret = new BitwiseAnd(a1, a2, new IntType(), false);
+		return super.visitAndExpression2(ctx);
+	}
+
+	@Override
+	public Object visitExclusiveOrExpression1(@NotNull Compiler2015Parser.ExclusiveOrExpression1Context ctx) {
+		ctx.ret = ctx.andExpression().ret;
+		return super.visitExclusiveOrExpression1(ctx);
+	}
+
+	@Override
+	public Object visitExclusiveOrExpression2(@NotNull Compiler2015Parser.ExclusiveOrExpression2Context ctx) {
+		Expression a1 = ctx.exclusiveOrExpression().ret;
+		Expression a2 = ctx.andExpression().ret;
+		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
+			throw new CompilationError("& must be operated on numeric types");
+		if (!(a1.type instanceof IntType))
+			a1 = new CastExpression(new IntType(), a1, new IntType(), false);
+		if (!(a2.type instanceof IntType))
+			a2 = new CastExpression(new IntType(), a2, new IntType(), false);
+		ctx.ret = new BitwiseXOR(a1, a2, new IntType(), false);
+		return super.visitExclusiveOrExpression2(ctx);
+	}
+
+	@Override
+	public Object visitInclusiveOrExpression1(@NotNull Compiler2015Parser.InclusiveOrExpression1Context ctx) {
+		ctx.ret = ctx.exclusiveOrExpression().ret;
+		return super.visitInclusiveOrExpression1(ctx);
+	}
+
+	@Override
+	public Object visitInclusiveOrExpression2(@NotNull Compiler2015Parser.InclusiveOrExpression2Context ctx) {
+		Expression a1 = ctx.inclusiveOrExpression().ret;
+		Expression a2 = ctx.exclusiveOrExpression().ret;
+		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
+			throw new CompilationError("& must be operated on numeric types");
+		if (!(a1.type instanceof IntType))
+			a1 = new CastExpression(new IntType(), a1, new IntType(), false);
+		if (!(a2.type instanceof IntType))
+			a2 = new CastExpression(new IntType(), a2, new IntType(), false);
+		ctx.ret = new BitwiseOr(a1, a2, new IntType(), false);
+		return super.visitInclusiveOrExpression2(ctx);
+	}
+
+	@Override
+	public Object visitLogicalAndExpression1(@NotNull Compiler2015Parser.LogicalAndExpression1Context ctx) {
+		ctx.ret = ctx.inclusiveOrExpression().ret;
+		return super.visitLogicalAndExpression1(ctx);
+	}
+
+	@Override
+	public Object visitLogicalAndExpression2(@NotNull Compiler2015Parser.LogicalAndExpression2Context ctx) {
+		Expression a1 = ctx.logicalAndExpression().ret;
+		Expression a2 = ctx.inclusiveOrExpression().ret;
+		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
+			throw new CompilationError("& must be operated on numeric types");
+		if (!(a1.type instanceof IntType))
+			a1 = new CastExpression(new IntType(), a1, new IntType(), false);
+		if (!(a2.type instanceof IntType))
+			a2 = new CastExpression(new IntType(), a2, new IntType(), false);
+		ctx.ret = new LogicalAnd(a1, a2, new IntType(), false);
+		return super.visitLogicalAndExpression2(ctx);
+	}
+
+	@Override
+	public Object visitLogicalOrExpression1(@NotNull Compiler2015Parser.LogicalOrExpression1Context ctx) {
+		ctx.ret = ctx.logicalAndExpression().ret;
+		return super.visitLogicalOrExpression1(ctx);
+	}
+
+	@Override
+	public Object visitLogicalOrExpression2(@NotNull Compiler2015Parser.LogicalOrExpression2Context ctx) {
+		Expression a1 = ctx.logicalOrExpression().ret;
+		Expression a2 = ctx.logicalAndExpression().ret;
+		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
+			throw new CompilationError("& must be operated on numeric types");
+		if (!(a1.type instanceof IntType))
+			a1 = new CastExpression(new IntType(), a1, new IntType(), false);
+		if (!(a2.type instanceof IntType))
+			a2 = new CastExpression(new IntType(), a2, new IntType(), false);
+		ctx.ret = new LogicalOr(a1, a2, new IntType(), false);
+		return super.visitLogicalOrExpression2(ctx);
+	}
+
+	@Override
+	public Object visitConditionalExpression1(@NotNull Compiler2015Parser.ConditionalExpression1Context ctx) {
+		ctx.ret = ctx.logicalOrExpression().ret;
+		return super.visitConditionalExpression1(ctx);
+	}
+
+	@Override
+	public Object visitConditionalExpression2(@NotNull Compiler2015Parser.ConditionalExpression2Context ctx) {
+		Expression a1 = ctx.logicalOrExpression().ret;
+		Expression a2 = ctx.expression().ret;
+		Expression a3 = ctx.conditionalExpression().ret;
+		if (a2.type instanceof CharType && a3.type instanceof IntType)
+			a2 = new CastExpression(new IntType(), a2, a2.type, false);
+		if (a2.type instanceof IntType && a3.type instanceof CharType)
+			a3 = new CastExpression(new IntType(), a3, a3.type, false);
+		if (!Type.sameType(a2.type, a3.type))
+			throw new CompilationError("Two expressions around : have different types.");
+		ctx.ret = new ConditionalExpression(a1, a2, a3, a2.type, false);
+		return super.visitConditionalExpression2(ctx);
+	}
+
+	@Override
+	public Object visitAssignmentExpression1(@NotNull Compiler2015Parser.AssignmentExpression1Context ctx) {
+		ctx.ret = ctx.conditionalExpression().ret;
+		return super.visitAssignmentExpression1(ctx);
+	}
+
+	@Override
+	public Object visitAssignmentExpression2(@NotNull Compiler2015Parser.AssignmentExpression2Context ctx) {
+		Expression a1 = ctx.unaryExpression().ret;
+		Expression a2 = ctx.assignmentExpression().ret;
+		if (!a1.isLValue)
+			throw new CompilationError("Expression to the left of = is not left-value.");
+
+		return super.visitAssignmentExpression2(ctx);
+	}
+
+	@Override
+	public Object visitAssignmentExpression3(@NotNull Compiler2015Parser.AssignmentExpression3Context ctx) {
+		return super.visitAssignmentExpression3(ctx);
+	}
+
+	@Override
+	public Object visitAssignmentExpression4(@NotNull Compiler2015Parser.AssignmentExpression4Context ctx) {
+		return super.visitAssignmentExpression4(ctx);
+	}
+
+	@Override
+	public Object visitAssignmentExpression5(@NotNull Compiler2015Parser.AssignmentExpression5Context ctx) {
+		return super.visitAssignmentExpression5(ctx);
+	}
+
+	@Override
+	public Object visitAssignmentExpression6(@NotNull Compiler2015Parser.AssignmentExpression6Context ctx) {
+		return super.visitAssignmentExpression6(ctx);
+	}
+
+	@Override
+	public Object visitAssignmentExpression7(@NotNull Compiler2015Parser.AssignmentExpression7Context ctx) {
+		return super.visitAssignmentExpression7(ctx);
+	}
+
+	@Override
+	public Object visitAssignmentExpression8(@NotNull Compiler2015Parser.AssignmentExpression8Context ctx) {
+		return super.visitAssignmentExpression8(ctx);
+	}
+
+	@Override
+	public Object visitAssignmentExpression9(@NotNull Compiler2015Parser.AssignmentExpression9Context ctx) {
+		return super.visitAssignmentExpression9(ctx);
+	}
+
+	@Override
+	public Object visitAssignmentExpression10(@NotNull Compiler2015Parser.AssignmentExpression10Context ctx) {
+		return super.visitAssignmentExpression10(ctx);
+	}
+
+	@Override
+	public Object visitAssignmentExpression11(@NotNull Compiler2015Parser.AssignmentExpression11Context ctx) {
+		return super.visitAssignmentExpression11(ctx);
+	}
+
+	@Override
+	public Object visitAssignmentExpression12(@NotNull Compiler2015Parser.AssignmentExpression12Context ctx) {
+		return super.visitAssignmentExpression12(ctx);
 	}
 
 	@Override
