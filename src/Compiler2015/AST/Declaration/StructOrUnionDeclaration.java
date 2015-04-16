@@ -7,9 +7,9 @@ import java.util.HashMap;
 
 public class StructOrUnionDeclaration extends Declaration {
 	public int uId;
-	boolean isUnion;
-	HashMap<String, Type> members; // name -> type
-	ArrayList<StructOrUnionDeclaration> anonymousMembers;
+	public boolean isUnion;
+	public HashMap<String, Type> members; // name -> type
+	public ArrayList<StructOrUnionDeclaration> anonymousMembers;
 
 	public StructOrUnionDeclaration(int uId, boolean isUnion, HashMap<String, Type> members, ArrayList<StructOrUnionDeclaration> anonymousMembers) {
 		this.uId = uId;
