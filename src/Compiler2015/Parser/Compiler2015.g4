@@ -3,6 +3,8 @@ grammar Compiler2015;
 @parser::header {
 import Compiler2015.AST.ASTNode;
 import Compiler2015.AST.ASTRoot;
+import Compiler2015.AST.Statement.Statement;
+import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Utility.Tokens;
@@ -150,26 +152,22 @@ expression returns [Expression ret]
 	|	expression ',' assignmentExpression		#expression2
 	;
 
-// TODO
 declaration returns [ASTNode ret]
 	:	'typedef' typeSpecifier initDeclaratorList? ';'		#declaration1
 	|	typeSpecifier initDeclaratorList? ';'				#declaration2
 	;
 
-// TODO
 initDeclaratorList returns [ASTNode ret]
 	:	initDeclarator							#initDeclaratorList1
 	|	initDeclaratorList ',' initDeclarator	#initDeclaratorList2
 	;
 
-// TODO
 initDeclarator returns [ASTNode ret]
 	:	declarator					#initDeclarator1
 	|	declarator '=' initializer	#initDeclarator2
 	;
 
-// TODO
-typeSpecifier returns [ASTNode ret]
+typeSpecifier returns [Type ret]
 	:	'void'					#typeSpecifier1
 	|	'char'					#typeSpecifier2
 	|	'int'					#typeSpecifier3
@@ -177,8 +175,7 @@ typeSpecifier returns [ASTNode ret]
 	|	typedefName				#typeSpecifier5
 	;
 
-// TODO
-structOrUnionSpecifier returns [ASTNode ret]
+structOrUnionSpecifier returns [Type ret]
 	:	structOrUnion Identifier? '{' structDeclaration* '}'	#structOrUnionSpecifier1
 	|	structOrUnion Identifier								#structOrUnionSpecifier2
 	;
@@ -188,29 +185,24 @@ structOrUnion returns [Tokens s]
 	|	'union'  { $s = Tokens.UNION; }
 	;
 
-// TODO
 structDeclaration returns [ASTNode ret]
 	:	typeSpecifier ';'						#structDeclaration1
 	|	typeSpecifier structDeclaratorList ';'	#structDeclaration2
 	;
 
-// TODO
 structDeclaratorList returns [ArrayList<ASTNode> ret]
 	:	declarator (',' declarator)*
 	;
 
-// TODO
 declarator returns [ASTNode ret]
-	:	pointer directDeclarator
-	|	directDeclarator
+	:	pointer? directDeclarator
 	;
 
-// TODO
-directDeclarator returns [String name]
+directDeclarator returns [Type type, String name]
 	:	Identifier										#directDeclarator1
 	|	'(' declarator ')'								#directDeclarator2
-	|	directDeclarator '[' assignmentExpression? ']'	#directDeclarator4
-	|	directDeclarator '(' parameterTypeList? ')'		#directDeclarator5
+	|	directDeclarator '[' assignmentExpression? ']'	#directDeclarator3
+	|	directDeclarator '(' parameterTypeList? ')'		#directDeclarator4
 	;
 
 pointer returns [int count]
@@ -218,43 +210,31 @@ pointer returns [int count]
 	|	'*' pointer		{ $count = $pointer.count + 1; }
 	;
 
-// TODO
 parameterTypeList returns [ArrayList<ASTNode> ret, boolean isFlexible]
 	:	parameterList				#parameterTypeList1
 	|	parameterList ',' '...'		#parameterTypeList2
 	;
 
-// TODO
 parameterList returns [ArrayList<ASTNode> ret]
 	:	parameterDeclaration					#parameterList1
 	|	parameterList ',' parameterDeclaration	#parameterList2
 	;
 
-// TODO
 parameterDeclaration returns [ASTNode ret]
 	:	typeSpecifier declarator // may be typedef should be applied?
 											#parameterDeclaration1
 	|	typeSpecifier abstractDeclarator?	#parameterDeclaration2
 	;
 
-// TODO
-identifierList returns [ArrayList<ASTNode> ret]
-	:	Identifier
-	|	identifierList ',' Identifier
-	;
-
-// TODO
 typeName returns [ASTNode ret]
 	:	typeSpecifier abstractDeclarator?
 	;
 
-// TODO
 abstractDeclarator returns [ASTNode ret]
 	:	pointer									#abstractDeclarator1
 	|	pointer? directAbstractDeclarator		#abstractDeclarator2
 	;
 
-// TODO
 directAbstractDeclarator returns [ASTNode ret]
 	:	'(' abstractDeclarator ')'								#directAbstractDeclarator1
 	|	'[' assignmentExpression? ']'							#directAbstractDeclarator2
@@ -263,85 +243,70 @@ directAbstractDeclarator returns [ASTNode ret]
 	|	directAbstractDeclarator '(' parameterTypeList? ')'		#directAbstractDeclarator5
 	;
 
-// TODO
-typedefName returns [String ret]
+typedefName returns [Type ret]
 	:	{ Environment.isTypedefName($Identifier.text) }? Identifier
 	;
 
-// TODO
 initializer returns [ASTNode ret]
-	:	assignmentExpression
-	|	'{' initializerList '}'
-	|	'{' initializerList ',' '}'
+	:	assignmentExpression			#initializer1
+	|	'{' initializerList '}'			#initializer2
+	|	'{' initializerList ',' '}'		#initializer3
 	;
 
-// TODO
 initializerList returns [ArrayList<Object> ret]
-	:	initializer
-	|	initializerList ',' initializer
+	:	initializer (',' initializer)*
 	;
 
-// TODO
-statement returns [ASTNode ret]
-	:	compoundStatement
-	|	expressionStatement
-	|	selectionStatement
-	|	iterationStatement
-	|	jumpStatement
+statement returns [Statement ret]
+	:	compoundStatement			{$ret = $compoundStatement.ret; }
+	|	expressionStatement			{$ret = $expressionStatement.ret; }
+	|	selectionStatement			{$ret = $selectionStatement.ret; }
+	|	iterationStatement			{$ret = $iterationStatement.ret; }
+	|	jumpStatement				{$ret = $jumpStatement.ret; }
 	;
 
-// TODO
-compoundStatement returns [ASTNode ret]
+compoundStatement returns [CompoundStatement ret]
 	:	'{' blockItem* '}'
 	;
 
-// TODO
 blockItem returns [ASTNode ret]
 	:	declaration				#blockItem1
 	|	functionDefinition		#blockItem2
 	|	statement				#blockItem3
 	;
 
-// TODO
-expressionStatement returns [ASTNode ret]
+expressionStatement returns [Statement ret]
 	:	expression? ';'
 	;
 
-// TODO
-selectionStatement returns [ASTNode ret]
+selectionStatement returns [Statement ret]
 	:	'if' '(' expression ')' statement ('else' statement)?
 	;
 
-// TODO
-iterationStatement returns [ASTNode ret]
+iterationStatement returns [Statement ret]
 	:	'while' '(' expression ')' statement
 									#iterationStatement1
-	|	'for' '(' expression? ';' expression? ';' expression? ')' statement
+	|	'for' '(' E1=expression? ';' E2=expression? ';' E3=expression? ')' statement
 									#iterationStatement2
 	;
 
-// TODO
-jumpStatement returns [ASTNode ret]
+jumpStatement returns [Statement ret]
 	:	'continue' ';'				#jumpStatement1
 	|	'break' ';'					#jumpStatement2
 	|	'return' expression? ';'	#jumpStatement3
 	;
 
-// TODO
 compilationUnit returns [ASTRoot ret]
 	: externalDeclaration* EOF
 	;
 
-// TODO
 externalDeclaration returns [ASTNode ret]
-	:	functionDefinition			#externalDeclaration1
-	|	declaration					#externalDeclaration2
-	|	';' 						#externalDeclaration3
+	:	functionDefinition			{ $ret = $functionDefinition.ret; }
+	|	declaration					{ $ret = $declaration.ret; }
+	|	';' 						{ $ret = null; }
 	;
 
-// TODO
 functionDefinition returns [ASTNode ret]
-//	:	typeSpecifier? declarator declaration* compoundStatement old-style definition is not allowed
 	:	typeSpecifier declarator compoundStatement
 	;
 

@@ -2,6 +2,7 @@ package Compiler2015;
 
 import Compiler2015.Parser.Compiler2015Lexer;
 import Compiler2015.Parser.Compiler2015Parser;
+import Compiler2015.Parser.MyVisitor;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -15,6 +16,8 @@ public class Main {
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		Compiler2015Parser parser = new Compiler2015Parser(tokens);
 		ParseTree tree = parser.compilationUnit();
+		MyVisitor visitor = new MyVisitor();
+		visitor.visit(tree);
 		System.out.println(tree.toString());
 	}
 }
