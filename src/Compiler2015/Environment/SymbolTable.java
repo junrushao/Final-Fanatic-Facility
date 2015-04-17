@@ -11,24 +11,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
 
-public class Entry {
-	public int uId;
-	public String name;
-	public int scope;
-	public Tokens type;
-	public Tokens status;
-	public Object ref;
-
-	public Entry(int uId, String name, int scope, Tokens type, Tokens status, Object ref) {
-		this.uId = uId;
-		this.name = name;
-		this.scope = scope;
-		this.type = type;
-		this.status = status;
-		this.ref = ref;
-	}
-}
-
 /**
  * Record the symbols that have been declared / defined
  */

@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class StructOrUnionDeclaration extends Declaration {
-	public int uId;
+	public int uId = -1;
 	public boolean isUnion;
 	public HashMap<String, Type> members; // name -> type
 	public ArrayList<StructOrUnionDeclaration> anonymousMembers;
 
-	public StructOrUnionDeclaration(int uId, boolean isUnion, HashMap<String, Type> members, ArrayList<StructOrUnionDeclaration> anonymousMembers) {
-		this.uId = uId;
+	public StructOrUnionDeclaration(boolean isUnion, HashMap<String, Type> members, ArrayList<StructOrUnionDeclaration> anonymousMembers) {
+//		this.uId = uId;
 		this.isUnion = isUnion;
 		this.members = members;
 		this.anonymousMembers = anonymousMembers;

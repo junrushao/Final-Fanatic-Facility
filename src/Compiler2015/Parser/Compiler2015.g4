@@ -6,9 +6,22 @@ import Compiler2015.AST.ASTRoot;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Utility.Tokens;
+import Compiler2015.AST.Type.Type;
+import Compiler2015.AST.Type.VariablePointerType;
+
 }
 
 @parser::members {
+
+Type innerType = null;
+/*
+Type embedPointer(int count, Type t) {
+	Type ret = t;
+	for ( ; count > 0; --count)
+		ret = new VariablePointerType(ret);
+	return ret;
+}
+*/
 }
 
 primaryExpression returns [Expression ret]
@@ -137,21 +150,25 @@ expression returns [Expression ret]
 	|	expression ',' assignmentExpression		#expression2
 	;
 
+// TODO
 declaration returns [ASTNode ret]
 	:	'typedef' typeSpecifier initDeclaratorList? ';'		#declaration1
 	|	typeSpecifier initDeclaratorList? ';'				#declaration2
 	;
 
+// TODO
 initDeclaratorList returns [ASTNode ret]
 	:	initDeclarator							#initDeclaratorList1
 	|	initDeclaratorList ',' initDeclarator	#initDeclaratorList2
 	;
 
+// TODO
 initDeclarator returns [ASTNode ret]
 	:	declarator					#initDeclarator1
 	|	declarator '=' initializer	#initDeclarator2
 	;
 
+// TODO
 typeSpecifier returns [ASTNode ret]
 	:	'void'					#typeSpecifier1
 	|	'char'					#typeSpecifier2
@@ -160,6 +177,7 @@ typeSpecifier returns [ASTNode ret]
 	|	typedefName				#typeSpecifier5
 	;
 
+// TODO
 structOrUnionSpecifier returns [ASTNode ret]
 	:	structOrUnion Identifier? '{' structDeclaration* '}'	#structOrUnionSpecifier1
 	|	structOrUnion Identifier								#structOrUnionSpecifier2
@@ -170,63 +188,73 @@ structOrUnion returns [Tokens s]
 	|	'union'  { $s = Tokens.UNION; }
 	;
 
+// TODO
 structDeclaration returns [ASTNode ret]
-	:	typeSpecifier+ structDeclaratorList? ';'
+	:	typeSpecifier ';'						#structDeclaration1
+	|	typeSpecifier structDeclaratorList ';'	#structDeclaration2
 	;
 
+// TODO
 structDeclaratorList returns [ArrayList<ASTNode> ret]
-	:	declarator								#structDeclaratorList1
-	|	structDeclaratorList ',' declarator		#structDeclaratorList2
+	:	declarator (',' declarator)*
 	;
 
+// TODO
 declarator returns [ASTNode ret]
-	:	pointer? directDeclarator
+	:	pointer directDeclarator
+	|	directDeclarator
 	;
 
-directDeclarator returns [ASTNode ret]
-	:	Identifier
-	|	'(' declarator ')'
-	|	directDeclarator '[' ']'
-	|	directDeclarator '[' assignmentExpression? ']'
-	|	directDeclarator '(' parameterTypeList ')'
-	|	directDeclarator '(' identifierList? ')'
+// TODO
+directDeclarator returns [String name]
+	:	Identifier										#directDeclarator1
+	|	'(' declarator ')'								#directDeclarator2
+	|	directDeclarator '[' assignmentExpression? ']'	#directDeclarator4
+	|	directDeclarator '(' parameterTypeList? ')'		#directDeclarator5
 	;
 
 pointer returns [int count]
-	:	'*'				#pointer1
-	|	'*' pointer		#pointer2
+	:	'*'				{ $count = 1; }
+	|	'*' pointer		{ $count = $pointer.count + 1; }
 	;
 
+// TODO
 parameterTypeList returns [ArrayList<ASTNode> ret, boolean isFlexible]
 	:	parameterList				#parameterTypeList1
 	|	parameterList ',' '...'		#parameterTypeList2
 	;
 
+// TODO
 parameterList returns [ArrayList<ASTNode> ret]
 	:	parameterDeclaration					#parameterList1
 	|	parameterList ',' parameterDeclaration	#parameterList2
 	;
 
+// TODO
 parameterDeclaration returns [ASTNode ret]
 	:	typeSpecifier declarator // may be typedef should be applied?
 											#parameterDeclaration1
 	|	typeSpecifier abstractDeclarator?	#parameterDeclaration2
 	;
 
+// TODO
 identifierList returns [ArrayList<ASTNode> ret]
 	:	Identifier
 	|	identifierList ',' Identifier
 	;
 
+// TODO
 typeName returns [ASTNode ret]
-	:	typeSpecifier+ abstractDeclarator?
+	:	typeSpecifier abstractDeclarator?
 	;
 
+// TODO
 abstractDeclarator returns [ASTNode ret]
 	:	pointer									#abstractDeclarator1
 	|	pointer? directAbstractDeclarator		#abstractDeclarator2
 	;
 
+// TODO
 directAbstractDeclarator returns [ASTNode ret]
 	:	'(' abstractDeclarator ')'								#directAbstractDeclarator1
 	|	'[' assignmentExpression? ']'							#directAbstractDeclarator2
@@ -235,21 +263,25 @@ directAbstractDeclarator returns [ASTNode ret]
 	|	directAbstractDeclarator '(' parameterTypeList? ')'		#directAbstractDeclarator5
 	;
 
+// TODO
 typedefName returns [String ret]
 	:	{ Environment.isTypedefName($Identifier.text) }? Identifier
 	;
 
+// TODO
 initializer returns [ASTNode ret]
 	:	assignmentExpression
 	|	'{' initializerList '}'
 	|	'{' initializerList ',' '}'
 	;
 
+// TODO
 initializerList returns [ArrayList<Object> ret]
 	:	initializer
 	|	initializerList ',' initializer
 	;
 
+// TODO
 statement returns [ASTNode ret]
 	:	compoundStatement
 	|	expressionStatement
@@ -258,24 +290,29 @@ statement returns [ASTNode ret]
 	|	jumpStatement
 	;
 
+// TODO
 compoundStatement returns [ASTNode ret]
 	:	'{' blockItem* '}'
 	;
 
+// TODO
 blockItem returns [ASTNode ret]
 	:	declaration				#blockItem1
 	|	functionDefinition		#blockItem2
 	|	statement				#blockItem3
 	;
 
+// TODO
 expressionStatement returns [ASTNode ret]
 	:	expression? ';'
 	;
 
+// TODO
 selectionStatement returns [ASTNode ret]
 	:	'if' '(' expression ')' statement ('else' statement)?
 	;
 
+// TODO
 iterationStatement returns [ASTNode ret]
 	:	'while' '(' expression ')' statement
 									#iterationStatement1
@@ -283,25 +320,29 @@ iterationStatement returns [ASTNode ret]
 									#iterationStatement2
 	;
 
+// TODO
 jumpStatement returns [ASTNode ret]
 	:	'continue' ';'				#jumpStatement1
 	|	'break' ';'					#jumpStatement2
 	|	'return' expression? ';'	#jumpStatement3
 	;
 
+// TODO
 compilationUnit returns [ASTRoot ret]
 	: externalDeclaration* EOF
 	;
 
+// TODO
 externalDeclaration returns [ASTNode ret]
 	:	functionDefinition			#externalDeclaration1
 	|	declaration					#externalDeclaration2
 	|	';' 						#externalDeclaration3
 	;
 
+// TODO
 functionDefinition returns [ASTNode ret]
 //	:	typeSpecifier? declarator declaration* compoundStatement old-style definition is not allowed
-	:	typeSpecifier? declarator compoundStatement
+	:	typeSpecifier declarator compoundStatement
 	;
 
 constant returns [Expression ret]

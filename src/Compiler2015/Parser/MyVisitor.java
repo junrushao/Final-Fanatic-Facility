@@ -1088,6 +1088,38 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 	}
 
 	@Override
+	public Object visitTypeSpecifier1(@NotNull Compiler2015Parser.TypeSpecifier1Context ctx) {
+		ctx.ret = new VoidType();
+		return super.visitTypeSpecifier1(ctx);
+	}
+
+	@Override
+	public Object visitTypeSpecifier2(@NotNull Compiler2015Parser.TypeSpecifier2Context ctx) {
+		ctx.ret = new CharType();
+		return super.visitTypeSpecifier2(ctx);
+	}
+
+	@Override
+	public Object visitTypeSpecifier3(@NotNull Compiler2015Parser.TypeSpecifier3Context ctx) {
+		ctx.ret = new IntType();
+		return super.visitTypeSpecifier3(ctx);
+	}
+
+	@Override
+	public Object visitTypeSpecifier4(@NotNull Compiler2015Parser.TypeSpecifier4Context ctx) {
+		// TODO
+		return super.visitTypeSpecifier4(ctx);
+	}
+
+	@Override
+	public Object visitTypeSpecifier5(@NotNull Compiler2015Parser.TypeSpecifier5Context ctx) {
+		String name = ctx.typedefName().getText();
+		ctx.ret = (Type) Environment.symbolNames.queryName(name).ref;
+		return super.visitTypeSpecifier5(ctx);
+	}
+
+
+	@Override
 	public Object visitConstant1(@NotNull Compiler2015Parser.Constant1Context ctx) {
 		ctx.ret = new IntConstant(
 				Integer.parseInt(ctx.DecimalConstant().getText(), 10),
