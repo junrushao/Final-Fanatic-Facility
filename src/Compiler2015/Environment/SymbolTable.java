@@ -81,6 +81,7 @@ public class SymbolTable {
 	}
 
 	public boolean isUnused(String name) {
+		// TODO: Wrong here
 		return queryName(name) == null;
 	}
 

@@ -185,7 +185,7 @@ structOrUnion returns [Tokens s]
 	|	'union'  { $s = Tokens.UNION; }
 	;
 
-structDeclaration returns [ASTNode ret]
+structDeclaration returns [ArrayList<Type> retType, ArrayList<String> retName]
 	:	typeSpecifier ';'						#structDeclaration1
 	|	typeSpecifier structDeclaratorList ';'	#structDeclaration2
 	;

@@ -14,6 +14,9 @@ import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+// TODO: In fact I should not use visitor at all.
 
 public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
@@ -34,7 +37,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitPrimaryExpression2(@NotNull Compiler2015Parser.PrimaryExpression2Context ctx) {
-		visit(ctx.constant());
 		ctx.ret = ctx.constant().ret;
 		return super.visitPrimaryExpression2(ctx);
 	}
@@ -56,22 +58,18 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitPrimaryExpression4(@NotNull Compiler2015Parser.PrimaryExpression4Context ctx) {
-		visit(ctx.expression());
 		ctx.ret = ctx.expression().ret;
 		return super.visitPrimaryExpression4(ctx);
 	}
 
 	@Override
 	public Object visitPostfixExpression1(@NotNull Compiler2015Parser.PostfixExpression1Context ctx) {
-		visit(ctx.primaryExpression());
 		ctx.ret = ctx.primaryExpression().ret;
 		return super.visitPostfixExpression1(ctx);
 	}
 
 	@Override
 	public Object visitPostfixExpression2(@NotNull Compiler2015Parser.PostfixExpression2Context ctx) {
-		visit(ctx.postfixExpression());
-		visit(ctx.expression());
 		Expression a1 = ctx.postfixExpression().ret;
 		Expression a2 = ctx.expression().ret;
 		if (a1.type instanceof VariablePointerType)
@@ -85,8 +83,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 	@Override
 	public Object visitPostfixExpression3(@NotNull Compiler2015Parser.PostfixExpression3Context ctx) {
 		// TODO: ArrayPointerType -> VariablePointerType
-		visit(ctx.postfixExpression());
-		visit(ctx.argumentExpressionList());
 		Type lType = ctx.postfixExpression().ret.type;
 		if (!(lType instanceof FunctionPointerType))
 			throw new CompilationError("Not a pointer to function.");
@@ -112,8 +108,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitPostfixExpression4(@NotNull Compiler2015Parser.PostfixExpression4Context ctx) {
-		visit(ctx.postfixExpression());
-		visit(ctx.Identifier());
 		Expression a1 = ctx.postfixExpression().ret;
 		String a2 = ctx.Identifier().getText();
 		if (!(a1.type instanceof StructOrUnionType))
@@ -128,8 +122,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitPostfixExpression5(@NotNull Compiler2015Parser.PostfixExpression5Context ctx) {
-		visit(ctx.postfixExpression());
-		visit(ctx.Identifier());
 		Expression a1 = ctx.postfixExpression().ret;
 		String a2 = ctx.Identifier().getText();
 		Type l = Pointer.getPointTo(a1.type);
@@ -145,7 +137,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitPostfixExpression6(@NotNull Compiler2015Parser.PostfixExpression6Context ctx) {
-		visit(ctx.postfixExpression());
 		Expression a1 = ctx.postfixExpression().ret;
 		if (!a1.isLValue)
 			throw new CompilationError("Not LValue.");
@@ -166,7 +157,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitPostfixExpression7(@NotNull Compiler2015Parser.PostfixExpression7Context ctx) {
-		visit(ctx.postfixExpression());
 		Expression a1 = ctx.postfixExpression().ret;
 		if (!a1.isLValue)
 			throw new CompilationError("Not LValue.");
@@ -187,15 +177,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitArgumentExpressionList1(@NotNull final Compiler2015Parser.ArgumentExpressionList1Context ctx) {
-		visit(ctx.assignmentExpression());
 		ctx.ret = new ArrayList<Expression>() {{add(ctx.assignmentExpression().ret);}};
 		return super.visitArgumentExpressionList1(ctx);
 	}
 
 	@Override
 	public Object visitArgumentExpressionList2(@NotNull Compiler2015Parser.ArgumentExpressionList2Context ctx) {
-		visit(ctx.argumentExpressionList());
-		visit(ctx.assignmentExpression());
 		ctx.ret = ctx.argumentExpressionList().ret;
 		ctx.ret.add(ctx.assignmentExpression().ret);
 		return super.visitArgumentExpressionList2(ctx);
@@ -203,14 +190,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitUnaryExpression1(@NotNull Compiler2015Parser.UnaryExpression1Context ctx) {
-		visit(ctx.postfixExpression());
 		ctx.ret = ctx.postfixExpression().ret;
 		return super.visitUnaryExpression1(ctx);
 	}
 
 	@Override
 	public Object visitUnaryExpression2(@NotNull Compiler2015Parser.UnaryExpression2Context ctx) {
-		visit(ctx.unaryExpression());
 		Expression a1 = ctx.unaryExpression().ret;
 		if (!a1.isLValue)
 			throw new CompilationError("Not LValue.");
@@ -231,7 +216,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitUnaryExpression3(@NotNull Compiler2015Parser.UnaryExpression3Context ctx) {
-		visit(ctx.unaryExpression());
 		Expression a1 = ctx.unaryExpression().ret;
 		if (!a1.isLValue)
 			throw new CompilationError("Not LValue.");
@@ -252,7 +236,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitUnaryExpression4(@NotNull Compiler2015Parser.UnaryExpression4Context ctx) {
-		visit(ctx.castExpression());
 		Expression e = ctx.castExpression().ret;
 		if (!e.isLValue)
 			throw new CompilationError("Not LValue.");
@@ -262,7 +245,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitUnaryExpression5(@NotNull Compiler2015Parser.UnaryExpression5Context ctx) {
-		visit(ctx.castExpression());
 		Expression e = ctx.castExpression().ret;
 		ctx.ret = new AddressAccess(e, Pointer.getPointTo(e.type), true);
 		return super.visitUnaryExpression5(ctx);
@@ -270,7 +252,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitUnaryExpression6(@NotNull Compiler2015Parser.UnaryExpression6Context ctx) {
-		visit(ctx.castExpression());
 		Expression e = ctx.castExpression().ret;
 		if (!Type.isNumeric(e.type))
 			throw new CompilationError("Cannot put unary plus before this type");
@@ -282,7 +263,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitUnaryExpression7(@NotNull Compiler2015Parser.UnaryExpression7Context ctx) {
-		visit(ctx.castExpression());
 		Expression e = ctx.castExpression().ret;
 		if (!Type.isNumeric(e.type))
 			throw new CompilationError("Cannot put unary plus before this type");
@@ -297,7 +277,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitUnaryExpression8(@NotNull Compiler2015Parser.UnaryExpression8Context ctx) {
-		visit(ctx.castExpression());
 		Expression e = ctx.castExpression().ret;
 		if (!Type.isNumeric(e.type))
 			throw new CompilationError("Cannot put unary plus before this type");
@@ -311,7 +290,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitUnaryExpression9(@NotNull Compiler2015Parser.UnaryExpression9Context ctx) {
-		visit(ctx.castExpression());
 		Expression e = ctx.castExpression().ret;
 		if (!Type.isNumeric(e.type))
 			throw new CompilationError("Cannot put unary plus before this type");
@@ -326,7 +304,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitUnaryExpression10(@NotNull Compiler2015Parser.UnaryExpression10Context ctx) {
-		visit(ctx.unaryExpression());
 		Expression e = ctx.unaryExpression().ret;
 		if (e instanceof StringConstant || e instanceof CharConstant || e instanceof IntConstant)
 			ctx.ret = new IntConstant(e.sizeof(), new IntType(), false);
@@ -337,22 +314,18 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitUnaryExpression11(@NotNull Compiler2015Parser.UnaryExpression11Context ctx) {
-		visit(ctx.typeName());
 		ctx.ret = new IntConstant(ctx.ret.sizeof(), new IntType(), false);
 		return super.visitUnaryExpression11(ctx);
 	}
 
 	@Override
 	public Object visitCastExpression1(@NotNull Compiler2015Parser.CastExpression1Context ctx) {
-		visit(ctx.unaryExpression());
 		ctx.ret = ctx.unaryExpression().ret;
 		return super.visitCastExpression1(ctx);
 	}
 
 	@Override
 	public Object visitCastExpression2(@NotNull Compiler2015Parser.CastExpression2Context ctx) {
-		visit(ctx.typeName());
-		visit(ctx.castExpression());
 		Type t = (Type)ctx.typeName().ret;
 		Expression c = ctx.castExpression().ret;
 		if (t instanceof VoidType)
@@ -378,15 +351,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitMultiplicativeExpression1(@NotNull Compiler2015Parser.MultiplicativeExpression1Context ctx) {
-		visit(ctx.castExpression());
 		ctx.ret = ctx.castExpression().ret;
 		return super.visitMultiplicativeExpression1(ctx);
 	}
 
 	@Override
 	public Object visitMultiplicativeExpression2(@NotNull Compiler2015Parser.MultiplicativeExpression2Context ctx) {
-		visit(ctx.multiplicativeExpression());
-		visit(ctx.castExpression());
 		Expression a1 = ctx.multiplicativeExpression().ret;
 		Expression a2 = ctx.castExpression().ret;
 		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
@@ -406,8 +376,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitMultiplicativeExpression3(@NotNull Compiler2015Parser.MultiplicativeExpression3Context ctx) {
-		visit(ctx.multiplicativeExpression());
-		visit(ctx.castExpression());
 		Expression a1 = ctx.multiplicativeExpression().ret;
 		Expression a2 = ctx.castExpression().ret;
 		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
@@ -427,8 +395,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitMultiplicativeExpression4(@NotNull Compiler2015Parser.MultiplicativeExpression4Context ctx) {
-		visit(ctx.multiplicativeExpression());
-		visit(ctx.castExpression());
 		Expression a1 = ctx.multiplicativeExpression().ret;
 		Expression a2 = ctx.castExpression().ret;
 		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
@@ -448,15 +414,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitAdditiveExpression1(@NotNull Compiler2015Parser.AdditiveExpression1Context ctx) {
-		visit(ctx.multiplicativeExpression());
 		ctx.ret = ctx.multiplicativeExpression().ret;
 		return super.visitAdditiveExpression1(ctx);
 	}
 
 	@Override
 	public Object visitAdditiveExpression2(@NotNull Compiler2015Parser.AdditiveExpression2Context ctx) {
-		visit(ctx.additiveExpression());
-		visit(ctx.multiplicativeExpression());
 		Expression a1 = ctx.additiveExpression().ret;
 		Expression a2 = ctx.multiplicativeExpression().ret;
 		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
@@ -482,8 +445,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitAdditiveExpression3(@NotNull Compiler2015Parser.AdditiveExpression3Context ctx) {
-		visit(ctx.additiveExpression());
-		visit(ctx.multiplicativeExpression());
 		Expression a1 = ctx.additiveExpression().ret;
 		Expression a2 = ctx.multiplicativeExpression().ret;
 		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
@@ -507,15 +468,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitShiftExpression1(@NotNull Compiler2015Parser.ShiftExpression1Context ctx) {
-		visit(ctx.additiveExpression());
 		ctx.ret = ctx.additiveExpression().ret;
 		return super.visitShiftExpression1(ctx);
 	}
 
 	@Override
 	public Object visitShiftExpression2(@NotNull Compiler2015Parser.ShiftExpression2Context ctx) {
-		visit(ctx.shiftExpression());
-		visit(ctx.additiveExpression());
 		Expression a1 = ctx.shiftExpression().ret;
 		Expression a2 = ctx.additiveExpression().ret;
 		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
@@ -535,8 +493,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitShiftExpression3(@NotNull Compiler2015Parser.ShiftExpression3Context ctx) {
-		visit(ctx.shiftExpression());
-		visit(ctx.additiveExpression());
 		Expression a1 = ctx.shiftExpression().ret;
 		Expression a2 = ctx.additiveExpression().ret;
 		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
@@ -556,15 +512,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitRelationalExpression1(@NotNull Compiler2015Parser.RelationalExpression1Context ctx) {
-		visit(ctx.shiftExpression());
 		ctx.ret = ctx.shiftExpression().ret;
 		return super.visitRelationalExpression1(ctx);
 	}
 
 	@Override
 	public Object visitRelationalExpression2(@NotNull Compiler2015Parser.RelationalExpression2Context ctx) {
-		visit(ctx.relationalExpression());
-		visit(ctx.shiftExpression());
 		Expression a1 = ctx.relationalExpression().ret;
 		Expression a2 = ctx.shiftExpression().ret;
 		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
@@ -583,8 +536,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitRelationalExpression3(@NotNull Compiler2015Parser.RelationalExpression3Context ctx) {
-		visit(ctx.relationalExpression());
-		visit(ctx.shiftExpression());
 		Expression a1 = ctx.relationalExpression().ret;
 		Expression a2 = ctx.shiftExpression().ret;
 		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
@@ -603,8 +554,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitRelationalExpression4(@NotNull Compiler2015Parser.RelationalExpression4Context ctx) {
-		visit(ctx.relationalExpression());
-		visit(ctx.shiftExpression());
 		Expression a1 = ctx.relationalExpression().ret;
 		Expression a2 = ctx.shiftExpression().ret;
 		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
@@ -623,8 +572,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitRelationalExpression5(@NotNull Compiler2015Parser.RelationalExpression5Context ctx) {
-		visit(ctx.relationalExpression());
-		visit(ctx.shiftExpression());
 		Expression a1 = ctx.relationalExpression().ret;
 		Expression a2 = ctx.shiftExpression().ret;
 		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
@@ -643,15 +590,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitEqualityExpression1(@NotNull Compiler2015Parser.EqualityExpression1Context ctx) {
-		visit(ctx.relationalExpression());
 		ctx.ret = ctx.relationalExpression().ret;
 		return super.visitEqualityExpression1(ctx);
 	}
 
 	@Override
 	public Object visitEqualityExpression2(@NotNull Compiler2015Parser.EqualityExpression2Context ctx) {
-		visit(ctx.equalityExpression());
-		visit(ctx.relationalExpression());
 		Expression a1 = ctx.equalityExpression().ret;
 		Expression a2 = ctx.relationalExpression().ret;
 		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
@@ -670,8 +614,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitEqualityExpression3(@NotNull Compiler2015Parser.EqualityExpression3Context ctx) {
-		visit(ctx.equalityExpression());
-		visit(ctx.relationalExpression());
 		Expression a1 = ctx.equalityExpression().ret;
 		Expression a2 = ctx.relationalExpression().ret;
 		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
@@ -690,15 +632,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitAndExpression1(@NotNull Compiler2015Parser.AndExpression1Context ctx) {
-		visit(ctx.equalityExpression());
 		ctx.ret = ctx.equalityExpression().ret;
 		return super.visitAndExpression1(ctx);
 	}
 
 	@Override
 	public Object visitAndExpression2(@NotNull Compiler2015Parser.AndExpression2Context ctx) {
-		visit(ctx.andExpression());
-		visit(ctx.equalityExpression());
 		Expression a1 = ctx.andExpression().ret;
 		Expression a2 = ctx.equalityExpression().ret;
 		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
@@ -718,15 +657,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitExclusiveOrExpression1(@NotNull Compiler2015Parser.ExclusiveOrExpression1Context ctx) {
-		visit(ctx.andExpression());
 		ctx.ret = ctx.andExpression().ret;
 		return super.visitExclusiveOrExpression1(ctx);
 	}
 
 	@Override
 	public Object visitExclusiveOrExpression2(@NotNull Compiler2015Parser.ExclusiveOrExpression2Context ctx) {
-		visit(ctx.exclusiveOrExpression());
-		visit(ctx.andExpression());
 		Expression a1 = ctx.exclusiveOrExpression().ret;
 		Expression a2 = ctx.andExpression().ret;
 		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
@@ -746,15 +682,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitInclusiveOrExpression1(@NotNull Compiler2015Parser.InclusiveOrExpression1Context ctx) {
-		visit(ctx.exclusiveOrExpression());
 		ctx.ret = ctx.exclusiveOrExpression().ret;
 		return super.visitInclusiveOrExpression1(ctx);
 	}
 
 	@Override
 	public Object visitInclusiveOrExpression2(@NotNull Compiler2015Parser.InclusiveOrExpression2Context ctx) {
-		visit(ctx.inclusiveOrExpression());
-		visit(ctx.exclusiveOrExpression());
 		Expression a1 = ctx.inclusiveOrExpression().ret;
 		Expression a2 = ctx.exclusiveOrExpression().ret;
 		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
@@ -774,15 +707,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitLogicalAndExpression1(@NotNull Compiler2015Parser.LogicalAndExpression1Context ctx) {
-		visit(ctx.inclusiveOrExpression());
 		ctx.ret = ctx.inclusiveOrExpression().ret;
 		return super.visitLogicalAndExpression1(ctx);
 	}
 
 	@Override
 	public Object visitLogicalAndExpression2(@NotNull Compiler2015Parser.LogicalAndExpression2Context ctx) {
-		visit(ctx.logicalAndExpression());
-		visit(ctx.inclusiveOrExpression());
 		Expression a1 = ctx.logicalAndExpression().ret;
 		Expression a2 = ctx.inclusiveOrExpression().ret;
 		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
@@ -802,15 +732,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitLogicalOrExpression1(@NotNull Compiler2015Parser.LogicalOrExpression1Context ctx) {
-		visit(ctx.logicalAndExpression());
 		ctx.ret = ctx.logicalAndExpression().ret;
 		return super.visitLogicalOrExpression1(ctx);
 	}
 
 	@Override
 	public Object visitLogicalOrExpression2(@NotNull Compiler2015Parser.LogicalOrExpression2Context ctx) {
-		visit(ctx.logicalOrExpression());
-		visit(ctx.logicalAndExpression());
 		Expression a1 = ctx.logicalOrExpression().ret;
 		Expression a2 = ctx.logicalAndExpression().ret;
 		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
@@ -830,16 +757,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitConditionalExpression1(@NotNull Compiler2015Parser.ConditionalExpression1Context ctx) {
-		visit(ctx.logicalOrExpression());
 		ctx.ret = ctx.logicalOrExpression().ret;
 		return super.visitConditionalExpression1(ctx);
 	}
 
 	@Override
 	public Object visitConditionalExpression2(@NotNull Compiler2015Parser.ConditionalExpression2Context ctx) {
-		visit(ctx.logicalOrExpression());
-		visit(ctx.expression());
-		visit(ctx.conditionalExpression());
 		Expression a1 = ctx.logicalOrExpression().ret;
 		Expression a2 = ctx.expression().ret;
 		Expression a3 = ctx.conditionalExpression().ret;
@@ -863,15 +786,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitAssignmentExpression1(@NotNull Compiler2015Parser.AssignmentExpression1Context ctx) {
-		visit(ctx.conditionalExpression());
 		ctx.ret = ctx.conditionalExpression().ret;
 		return super.visitAssignmentExpression1(ctx);
 	}
 
 	@Override
 	public Object visitAssignmentExpression2(@NotNull Compiler2015Parser.AssignmentExpression2Context ctx) {
-		visit(ctx.unaryExpression());
-		visit(ctx.assignmentExpression());
 		Expression a1 = ctx.unaryExpression().ret;
 		Expression a2 = ctx.assignmentExpression().ret;
 		if (!a1.isLValue)
@@ -898,8 +818,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitAssignmentExpression3(@NotNull Compiler2015Parser.AssignmentExpression3Context ctx) {
-		visit(ctx.unaryExpression());
-		visit(ctx.assignmentExpression());
 		Expression a1 = ctx.unaryExpression().ret;
 		Expression a2 = ctx.assignmentExpression().ret;
 		if (!a1.isLValue)
@@ -926,8 +844,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitAssignmentExpression4(@NotNull Compiler2015Parser.AssignmentExpression4Context ctx) {
-		visit(ctx.unaryExpression());
-		visit(ctx.assignmentExpression());
 		Expression a1 = ctx.unaryExpression().ret;
 		Expression a2 = ctx.assignmentExpression().ret;
 		if (!a1.isLValue)
@@ -954,8 +870,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitAssignmentExpression5(@NotNull Compiler2015Parser.AssignmentExpression5Context ctx) {
-		visit(ctx.unaryExpression());
-		visit(ctx.assignmentExpression());
 		Expression a1 = ctx.unaryExpression().ret;
 		Expression a2 = ctx.assignmentExpression().ret;
 		if (!a1.isLValue)
@@ -982,8 +896,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitAssignmentExpression6(@NotNull Compiler2015Parser.AssignmentExpression6Context ctx) {
-		visit(ctx.unaryExpression());
-		visit(ctx.assignmentExpression());
 		Expression a1 = ctx.unaryExpression().ret;
 		Expression a2 = ctx.assignmentExpression().ret;
 		if (!a1.isLValue)
@@ -1010,8 +922,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitAssignmentExpression7(@NotNull Compiler2015Parser.AssignmentExpression7Context ctx) {
-		visit(ctx.unaryExpression());
-		visit(ctx.assignmentExpression());
 		Expression a1 = ctx.unaryExpression().ret;
 		Expression a2 = ctx.assignmentExpression().ret;
 		if (!a1.isLValue)
@@ -1038,8 +948,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitAssignmentExpression8(@NotNull Compiler2015Parser.AssignmentExpression8Context ctx) {
-		visit(ctx.unaryExpression());
-		visit(ctx.assignmentExpression());
 		Expression a1 = ctx.unaryExpression().ret;
 		Expression a2 = ctx.assignmentExpression().ret;
 		if (!a1.isLValue)
@@ -1066,8 +974,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitAssignmentExpression9(@NotNull Compiler2015Parser.AssignmentExpression9Context ctx) {
-		visit(ctx.unaryExpression());
-		visit(ctx.assignmentExpression());
 		Expression a1 = ctx.unaryExpression().ret;
 		Expression a2 = ctx.assignmentExpression().ret;
 		if (!a1.isLValue)
@@ -1094,8 +1000,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitAssignmentExpression10(@NotNull Compiler2015Parser.AssignmentExpression10Context ctx) {
-		visit(ctx.unaryExpression());
-		visit(ctx.assignmentExpression());
 		Expression a1 = ctx.unaryExpression().ret;
 		Expression a2 = ctx.assignmentExpression().ret;
 		if (!a1.isLValue)
@@ -1122,8 +1026,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitAssignmentExpression11(@NotNull Compiler2015Parser.AssignmentExpression11Context ctx) {
-		visit(ctx.unaryExpression());
-		visit(ctx.assignmentExpression());
 		Expression a1 = ctx.unaryExpression().ret;
 		Expression a2 = ctx.assignmentExpression().ret;
 		if (!a1.isLValue)
@@ -1150,8 +1052,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitAssignmentExpression12(@NotNull Compiler2015Parser.AssignmentExpression12Context ctx) {
-		visit(ctx.unaryExpression());
-		visit(ctx.assignmentExpression());
 		Expression a1 = ctx.unaryExpression().ret;
 		Expression a2 = ctx.assignmentExpression().ret;
 		if (!a1.isLValue)
@@ -1178,15 +1078,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitExpression1(@NotNull Compiler2015Parser.Expression1Context ctx) {
-		visit(ctx.assignmentExpression());
 		ctx.ret = ctx.assignmentExpression().ret;
 		return super.visitExpression1(ctx);
 	}
 
 	@Override
 	public Object visitExpression2(@NotNull Compiler2015Parser.Expression2Context ctx) {
-		visit(ctx.expression());
-		visit(ctx.assignmentExpression());
 		Expression e1 = ctx.expression().ret;
 		Expression e2 = ctx.assignmentExpression().ret;
 		Integer v1 = toInt(e1), v2 = toInt(e2);
@@ -1247,14 +1144,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitTypeSpecifier4(@NotNull Compiler2015Parser.TypeSpecifier4Context ctx) {
-		visit(ctx.structOrUnionSpecifier());
 		ctx.ret = ctx.structOrUnionSpecifier().ret;
 		return super.visitTypeSpecifier4(ctx);
 	}
 
 	@Override
 	public Object visitTypeSpecifier5(@NotNull Compiler2015Parser.TypeSpecifier5Context ctx) {
-		visit(ctx.typedefName());
 		String name = ctx.typedefName().getText();
 		ctx.ret = (Type) Environment.symbolNames.queryName(name).ref;
 		return super.visitTypeSpecifier5(ctx);
@@ -1262,6 +1157,21 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitStructOrUnionSpecifier1(@NotNull Compiler2015Parser.StructOrUnionSpecifier1Context ctx) {
+		boolean isUnion = ctx.structOrUnion().s == Tokens.UNION;
+		String name = ctx.Identifier() == null ? null : ctx.Identifier().getText();
+
+		if (name != null && Environment.classNames.queryName(name).status == Tokens.DEFINED)
+			throw new CompilationError("Already defined.");
+
+		Environment.enterScope();
+		Environment.exitScope(true);
+
+		HashMap<String, Type> members = new HashMap<String, Type>();
+		ArrayList<Type> anonymousMembers = new ArrayList<Type>();
+		for (Compiler2015Parser.StructDeclarationContext x : ctx.structDeclaration()) {
+			// TODO: E Xin Mei Xie Wan
+		}
+//		StructOrUnionDeclaration declaration = new StructOrUnionDeclaration(ctx.stru);
 		return super.visitStructOrUnionSpecifier1(ctx);
 	}
 
@@ -1415,6 +1325,7 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitCompoundStatement(@NotNull Compiler2015Parser.CompoundStatementContext ctx) {
+		Environment.enterScope();
 		ArrayList<ASTNode> ret = new ArrayList<ASTNode>();
 		for (Compiler2015Parser.BlockItemContext x : ctx.blockItem()) {
 			visit(x);
@@ -1422,6 +1333,7 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 				ret.add(x.ret);
 		}
 		ctx.ret = new CompoundStatement(ret);
+		Environment.exitScope(false);
 		return super.visitCompoundStatement(ctx);
 	}
 
