@@ -1,5 +1,7 @@
 package Compiler2015.AST.Type;
 
+import Compiler2015.AST.Statement.ExpressionStatement.Constant;
+import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
 
 import java.util.ArrayList;
@@ -14,29 +16,34 @@ public class ArrayPointerType extends Pointer {
 	public ArrayList<Integer> dimensions;
 
 	/**
-	 * @param t   the type of the array
-	 * @param len length of the current dimension
+	 * @param t the type of the array
+	 * @param d length of each dimension
 	 */
-	public ArrayPointerType(Type t, final int len) {
-		if (t instanceof ArrayPointerType) {
-			if (len < 0)
-				throw new CompilationError("Dimension must be non-negative and determined.");
-			this.pointTo = ((ArrayPointerType) t).pointTo;
-			this.dimensions = ((ArrayPointerType) t).dimensions;
-			this.dimensions.add(len);
-		} else {
-			this.pointTo = t;
-			this.dimensions = new ArrayList<Integer>() {{
-				add(len);
-			}};
+	public ArrayPointerType(Type t, ArrayList<Expression> d) {
+		pointTo = t;
+		dimensions = new ArrayList<Integer>();
+		int n = d.size();
+		for (int i = 0; i < n; ++i) {
+			Expression e = d.get(i);
+			if (e == null) {
+				if (i != 0)
+					throw new CompilationError("Array type has incomplete dimensions.");
+				dimensions.add(-1);
+			} else if (e instanceof Constant) {
+				int v = ((Constant) e).toInt();
+				if (v < 0)
+					throw new CompilationError("The length of each dimension must be non-negative.");
+				dimensions.add(v);
+			} else
+				throw new CompilationError("The length of each dimension must be constant.");
 		}
 	}
 
 	@Override
 	public int sizeof() { // assume there is no integer overflow
 		int ret = pointTo.sizeof();
-		for (int i = 0, size = dimensions.size(); i < size; ++i)
-			ret *= dimensions.get(i);
+		for (int d : dimensions)
+			ret *= d;
 		return ret;
 	}
 }

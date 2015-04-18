@@ -16,4 +16,9 @@ public class StringConstant extends Expression {
 	public int sizeof() {
 		return c.length() + 1;
 	}
+
+//	@Override
+//	public int toInt() {
+//		throw new CompilationError("Internal Error");
+//	}
 }

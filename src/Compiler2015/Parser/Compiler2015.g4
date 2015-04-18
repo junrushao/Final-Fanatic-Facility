@@ -1,320 +1,459 @@
 grammar Compiler2015;
 
 @parser::header {
-import Compiler2015.AST.ASTNode;
-import Compiler2015.AST.ASTRoot;
-import Compiler2015.AST.Statement.Statement;
-import Compiler2015.AST.Statement.CompoundStatement;
-import Compiler2015.AST.Statement.ExpressionStatement.Expression;
-import Compiler2015.Environment.Environment;
-import Compiler2015.Utility.Tokens;
-import Compiler2015.AST.Type.Type;
-import Compiler2015.AST.Type.VariablePointerType;
+import Compiler2015.AST.*;
+import Compiler2015.AST.Statement.*;
+import Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression.*;
+import Compiler2015.AST.Statement.ExpressionStatement.*;
+import Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression.*;
+import Compiler2015.AST.Declaration.*;
+import Compiler2015.AST.Type.*;
+import Compiler2015.Environment.*;
+import Compiler2015.Exception.*;
+import Compiler2015.Utility.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 }
 
 @parser::members {
+int inStructDepth = 0;
+}
 
-Type innerType = null;
+/* Top level */
+
+// TODO: Interact with Environment
+
+// Done
+compilationUnit
+	: (declaration | functionDefinition)* EOF
+	;
+
 /*
-Type embedPointer(int count, Type t) {
-	Type ret = t;
-	for ( ; count > 0; --count)
-		ret = new VariablePointerType(ret);
-	return ret;
+program returns [ASTRoot ret]
+@init {
+	ArrayList<ASTNode> list = new ArrayList<ASTNode>();
 }
+@after {
+	$ret = new ASTRoot(list);
+}
+	: (declaration { list.add($declaration.ret); } | functionDefinition { list.add($functionDefinition.ret); } )+
+	;
 */
+
+// Done
+declaration
+	: 'typedef' typeSpecifier declarators[$typeSpecifier.ret] ';'
+		{
+			ArrayList<Type> types = $declarators.types;
+			ArrayList<String> names = $declarators.names;
+			int n = types.size();
+			for (int i = 0; i < n; ++i)
+				Environment.symbolNames.defineTypedefName(names.get(i), types.get(i));
+		}
+	| typeSpecifier initDeclarators[$typeSpecifier.ret]? ';'
+		{
+			ArrayList<Type> types = $initDeclarators.types;
+			ArrayList<String> names = $initDeclarators.names;
+			ArrayList<Initializer> inits = $initDeclarators.inits;
+			int n = types.size();
+			for (int i = 0; i < n; ++i) {
+				Environment.symbolNames.defineVariable(names.get(i), new VariableDefinition(types.get(i), inits.get(i)));
+			}
+		}
+	;
+
+// Done
+functionDefinition returns [ASTNode ret]
+locals [ Type returnType, String name, ArrayList<Type> types = null, ArrayList<String> names = null, boolean hasVaList = false, Statement s ]
+@after {
+	$ret = new FunctionDeclaration(
+		-1,
+		$returnType,
+		$types,
+		$names,
+		$hasVaList,
+		$s
+	);
 }
-
-primaryExpression returns [Expression ret]
-	:	{ Environment.isVariable($Identifier.text) }?
-		Identifier
-									#primaryExpression1
-	|	constant					#primaryExpression2
-	|	StringLiteral+				#primaryExpression3
-	|	'(' expression ')'			#primaryExpression4
+	: typeSpecifier
+		plainDeclarator[$typeSpecifier.ret]
+			{
+				$returnType = $plainDeclarator.type;
+				$name = $plainDeclarator.name;
+			}
+		'(' (parameters
+				{
+					$types = $parameters.types;
+					$names = $parameters.names;
+					$hasVaList = $parameters.hasVaList;
+				}
+			) ? ')'
+		compoundStatement
+			{
+				$s = $compoundStatement.ret;
+			}
 	;
 
-postfixExpression returns [Expression ret]
-	:	primaryExpression									#postfixExpression1
-	|	postfixExpression '[' expression ']'				#postfixExpression2
-	|	postfixExpression '(' argumentExpressionList? ')'	#postfixExpression3
-	|	postfixExpression '.' Identifier					#postfixExpression4
-	|	postfixExpression '->' Identifier					#postfixExpression5
-	|	postfixExpression '++'								#postfixExpression6
-	|	postfixExpression '--'								#postfixExpression7
+/**
+ * something like:
+ *     int a, boolean b, struct X c, ...
+ */
+// Done
+parameters returns [ArrayList<Type> types, ArrayList<String> names, boolean hasVaList]
+locals [int n = 0, Type type, String name]
+@init {
+	$hasVaList = false;
+	$types = new ArrayList<Type>();
+	$names = new ArrayList<String>();
+	HashSet<String> existNames = new HashSet<String>();
+}
+	: p1 = plainDeclaration {
+			$type = $p1.type;
+			$name = $p1.name;
+			if (existNames.contains($name))
+				throw new CompilationError("Name appears more than once.");
+			existNames.add($name);
+			$types.add($type);
+			$names.add($name);
+		}
+		(',' p2 = plainDeclaration {
+			$type = $p2.type;
+			$name = $p2.name;
+			if (existNames.contains($name))
+				throw new CompilationError("Name appears more than once.");
+			existNames.add($name);
+			$types.add($type);
+			$names.add($name);
+		} )*
+		(',' '...' { $hasVaList = true; } )?
 	;
 
-argumentExpressionList returns [ArrayList<Expression> ret]
-	:	assignmentExpression								#argumentExpressionList1
-	|	argumentExpressionList ',' assignmentExpression		#argumentExpressionList2
+// Done
+declarators[Type innerType] returns [ArrayList<Type> types, ArrayList<String> names]
+@init {
+	$types = new ArrayList<Type>();
+	$names = new ArrayList<String>();
+}
+	: declarator[innerType] { $types.add($declarator.type); $names.add($declarator.name); } (',' declarator[innerType] { $types.add($declarator.type); $names.add($declarator.name); } )*
 	;
 
-unaryExpression returns [Expression ret]
-	:	postfixExpression			#unaryExpression1
-	|	'++' unaryExpression		#unaryExpression2
-	|	'--' unaryExpression		#unaryExpression3
-	|	'&' castExpression			#unaryExpression4
-	|	'*' castExpression			#unaryExpression5
-	|	'+' castExpression			#unaryExpression6
-	|	'-' castExpression			#unaryExpression7
-	|	'~' castExpression			#unaryExpression8
-	|	'!' castExpression			#unaryExpression9
-	|	'sizeof' unaryExpression	#unaryExpression10
-	|	'sizeof' '(' typeName ')'	#unaryExpression11
+// Done
+initDeclarators[Type innerType] returns [ArrayList<Type> types, ArrayList<String> names, ArrayList<Initializer> inits]
+@init {
+	$types = new ArrayList<Type>();
+	$names = new ArrayList<String>();
+	$inits = new ArrayList<Initializer>();
+}
+	: initDeclarator[innerType]
+		{
+			$types.add($initDeclarator.type);
+			$names.add($initDeclarator.name);
+			$inits.add($initDeclarator.init);
+		}
+		(',' initDeclarator[innerType]
+			{
+				$types.add($initDeclarator.type);
+				$names.add($initDeclarator.name);
+				$inits.add($initDeclarator.init);
+			}
+		)*
 	;
 
-castExpression returns [Expression ret]
-	:	unaryExpression						#castExpression1
-	|	'(' typeName ')' castExpression		#castExpression2
+// Done
+initDeclarator[Type innerType] returns [Type type, String name, Initializer init = null]
+	: declarator[innerType] {$type = $declarator.type; $name = $declarator.name; } ('=' initializer {$init = $initializer.ret; } )?
 	;
 
-multiplicativeExpression returns [Expression ret]
-	:	castExpression									#multiplicativeExpression1
-	|	multiplicativeExpression '*' castExpression		#multiplicativeExpression2
-	|	multiplicativeExpression '/' castExpression		#multiplicativeExpression3
-	|	multiplicativeExpression '%' castExpression		#multiplicativeExpression4
+// Done
+initializer returns [Initializer ret]
+	: assignmentExpression { $ret = new Initializer($assignmentExpression.ret); }
+	| '{' i1 = initializer
+			{
+				$ret = new Initializer(new ArrayList<Initializer>());
+				$ret.list.add($i1.ret);
+			}
+		(',' i2 = initializer { $ret.list.add($i2.ret); })* '}'
 	;
 
-additiveExpression returns [Expression ret]
-	:	multiplicativeExpression							#additiveExpression1
-	|	additiveExpression '+' multiplicativeExpression		#additiveExpression2
-	|	additiveExpression '-' multiplicativeExpression		#additiveExpression3
-	;
-
-shiftExpression returns [Expression ret]
-	:	additiveExpression							#shiftExpression1
-	|	shiftExpression '<<' additiveExpression		#shiftExpression2
-	|	shiftExpression '>>' additiveExpression		#shiftExpression3
-	;
-
-relationalExpression returns [Expression ret]
-	:	shiftExpression								#relationalExpression1
-	|	relationalExpression '<' shiftExpression	#relationalExpression2
-	|	relationalExpression '>' shiftExpression	#relationalExpression3
-	|	relationalExpression '<=' shiftExpression	#relationalExpression4
-	|	relationalExpression '>=' shiftExpression	#relationalExpression5
-	;
-
-equalityExpression returns [Expression ret]
-	:	relationalExpression							#equalityExpression1
-	|	equalityExpression '==' relationalExpression	#equalityExpression2
-	|	equalityExpression '!=' relationalExpression	#equalityExpression3
-	;
-
-andExpression returns [Expression ret]
-	:	equalityExpression						#andExpression1
-	|	andExpression '&' equalityExpression	#andExpression2
-	;
-
-exclusiveOrExpression returns [Expression ret]
-	:	andExpression								#exclusiveOrExpression1
-	|	exclusiveOrExpression '^' andExpression		#exclusiveOrExpression2
-	;
-
-inclusiveOrExpression returns [Expression ret]
-	:	exclusiveOrExpression								#inclusiveOrExpression1
-	|	inclusiveOrExpression '|' exclusiveOrExpression		#inclusiveOrExpression2
-	;
-
-logicalAndExpression returns [Expression ret]
-	:	inclusiveOrExpression								#logicalAndExpression1
-	|	logicalAndExpression '&&' inclusiveOrExpression		#logicalAndExpression2
-	;
-
-logicalOrExpression returns [Expression ret]
-	:	logicalAndExpression							#logicalOrExpression1
-	|	logicalOrExpression '||' logicalAndExpression	#logicalOrExpression2
-	;
-
-conditionalExpression returns [Expression ret]
-	:	logicalOrExpression												#conditionalExpression1
-	|	logicalOrExpression '?' expression ':' conditionalExpression	#conditionalExpression2
-	;
-
-assignmentExpression returns [Expression ret]
-	:	conditionalExpression						#assignmentExpression1
-	|	unaryExpression '=' assignmentExpression	#assignmentExpression2
-	|	unaryExpression '*=' assignmentExpression	#assignmentExpression3
-	|	unaryExpression '/=' assignmentExpression	#assignmentExpression4
-	|	unaryExpression '%=' assignmentExpression	#assignmentExpression5
-	|	unaryExpression '+=' assignmentExpression	#assignmentExpression6
-	|	unaryExpression '-=' assignmentExpression	#assignmentExpression7
-	|	unaryExpression '<<=' assignmentExpression	#assignmentExpression8
-	|	unaryExpression '>>=' assignmentExpression	#assignmentExpression9
-	|	unaryExpression '&=' assignmentExpression	#assignmentExpression10
-	|	unaryExpression '^=' assignmentExpression	#assignmentExpression11
-	|	unaryExpression '|=' assignmentExpression	#assignmentExpression12
-	;
-
-expression returns [Expression ret]
-	:	assignmentExpression					#expression1
-	|	expression ',' assignmentExpression		#expression2
-	;
-
-declaration returns [ASTNode ret]
-	:	'typedef' typeSpecifier initDeclaratorList? ';'		#declaration1
-	|	typeSpecifier initDeclaratorList? ';'				#declaration2
-	;
-
-initDeclaratorList returns [ASTNode ret]
-	:	initDeclarator							#initDeclaratorList1
-	|	initDeclaratorList ',' initDeclarator	#initDeclaratorList2
-	;
-
-initDeclarator returns [ASTNode ret]
-	:	declarator					#initDeclarator1
-	|	declarator '=' initializer	#initDeclarator2
-	;
-
+// Done
+/**
+ * something like:
+ *     void
+ *     struct x
+ *     struct x { int a, b; }
+ */
 typeSpecifier returns [Type ret]
-	:	'void'					#typeSpecifier1
-	|	'char'					#typeSpecifier2
-	|	'int'					#typeSpecifier3
-	|	structOrUnionSpecifier	#typeSpecifier4
-	|	typedefName				#typeSpecifier5
+locals [String name, StructOrUnionDeclaration su]
+@init {
+	$name = null;
+	$su = null;
+}
+	: 'void' { $ret = new VoidType(); }
+	| 'char' { $ret = new CharType(); }
+	| 'int'  { $ret = new IntType();  }
+	| typedefName { $ret = $typedefName.ret; }
+	| structOrUnion (Identifier { $name = $Identifier.text; } )?
+		'{'
+			{
+				Environment.enterScope();
+				$su = new StructOrUnionDeclaration($structOrUnion.isUnion, new HashMap<String, Type>(), new ArrayList<StructOrUnionDeclaration>());
+				++inStructDepth;
+			}
+			(t2 = typeSpecifier declarators[$t2.ret] ';'
+				{
+					$su.addAttributes($declarators.types, $declarators.names);
+				}
+			)+
+		'}'
+			{
+				Environment.classNames.defineStructOrUnion($name, $su);
+				Environment.exitScope(true);
+				--inStructDepth;
+			}
+	| structOrUnion Identifier
+			{
+				$name = $Identifier.text;
+				Environment.classNames.declareStructOrUnion($name, $structOrUnion.isUnion);
+			}
 	;
 
-structOrUnionSpecifier returns [Type ret]
-	:	structOrUnion Identifier? '{' structDeclaration* '}'	#structOrUnionSpecifier1
-	|	structOrUnion Identifier								#structOrUnionSpecifier2
-	;
-
-structOrUnion returns [Tokens s]
-	:	'struct' { $s = Tokens.STRUCT; }
-	|	'union'  { $s = Tokens.UNION; }
-	;
-
-structDeclaration returns [ArrayList<Type> retType, ArrayList<String> retName]
-	:	typeSpecifier ';'						#structDeclaration1
-	|	typeSpecifier structDeclaratorList ';'	#structDeclaration2
-	;
-
-structDeclaratorList returns [ArrayList<ASTNode> ret]
-	:	declarator (',' declarator)*
-	;
-
-declarator returns [ASTNode ret]
-	:	pointer? directDeclarator
-	;
-
-directDeclarator returns [Type type, String name]
-	:	Identifier										#directDeclarator1
-	|	'(' declarator ')'								#directDeclarator2
-	|	directDeclarator '[' assignmentExpression? ']'	#directDeclarator3
-	|	directDeclarator '(' parameterTypeList? ')'		#directDeclarator4
-	;
-
-pointer returns [int count]
-	:	'*'				{ $count = 1; }
-	|	'*' pointer		{ $count = $pointer.count + 1; }
-	;
-
-parameterTypeList returns [ArrayList<ASTNode> ret, boolean isFlexible]
-	:	parameterList				#parameterTypeList1
-	|	parameterList ',' '...'		#parameterTypeList2
-	;
-
-parameterList returns [ArrayList<ASTNode> ret]
-	:	parameterDeclaration					#parameterList1
-	|	parameterList ',' parameterDeclaration	#parameterList2
-	;
-
-parameterDeclaration returns [ASTNode ret]
-	:	typeSpecifier declarator // may be typedef should be applied?
-											#parameterDeclaration1
-	|	typeSpecifier abstractDeclarator?	#parameterDeclaration2
-	;
-
-typeName returns [ASTNode ret]
-	:	typeSpecifier abstractDeclarator?
-	;
-
-abstractDeclarator returns [ASTNode ret]
-	:	pointer									#abstractDeclarator1
-	|	pointer? directAbstractDeclarator		#abstractDeclarator2
-	;
-
-directAbstractDeclarator returns [ASTNode ret]
-	:	'(' abstractDeclarator ')'								#directAbstractDeclarator1
-	|	'[' assignmentExpression? ']'							#directAbstractDeclarator2
-	|	'(' parameterTypeList? ')'								#directAbstractDeclarator3
-	|	directAbstractDeclarator '[' ']'						#directAbstractDeclarator4
-	|	directAbstractDeclarator '(' parameterTypeList? ')'		#directAbstractDeclarator5
-	;
-
+// Done
 typedefName returns [Type ret]
-	:	{ Environment.isTypedefName($Identifier.text) }? Identifier
+	: { Environment.isTypedefName($Identifier.text) }? Identifier
 	;
 
-initializer returns [ASTNode ret]
-	:	assignmentExpression			#initializer1
-	|	'{' initializerList '}'			#initializer2
-	|	'{' initializerList ',' '}'		#initializer3
+// Done
+structOrUnion returns [boolean isUnion]
+	: 'struct' { $isUnion = false; }
+	| 'union'  { $isUnion = true; }
 	;
 
-initializerList returns [ArrayList<Object> ret]
-	:	initializer (',' initializer)*
+// Done
+/**
+ * something like:
+ *     int a
+ *     char **a
+ */
+plainDeclaration returns [Type type, String name]
+	: typeSpecifier declarator[$typeSpecifier.ret]
+		{
+			$type = $declarator.type;
+			$name = $declarator.name;
+		}
 	;
 
+// Done
+/**
+ * something like:
+ *     **a(int a, int b)
+ *     *a[1][2][3]
+ */
+declarator[Type innerType] returns [Type type, String name]
+locals [ArrayList<Expression> list = new ArrayList<Expression>() ]
+	: { inStructDepth == 0 }? plainDeclarator[$innerType] '(' ')'
+		{
+			$type = new FunctionPointerType(
+				$plainDeclarator.type,
+				new ArrayList<Type>(),
+				new ArrayList<String>(),
+				true,
+				false
+			);
+			$name = $plainDeclarator.name;
+		}
+	| { inStructDepth == 0 }? plainDeclarator[$innerType] '(' parameters ')'
+		{
+			$type = new FunctionPointerType(
+				$plainDeclarator.type,
+				$parameters.types,
+				$parameters.names,
+				true,
+				$parameters.hasVaList
+				);
+		}
+	| plainDeclarator[$innerType] ('[' constantExpression { $list.add($constantExpression.ret); } ']')*
+		{
+			$type = new ArrayPointerType($plainDeclarator.type, $list);
+			$name = $plainDeclarator.name;
+		}
+	;
+
+// Done
+/**
+ * something like:
+ *     **a
+ */
+plainDeclarator[Type innerType] returns [Type type, String name]
+locals [int n = 0]
+	: (s = '*' { ++$n; } )* Identifier
+		{
+			$type = $innerType;
+			for (int i = 0; i < $n; ++i)
+				$type = new VariablePointerType($type);
+			$name = $Identifier.text;
+		}
+	;
+
+/* Statements */
 statement returns [Statement ret]
-	:	compoundStatement			{$ret = $compoundStatement.ret; }
-	|	expressionStatement			{$ret = $expressionStatement.ret; }
-	|	selectionStatement			{$ret = $selectionStatement.ret; }
-	|	iterationStatement			{$ret = $iterationStatement.ret; }
-	|	jumpStatement				{$ret = $jumpStatement.ret; }
-	;
-
-compoundStatement returns [CompoundStatement ret]
-	:	'{' blockItem* '}'
-	;
-
-blockItem returns [ASTNode ret]
-	:	declaration				#blockItem1
-	|	functionDefinition		#blockItem2
-	|	statement				#blockItem3
+	: expressionStatement
+	| compoundStatement
+	| selectionStatement
+	| iterationStatement
+	| jumpStatement
 	;
 
 expressionStatement returns [Statement ret]
-	:	expression? ';'
+	: expression? ';'
 	;
 
-selectionStatement returns [Statement ret]
-	:	'if' '(' expression ')' statement ('else' statement)?
+compoundStatement returns [CompoundStatement ret]
+	: '{' declaration* statement* '}'
+	;
+
+selectionStatement returns [IfStatement ret]
+	: 'if' '(' expression ')' statement ('else' statement)?
 	;
 
 iterationStatement returns [Statement ret]
-	:	'while' '(' expression ')' statement
-									#iterationStatement1
-	|	'for' '(' E1=expression? ';' E2=expression? ';' E3=expression? ')' statement
-									#iterationStatement2
+	: 'while' '(' expression ')' statement
+	| 'for' '(' expression? ';' expression? ';' expression? ')' statement
 	;
 
 jumpStatement returns [Statement ret]
-	:	'continue' ';'				#jumpStatement1
-	|	'break' ';'					#jumpStatement2
-	|	'return' expression? ';'	#jumpStatement3
+	: 'continue' ';'
+	| 'break' ';'
+	| 'return' expression? ';'
 	;
 
-compilationUnit returns [ASTRoot ret]
-	: externalDeclaration* EOF
+/* Expressions  */
+expression returns [CommaExpression ret]
+	: assignmentExpression (',' assignmentExpression)*
 	;
 
-externalDeclaration returns [ASTNode ret]
-	:	functionDefinition			{ $ret = $functionDefinition.ret; }
-	|	declaration					{ $ret = $declaration.ret; }
-	|	';' 						{ $ret = null; }
+assignmentExpression returns [Expression ret]
+	: logicalOrExpression
+	| unaryExpression assignmentOperator assignmentExpression
 	;
 
-functionDefinition returns [ASTNode ret]
-	:	typeSpecifier declarator compoundStatement
+assignmentOperator
+	: '=' | '*=' | '/=' | '%=' | '+=' | '-=' | '<<=' | '>>=' | '&=' | '^=' | '|='
+	;
+
+constantExpression returns [Expression ret]
+	: logicalOrExpression
+	;
+
+logicalOrExpression returns [Expression ret]
+	: logicalAndExpression ('||' logicalAndExpression)*
+	;
+
+logicalAndExpression returns [Expression ret]
+	: inclusiveOrExpression ('&&' inclusiveOrExpression)*
+	;
+
+inclusiveOrExpression returns [Expression ret]
+	: exclusiveOrExpression ('|' exclusiveOrExpression)*
+	;
+
+exclusiveOrExpression returns [Expression ret]
+	: andExpression ('^' andExpression)*
+	;
+
+andExpression returns [Expression ret]
+	: equalityExpression ('&' equalityExpression)*
+	;
+
+equalityExpression returns [Expression ret]
+	: relationalExpression (equalityOperator relationalExpression)*
+	;
+
+equalityOperator
+	: '==' | '!='
+	;
+
+relationalExpression returns [Expression ret]
+	: shiftExpression (relationalOperator shiftExpression)*
+	;
+
+relationalOperator returns [Expression ret]
+	: '<' | '>' | '<=' | '>='
+	;
+
+shiftExpression returns [Expression ret]
+	: additiveExpression (shiftOperator additiveExpression)*
+	;
+
+shiftOperator returns [Expression ret]
+	: '<<' | '>>'
+	;
+
+additiveExpression returns [Expression ret]
+	: multiplicativeExpression (additiveOperator multiplicativeExpression)*
+	;
+
+additiveOperator
+	: '+' | '-'
+	;
+
+multiplicativeExpression returns [Expression ret]
+	: castExpression (multiplicativeOperator castExpression)*
+	;
+
+multiplicativeOperator
+	: '*' | '/' | '%'
+	;
+
+castExpression returns [Expression ret]
+	: unaryExpression
+	| '(' typeName ')' castExpression
+	;
+
+typeName returns [Type type]
+	: typeSpecifier '*'*
+	;
+
+unaryExpression returns [Expression ret]
+	: postfixExpression
+	| '++' unaryExpression
+	| '--' unaryExpression
+	| unaryOperator castExpression
+	| 'sizeof' unaryExpression
+	| 'sizeof' '(' typeName ')'
+	;
+
+unaryOperator
+	: '&' | '*' | '+' | '-' | '~' | '!'
+	;
+
+postfixExpression returns [Expression ret]
+	: primaryExpression
+	| postfixExpression '[' expression ']'
+	| postfixExpression '(' arguments? ')'
+	| postfixExpression '.' Identifier
+	| postfixExpression '->' Identifier
+	| postfixExpression '++'
+	| postfixExpression '--'
+	;
+
+arguments returns [ArrayList<Expression> ret]
+	: assignmentExpression (',' assignmentExpression)*
+	;
+
+primaryExpression returns [Expression ret]
+	: Identifier
+	| constant
+	| StringLiteral
+	| '(' expression ')'
 	;
 
 constant returns [Expression ret]
-	:	DecimalConstant				#constant1
-	|	OctalConstant				#constant2
-	|	HexadecimalConstant			#constant3
-	|	CharacterConstant			#constant4
+	: DecimalConstant
+	| OctalConstant
+	| HexadecimalConstant
+	| CharacterConstant
 	;
 
 // Lexer

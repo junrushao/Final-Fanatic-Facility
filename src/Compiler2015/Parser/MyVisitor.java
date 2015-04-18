@@ -1,24 +1,10 @@
 package Compiler2015.Parser;
 
-import Compiler2015.AST.ASTNode;
-import Compiler2015.AST.ASTRoot;
-import Compiler2015.AST.Statement.*;
-import Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression.*;
-import Compiler2015.AST.Statement.ExpressionStatement.*;
-import Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression.*;
-import Compiler2015.AST.Type.*;
-import Compiler2015.Environment.Environment;
-import Compiler2015.Exception.CompilationError;
-import Compiler2015.Utility.Tokens;
-import org.antlr.v4.runtime.misc.NotNull;
-import org.antlr.v4.runtime.tree.TerminalNode;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-// TODO: In fact I should not use visitor at all.
-
-public class MyVisitor extends Compiler2015BaseVisitor<Object> {
+public class MyVisitor {
+	public void Test() {
+	}
+/*
+	Type coreType = null;
 
 	Integer toInt(Expression x) {
 		if (x instanceof IntConstant)
@@ -48,7 +34,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 			String str = n.getText();
 			sb.append(str.substring(1, str.length() - 1));
 		}
-		// TODO: length would be wrong if string contains ESCAPE CHARACTERs.
 		ctx.ret = new StringConstant(
 				sb.toString(),
 				new ArrayPointerType(new CharType(), sb.length()),
@@ -75,14 +60,12 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 		if (a1.type instanceof VariablePointerType)
 			ctx.ret = new ArrayAccess(a1, a2, ((VariablePointerType) a1.type).pointTo, true);
 		else if (a1.type instanceof ArrayPointerType) {
-			// TODO: What should I do?
 		}
 		return super.visitPostfixExpression2(ctx);
 	}
 
 	@Override
 	public Object visitPostfixExpression3(@NotNull Compiler2015Parser.PostfixExpression3Context ctx) {
-		// TODO: ArrayPointerType -> VariablePointerType
 		Type lType = ctx.postfixExpression().ret.type;
 		if (!(lType instanceof FunctionPointerType))
 			throw new CompilationError("Not a pointer to function.");
@@ -1157,21 +1140,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitStructOrUnionSpecifier1(@NotNull Compiler2015Parser.StructOrUnionSpecifier1Context ctx) {
-		boolean isUnion = ctx.structOrUnion().s == Tokens.UNION;
-		String name = ctx.Identifier() == null ? null : ctx.Identifier().getText();
-
-		if (name != null && Environment.classNames.queryName(name).status == Tokens.DEFINED)
-			throw new CompilationError("Already defined.");
-
-		Environment.enterScope();
-		Environment.exitScope(true);
-
-		HashMap<String, Type> members = new HashMap<String, Type>();
-		ArrayList<Type> anonymousMembers = new ArrayList<Type>();
-		for (Compiler2015Parser.StructDeclarationContext x : ctx.structDeclaration()) {
-			// TODO: E Xin Mei Xie Wan
-		}
-//		StructOrUnionDeclaration declaration = new StructOrUnionDeclaration(ctx.stru);
 		return super.visitStructOrUnionSpecifier1(ctx);
 	}
 
@@ -1182,6 +1150,8 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitStructDeclaration1(@NotNull Compiler2015Parser.StructDeclaration1Context ctx) {
+		ctx.retType = new ArrayList<Type>();
+		ctx.retName = new ArrayList<String>();
 		return super.visitStructDeclaration1(ctx);
 	}
 
@@ -1459,7 +1429,6 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 
 	@Override
 	public Object visitConstant4(@NotNull Compiler2015Parser.Constant4Context ctx) {
-		// TODO: error should occur if this is an Escape Character.
 		ctx.ret = new CharConstant(
 				ctx.CharacterConstant().getText().charAt(1),
 				new CharType(),
@@ -1467,5 +1436,5 @@ public class MyVisitor extends Compiler2015BaseVisitor<Object> {
 		);
 		return super.visitConstant4(ctx);
 	}
-
+*/
 }

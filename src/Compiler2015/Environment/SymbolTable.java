@@ -81,8 +81,8 @@ public class SymbolTable {
 	}
 
 	public boolean isUnused(String name) {
-		// TODO: Wrong here
-		return queryName(name) == null;
+		Entry e = queryName(name);
+		return e == null || scopes.peek().contains(e.uId);
 	}
 
 	/**
@@ -100,11 +100,11 @@ public class SymbolTable {
 			FunctionDeclaration lastRef = (FunctionDeclaration) e.ref;
 			if (!Type.sameType(lastRef.returnType, ref.returnType))
 				throw new CompilationError("Mismatch declaration.");
-			int size = lastRef.parameterTypes.length;
-			if (size != ref.parameterTypes.length)
+			int size = lastRef.parameterTypes.size();
+			if (size != ref.parameterTypes.size())
 				throw new CompilationError("Mismatch parameter type.");
 			for (int i = 0; i < size; ++i)
-				if (!Type.sameType(lastRef.parameterTypes[i], ref.parameterTypes[i]))
+				if (!Type.sameType(lastRef.parameterTypes.get(i), ref.parameterTypes.get(i)))
 					throw new CompilationError("Mismatch declaration.");
 			// do nothing.
 			return -1;
@@ -134,11 +134,11 @@ public class SymbolTable {
 			FunctionDeclaration lastRef = (FunctionDeclaration) e.ref;
 			if (!Type.sameType(lastRef.returnType, ref.returnType))
 				throw new CompilationError("Mismatch declaration.");
-			int size = lastRef.parameterTypes.length;
-			if (size != ref.parameterTypes.length)
+			int size = lastRef.parameterTypes.size();
+			if (size != ref.parameterTypes.size())
 				throw new CompilationError("Mismatch parameter type.");
 			for (int i = 0; i < size; ++i)
-				if (!Type.sameType(lastRef.parameterTypes[i], ref.parameterTypes[i]))
+				if (!Type.sameType(lastRef.parameterTypes.get(i), ref.parameterTypes.get(i)))
 					throw new CompilationError("Mismatch declaration.");
 			// Warning: pointer?
 			e.status = Tokens.DEFINED;
@@ -158,7 +158,7 @@ public class SymbolTable {
 	 * @return uId of the variable
 	 * @throws CompilationError if type mismatch or already defined
 	 */
-	public int defineVariable(String name, Type ref) {
+	public int defineVariable(String name, VariableDefinition ref) {
 		if (name == null || name.equals(""))
 			throw new CompilationError("Internal Error");
 		Entry e = queryName(name);
@@ -175,24 +175,25 @@ public class SymbolTable {
 
 	/**
 	 * @param name name of the structure / union
-	 * @param ref  ref to the declaration of s / u
+	 * @param isUnion the exact type, union or struct
 	 * @return uId if first time define, -1 if already declared / defined
 	 */
-	public int declareStructOrUnion(String name, StructOrUnionDeclaration ref) {
+	public StructOrUnionDeclaration declareStructOrUnion(String name, boolean isUnion) {
 		if (name != null && name.equals("")) name = null;
+		StructOrUnionDeclaration ref = new StructOrUnionDeclaration(isUnion, null, null);
 		Entry e = queryName(name);
 		if (e != null && scopes.peek().contains(e.uId)) {
 			if (ref.isUnion != ((StructOrUnionDeclaration) e.ref).isUnion) {
 				throw new CompilationError("Defined as wrong kind of tag");
 			}
-			return -1;
+			return (StructOrUnionDeclaration) e.ref;
 		} else {
-			int uId = ++lastUId;
+			int uId = ref.uId = ++lastUId;
 			table.add(new Entry(uId, name, currentScope, Tokens.STRUCT_OR_UNION, Tokens.DECLARED, ref));
 			scopes.peek().add(uId);
 			if (name != null)
 				name2UIds.get(name).push(uId);
-			return uId;
+			return ref;
 		}
 	}
 
@@ -205,9 +206,9 @@ public class SymbolTable {
 		if (name != null && name.equals("")) name = null;
 		Entry e = queryName(name);
 		if (e != null && scopes.peek().contains(e.uId)) {
-			throw new CompilationError("Already defined");
+			throw new CompilationError("Struct / Union could be defined twice.");
 		} else {
-			int uId = ++lastUId;
+			int uId = ref.uId = ++lastUId;
 			table.add(new Entry(uId, name, currentScope, Tokens.STRUCT_OR_UNION, Tokens.DEFINED, ref));
 			scopes.peek().add(uId);
 			if (name != null)

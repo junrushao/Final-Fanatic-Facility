@@ -1,15 +1,23 @@
 package Compiler2015.AST.Type;
 
-import Compiler2015.AST.Declaration.FunctionDeclaration;
+import java.util.ArrayList;
 
 /**
  *
  */
 public class FunctionPointerType extends Pointer {
-	public FunctionDeclaration ref;
+	public Type returnType;
+	public ArrayList<Type> parameterType;
+	public ArrayList<String> parameterName;
+	public boolean isConstant;
+	public boolean hasVarList;
 
-	public FunctionPointerType(FunctionDeclaration ref) {
-		this.ref = ref;
+	public FunctionPointerType(Type returnType, ArrayList<Type> parameterType, ArrayList<String> parameterName, boolean isConstant, boolean hasVarList) {
+		this.returnType = returnType;
+		this.parameterType = parameterType;
+		this.parameterName = parameterName;
+		this.isConstant = isConstant;
+		this.hasVarList = hasVarList;
 	}
 
 	@Override

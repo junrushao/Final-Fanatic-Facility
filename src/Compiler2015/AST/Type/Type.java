@@ -24,12 +24,12 @@ public abstract class Type extends ASTNode implements SizeMeasurable {
 		if (a instanceof FunctionPointerType && b instanceof FunctionPointerType) {
 			FunctionPointerType A = (FunctionPointerType)a;
 			FunctionPointerType B = (FunctionPointerType)b;
-			int size = A.ref.parameterTypes.length;
-			if (A.ref.parameterTypes.length != B.ref.parameterTypes.length)
-			if (!suitable(A.ref.returnType, B.ref.returnType))
+			int size = A.parameterType.size();
+			if (A.parameterType.size() != B.parameterType.size())
+				if (!suitable(A.returnType, B.returnType))
 				return false;
 			for (int i = 0; i < size; ++i)
-				if (!suitable(A.ref.parameterTypes[i], B.ref.parameterTypes[i]))
+				if (!suitable(A.parameterType.get(i), B.parameterType.get(i)))
 					return false;
 			return true;
 		}
@@ -64,12 +64,12 @@ public abstract class Type extends ASTNode implements SizeMeasurable {
 		if (a instanceof FunctionPointerType && b instanceof FunctionPointerType) {
 			FunctionPointerType A = (FunctionPointerType)a;
 			FunctionPointerType B = (FunctionPointerType)b;
-			int size = A.ref.parameterTypes.length;
-			if (A.ref.parameterTypes.length != B.ref.parameterTypes.length)
-				if (!sameType(A.ref.returnType, B.ref.returnType))
+			int size = A.parameterType.size();
+			if (A.parameterType.size() != B.parameterType.size())
+				if (!sameType(A.returnType, B.returnType))
 					return false;
 			for (int i = 0; i < size; ++i)
-				if (!sameType(A.ref.parameterTypes[i], B.ref.parameterTypes[i]))
+				if (!sameType(A.parameterType.get(i), B.parameterType.get(i)))
 					return false;
 			return true;
 		}
