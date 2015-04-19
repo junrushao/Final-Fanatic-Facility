@@ -5,24 +5,18 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
 
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- *
- * a is an ArrayPointerType
- * TODO: ArrayPointerType -> Variable Pointer Type, e.g. for int a[3][4], a[1] returns a pointer type
- */
 public class ArrayPointerType extends Pointer {
 	public Type pointTo;
 	public ArrayList<Integer> dimensions;
 
-	/**
-	 * @param t the type of the array
-	 * @param d length of each dimension
-	 */
-	public ArrayPointerType(Type t, ArrayList<Expression> d) {
+	public ArrayPointerType(Type t, List<Expression> d) {
 		pointTo = t;
 		dimensions = new ArrayList<Integer>();
 		int n = d.size();
+		if (n < 1)
+			throw new CompilationError("Dimension should be positive");
 		for (int i = 0; i < n; ++i) {
 			Expression e = d.get(i);
 			if (e == null) {
@@ -37,6 +31,28 @@ public class ArrayPointerType extends Pointer {
 			} else
 				throw new CompilationError("The length of each dimension must be constant.");
 		}
+	}
+
+	public ArrayPointerType() {
+		this.pointTo = null;
+		this.dimensions = null;
+	}
+
+	public Type lower() {
+		int n = dimensions.size();
+		if (n == 1)
+			return pointTo;
+		ArrayPointerType ret = new ArrayPointerType();
+		ret.pointTo = pointTo;
+		ret.dimensions = new ArrayList<Integer>(n - 1);
+		for (int i = 1; i < n; ++i)
+			ret.dimensions.set(i - 1, dimensions.get(i));
+		return ret;
+	}
+
+	public VariablePointerType toVariablePointerType() {
+		Type t = lower();
+		return new VariablePointerType(t);
 	}
 
 	@Override

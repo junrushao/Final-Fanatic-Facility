@@ -9,13 +9,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class StructOrUnionDeclaration extends Declaration {
-	public int uId = -1;
+	public int uId;
 	public boolean isUnion;
 	public HashMap<String, Type> members; // name -> type
 	public ArrayList<StructOrUnionDeclaration> anonymousMembers;
 
-	public StructOrUnionDeclaration(boolean isUnion, HashMap<String, Type> members, ArrayList<StructOrUnionDeclaration> anonymousMembers) {
-//		this.uId = uId;
+	public StructOrUnionDeclaration(int uId, boolean isUnion, HashMap<String, Type> members, ArrayList<StructOrUnionDeclaration> anonymousMembers) {
+		this.uId = uId;
 		this.isUnion = isUnion;
 		this.members = members;
 		this.anonymousMembers = anonymousMembers;

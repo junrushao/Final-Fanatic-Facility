@@ -18,58 +18,42 @@ import java.util.HashSet;
 }
 
 @parser::members {
-int inStructDepth = 0;
+public int inStructDepth = 0;
 }
 
 /* Top level */
 
-// TODO: Interact with Environment
-
-// Done
 compilationUnit
 	: (declaration | functionDefinition)* EOF
 	;
 
-/*
-program returns [ASTRoot ret]
-@init {
-	ArrayList<ASTNode> list = new ArrayList<ASTNode>();
-}
-@after {
-	$ret = new ASTRoot(list);
-}
-	: (declaration { list.add($declaration.ret); } | functionDefinition { list.add($functionDefinition.ret); } )+
-	;
-*/
-
-// Done
 declaration
+locals [ ArrayList<Type> types = null, ArrayList<String> names = null, ArrayList<Initializer> inits = null, int n = 0 ]
 	: 'typedef' typeSpecifier declarators[$typeSpecifier.ret] ';'
 		{
-			ArrayList<Type> types = $declarators.types;
-			ArrayList<String> names = $declarators.names;
-			int n = types.size();
-			for (int i = 0; i < n; ++i)
-				Environment.symbolNames.defineTypedefName(names.get(i), types.get(i));
+			$types = $declarators.types;
+			$names = $declarators.names;
+			$n = $types.size();
+			for (int i = 0; i < $n; ++i)
+				Environment.symbolNames.defineTypedefName($names.get(i), $types.get(i));
 		}
 	| typeSpecifier initDeclarators[$typeSpecifier.ret]? ';'
 		{
-			ArrayList<Type> types = $initDeclarators.types;
-			ArrayList<String> names = $initDeclarators.names;
-			ArrayList<Initializer> inits = $initDeclarators.inits;
-			int n = types.size();
-			for (int i = 0; i < n; ++i) {
-				Environment.symbolNames.defineVariable(names.get(i), new VariableDefinition(types.get(i), inits.get(i)));
+			$types = $initDeclarators.types;
+			$names = $initDeclarators.names;
+			$inits = $initDeclarators.inits;
+			$n = $types.size();
+			for (int i = 0; i < $n; ++i) {
+				Environment.symbolNames.defineVariable($names.get(i), $types.get(i), $inits.get(i));
 			}
 		}
 	;
 
-// Done
-functionDefinition returns [ASTNode ret]
-locals [ Type returnType, String name, ArrayList<Type> types = null, ArrayList<String> names = null, boolean hasVaList = false, Statement s ]
+functionDefinition
+locals [ Type returnType, String name, ArrayList<Type> types = null, ArrayList<String> names = null, boolean hasVaList = false, Statement s = null ]
 @after {
-	$ret = new FunctionDeclaration(
-		-1,
+	Environment.symbolNames.defineFunction(
+		$name,
 		$returnType,
 		$types,
 		$names,
@@ -100,13 +84,9 @@ locals [ Type returnType, String name, ArrayList<Type> types = null, ArrayList<S
  * something like:
  *     int a, boolean b, struct X c, ...
  */
-// Done
-parameters returns [ArrayList<Type> types, ArrayList<String> names, boolean hasVaList]
+parameters returns [ArrayList<Type> types = new ArrayList<Type>(), ArrayList<String> names = new ArrayList<String>(), boolean hasVaList = false]
 locals [int n = 0, Type type, String name]
 @init {
-	$hasVaList = false;
-	$types = new ArrayList<Type>();
-	$names = new ArrayList<String>();
 	HashSet<String> existNames = new HashSet<String>();
 }
 	: p1 = plainDeclaration {
@@ -130,22 +110,11 @@ locals [int n = 0, Type type, String name]
 		(',' '...' { $hasVaList = true; } )?
 	;
 
-// Done
-declarators[Type innerType] returns [ArrayList<Type> types, ArrayList<String> names]
-@init {
-	$types = new ArrayList<Type>();
-	$names = new ArrayList<String>();
-}
+declarators[Type innerType] returns [ArrayList<Type> types = new ArrayList<Type>(), ArrayList<String> names = new ArrayList<String>()]
 	: declarator[innerType] { $types.add($declarator.type); $names.add($declarator.name); } (',' declarator[innerType] { $types.add($declarator.type); $names.add($declarator.name); } )*
 	;
 
-// Done
-initDeclarators[Type innerType] returns [ArrayList<Type> types, ArrayList<String> names, ArrayList<Initializer> inits]
-@init {
-	$types = new ArrayList<Type>();
-	$names = new ArrayList<String>();
-	$inits = new ArrayList<Initializer>();
-}
+initDeclarators[Type innerType] returns [ArrayList<Type> types = new ArrayList<Type>(), ArrayList<String> names = new ArrayList<String>(), ArrayList<Initializer> inits = new ArrayList<Initializer>()]
 	: initDeclarator[innerType]
 		{
 			$types.add($initDeclarator.type);
@@ -161,12 +130,10 @@ initDeclarators[Type innerType] returns [ArrayList<Type> types, ArrayList<String
 		)*
 	;
 
-// Done
 initDeclarator[Type innerType] returns [Type type, String name, Initializer init = null]
 	: declarator[innerType] {$type = $declarator.type; $name = $declarator.name; } ('=' initializer {$init = $initializer.ret; } )?
 	;
 
-// Done
 initializer returns [Initializer ret]
 	: assignmentExpression { $ret = new Initializer($assignmentExpression.ret); }
 	| '{' i1 = initializer
@@ -177,7 +144,6 @@ initializer returns [Initializer ret]
 		(',' i2 = initializer { $ret.list.add($i2.ret); })* '}'
 	;
 
-// Done
 /**
  * something like:
  *     void
@@ -185,11 +151,7 @@ initializer returns [Initializer ret]
  *     struct x { int a, b; }
  */
 typeSpecifier returns [Type ret]
-locals [String name, StructOrUnionDeclaration su]
-@init {
-	$name = null;
-	$su = null;
-}
+locals [String name = null, StructOrUnionDeclaration su = null, int uId = -1]
 	: 'void' { $ret = new VoidType(); }
 	| 'char' { $ret = new CharType(); }
 	| 'int'  { $ret = new IntType();  }
@@ -197,8 +159,9 @@ locals [String name, StructOrUnionDeclaration su]
 	| structOrUnion (Identifier { $name = $Identifier.text; } )?
 		'{'
 			{
+				$uId = Environment.classNames.declareStructOrUnion($name, $structOrUnion.isUnion);
 				Environment.enterScope();
-				$su = new StructOrUnionDeclaration($structOrUnion.isUnion, new HashMap<String, Type>(), new ArrayList<StructOrUnionDeclaration>());
+				$su = new StructOrUnionDeclaration(-1, $structOrUnion.isUnion, new HashMap<String, Type>(), new ArrayList<StructOrUnionDeclaration>());
 				++inStructDepth;
 			}
 			(t2 = typeSpecifier declarators[$t2.ret] ';'
@@ -208,7 +171,7 @@ locals [String name, StructOrUnionDeclaration su]
 			)+
 		'}'
 			{
-				Environment.classNames.defineStructOrUnion($name, $su);
+				Environment.classNames.defineStructOrUnion($uId, $structOrUnion.isUnion, $su.members, $su.anonymousMembers);
 				Environment.exitScope(true);
 				--inStructDepth;
 			}
@@ -219,18 +182,15 @@ locals [String name, StructOrUnionDeclaration su]
 			}
 	;
 
-// Done
 typedefName returns [Type ret]
 	: { Environment.isTypedefName($Identifier.text) }? Identifier
 	;
 
-// Done
 structOrUnion returns [boolean isUnion]
 	: 'struct' { $isUnion = false; }
 	| 'union'  { $isUnion = true; }
 	;
 
-// Done
 /**
  * something like:
  *     int a
@@ -244,7 +204,6 @@ plainDeclaration returns [Type type, String name]
 		}
 	;
 
-// Done
 /**
  * something like:
  *     **a(int a, int b)
@@ -280,7 +239,6 @@ locals [ArrayList<Expression> list = new ArrayList<Expression>() ]
 		}
 	;
 
-// Done
 /**
  * something like:
  *     **a
