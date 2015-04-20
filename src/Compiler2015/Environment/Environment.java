@@ -1,6 +1,9 @@
 package Compiler2015.Environment;
 
+import Compiler2015.AST.Type.*;
 import Compiler2015.Utility.Tokens;
+
+import java.util.ArrayList;
 
 /**
  */
@@ -9,8 +12,50 @@ public class Environment {
 	public static SymbolTable symbolNames = new SymbolTable();
 
 	static {
-		symbolNames.defineFunction("printf", null);
-		symbolNames.defineFunction("malloc", null);
+//		symbolNames.defineFunction(
+//				"__putint__",
+//				new VoidType(),
+//				new ArrayList<Type>() {{ add(new IntType()); }},
+//				new ArrayList<String>() {{ add("x"); }},
+//				false,
+//				null
+//		);
+		symbolNames.defineFunction(
+				"__$putchar__",
+				new VoidType(),
+				new ArrayList<Type>() {{
+					add(new CharType());
+				}},
+				new ArrayList<String>() {{
+					add("x");
+				}},
+				false,
+				null
+		);
+		symbolNames.defineFunction(
+				"__$getchar__",
+				new VoidType(),
+				new ArrayList<Type>() {{
+					add(new CharType());
+				}},
+				new ArrayList<String>() {{
+					add("x");
+				}},
+				false,
+				null
+		);
+		symbolNames.defineFunction(
+				"__$malloc__",
+				new VariablePointerType(new VoidType()),
+				new ArrayList<Type>() {{
+					add(new IntType());
+				}},
+				new ArrayList<String>() {{
+					add("x");
+				}},
+				false,
+				null
+		);
 	}
 
 	public static void enterScope() {
@@ -23,11 +68,6 @@ public class Environment {
 		classNames.exitScope(isStructOrUnionScope);
 	}
 
-	public static boolean isFunction(String name) {
-		Entry e = symbolNames.queryName(name);
-		return e != null && e.type == Tokens.FUNCTION;
-	}
-
 	public static boolean isVariable(String name) {
 		Entry e = symbolNames.queryName(name);
 		return e != null && e.type == Tokens.VARIABLE;
@@ -38,12 +78,4 @@ public class Environment {
 		return e != null && e.type == Tokens.TYPEDEF_NAME;
 	}
 
-	public static boolean isStructOrUnion(String name) {
-		Entry e = classNames.queryName(name);
-		return e != null && e.type == Tokens.STRUCT_OR_UNION;
-	}
-
-	public static boolean isUnused(String name) {
-		return symbolNames.queryName(name) == null;
-	}
 }

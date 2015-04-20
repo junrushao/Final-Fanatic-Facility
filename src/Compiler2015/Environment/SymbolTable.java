@@ -6,6 +6,7 @@ import Compiler2015.AST.Initializer;
 import Compiler2015.AST.Statement.Statement;
 import Compiler2015.AST.Type.ArrayPointerType;
 import Compiler2015.AST.Type.Type;
+import Compiler2015.AST.Type.VoidType;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Tokens;
 
@@ -68,26 +69,6 @@ public class SymbolTable {
 		return e != null && e.type == Tokens.FUNCTION;
 	}
 
-	public boolean isVariable(String name) {
-		Entry e = queryName(name);
-		return e != null && e.type == Tokens.VARIABLE;
-	}
-
-	public boolean isTypedefName(String name) {
-		Entry e = queryName(name);
-		return e != null && e.type == Tokens.TYPEDEF_NAME;
-	}
-
-	public boolean isStructOrUnion(String name) {
-		Entry e = queryName(name);
-		return e != null && e.type == Tokens.STRUCT_OR_UNION;
-	}
-
-	public boolean isUnused(String name) {
-		Entry e = queryName(name);
-		return e == null || scopes.peek().contains(e.uId);
-	}
-
 	/**
 	 * @param name function name
 	 * @param returnType return type
@@ -118,7 +99,7 @@ public class SymbolTable {
 				throw new CompilationError("Function already defined.");
 			FunctionDeclaration lastRef = (FunctionDeclaration) e.ref;
 
-			if (!Type.sameType(lastRef.returnType, returnType))
+			if (!lastRef.returnType.equals(returnType))
 				throw new CompilationError("Mismatch return type.");
 
 			int size = lastRef.parameterTypes.size();
@@ -126,7 +107,7 @@ public class SymbolTable {
 				throw new CompilationError("Mismatch parameter type.");
 
 			for (int i = 0; i < size; ++i)
-				if (!Type.sameType(lastRef.parameterTypes.get(i), types.get(i)))
+				if (!lastRef.parameterTypes.get(i).equals(types.get(i)))
 					throw new CompilationError("Mismatch declaration.");
 
 			e.status = Tokens.DEFINED;
@@ -145,20 +126,22 @@ public class SymbolTable {
 
 	/**
 	 * @param name name of the variable
-	 * @param ref  reference to the definition
+	 * @param type reference to the defined type
 	 * @return uId of the variable
 	 * @throws CompilationError if type mismatch or already defined
 	 */
-	public int defineVariable(String name, Type ref, Initializer init) {
+	public int defineVariable(String name, Type type, Initializer init) {
 		if (name == null || name.equals(""))
 			throw new CompilationError("Internal Error");
+		if (type instanceof VoidType)
+			throw new CompilationError("Cannot create void type variables.");
 		Entry e = queryName(name);
 		if (e != null && scopes.peek().contains(e.uId)) {
 			// have been declared or defined in the current scope
 			throw new CompilationError("Variable already defined.");
 		}
 		int uId = ++lastUId;
-		table.add(new Entry(uId, name, currentScope, Tokens.VARIABLE, Tokens.DEFINED, ref, init));
+		table.add(new Entry(uId, name, currentScope, Tokens.VARIABLE, Tokens.DEFINED, type, init));
 		scopes.peek().add(uId);
 		name2UIds.get(name).push(uId);
 		return uId;
@@ -187,34 +170,34 @@ public class SymbolTable {
 		}
 	}
 
-	/**
-	 * @param name name of the structure / union
-	 * @param isUnion the tag of structure / union
-	 * @param members named members
-	 * @param anonymousMembers anonymous members
-	 * @return uId
-	 */
-	public int defineStructOrUnion(String name, boolean isUnion, HashMap<String, Type> members, ArrayList<StructOrUnionDeclaration> anonymousMembers) {
-		if (name != null && name.equals("")) name = null;
-		Entry e = queryName(name);
-		if (e != null && scopes.peek().contains(e.uId)) {
-			if (e.status == Tokens.DEFINED)
-				throw new CompilationError("Struct / Union could not be defined twice.");
-			if (((StructOrUnionDeclaration) (e.ref)).isUnion != isUnion)
-				throw new CompilationError("Struct / Union tag mismatch.");
-			int uId = e.uId;
-			e.ref = new StructOrUnionDeclaration(uId, isUnion, members, anonymousMembers);
-			return uId;
-		} else {
-			int uId = ++lastUId;
-			table.add(new Entry(uId, name, currentScope, Tokens.STRUCT_OR_UNION, Tokens.DEFINED,
-					new StructOrUnionDeclaration(uId, isUnion, members, anonymousMembers), isUnion));
-			scopes.peek().add(uId);
-			if (name != null)
-				name2UIds.get(name).push(uId);
-			return uId;
-		}
-	}
+//	/**
+//	 * @param name name of the structure / union
+//	 * @param isUnion the tag of structure / union
+//	 * @param members named members
+//	 * @param anonymousMembers anonymous members
+//	 * @return uId
+//	 */
+//	public int defineStructOrUnion(String name, boolean isUnion, HashMap<String, Type> members, ArrayList<StructOrUnionDeclaration> anonymousMembers) {
+//		if (name != null && name.equals("")) name = null;
+//		Entry e = queryName(name);
+//		if (e != null && scopes.peek().contains(e.uId)) {
+//			if (e.status == Tokens.DEFINED)
+//				throw new CompilationError("Struct / Union could not be defined twice.");
+//			if (((StructOrUnionDeclaration) (e.ref)).isUnion != isUnion)
+//				throw new CompilationError("Struct / Union tag mismatch.");
+//			int uId = e.uId;
+//			e.ref = new StructOrUnionDeclaration(uId, isUnion, members, anonymousMembers);
+//			return uId;
+//		} else {
+//			int uId = ++lastUId;
+//			table.add(new Entry(uId, name, currentScope, Tokens.STRUCT_OR_UNION, Tokens.DEFINED,
+//					new StructOrUnionDeclaration(uId, isUnion, members, anonymousMembers), isUnion));
+//			scopes.peek().add(uId);
+//			if (name != null)
+//				name2UIds.get(name).push(uId);
+//			return uId;
+//		}
+//	}
 
 	/**
 	 * @param uId              uId of the structure / union
@@ -236,7 +219,7 @@ public class SymbolTable {
 
 	/**
 	 * @param name typedef name
-	 * @param ref  the original type name
+	 * @param ref the original type name
 	 * @return uId of the name
 	 */
 	public int defineTypedefName(String name, Type ref) {
@@ -252,5 +235,16 @@ public class SymbolTable {
 			name2UIds.get(name).push(uId);
 			return uId;
 		}
+	}
+
+	/**
+	 * @return variables in current scope
+	 */
+	public ArrayList<Integer> getVariablesInCurrentScope() {
+		ArrayList<Integer> ret = new ArrayList<Integer>();
+		for (int x : scopes.peek())
+			if (table.get(x).type == Tokens.VARIABLE)
+				ret.add(x);
+		return ret;
 	}
 }

@@ -24,7 +24,7 @@ public class ArrayPointerType extends Pointer {
 					throw new CompilationError("Array type has incomplete dimensions.");
 				dimensions.add(-1);
 			} else if (e instanceof Constant) {
-				int v = ((Constant) e).toInt();
+				int v = Expression.toInt(e);
 				if (v < 0)
 					throw new CompilationError("The length of each dimension must be non-negative.");
 				dimensions.add(v);
@@ -58,8 +58,30 @@ public class ArrayPointerType extends Pointer {
 	@Override
 	public int sizeof() { // assume there is no integer overflow
 		int ret = pointTo.sizeof();
+		if (ret == 0)
+			return 0;
 		for (int d : dimensions)
-			ret *= d;
+			if (d == -1 || d == 0)
+				return 0;
+			else
+				ret *= d;
 		return ret;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof ArrayPointerType) {
+			ArrayPointerType other = (ArrayPointerType) obj;
+			if (!pointTo.equals(other.pointTo))
+				return false;
+			int n = dimensions.size();
+			if (n != other.dimensions.size())
+				return false;
+			for (int i = 0; i < n; ++i)
+				if (!dimensions.get(i).equals(other.dimensions.get(i)))
+					return false;
+			return true;
+		}
+		return super.equals(obj);
 	}
 }

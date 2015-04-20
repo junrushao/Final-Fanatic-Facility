@@ -1,5 +1,12 @@
 grammar Compiler2015;
 
+/* TODO:
+ * 1. Scope in structures seems not correct;
+ * 2. Need to declare a constant function pointer once a function is declared;
+ * 3. Check whether a type is well defined after AST is built;
+ * 4. Check function main exists;
+ * 5. Consider functions without return types(default return int)
+ */
 @parser::header {
 import Compiler2015.AST.*;
 import Compiler2015.AST.Statement.*;
@@ -171,6 +178,7 @@ locals [String name = null, StructOrUnionDeclaration su = null, int uId = -1]
 			)+
 		'}'
 			{
+				$ret = (Type) (Environment.classNames.table.get($uId).ref);
 				Environment.classNames.defineStructOrUnion($uId, $structOrUnion.isUnion, $su.members, $su.anonymousMembers);
 				Environment.exitScope(true);
 				--inStructDepth;
@@ -178,7 +186,8 @@ locals [String name = null, StructOrUnionDeclaration su = null, int uId = -1]
 	| structOrUnion Identifier
 			{
 				$name = $Identifier.text;
-				Environment.classNames.declareStructOrUnion($name, $structOrUnion.isUnion);
+				$uId = Environment.classNames.declareStructOrUnion($name, $structOrUnion.isUnion);
+				$ret = (Type) (Environment.classNames.table.get($uId).ref);
 			}
 	;
 
@@ -217,7 +226,6 @@ locals [ArrayList<Expression> list = new ArrayList<Expression>() ]
 				$plainDeclarator.type,
 				new ArrayList<Type>(),
 				new ArrayList<String>(),
-				true,
 				false
 			);
 			$name = $plainDeclarator.name;
@@ -228,11 +236,22 @@ locals [ArrayList<Expression> list = new ArrayList<Expression>() ]
 				$plainDeclarator.type,
 				$parameters.types,
 				$parameters.names,
-				true,
 				$parameters.hasVaList
 				);
 		}
-	| plainDeclarator[$innerType] ('[' constantExpression { $list.add($constantExpression.ret); } ']')*
+	| plainDeclarator[$innerType]
+		{
+			$type = $plainDeclarator.type;
+			$name = $plainDeclarator.name;
+		}
+	| plainDeclarator[$innerType]
+		'[' ']' { $list.add(null); } // the first dimension could be empty
+		('[' constantExpression { $list.add($constantExpression.ret); } ']')*
+		{
+			$type = new ArrayPointerType($plainDeclarator.type, $list);
+			$name = $plainDeclarator.name;
+		}
+	| plainDeclarator[$innerType] ('[' constantExpression { $list.add($constantExpression.ret); } ']')+
 		{
 			$type = new ArrayPointerType($plainDeclarator.type, $list);
 			$name = $plainDeclarator.name;
@@ -256,44 +275,67 @@ locals [int n = 0]
 
 /* Statements */
 statement returns [Statement ret]
-	: expressionStatement
-	| compoundStatement
-	| selectionStatement
-	| iterationStatement
-	| jumpStatement
+	: expressionStatement	{ $ret = $expressionStatement.ret; }
+	| compoundStatement		{ $ret = $compoundStatement.ret; }
+	| selectionStatement	{ $ret = $selectionStatement.ret;  }
+	| iterationStatement	{ $ret = $iterationStatement.ret; }
+	| jumpStatement			{ $ret = $jumpStatement.ret; }
 	;
 
-expressionStatement returns [Statement ret]
-	: expression? ';'
+expressionStatement returns [Statement ret = null]
+	: (expression { $ret = $expression.ret; })? ';'
 	;
 
 compoundStatement returns [CompoundStatement ret]
-	: '{' declaration* statement* '}'
+locals [ ArrayList<Statement> statements = new ArrayList<Statement>(); ]
+	: '{' 					{ Environment.enterScope(); }
+		(
+			declaration
+		|
+			(statement { $statements.add($statement.ret); } )
+		)*
+	  '}'
+			{
+				$ret = new CompoundStatement(Environment.symbolNames.getVariablesInCurrentScope(), $statements);
+				Environment.exitScope(false);
+			}
 	;
 
 selectionStatement returns [IfStatement ret]
-	: 'if' '(' expression ')' statement ('else' statement)?
+locals [ Expression e1 = null, Statement s1 = null, Statement s2 = null ]
+	: 'if' '(' expression { $e1 = $expression.ret; } ')' st1 = statement { $s1 = $st1.ret; } ('else' st2 = statement { $s2 = $st2.ret; } )?
+		{
+			$ret = new IfStatement($e1, $s1, $s2);
+		}
 	;
 
 iterationStatement returns [Statement ret]
 	: 'while' '(' expression ')' statement
-	| 'for' '(' expression? ';' expression? ';' expression? ')' statement
+			{ $ret = new WhileStatement($expression.ret, $statement.ret); }
+	| 'for' '(' ex1 = expression? ';' ex2 = expression? ';' ex3 = expression? ')' statement
+			{ $ret = new ForStatement($ex1.ret, $ex2.ret, $ex3.ret, $statement.ret); }
 	;
 
 jumpStatement returns [Statement ret]
-	: 'continue' ';'
-	| 'break' ';'
-	| 'return' expression? ';'
+locals [ Expression e = null ]
+	: 'continue' ';'				{ $ret = new ContinueStatement(); }
+	| 'break' ';'					{ $ret = new BreakStatement(); }
+	| 'return' (expression {$e = $expression.ret;} )? ';'
+									{ $ret = new ReturnStatement($e); }
 	;
 
 /* Expressions  */
-expression returns [CommaExpression ret]
-	: assignmentExpression (',' assignmentExpression)*
+expression returns [Expression ret]
+	: a1 = assignmentExpression   { $ret = $a1.ret; }
+		(',' a2 = assignmentExpression
+			{ $ret = CommaExpression.getExpression($ret, $a2.ret);  }
+		)*
 	;
 
 assignmentExpression returns [Expression ret]
-	: logicalOrExpression
+	: logicalOrExpression { $ret = $logicalOrExpression.ret; }
 	| unaryExpression assignmentOperator assignmentExpression
+				{ $ret = AssignClass.getExpression($unaryExpression.ret, $assignmentExpression.ret, $assignmentOperator.text); }
 	;
 
 assignmentOperator
@@ -302,30 +344,58 @@ assignmentOperator
 
 constantExpression returns [Expression ret]
 	: logicalOrExpression
+		{
+			$ret = $logicalOrExpression.ret;
+			if (!($ret instanceof Constant))
+				throw new CompilationError("Not constant.");
+		}
 	;
 
 logicalOrExpression returns [Expression ret]
-	: logicalAndExpression ('||' logicalAndExpression)*
+	: a1 = logicalAndExpression { $ret = $a1.ret; }
+		('||' a2 = logicalAndExpression
+			{ $ret = LogicalOr.getExpression($ret, $a2.ret); }
+		)*
 	;
 
 logicalAndExpression returns [Expression ret]
-	: inclusiveOrExpression ('&&' inclusiveOrExpression)*
+	: a1 = inclusiveOrExpression  { $ret = $a1.ret; }
+		('&&' a2 = inclusiveOrExpression
+			{ $ret = LogicalAnd.getExpression($ret, $a2.ret);  }
+		)*
 	;
 
 inclusiveOrExpression returns [Expression ret]
-	: exclusiveOrExpression ('|' exclusiveOrExpression)*
+	: a1 = exclusiveOrExpression   { $ret = $a1.ret; }
+		('|' a2 = exclusiveOrExpression
+			{ $ret = BitwiseOr.getExpression($ret, $a2.ret); }
+		)*
 	;
 
 exclusiveOrExpression returns [Expression ret]
-	: andExpression ('^' andExpression)*
+	: a1 = andExpression   { $ret = $a1.ret; }
+		('^' a2 = andExpression
+			{ $ret = BitwiseXOR.getExpression($ret, $a2.ret); }
+		)*
 	;
 
 andExpression returns [Expression ret]
-	: equalityExpression ('&' equalityExpression)*
+	: a1 = equalityExpression   { $ret = $a1.ret; }
+		('&' a2 = equalityExpression
+			{ $ret = BitwiseAnd.getExpression($ret, $a2.ret); }
+		)*
 	;
 
 equalityExpression returns [Expression ret]
-	: relationalExpression (equalityOperator relationalExpression)*
+	: a1 = relationalExpression   { $ret = $a1.ret; }
+		(op = equalityOperator a2 = relationalExpression
+			{
+				if ($op.text.equals("=="))
+					$ret = EqualTo.getExpression($ret, $a2.ret);
+				else
+					$ret = NotEqualTo.getExpression($ret, $a2.ret);
+			}
+		)*
 	;
 
 equalityOperator
@@ -333,23 +403,51 @@ equalityOperator
 	;
 
 relationalExpression returns [Expression ret]
-	: shiftExpression (relationalOperator shiftExpression)*
+	: a1 = shiftExpression   { $ret = $a1.ret; }
+		(op = relationalOperator a2 = shiftExpression
+			{
+				if ($op.text.equals("<"))
+					$ret = LessThan.getExpression($ret, $a2.ret);
+				else if ($op.text.equals(">"))
+					$ret = GreaterThan.getExpression($ret, $a2.ret);
+				else if ($op.text.equals("<="))
+					$ret = LE.getExpression($ret, $a2.ret);
+				else
+					$ret = GE.getExpression($ret, $a2.ret);
+			}
+		)*
 	;
 
-relationalOperator returns [Expression ret]
+relationalOperator
 	: '<' | '>' | '<=' | '>='
 	;
 
 shiftExpression returns [Expression ret]
-	: additiveExpression (shiftOperator additiveExpression)*
+	: a1 = additiveExpression { $ret = $a1.ret; }
+		(op = shiftOperator a2 = additiveExpression
+			{
+				if ($op.text.equals("<<"))
+					$ret = ShiftLeft.getExpression($ret, $a2.ret);
+				else
+					$ret = ShiftRight.getExpression($ret, $a2.ret);
+			}
+		)*
 	;
 
-shiftOperator returns [Expression ret]
+shiftOperator
 	: '<<' | '>>'
 	;
 
 additiveExpression returns [Expression ret]
-	: multiplicativeExpression (additiveOperator multiplicativeExpression)*
+	: a1 = multiplicativeExpression { $ret = $a1.ret; }
+		(op = additiveOperator a2 = multiplicativeExpression
+			{
+				if ($op.text.equals("+"))
+					$ret = Add.getExpression($ret, $a2.ret);
+				else
+					$ret = Subtract.getExpression($ret, $a2.ret);
+			}
+		)*
 	;
 
 additiveOperator
@@ -357,7 +455,17 @@ additiveOperator
 	;
 
 multiplicativeExpression returns [Expression ret]
-	: castExpression (multiplicativeOperator castExpression)*
+	: a1 = castExpression { $ret = $castExpression.ret; }
+		(op = multiplicativeOperator a2 = castExpression
+			{
+				if ($op.text.equals("*"))
+					$ret = Multiply.getExpression($ret, $a2.ret);
+				else if ($op.text.equals("/"))
+					$ret = Divide.getExpression($ret, $a2.ret);
+				else
+					$ret = Modulo.getExpression($ret, $a2.ret);
+			}
+		)*
 	;
 
 multiplicativeOperator
@@ -365,21 +473,43 @@ multiplicativeOperator
 	;
 
 castExpression returns [Expression ret]
-	: unaryExpression
+	: unaryExpression { $ret = $unaryExpression.ret; }
 	| '(' typeName ')' castExpression
+		{
+			$ret = CastExpression.getExpression($typeName.ret, $castExpression.ret);
+		}
 	;
 
-typeName returns [Type type]
-	: typeSpecifier '*'*
+typeName returns [Type ret]
+	: typeSpecifier { $ret = $typeSpecifier.ret; }
+		('*'
+			{
+				$ret = new VariablePointerType($ret);
+			}
+		)*
 	;
 
 unaryExpression returns [Expression ret]
-	: postfixExpression
-	| '++' unaryExpression
-	| '--' unaryExpression
-	| unaryOperator castExpression
-	| 'sizeof' unaryExpression
-	| 'sizeof' '(' typeName ')'
+	: postfixExpression { $ret = $postfixExpression.ret; }
+	| '++' unaryExpression { $ret = PrefixSelfInc.getExpression($unaryExpression.ret); }
+	| '--' unaryExpression { $ret = PrefixSelfDec.getExpression($unaryExpression.ret); }
+	| op = unaryOperator a2 = castExpression
+		{
+			if ($op.text.equals("&"))
+				$ret = AddressFetch.getExpression($a2.ret);
+			else if ($op.text.equals("*"))
+				$ret = AddressAccess.getExpression($a2.ret);
+			else if ($op.text.equals("+"))
+				$ret = Positive.getExpression($a2.ret);
+			else if ($op.text.equals("-"))
+				$ret = Negative.getExpression($a2.ret);
+			else if ($op.text.equals("~"))
+				$ret = BitwiseNot.getExpression($a2.ret);
+			else if ($op.text.equals("!"))
+				$ret = LogicalNot.getExpression($a2.ret);
+		}
+	| 'sizeof' unaryExpression { $ret = new Sizeof($unaryExpression.ret); }
+	| 'sizeof' '(' typeName ')' { $ret = new IntConstant($typeName.ret.sizeof()); }
 	;
 
 unaryOperator
@@ -387,31 +517,54 @@ unaryOperator
 	;
 
 postfixExpression returns [Expression ret]
-	: primaryExpression
-	| postfixExpression '[' expression ']'
-	| postfixExpression '(' arguments? ')'
-	| postfixExpression '.' Identifier
-	| postfixExpression '->' Identifier
-	| postfixExpression '++'
-	| postfixExpression '--'
+locals [ ArrayList<Expression> arg = null ]
+	: primaryExpression { $ret = $primaryExpression.ret; }
+	| p = postfixExpression '[' expression ']' { $ret = ArrayAccess.getExpression($p.ret, $expression.ret); }
+	| p = postfixExpression '(' (arguments { $arg = $arguments.ret; } )? ')' { $ret = FunctionCall.getExpression($p.ret, $arg); }
+	| p = postfixExpression '.' Identifier { $ret = MemberAccess.getExpression($p.ret, $Identifier.text); }
+	| p = postfixExpression '->' Identifier  { $ret = PointerMemberAccess.getExpression($p.ret, $Identifier.text); }
+	| p = postfixExpression '++' { $ret = PostfixSelfInc.getExpression($p.ret); }
+	| p = postfixExpression '--' { $ret = PostfixSelfDec.getExpression($p.ret); }
 	;
 
-arguments returns [ArrayList<Expression> ret]
-	: assignmentExpression (',' assignmentExpression)*
+arguments returns [ArrayList<Expression> ret = new ArrayList<Expression>() ]
+	: a1 = assignmentExpression { $ret.add($a1.ret); }
+		(',' a2 = assignmentExpression
+			{
+				$ret.add($a2.ret);
+			}
+		)*
 	;
 
 primaryExpression returns [Expression ret]
-	: Identifier
+locals [ ArrayList<String> s = new ArrayList<String>() ]
+	: { Environment.isVariable($Identifier.text) }? Identifier
+		{
+			$ret = IdentifierExpression.getExpression($Identifier.text);
+		}
 	| constant
-	| StringLiteral
+		{
+			$ret = $constant.ret;
+		}
+	| (StringLiteral
+		{
+			$s.add($StringLiteral.text);
+		}
+	  )+
+		{
+			$ret = StringConstant.getExpression($s);
+		}
 	| '(' expression ')'
+		{
+			$ret = $expression.ret;
+		}
 	;
 
 constant returns [Expression ret]
-	: DecimalConstant
-	| OctalConstant
-	| HexadecimalConstant
-	| CharacterConstant
+	: DecimalConstant { $ret = IntConstant.getExpression($DecimalConstant.text, 10); }
+	| OctalConstant { $ret = IntConstant.getExpression($OctalConstant.text, 8); }
+	| HexadecimalConstant { $ret = IntConstant.getExpression($HexadecimalConstant.text, 16);  }
+	| CharacterConstant { $ret = CharConstant.getExpression($CharacterConstant.text); }
 	;
 
 // Lexer
@@ -486,16 +639,16 @@ DigitSequence
 	;
 
 CharacterConstant
-	:	'\'' CCharSequence '\''
+	:	'\'' CharSequence '\''
 	;
 
 fragment
-CCharSequence
-	:	CChar+
+CharSequence
+	:	Char+
 	;
 
 fragment
-CChar
+Char
 	:	~['\\\r\n]
 	|	EscapeSequence
 	;
@@ -525,18 +678,7 @@ HexadecimalEscapeSequence
 	;
 
 StringLiteral
-	:	'"' SCharSequence? '"'
-	;
-
-fragment
-SCharSequence
-	:	SChar+
-	;
-
-fragment
-SChar
-	:	~["\\\r\n]
-	|	EscapeSequence
+	:	'"' CharSequence? '"'
 	;
 
 Preprocessing

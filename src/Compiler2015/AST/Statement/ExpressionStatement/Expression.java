@@ -5,16 +5,19 @@ import Compiler2015.AST.Statement.Statement;
 import Compiler2015.AST.Type.Type;
 
 public class Expression extends Statement implements SizeMeasurable {
-	public Type type;
-	public boolean isLValue;
-
-	public Expression(Type type, boolean isLValue) {
-		this.type = type;
-		this.isLValue = isLValue;
-	}
+	public Type type = null;
+	public boolean isLValue = false;
 
 	@Override
 	public int sizeof() {
 		return type.sizeof();
+	}
+
+	public static Integer toInt(Expression x) {
+		if (x instanceof IntConstant)
+			return ((IntConstant) x).c;
+		if (x instanceof CharConstant)
+			return (int) (((CharConstant) x).c);
+		return null;
 	}
 }

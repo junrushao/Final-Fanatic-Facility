@@ -1,19 +1,23 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
-import Compiler2015.AST.Type.Type;
+import Compiler2015.AST.Type.CharType;
+import Compiler2015.Exception.CompilationError;
 
 /**
  * 'c'
  */
 public class CharConstant extends Constant {
 	public Character c;
-	public CharConstant(Character c, Type type, boolean isLValue) {
-		super(type, isLValue);
+
+	public CharConstant(Character c) {
 		this.c = c;
+		this.type = new CharType();
 	}
 
-	@Override
-	public int toInt() {
-		return (int) c;
+	public static Expression getExpression(String s) {
+		s = StringConstant.convert(s);
+		if (s.length() == 0)
+			throw new CompilationError("Empty character constant.");
+		return new CharConstant(s.charAt(0));
 	}
 }

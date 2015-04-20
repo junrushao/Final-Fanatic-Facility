@@ -1,6 +1,7 @@
 package Compiler2015.AST.Declaration;
 
 import Compiler2015.AST.Statement.Statement;
+import Compiler2015.AST.Type.FunctionPointerType;
 import Compiler2015.AST.Type.Type;
 
 import java.util.ArrayList;
@@ -20,5 +21,9 @@ public class FunctionDeclaration extends Declaration {
 		this.parameterNames = parameterNames;
 		this.hasVaList = hasVaList;
 		this.statement = statement;
+	}
+
+	public FunctionPointerType toFunctionPointerType() {
+		return new FunctionPointerType(returnType, parameterTypes, parameterNames, hasVaList);
 	}
 }

@@ -1,14 +1,13 @@
 package Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression;
 
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
-import Compiler2015.AST.Type.Type;
 
 /**
  * a = b
  */
-public class Assign extends BinaryExpression {
-	public Assign(Expression left, Expression right, Type type, boolean isLValue) {
-		super(left, right, type, isLValue);
+public class Assign extends AssignClass {
+	public Assign(Expression left, Expression right) {
+		super(left, right);
 	}
 
 }

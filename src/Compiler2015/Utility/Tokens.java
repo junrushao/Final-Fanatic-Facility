@@ -9,7 +9,4 @@ public enum Tokens {
 
 	DECLARED,
 	DEFINED,
-
-	STRUCT,
-	UNION
 }
