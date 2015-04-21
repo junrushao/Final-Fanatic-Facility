@@ -50,7 +50,7 @@ public class StructOrUnionDeclaration extends Declaration {
 	}
 
 	public HashSet<String> getDirectMemberNames() {
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 		for (String s : members.keySet()) {
 			if (s == null || s.equals(""))
 				throw new CompilationError("Internal Error!");

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 /**
  * Record the symbols that have been declared / defined
@@ -24,17 +25,27 @@ public class SymbolTable {
 	public ArrayList<Entry> table = new ArrayList<Entry>() {{
 		add(new Entry(0, null, 0, Tokens.UNUSED, Tokens.DECLARED, null, null));
 	}};
-	public HashMap<String, Stack<Integer>> name2UIds = new HashMap<String, Stack<Integer>>();
-	public Stack<HashSet<Integer>> scopes = new Stack<HashSet<Integer>>();
+	public HashMap<String, Stack<Integer>> name2UIds = new HashMap<>();
+	public Stack<HashSet<Integer>> scopes = new Stack<>();
 //	public final static String basicTypes[] = {"int", "void", "char"};
 
 	public SymbolTable() {
 		enterScope();
 	}
 
+	public Stack<Integer> getUId(String name) {
+		Stack<Integer> ret = name2UIds.get(name);
+		if (ret == null) {
+			Stack<Integer> newOne = new Stack<>();
+			name2UIds.put(name, newOne);
+			return newOne;
+		}
+		return ret;
+	}
+
 	public int enterScope() {
 		++currentScope;
-		scopes.push(new HashSet<Integer>());
+		scopes.push(new HashSet<>());
 		return currentScope;
 	}
 
@@ -47,7 +58,7 @@ public class SymbolTable {
 				continue;
 			if (table.get(x).type == Tokens.STRUCT_OR_UNION && injectSU)
 				continue;
-			int pop = name2UIds.get(name).pop();
+			int pop = getUId(name).pop();
 			if (pop != x)
 				throw new CompilationError("Internal Error.");
 		}
@@ -62,11 +73,6 @@ public class SymbolTable {
 		} catch (NullPointerException e) {
 			return null;
 		}
-	}
-
-	public boolean isFunction(String name) {
-		Entry e = queryName(name);
-		return e != null && e.type == Tokens.FUNCTION;
 	}
 
 	/**
@@ -119,7 +125,7 @@ public class SymbolTable {
 					null
 			));
 			scopes.peek().add(uId);
-			name2UIds.get(name).push(uId);
+			getUId(name).push(uId);
 			return uId;
 		}
 	}
@@ -143,7 +149,7 @@ public class SymbolTable {
 		int uId = ++lastUId;
 		table.add(new Entry(uId, name, currentScope, Tokens.VARIABLE, Tokens.DEFINED, type, init));
 		scopes.peek().add(uId);
-		name2UIds.get(name).push(uId);
+		getUId(name).push(uId);
 		return uId;
 	}
 
@@ -165,39 +171,10 @@ public class SymbolTable {
 			table.add(new Entry(uId, name, currentScope, Tokens.STRUCT_OR_UNION, Tokens.DECLARED, null, isUnion));
 			scopes.peek().add(uId);
 			if (name != null)
-				name2UIds.get(name).push(uId);
+				getUId(name).push(uId);
 			return uId;
 		}
 	}
-
-//	/**
-//	 * @param name name of the structure / union
-//	 * @param isUnion the tag of structure / union
-//	 * @param members named members
-//	 * @param anonymousMembers anonymous members
-//	 * @return uId
-//	 */
-//	public int defineStructOrUnion(String name, boolean isUnion, HashMap<String, Type> members, ArrayList<StructOrUnionDeclaration> anonymousMembers) {
-//		if (name != null && name.equals("")) name = null;
-//		Entry e = queryName(name);
-//		if (e != null && scopes.peek().contains(e.uId)) {
-//			if (e.status == Tokens.DEFINED)
-//				throw new CompilationError("Struct / Union could not be defined twice.");
-//			if (((StructOrUnionDeclaration) (e.ref)).isUnion != isUnion)
-//				throw new CompilationError("Struct / Union tag mismatch.");
-//			int uId = e.uId;
-//			e.ref = new StructOrUnionDeclaration(uId, isUnion, members, anonymousMembers);
-//			return uId;
-//		} else {
-//			int uId = ++lastUId;
-//			table.add(new Entry(uId, name, currentScope, Tokens.STRUCT_OR_UNION, Tokens.DEFINED,
-//					new StructOrUnionDeclaration(uId, isUnion, members, anonymousMembers), isUnion));
-//			scopes.peek().add(uId);
-//			if (name != null)
-//				name2UIds.get(name).push(uId);
-//			return uId;
-//		}
-//	}
 
 	/**
 	 * @param uId              uId of the structure / union
@@ -232,7 +209,7 @@ public class SymbolTable {
 			int uId = ++lastUId;
 			table.add(new Entry(uId, name, currentScope, Tokens.STRUCT_OR_UNION, Tokens.DEFINED, ref, null));
 			scopes.peek().add(uId);
-			name2UIds.get(name).push(uId);
+			getUId(name).push(uId);
 			return uId;
 		}
 	}
@@ -241,10 +218,7 @@ public class SymbolTable {
 	 * @return variables in current scope
 	 */
 	public ArrayList<Integer> getVariablesInCurrentScope() {
-		ArrayList<Integer> ret = new ArrayList<Integer>();
-		for (int x : scopes.peek())
-			if (table.get(x).type == Tokens.VARIABLE)
-				ret.add(x);
-		return ret;
+		return scopes.peek().stream().filter(x -> table.get(x).type == Tokens.VARIABLE)
+				.collect(Collectors.toCollection(ArrayList::new));
 	}
 }

@@ -8,10 +8,12 @@ import java.util.ArrayList;
 /**
  */
 public class Environment {
-	public static SymbolTable classNames = new SymbolTable();
-	public static SymbolTable symbolNames = new SymbolTable();
+	public static SymbolTable classNames;
+	public static SymbolTable symbolNames;
 
 	static {
+		classNames = new SymbolTable();
+		symbolNames = new SymbolTable();
 //		symbolNames.defineFunction(
 //				"__putint__",
 //				new VoidType(),

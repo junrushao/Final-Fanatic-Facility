@@ -24,7 +24,7 @@ public class FunctionCall extends Expression {
 	}
 
 	public static Expression getExpression(Expression e1, ArrayList<Expression> parameters) {
-		if (parameters == null) parameters = new ArrayList<Expression>();
+		if (parameters == null) parameters = new ArrayList<>();
 
 		if (!(e1.type instanceof FunctionPointerType))
 			throw new CompilationError("Not a pointer to function.");
