@@ -4,15 +4,15 @@ import java.util.ArrayList;
 
 public class FunctionPointerType extends Pointer {
 	public Type returnType;
-	public ArrayList<Type> parameterType;
-	public ArrayList<String> parameterName;
-	public boolean hasVarList;
+	public ArrayList<Type> parameterTypes;
+	public ArrayList<String> parameterNames;
+	public boolean hasVaList;
 
-	public FunctionPointerType(Type returnType, ArrayList<Type> parameterType, ArrayList<String> parameterName, boolean hasVarList) {
+	public FunctionPointerType(Type returnType, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList) {
 		this.returnType = returnType;
-		this.parameterType = parameterType;
-		this.parameterName = parameterName;
-		this.hasVarList = hasVarList;
+		this.parameterTypes = parameterTypes;
+		this.parameterNames = parameterNames;
+		this.hasVaList = hasVaList;
 	}
 
 	@Override
@@ -24,17 +24,30 @@ public class FunctionPointerType extends Pointer {
 	public boolean equals(Object obj) {
 		if (obj instanceof FunctionPointerType) {
 			FunctionPointerType other = (FunctionPointerType) obj;
-			if (hasVarList != other.hasVarList)
+			if (hasVaList != other.hasVaList)
 				return false;
 			if (!returnType.equals(other.returnType))
 				return false;
-			int size = parameterType.size();
-			if (size != other.parameterType.size())
+			int size = parameterTypes.size();
+			if (size != other.parameterTypes.size())
 				return false;
 			for (int i = 0; i < size; ++i)
-				if (!parameterType.get(i).equals(other.parameterType.get(i)))
+				if (!parameterTypes.get(i).equals(other.parameterTypes.get(i)))
 					return false;
 		}
 		return super.equals(obj);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("FunctionPointer(return = ");
+		sb.append(returnType.toString()).append(", parameter =");
+		String sep = " <";
+		for (Type t : parameterTypes) {
+			sb.append(sep).append(t.toString());
+			sep = ", ";
+		}
+		sb.append(">, hasVaList = ").append(hasVaList).append(']');
+		return sb.toString();
 	}
 }

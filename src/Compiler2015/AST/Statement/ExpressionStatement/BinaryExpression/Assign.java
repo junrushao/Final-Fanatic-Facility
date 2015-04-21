@@ -10,4 +10,9 @@ public class Assign extends AssignClass {
 		super(left, right);
 	}
 
+	@Override
+	public String getOperator() {
+		return "=";
+	}
+
 }

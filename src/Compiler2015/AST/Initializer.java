@@ -17,4 +17,18 @@ public class Initializer {
 		this.single = null;
 		this.list = list;
 	}
+
+	@Override
+	public String toString() {
+		if (single != null)
+			return single.toString();
+		StringBuilder sb = new StringBuilder();
+		String sep = "{";
+		for (Initializer i : list) {
+			sb.append(sep).append(i.toString());
+			sep = ", ";
+		}
+		sb.append("}");
+		return sb.toString();
+	}
 }

@@ -4,6 +4,7 @@ import Compiler2015.AST.Type.ArrayPointerType;
 import Compiler2015.AST.Type.FunctionPointerType;
 import Compiler2015.AST.Type.Type;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
 
@@ -29,8 +30,8 @@ public class FunctionCall extends Expression {
 		if (!(e1.type instanceof FunctionPointerType))
 			throw new CompilationError("Not a pointer to function.");
 		FunctionPointerType f = (FunctionPointerType) e1.type;
-		int size = f.parameterName.size(), sizeR = parameters.size();
-		if (f.hasVarList) {
+		int size = f.parameterNames.size(), sizeR = parameters.size();
+		if (f.hasVaList) {
 			if (size > sizeR)
 				throw new CompilationError("Parameter number mismatch");
 		} else {
@@ -46,17 +47,27 @@ public class FunctionCall extends Expression {
 			}
 		}
 		for (int i = 0; i < size; ++i)
-			if (!Type.suitable(f.parameterType.get(i), parameters.get(i).type))
+			if (!Type.suitable(f.parameterTypes.get(i), parameters.get(i).type))
 				throw new CompilationError("Parameter type mismatch");
 		Expression argList[] = new Expression[size];
 		Expression vaList[] = null;
 		for (int i = 0; i < size; ++i)
 			argList[i] = parameters.get(i);
-		if (f.hasVarList) {
+		if (f.hasVaList) {
 			vaList = new Expression[sizeR - size];
 			for (int i = size; i < sizeR; ++i)
 				vaList[i - size] = parameters.get(i);
 		}
 		return new FunctionCall(f, argList, vaList);
+	}
+
+	@Override
+	public String toString(int depth) {
+		StringBuilder sb = Utility.getIndent(depth).append("[Call]").append(function.toString()).append(Utility.NEW_LINE);
+		for (Expression e : argumentExpressionList)
+			sb.append(e.toString(depth + 1));
+		for (Expression e : VaList)
+			sb.append(e.toString(depth + 1));
+		return sb.toString();
 	}
 }

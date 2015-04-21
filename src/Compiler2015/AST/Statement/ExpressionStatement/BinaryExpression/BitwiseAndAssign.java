@@ -10,4 +10,9 @@ public class BitwiseAndAssign extends BinaryExpression {
 		super(left, right);
 	}
 
+	@Override
+	public String getOperator() {
+		return "&=";
+	}
+
 }

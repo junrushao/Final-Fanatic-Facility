@@ -15,6 +15,11 @@ public class LogicalAnd extends BinaryExpression {
 		super(left, right);
 	}
 
+	@Override
+	public String getOperator() {
+		return "&&";
+	}
+
 	public static Expression getExpression(Expression a1, Expression a2) {
 		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
 			throw new CompilationError("&& must be operated on numeric types");

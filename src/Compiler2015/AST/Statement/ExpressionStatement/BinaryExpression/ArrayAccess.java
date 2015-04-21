@@ -25,4 +25,9 @@ public class ArrayAccess extends BinaryExpression {
 			return new ArrayAccess(a1, a2, ((ArrayPointerType) a1.type).lower(), ((ArrayPointerType) a1.type).dimensions.size() == 1);
 		throw new CompilationError("Incompatible type.");
 	}
+
+	@Override
+	public String getOperator() {
+		return "[]";
+	}
 }

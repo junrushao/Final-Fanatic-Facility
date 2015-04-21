@@ -1,20 +1,55 @@
 package Compiler2015;
 
+import Compiler2015.Environment.Environment;
+import Compiler2015.Panel.Panel;
 import Compiler2015.Parser.Compiler2015Lexer;
 import Compiler2015.Parser.Compiler2015Parser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import java.io.IOException;
+import java.io.*;
 
 public class Main {
-	public static void main(String args[]) throws IOException {
-		ANTLRInputStream input = new ANTLRInputStream(System.in);
+	public InputStream inputFile = System.in;
+
+	public void showSymbolTableAndASTTree() {
+		System.out.println(Environment.classNames.toString());
+		System.out.println(Environment.symbolNames.toString());
+	}
+
+	public void argumentsInspect(String args[]) {
+		for (String s : args) {
+			if (s.equals(Panel.prettyPrinter))
+				Panel.isPrettyPrinter = true;
+			else if (!s.startsWith("-")) {
+				try {
+					inputFile = new BufferedInputStream(new FileInputStream(s));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+			} else {
+				System.err.println("Unknown arg: " + s);
+			}
+		}
+	}
+
+	public void compile(String args[]) {
+		argumentsInspect(args);
+		ANTLRInputStream input = null;
+		try {
+			input = new ANTLRInputStream(inputFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Compiler2015Lexer lexer = new Compiler2015Lexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		Compiler2015Parser parser = new Compiler2015Parser(tokens);
 		ParseTree tree = parser.compilationUnit();
-		System.out.println(tree.toString());
+		showSymbolTableAndASTTree();
+	}
+
+	public static void main(String args[]) {
+		new Main().compile(args);
 	}
 }

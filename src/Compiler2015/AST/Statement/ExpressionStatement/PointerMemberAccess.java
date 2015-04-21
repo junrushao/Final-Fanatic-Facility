@@ -4,6 +4,7 @@ import Compiler2015.AST.Type.Pointer;
 import Compiler2015.AST.Type.StructOrUnionType;
 import Compiler2015.AST.Type.Type;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.Utility.Utility;
 
 /**
  * a->b
@@ -28,5 +29,10 @@ public class PointerMemberAccess extends Expression {
 		if (memberType == null)
 			throw new CompilationError("No such member.");
 		return new PointerMemberAccess(a1, a2, memberType);
+	}
+
+	@Override
+	public String toString(int depth) {
+		return Utility.getIndent(depth).append("->").append(memberName).append(Utility.NEW_LINE).append(su.toString(depth + 1)).toString();
 	}
 }

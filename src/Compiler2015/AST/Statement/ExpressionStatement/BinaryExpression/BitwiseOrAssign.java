@@ -9,4 +9,9 @@ public class BitwiseOrAssign extends BinaryExpression {
 	public BitwiseOrAssign(Expression left, Expression right) {
 		super(left, right);
 	}
+
+	@Override
+	public String getOperator() {
+		return "|=";
+	}
 }

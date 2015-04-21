@@ -9,4 +9,9 @@ public class BitwiseXORAssign extends BinaryExpression {
 	public BitwiseXORAssign(Expression left, Expression right) {
 		super(left, right);
 	}
+
+	@Override
+	public String getOperator() {
+		return "^=";
+	}
 }

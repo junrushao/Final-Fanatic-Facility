@@ -21,4 +21,5 @@ public class Pointer extends Type {
 	public int sizeof() {
 		return 8;
 	}
+
 }

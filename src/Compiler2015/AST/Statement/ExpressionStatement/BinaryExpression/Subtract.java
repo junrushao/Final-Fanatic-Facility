@@ -72,4 +72,9 @@ public class Subtract extends BinaryExpression {
 		}
 		throw new CompilationError("Internal Error.");
 	}
+
+	@Override
+	public String getOperator() {
+		return "-";
+	}
 }

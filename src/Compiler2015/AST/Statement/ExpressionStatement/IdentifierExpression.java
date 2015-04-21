@@ -7,6 +7,7 @@ import Compiler2015.Environment.Entry;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Tokens;
+import Compiler2015.Utility.Utility;
 
 public class IdentifierExpression extends Expression {
 	public int uId;
@@ -22,5 +23,10 @@ public class IdentifierExpression extends Expression {
 		if (e.type != Tokens.VARIABLE)
 			throw new CompilationError("Internal Error.");
 		return new IdentifierExpression(e.uId, (Type) e.ref);
+	}
+
+	@Override
+	public String toString(int depth) {
+		return Utility.getIndent(depth).append(uId).toString();
 	}
 }

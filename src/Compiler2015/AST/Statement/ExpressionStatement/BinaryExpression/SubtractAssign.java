@@ -9,4 +9,9 @@ public class SubtractAssign extends BinaryExpression {
 	public SubtractAssign(Expression left, Expression right) {
 		super(left, right);
 	}
+
+	@Override
+	public String getOperator() {
+		return "-=";
+	}
 }

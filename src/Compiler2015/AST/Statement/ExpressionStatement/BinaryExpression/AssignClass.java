@@ -7,7 +7,7 @@ import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
 import Compiler2015.AST.Type.*;
 import Compiler2015.Exception.CompilationError;
 
-public class AssignClass extends BinaryExpression {
+public abstract class AssignClass extends BinaryExpression {
 	public AssignClass(Expression left, Expression right) {
 		super(left, right);
 	}

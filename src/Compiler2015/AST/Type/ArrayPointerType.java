@@ -13,7 +13,7 @@ public class ArrayPointerType extends Pointer {
 
 	public ArrayPointerType(Type t, List<Expression> d) {
 		pointTo = t;
-		dimensions = new ArrayList<Integer>();
+		dimensions = new ArrayList<>();
 		int n = d.size();
 		if (n < 1)
 			throw new CompilationError("Dimension should be positive");
@@ -44,7 +44,7 @@ public class ArrayPointerType extends Pointer {
 			return pointTo;
 		ArrayPointerType ret = new ArrayPointerType();
 		ret.pointTo = pointTo;
-		ret.dimensions = new ArrayList<Integer>(n - 1);
+		ret.dimensions = new ArrayList<>(n - 1);
 		for (int i = 1; i < n; ++i)
 			ret.dimensions.set(i - 1, dimensions.get(i));
 		return ret;
@@ -83,5 +83,19 @@ public class ArrayPointerType extends Pointer {
 			return true;
 		}
 		return super.equals(obj);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Array");
+		for (int i : dimensions) {
+			sb.append('[');
+			if (i != -1)
+				sb.append(i);
+			sb.append(']');
+		}
+		sb.append('(').append(pointTo.toString()).append(')');
+		return sb.toString();
 	}
 }

@@ -38,4 +38,9 @@ public class Add extends BinaryExpression {
 		}
 		return new Add(a1, a2, a1.type instanceof IntType ? a2.type : a1.type);
 	}
+
+	@Override
+	public String getOperator() {
+		return "+";
+	}
 }

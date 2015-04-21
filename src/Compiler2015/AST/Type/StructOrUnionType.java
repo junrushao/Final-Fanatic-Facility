@@ -22,4 +22,12 @@ public class StructOrUnionType extends Type {
 		}
 		return super.equals(obj);
 	}
+
+	@Override
+	public String toString() {
+		if (ref.isUnion)
+			return "Union#" + ref.uId;
+		else
+			return "Struct#" + ref.uId;
+	}
 }

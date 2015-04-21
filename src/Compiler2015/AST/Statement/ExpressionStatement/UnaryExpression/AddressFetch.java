@@ -13,6 +13,11 @@ public class AddressFetch extends UnaryExpression {
 		this.type = new VariablePointerType(e.type);
 	}
 
+	@Override
+	public String getOperator() {
+		return "&";
+	}
+
 	public static Expression getExpression(Expression e) {
 		if (!e.isLValue)
 			throw new CompilationError("Not LValue.");

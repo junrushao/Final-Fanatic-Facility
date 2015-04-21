@@ -8,4 +8,9 @@ public class Sizeof extends UnaryExpression {
 		super(e);
 		this.type = new IntType();
 	}
+
+	@Override
+	public String getOperator() {
+		return "Sizeof";
+	}
 }

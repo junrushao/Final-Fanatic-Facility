@@ -21,4 +21,9 @@ public class VariablePointerType extends Pointer {
 		}
 		return super.equals(obj);
 	}
+
+	@Override
+	public String toString() {
+		return "Pointer(" + pointTo.toString() + ")";
+	}
 }

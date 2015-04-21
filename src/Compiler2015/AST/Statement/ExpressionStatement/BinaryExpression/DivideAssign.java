@@ -9,4 +9,9 @@ public class DivideAssign extends BinaryExpression {
 	public DivideAssign(Expression left, Expression right) {
 		super(left, right);
 	}
+
+	@Override
+	public String getOperator() {
+		return "/=";
+	}
 }

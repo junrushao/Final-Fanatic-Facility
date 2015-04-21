@@ -17,4 +17,9 @@ public class VoidType extends Type {
 			return true;
 		return super.equals(obj);
 	}
+
+	@Override
+	public String toString() {
+		return "void";
+	}
 }

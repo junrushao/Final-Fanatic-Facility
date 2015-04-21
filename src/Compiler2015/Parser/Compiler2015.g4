@@ -168,7 +168,7 @@ locals [String name = null, StructOrUnionDeclaration su = null, int uId = -1]
 			{
 				$uId = Environment.classNames.declareStructOrUnion($name, $structOrUnion.isUnion);
 				Environment.enterScope();
-				$su = new StructOrUnionDeclaration(-1, $structOrUnion.isUnion, new HashMap<String, Type>(), new ArrayList<StructOrUnionDeclaration>());
+				$su = new StructOrUnionDeclaration(-1, $structOrUnion.isUnion, new HashMap<String, Type>(), new ArrayList<StructOrUnionType>());
 				++inStructDepth;
 			}
 			(t2 = typeSpecifier declarators[$t2.ret] ';'

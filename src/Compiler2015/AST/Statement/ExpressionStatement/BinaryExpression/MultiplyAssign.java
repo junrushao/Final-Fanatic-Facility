@@ -9,4 +9,9 @@ public class MultiplyAssign extends AssignClass {
 	public MultiplyAssign(Expression left, Expression right) {
 		super(left, right);
 	}
+
+	@Override
+	public String getOperator() {
+		return "*=";
+	}
 }

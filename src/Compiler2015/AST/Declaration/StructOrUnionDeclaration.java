@@ -3,6 +3,7 @@ package Compiler2015.AST.Declaration;
 import Compiler2015.AST.Type.StructOrUnionType;
 import Compiler2015.AST.Type.Type;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,9 +13,9 @@ public class StructOrUnionDeclaration extends Declaration {
 	public int uId;
 	public boolean isUnion;
 	public HashMap<String, Type> members; // name -> type
-	public ArrayList<StructOrUnionDeclaration> anonymousMembers;
+	public ArrayList<StructOrUnionType> anonymousMembers;
 
-	public StructOrUnionDeclaration(int uId, boolean isUnion, HashMap<String, Type> members, ArrayList<StructOrUnionDeclaration> anonymousMembers) {
+	public StructOrUnionDeclaration(int uId, boolean isUnion, HashMap<String, Type> members, ArrayList<StructOrUnionType> anonymousMembers) {
 		this.uId = uId;
 		this.isUnion = isUnion;
 		this.members = members;
@@ -26,13 +27,13 @@ public class StructOrUnionDeclaration extends Declaration {
 		if (isUnion) {
 			for (Type t : members.values())
 				size = Math.max(size, t.sizeof());
-			for (StructOrUnionDeclaration t: anonymousMembers)
+			for (StructOrUnionType t : anonymousMembers)
 				size = Math.max(size, t.sizeof());
 		}
 		else {
 			for (Type t : members.values())
 				size += t.sizeof();
-			for (StructOrUnionDeclaration t: anonymousMembers)
+			for (StructOrUnionType t : anonymousMembers)
 				size += t.sizeof();
 		}
 		return size;
@@ -41,8 +42,8 @@ public class StructOrUnionDeclaration extends Declaration {
 	public Type memberType(String memberName) {
 		if (members.containsKey(memberName))
 			return members.get(memberName);
-		for (StructOrUnionDeclaration t : anonymousMembers) {
-			Type ret = t.memberType(memberName);
+		for (StructOrUnionType t : anonymousMembers) {
+			Type ret = t.ref.memberType(memberName);
 			if (ret != null)
 				return ret;
 		}
@@ -58,8 +59,8 @@ public class StructOrUnionDeclaration extends Declaration {
 				throw new CompilationError("Internal Error!");
 			res.add(s);
 		}
-		for (StructOrUnionDeclaration s : anonymousMembers) {
-			HashSet<String> tmp = s.getDirectMemberNames();
+		for (StructOrUnionType s : anonymousMembers) {
+			HashSet<String> tmp = s.ref.getDirectMemberNames();
 			res.addAll(tmp);
 		}
 		return res;
@@ -85,7 +86,7 @@ public class StructOrUnionDeclaration extends Declaration {
 				HashSet<String> originalNames = getDirectMemberNames();
 				if (checkOverlap(newNames, originalNames))
 					throw new CompilationError("Naming overlap.");
-				anonymousMembers.add(((StructOrUnionType) type).ref);
+				anonymousMembers.add((StructOrUnionType) type);
 			} else {
 				HashSet<String> originalNames = getDirectMemberNames();
 				if (originalNames.contains(name))
@@ -94,5 +95,17 @@ public class StructOrUnionDeclaration extends Declaration {
 				names.add(name);
 			}
 		}
+	}
+
+	public String toString(int depth) {
+		StringBuilder sb = Utility.getIndent(depth).append(isUnion ? "[UnionDeclaration]" : "[StructDeclaration]").append(Utility.NEW_LINE);
+		StringBuilder indent = Utility.getIndent(depth + 1);
+		for (HashMap.Entry<String, Type> e : members.entrySet()) {
+			sb.append(indent).append('(').append(e.getValue().toString()).append(", ").append(e.getKey()).append(")").append(Utility.NEW_LINE);
+		}
+		for (StructOrUnionType x : anonymousMembers) {
+			sb.append(indent).append('(').append(x.toString()).append(", ##)").append(Utility.NEW_LINE);
+		}
+		return sb.toString();
 	}
 }

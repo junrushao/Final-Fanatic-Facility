@@ -13,6 +13,10 @@ public class AddressAccess extends UnaryExpression {
 		this.isLValue = true;
 	}
 
+	public String getOperator() {
+		return "*";
+	}
+
 	public static Expression getExpression(Expression e) {
 		return new AddressAccess(e);
 	}

@@ -15,6 +15,11 @@ public class Negative extends UnaryExpression {
 		this.type = new IntType();
 	}
 
+	@Override
+	public String getOperator() {
+		return "-";
+	}
+
 	public static Expression getExpression(Expression e) {
 		if (!Type.isNumeric(e.type))
 			throw new CompilationError("Cannot put - before this type");

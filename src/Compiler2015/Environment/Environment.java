@@ -5,25 +5,13 @@ import Compiler2015.Utility.Tokens;
 
 import java.util.ArrayList;
 
-/**
- */
 public class Environment {
-	public static SymbolTable classNames;
-	public static SymbolTable symbolNames;
+	public static SymbolTable classNames = new SymbolTable();
+	public static SymbolTable symbolNames = new SymbolTable();
 
 	static {
-		classNames = new SymbolTable();
-		symbolNames = new SymbolTable();
-//		symbolNames.defineFunction(
-//				"__putint__",
-//				new VoidType(),
-//				new ArrayList<Type>() {{ add(new IntType()); }},
-//				new ArrayList<String>() {{ add("x"); }},
-//				false,
-//				null
-//		);
 		symbolNames.defineFunction(
-				"__$putchar__",
+				"...putchar...",
 				new VoidType(),
 				new ArrayList<Type>() {{
 					add(new CharType());
@@ -35,7 +23,7 @@ public class Environment {
 				null
 		);
 		symbolNames.defineFunction(
-				"__$getchar__",
+				"...getchar...",
 				new VoidType(),
 				new ArrayList<Type>() {{
 					add(new CharType());
@@ -47,7 +35,7 @@ public class Environment {
 				null
 		);
 		symbolNames.defineFunction(
-				"__$malloc__",
+				"...malloc...",
 				new VariablePointerType(new VoidType()),
 				new ArrayList<Type>() {{
 					add(new IntType());

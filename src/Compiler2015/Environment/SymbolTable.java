@@ -5,10 +5,12 @@ import Compiler2015.AST.Declaration.StructOrUnionDeclaration;
 import Compiler2015.AST.Initializer;
 import Compiler2015.AST.Statement.Statement;
 import Compiler2015.AST.Type.ArrayPointerType;
+import Compiler2015.AST.Type.StructOrUnionType;
 import Compiler2015.AST.Type.Type;
 import Compiler2015.AST.Type.VoidType;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Tokens;
+import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +25,7 @@ public class SymbolTable {
 	public int currentScope = 0;
 	public int lastUId = 0;
 	public ArrayList<Entry> table = new ArrayList<Entry>() {{
-		add(new Entry(0, null, 0, Tokens.UNUSED, Tokens.DECLARED, null, null));
+		add(null);
 	}};
 	public HashMap<String, Stack<Integer>> name2UIds = new HashMap<>();
 	public Stack<HashSet<Integer>> scopes = new Stack<>();
@@ -183,7 +185,7 @@ public class SymbolTable {
 	 * @param anonymousMembers anonymous members
 	 * @return uId
 	 */
-	public int defineStructOrUnion(int uId, boolean isUnion, HashMap<String, Type> members, ArrayList<StructOrUnionDeclaration> anonymousMembers) {
+	public int defineStructOrUnion(int uId, boolean isUnion, HashMap<String, Type> members, ArrayList<StructOrUnionType> anonymousMembers) {
 		Entry e = table.get(uId);
 		if (e.ref != null)
 			throw new CompilationError("Struct / Union could not be defined twice.");
@@ -220,5 +222,24 @@ public class SymbolTable {
 	public ArrayList<Integer> getVariablesInCurrentScope() {
 		return scopes.peek().stream().filter(x -> table.get(x).type == Tokens.VARIABLE)
 				.collect(Collectors.toCollection(ArrayList::new));
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (Entry e : table) {
+			if (e == null) continue;
+			if (e.scope != 1) continue;
+			if (e.type == Tokens.VARIABLE) {
+				sb.append('(').append((Type) e.ref).append(", ").append(e.name).append(")");
+				if (e.info != null)
+					sb.append(" init = ").append(e.info.toString());
+				sb.append(Utility.NEW_LINE);
+			} else if (e.type == Tokens.STRUCT_OR_UNION)
+				sb.append(e.ref.toString());
+			else if (e.type == Tokens.FUNCTION)
+				sb.append(e.ref.toString());
+		}
+		return sb.toString();
 	}
 }

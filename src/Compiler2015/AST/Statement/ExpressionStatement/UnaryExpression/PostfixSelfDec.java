@@ -16,6 +16,11 @@ public class PostfixSelfDec extends UnaryExpression {
 		this.type = e.type;
 	}
 
+	@Override
+	public String getOperator() {
+		return "Postfix --";
+	}
+
 	public static Expression getExpression(Expression a1) {
 		if (!a1.isLValue)
 			throw new CompilationError("Not LValue.");

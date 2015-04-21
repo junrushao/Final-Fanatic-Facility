@@ -9,4 +9,9 @@ public class AddAssign extends BinaryExpression {
 	public AddAssign(Expression left, Expression right) {
 		super(left, right);
 	}
+
+	@Override
+	public String getOperator() {
+		return "+=";
+	}
 }

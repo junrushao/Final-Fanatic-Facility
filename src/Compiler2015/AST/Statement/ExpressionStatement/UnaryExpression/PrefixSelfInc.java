@@ -16,6 +16,11 @@ public class PrefixSelfInc extends UnaryExpression {
 		this.type = e.type;
 	}
 
+	@Override
+	public String getOperator() {
+		return "Prefix ++";
+	}
+
 	public static Expression getExpression(Expression a1) {
 		if (!a1.isLValue)
 			throw new CompilationError("Not LValue.");

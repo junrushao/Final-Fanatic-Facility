@@ -1,5 +1,7 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
+import Compiler2015.Utility.Utility;
+
 /**
  * a, b, c
  */
@@ -19,5 +21,10 @@ public class CommaExpression extends Expression {
 			return new IntConstant(v2);
 		else
 			return new CommaExpression(e1, e2);
+	}
+
+	@Override
+	public String toString(int depth) {
+		return Utility.getIndent(depth).append(e1.toString(depth + 1)).append(e2.toString(depth + 1)).toString();
 	}
 }

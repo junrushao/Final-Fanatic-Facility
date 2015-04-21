@@ -16,6 +16,11 @@ public class LogicalNot extends UnaryExpression {
 		this.type = new IntType();
 	}
 
+	@Override
+	public String getOperator() {
+		return "!";
+	}
+
 	public static Expression getExpression(Expression e) {
 		if (e.type instanceof StructOrUnionType)
 			throw new CompilationError("Incompatible type.");
