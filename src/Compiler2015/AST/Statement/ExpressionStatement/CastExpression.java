@@ -33,6 +33,14 @@ public class CastExpression extends Expression {
 		return new CastExpression(t, c);
 	}
 
+	public static boolean castable(Type from, Type to) {
+		if (from.equals(to))
+			return true;
+		if (from instanceof StructOrUnionType || to instanceof StructOrUnionType)
+			return false;
+		return true;
+	}
+
 	@Override
 	public String toString(int depth) {
 		return Utility.getIndent(depth).append("Cast").append(Utility.NEW_LINE).append(Utility.getIndent(depth + 1)).append(type.toString()).append(Utility.NEW_LINE).append(e.toString(depth + 1)).toString();
