@@ -1,10 +1,5 @@
 package Compiler2015.Environment;
 
-import Compiler2015.AST.Declaration.FunctionDeclaration;
-import Compiler2015.AST.Declaration.StructOrUnionDeclaration;
-import Compiler2015.AST.Initializer;
-import Compiler2015.AST.Statement.Statement;
-import Compiler2015.AST.Type.ArrayPointerType;
 import Compiler2015.AST.Type.StructOrUnionType;
 import Compiler2015.AST.Type.Type;
 import Compiler2015.AST.Type.VoidType;
@@ -19,13 +14,36 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 /**
- * Record the symbols that have been declared / defined
+ * For function
+ *     ref = FunctionType
+ *     info = statement
+ * For variable
+ *     ref = type
+ *     info = initializer
+ * For typedefName
+ *     ref = type
+ *     info = null
+ * For struct / union
+ *     ref = isUnion
+ *     info = definition
+ *
+ * The operations in symbol table could be considered to has two main steps:
+ *     + declaration
+ *         declare some symbol exists for some use
+ *     + definition
+ *         define clearly what the use is
+ *
+ * 1. TypedefName is a special case, which always has a single step.
+ * 2. In global scope, a variable could be declared several times but defined only once(or never)
+ * 3. In fact, function is a special type of variable, so I do not take it into consideration
+ *
+ * In my implementation, "info = null" means something is declared but not defined.
  */
 public class SymbolTable {
 	public int currentScope = 0;
 	public int lastUId = 0;
-	public ArrayList<Entry> table = new ArrayList<Entry>() {{
-		add(null);
+	public ArrayList<SymbolTableEntry> table = new ArrayList<SymbolTableEntry>() {{
+		add(null); // table[0] remains null
 	}};
 	public HashMap<String, Stack<Integer>> name2UIds = new HashMap<>();
 	public Stack<HashSet<Integer>> scopes = new Stack<>();
@@ -51,23 +69,19 @@ public class SymbolTable {
 		return currentScope;
 	}
 
-	public void exitScope(boolean injectSU) {
+	public void exitScope() {
 		HashSet<Integer> peek = scopes.pop();
-		for (Integer x : peek) {
-			Entry e = table.get(x);
+		for (Integer uId : peek) {
+			SymbolTableEntry e = table.get(uId);
 			String name = e.name;
-			if (name == null)
-				continue;
-			if (table.get(x).type == Tokens.STRUCT_OR_UNION && injectSU)
-				continue;
 			int pop = getUId(name).pop();
-			if (pop != x)
+			if (pop != uId)
 				throw new CompilationError("Internal Error.");
 		}
 		--currentScope;
 	}
 
-	public Entry queryName(String name) {
+	public SymbolTableEntry queryName(String name) {
 		if (name == null)
 			return null;
 		try {
@@ -76,123 +90,151 @@ public class SymbolTable {
 			return null;
 		}
 	}
+//
+//	/**
+//	 * @param uId uId of the function
+//	 * @param s function statement
+//	 * @return uId of the function
+//	 */
+//	public int defineFunction(int uId, FunctionType t, Statement s) {
+//		SymbolTableEntry e = table.get(uId);
+//		if (e.type != Tokens.FUNCTION)
+//			throw new CompilationError("Symbol already defined as other types.");
+//		if (e.info != null && s != null)
+//			throw new CompilationError("Function already defined.");
+//		if (!e.ref.equals(t))
+//			throw new CompilationError("Function parameter and return type should be the same.");
+//		e.info = s;
+//		return e.uId;
+//	}
+//
+//	/**
+//	 * @param name name of the function
+//	 * @param type type of the function
+//	 * @param s function statements
+//	 * @return uId of the function
+//	 */
+//	public int defineFunction(String name, Type type, Statement s) {
+//		if (!(type instanceof FunctionType))
+//			throw new CompilationError("Should be a function type.");
+//		FunctionType t = (FunctionType)type;
+//		if (name == null || name.equals(""))
+//			throw new CompilationError("Name of function is not allowed to be empty.");
+//		if (t.returnType instanceof ArrayPointerType)
+//			throw new CompilationError("A function should not return an array.");
+//		if (t.returnType instanceof FunctionType)
+//			throw new CompilationError("A function should not return a function.");
+//		SymbolTableEntry e = queryName(name);
+//		int uId;
+//		if (e != null && scopes.peek().contains(e.uId)) {
+//			uId = e.uId;
+//			defineFunction(uId, t, s);
+//		}
+//		else {
+//			uId = ++lastUId;
+//			table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.FUNCTION, t, null));
+//			defineFunction(uId, t, s);
+//		}
+//		return uId;
+//	}
 
 	/**
-	 * @param name function name
-	 * @param returnType return type
-	 * @param types type of each parameter
-	 * @param names name of each parameter
-	 * @param hasVaList whether the function has a VaList
-	 * @param state compoundStatement
+	 * @param uId uId of the variable
+	 * @param t type of the variable
 	 * @return uId of the function
-	 * @throws CompilationError if type mismatch or already defined
 	 */
-	public int defineFunction(String name, Type returnType, ArrayList<Type> types, ArrayList<String> names, boolean hasVaList, Statement state) {
-		if (name == null || name.equals(""))
-			throw new CompilationError("Internal Error.");
-		if (returnType instanceof ArrayPointerType)
-			throw new CompilationError("Cannot return an array.");
-
-		for (int i = 0, size = types.size(); i < size; ++i) {
-			Type t = types.get(i);
-			if (t instanceof ArrayPointerType) {
-				types.set(i, ((ArrayPointerType) t).toVariablePointerType());
-			}
-		}
-
-		Entry e = queryName(name);
-		if (e != null && scopes.peek().contains(e.uId)) {
-			// have been declared or defined in the current scope
-			if (e.status == Tokens.DEFINED)
-				throw new CompilationError("Function already defined.");
-			FunctionDeclaration lastRef = (FunctionDeclaration) e.ref;
-
-			if (!lastRef.returnType.equals(returnType))
-				throw new CompilationError("Mismatch return type.");
-
-			int size = lastRef.parameterTypes.size();
-			if (size != types.size() || hasVaList != lastRef.hasVaList)
-				throw new CompilationError("Mismatch parameter type.");
-
-			for (int i = 0; i < size; ++i)
-				if (!lastRef.parameterTypes.get(i).equals(types.get(i)))
-					throw new CompilationError("Mismatch declaration.");
-
-			e.status = Tokens.DEFINED;
-			return e.uId;
-		} else {
-			int uId = ++lastUId;
-			table.add(new Entry(uId, name, currentScope, Tokens.FUNCTION, Tokens.DEFINED,
-					new FunctionDeclaration(uId, returnType, types, names, hasVaList, state),
-					null
-			));
-			scopes.peek().add(uId);
-			getUId(name).push(uId);
-			return uId;
-		}
-	}
-
-	/**
-	 * @param name name of the variable
-	 * @param type reference to the defined type
-	 * @return uId of the variable
-	 * @throws CompilationError if type mismatch or already defined
-	 */
-	public int defineVariable(String name, Type type, Initializer init) {
-		if (name == null || name.equals(""))
-			throw new CompilationError("Internal Error");
-		if (type instanceof VoidType)
-			throw new CompilationError("Cannot create void type variables.");
-		Entry e = queryName(name);
-		if (e != null && scopes.peek().contains(e.uId)) {
-			// have been declared or defined in the current scope
+	public int defineVariable(int uId, Type t, Object init) {
+		SymbolTableEntry e = table.get(uId);
+		if (e.type != Tokens.VARIABLE)
+			throw new CompilationError("Symbol already defined as other types.");
+		if (e.info != null && init != null)
 			throw new CompilationError("Variable already defined.");
-		}
-		int uId = ++lastUId;
-		table.add(new Entry(uId, name, currentScope, Tokens.VARIABLE, Tokens.DEFINED, type, init));
-		scopes.peek().add(uId);
-		getUId(name).push(uId);
-		return uId;
+		if (!e.ref.equals(t))
+			throw new CompilationError("Already defined as another variable type.");
+		e.info = init;
+		return e.uId;
 	}
 
 	/**
-	 * @param name name of the structure / union
-	 * @param isUnion the exact type, union or struct
-	 * @return uId if first time define, -1 if already declared / defined
+	 * TODO : misbehave in local scope in function declaration
+	 * Attention: global variables allows redefinition if there is at most one place that it is assigned the initial value.
+	 *
+	 * @param name name of the variable
+	 * @param t    type of the variable
+	 * @return uId of the function
 	 */
-	public int declareStructOrUnion(String name, boolean isUnion) {
-		if (name != null && name.equals("")) name = null;
-		Entry e = queryName(name);
-		if (e != null && scopes.peek().contains(e.uId)) {
-			if (isUnion != ((StructOrUnionDeclaration) e.ref).isUnion) {
-				throw new CompilationError("Defined as wrong kind of tag");
+	public int defineVariable(String name, Type t, Object init) {
+		if (currentScope == 1) { // global
+			if (name == null || name.equals(""))
+				throw new CompilationError("Name of variable is not allowed to be empty.");
+			if (t instanceof VoidType)
+				throw new CompilationError("Void-type variable is not allowed.");
+			SymbolTableEntry e = queryName(name);
+			int uId;
+			if (e != null && scopes.peek().contains(e.uId)) {
+				uId = e.uId;
+				defineVariable(uId, t, init);
+			} else {
+				uId = ++lastUId;
+				table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.VARIABLE, t, null));
+				defineVariable(uId, t, init);
 			}
-			return e.uId;
-		} else {
-			int uId = ++lastUId;
-			table.add(new Entry(uId, name, currentScope, Tokens.STRUCT_OR_UNION, Tokens.DECLARED, null, isUnion));
-			scopes.peek().add(uId);
-			if (name != null)
-				getUId(name).push(uId);
+			return uId;
+		} else { // local
+			if (name == null || name.equals(""))
+				throw new CompilationError("Name of variable is not allowed to be empty.");
+			if (t instanceof VoidType)
+				throw new CompilationError("Void-type variable is not allowed.");
+			SymbolTableEntry e = queryName(name);
+			int uId;
+			if (e != null && scopes.peek().contains(e.uId)) {
+				throw new CompilationError("Symbol already defined.");
+			} else {
+				uId = ++lastUId;
+				table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.VARIABLE, t, null));
+				defineVariable(uId, t, init);
+			}
 			return uId;
 		}
 	}
 
 	/**
-	 * @param uId              uId of the structure / union
-	 * @param isUnion          the tag of structure / union
-	 * @param members          named members
-	 * @param anonymousMembers anonymous members
-	 * @return uId
+	 * @param uId uId of the struct / union
+	 * @param isUnion is union or struct
+	 * @param t type of the struct
 	 */
-	public int defineStructOrUnion(int uId, boolean isUnion, HashMap<String, Type> members, ArrayList<StructOrUnionType> anonymousMembers) {
-		Entry e = table.get(uId);
-		if (e.ref != null)
-			throw new CompilationError("Struct / Union could not be defined twice.");
-		if (!e.info.equals(isUnion))
+	public int defineStructOrUnion(int uId, boolean isUnion, StructOrUnionType t) {
+		SymbolTableEntry e = table.get(uId);
+		if (e.type != Tokens.STRUCT_OR_UNION)
+			throw new CompilationError("Symbol already defined as other types.");
+		if ((boolean) e.ref != isUnion)
 			throw new CompilationError("Struct / Union tag mismatch.");
-		e.status = Tokens.DEFINED;
-		e.ref = new StructOrUnionDeclaration(uId, isUnion, members, anonymousMembers);
+		if (!t.equals(e.info))
+			throw new CompilationError("Struct / Union already defined");
+		return e.uId;
+	}
+
+	/**
+	 * @param name name of the struct / union
+	 * @param isUnion is union or struct
+	 * @param type type of the struct
+	 */
+	public int defineStructOrUnion(String name, boolean isUnion, Type type) {
+		if (!(type instanceof StructOrUnionType))
+			throw new CompilationError("Should be a function type.");
+		StructOrUnionType t = (StructOrUnionType) type;
+		if (name == null || name.equals(""))
+			throw new CompilationError("Name of function is not allowed to be empty.");
+		SymbolTableEntry e = queryName(name);
+		int uId;
+		if (e != null && scopes.peek().contains(e.uId)) {
+			uId = e.uId;
+			defineStructOrUnion(uId, isUnion, t);
+		} else {
+			uId = ++lastUId;
+			table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.FUNCTION, t, null));
+			defineStructOrUnion(uId, isUnion, t);
+		}
 		return uId;
 	}
 
@@ -203,13 +245,13 @@ public class SymbolTable {
 	 */
 	public int defineTypedefName(String name, Type ref) {
 		if (name == null || name.equals(""))
-			throw new CompilationError("Internal Error");
-		Entry e = queryName(name);
+			throw new CompilationError("Typedef name should be non-empty.");
+		SymbolTableEntry e = queryName(name);
 		if (e != null && scopes.peek().contains(e.uId)) {
-			throw new CompilationError("Already defined");
+			throw new CompilationError("Symbol already used.");
 		} else {
 			int uId = ++lastUId;
-			table.add(new Entry(uId, name, currentScope, Tokens.STRUCT_OR_UNION, Tokens.DEFINED, ref, null));
+			table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.STRUCT_OR_UNION, ref, null));
 			scopes.peek().add(uId);
 			getUId(name).push(uId);
 			return uId;
@@ -227,7 +269,7 @@ public class SymbolTable {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for (Entry e : table) {
+		for (SymbolTableEntry e : table) {
 			if (e == null) continue;
 			if (e.scope != 1) continue;
 			if (e.type == Tokens.VARIABLE) {

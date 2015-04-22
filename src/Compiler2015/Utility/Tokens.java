@@ -9,4 +9,8 @@ public enum Tokens {
 
 	DECLARED,
 	DEFINED,
+
+	STAR,
+	ARRAY_BRACKET,
+	PARAMETER_BRACKET
 }

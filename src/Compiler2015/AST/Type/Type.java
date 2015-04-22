@@ -20,7 +20,7 @@ public abstract class Type extends ASTNode implements SizeMeasurable {
 
 		// Struct / Union
 		if (a instanceof StructOrUnionType && b instanceof StructOrUnionType)
-			return ((StructOrUnionType) a).ref.uId == ((StructOrUnionType) b).ref.uId;
+			return ((StructOrUnionType) a).uId == ((StructOrUnionType) b).uId;
 		return !(a instanceof StructOrUnionType || b instanceof StructOrUnionType);
 
 	}

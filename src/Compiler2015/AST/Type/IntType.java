@@ -13,9 +13,7 @@ public class IntType extends Type {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof IntType)
-			return true;
-		return super.equals(obj);
+		return obj instanceof IntType;
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 package Compiler2015.AST.Statement;
 
 import Compiler2015.AST.Type.Type;
-import Compiler2015.Environment.Entry;
 import Compiler2015.Environment.Environment;
+import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class CompoundStatement extends Statement {
 		StringBuilder sb = Utility.getIndent(depth);
 		StringBuilder indent = Utility.getIndent(depth + 1);
 		for (int x : variables) {
-			Entry e = Environment.symbolNames.table.get(x);
+			SymbolTableEntry e = Environment.symbolNames.table.get(x);
 			Type t = (Type) e.ref;
 			String name = e.name;
 			sb.append(indent).append(String.format("uId = %d, type = %s, name = %s", x, t.toString(), name)).append(Utility.NEW_LINE);

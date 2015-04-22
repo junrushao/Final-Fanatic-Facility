@@ -5,32 +5,14 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ArrayPointerType extends Pointer {
 	public Type pointTo;
 	public ArrayList<Integer> dimensions;
 
-	public ArrayPointerType(Type t, List<Expression> d) {
-		pointTo = t;
-		dimensions = new ArrayList<>();
-		int n = d.size();
-		if (n < 1)
-			throw new CompilationError("Dimension should be positive");
-		for (int i = 0; i < n; ++i) {
-			Expression e = d.get(i);
-			if (e == null) {
-				if (i != 0)
-					throw new CompilationError("Array type has incomplete dimensions.");
-				dimensions.add(-1);
-			} else if (e instanceof Constant) {
-				int v = Expression.toInt(e);
-				if (v < 0)
-					throw new CompilationError("The length of each dimension must be non-negative.");
-				dimensions.add(v);
-			} else
-				throw new CompilationError("The length of each dimension must be constant.");
-		}
+	public ArrayPointerType(Type pointTo, ArrayList<Integer> dimensions) {
+		this.pointTo = pointTo;
+		this.dimensions = dimensions;
 	}
 
 	public ArrayPointerType() {
@@ -70,19 +52,18 @@ public class ArrayPointerType extends Pointer {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof ArrayPointerType) {
-			ArrayPointerType other = (ArrayPointerType) obj;
-			if (!pointTo.equals(other.pointTo))
+		if (!(obj instanceof ArrayPointerType))
+			return false;
+		ArrayPointerType other = (ArrayPointerType) obj;
+		if (!pointTo.equals(other.pointTo))
+			return false;
+		int n = dimensions.size();
+		if (n != other.dimensions.size())
+			return false;
+		for (int i = 0; i < n; ++i)
+			if (!dimensions.get(i).equals(other.dimensions.get(i)))
 				return false;
-			int n = dimensions.size();
-			if (n != other.dimensions.size())
-				return false;
-			for (int i = 0; i < n; ++i)
-				if (!dimensions.get(i).equals(other.dimensions.get(i)))
-					return false;
-			return true;
-		}
-		return super.equals(obj);
+		return true;
 	}
 
 	@Override
@@ -97,5 +78,48 @@ public class ArrayPointerType extends Pointer {
 		}
 		sb.append('(').append(pointTo.toString()).append(')');
 		return sb.toString();
+	}
+
+	public static Type pushFromUndimensioned(Type t) {
+		ArrayPointerType ret = new ArrayPointerType();
+		if (t instanceof ArrayPointerType) {
+			if (((ArrayPointerType) t).dimensions.get(0) == -1)
+				throw new CompilationError("Dimension error.");
+			ret.pointTo = ((ArrayPointerType) t).pointTo;
+			ret.dimensions = new ArrayList<Integer>() {{
+				add(-1);
+			}};
+			ret.dimensions.addAll(((ArrayPointerType) t).dimensions);
+		} else {
+			ret.pointTo = t;
+			ret.dimensions = new ArrayList<Integer>() {{
+				add(-1);
+			}};
+		}
+		return ret;
+	}
+
+	public static Type pushFrontDimension(Type t, Object o) {
+		if (!(o instanceof Constant))
+			throw new CompilationError("Length should be a non-negative integer.");
+		int v = Expression.toInt((Expression) o);
+		if (v < 0)
+			throw new CompilationError("Length should be non-negative.");
+		ArrayPointerType ret = new ArrayPointerType();
+		if (t instanceof ArrayPointerType) {
+			if (((ArrayPointerType) t).dimensions.get(0) == -1)
+				throw new CompilationError("Dimension error.");
+			ret.pointTo = ((ArrayPointerType) t).pointTo;
+			ret.dimensions = new ArrayList<Integer>() {{
+				add(v);
+			}};
+			ret.dimensions.addAll(((ArrayPointerType) t).dimensions);
+		} else {
+			ret.pointTo = t;
+			ret.dimensions = new ArrayList<Integer>() {{
+				add(v);
+			}};
+		}
+		return ret;
 	}
 }

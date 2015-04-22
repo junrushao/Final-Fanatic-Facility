@@ -13,9 +13,7 @@ public class CharType extends Type {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof CharType)
-			return true;
-		return super.equals(obj);
+		return obj instanceof CharType;
 	}
 
 	@Override

@@ -1,33 +1,28 @@
 package Compiler2015.AST.Type;
 
-import Compiler2015.AST.Declaration.StructOrUnionDeclaration;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class StructOrUnionType extends Type {
-	public StructOrUnionDeclaration ref;
+	public int uId = -1;
+	public boolean isUnion = false;
+	public ArrayList<Type> types;
+	public ArrayList<String> names;
+	public HashMap<String, Type> directlyAccessableMembers;
 
-	public StructOrUnionType(StructOrUnionDeclaration ref) {
-		this.ref = ref;
-	}
-
-	@Override
-	public int sizeof() {
-		return ref.sizeof();
+	public StructOrUnionType() {
+		types = new ArrayList<>();
+		names = new ArrayList<>();
+		directlyAccessableMembers = new HashMap<>();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof StructOrUnionType) {
-			StructOrUnionType other = (StructOrUnionType) obj;
-			return ref.uId == other.ref.uId;
-		}
-		return super.equals(obj);
+		return obj instanceof StructOrUnionType && ((StructOrUnionType) obj).uId == uId;
 	}
 
 	@Override
-	public String toString() {
-		if (ref.isUnion)
-			return "Union#" + ref.uId;
-		else
-			return "Struct#" + ref.uId;
+	public int sizeof() {
+		return 0;
 	}
 }

@@ -13,9 +13,7 @@ public class VoidType extends Type {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof VoidType)
-			return true;
-		return super.equals(obj);
+		return obj instanceof VoidType;
 	}
 
 	@Override

@@ -15,11 +15,10 @@ public class VariablePointerType extends Pointer {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof VariablePointerType) {
-			VariablePointerType other = (VariablePointerType) obj;
-			return pointTo.equals(other.pointTo);
-		}
-		return super.equals(obj);
+		if (!(obj instanceof VariablePointerType))
+			return false;
+		VariablePointerType other = (VariablePointerType) obj;
+		return pointTo.equals(other.pointTo);
 	}
 
 	@Override

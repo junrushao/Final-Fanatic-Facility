@@ -17,7 +17,7 @@ public class FunctionCall extends Expression {
 	public Expression VaList[];
 
 	public FunctionCall(FunctionPointerType function, Expression[] argumentExpressionList, Expression[] VaList) {
-		this.type = function.returnType;
+		this.type = function.pointTo.returnType;
 		this.isLValue = false;
 		this.function = function;
 		this.argumentExpressionList = argumentExpressionList;
@@ -30,8 +30,8 @@ public class FunctionCall extends Expression {
 		if (!(e1.type instanceof FunctionPointerType))
 			throw new CompilationError("Not a pointer to function.");
 		FunctionPointerType f = (FunctionPointerType) e1.type;
-		int size = f.parameterNames.size(), sizeR = parameters.size();
-		if (f.hasVaList) {
+		int size = f.pointTo.parameterNames.size(), sizeR = parameters.size();
+		if (f.pointTo.hasVaList) {
 			if (size > sizeR)
 				throw new CompilationError("Parameter number mismatch");
 		} else {
@@ -47,13 +47,13 @@ public class FunctionCall extends Expression {
 			}
 		}
 		for (int i = 0; i < size; ++i)
-			if (!Type.suitable(f.parameterTypes.get(i), parameters.get(i).type))
+			if (!Type.suitable(f.pointTo.parameterTypes.get(i), parameters.get(i).type))
 				throw new CompilationError("Parameter type mismatch");
 		Expression argList[] = new Expression[size];
 		Expression vaList[] = null;
 		for (int i = 0; i < size; ++i)
 			argList[i] = parameters.get(i);
-		if (f.hasVaList) {
+		if (f.pointTo.hasVaList) {
 			vaList = new Expression[sizeR - size];
 			for (int i = size; i < sizeR; ++i)
 				vaList[i - size] = parameters.get(i);

@@ -25,7 +25,7 @@ public class PointerMemberAccess extends Expression {
 		if (!(l instanceof StructOrUnionType))
 			throw new CompilationError("Must be a pointer to a certain struct/union");
 		StructOrUnionType leftType = (StructOrUnionType) l;
-		Type memberType = leftType.ref.memberType(a2);
+		Type memberType = leftType.directlyAccessableMembers.get(a2);
 		if (memberType == null)
 			throw new CompilationError("No such member.");
 		return new PointerMemberAccess(a1, a2, memberType);

@@ -23,7 +23,7 @@ public class MemberAccess extends Expression {
 		if (!(a1.type instanceof StructOrUnionType))
 			throw new CompilationError("Basic type cannot have members.");
 		StructOrUnionType leftType = (StructOrUnionType) a1.type;
-		Type memberType = leftType.ref.memberType(a2);
+		Type memberType = leftType.directlyAccessableMembers.get(a2);
 		if (memberType == null)
 			throw new CompilationError("No such member.");
 		return new MemberAccess(a1, a2, memberType);

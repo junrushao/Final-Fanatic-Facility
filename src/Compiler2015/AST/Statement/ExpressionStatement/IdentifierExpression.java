@@ -3,8 +3,8 @@ package Compiler2015.AST.Statement.ExpressionStatement;
 import Compiler2015.AST.Type.ArrayPointerType;
 import Compiler2015.AST.Type.FunctionPointerType;
 import Compiler2015.AST.Type.Type;
-import Compiler2015.Environment.Entry;
 import Compiler2015.Environment.Environment;
+import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
@@ -19,7 +19,7 @@ public class IdentifierExpression extends Expression {
 	}
 
 	public static Expression getExpression(String name) {
-		Entry e = Environment.symbolNames.queryName(name);
+		SymbolTableEntry e = Environment.symbolNames.queryName(name);
 		if (e.type != Tokens.VARIABLE)
 			throw new CompilationError("Internal Error.");
 		return new IdentifierExpression(e.uId, (Type) e.ref);

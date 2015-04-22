@@ -1,11 +1,14 @@
 grammar Compiler2015;
 
 /* TODO:
+ * 0. FunctionCall should support (FunctionType | FunctionPointerType)
  * 1. Scope in structures seems not correct;
  * 2. Need to declare a constant function pointer once a function is declared;
  * 3. Check whether a type is well defined after AST is built;
  * 4. Check function main exists;
  * 5. Consider functions without return types(default return int)
+ * 6. In declaration, array size should be determined, except that it has initializer list.
+ * 7. ArrayPointerType in parameter type should first be converted into
  */
 @parser::header {
 import Compiler2015.AST.*;
@@ -22,113 +25,97 @@ import Compiler2015.Utility.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.ArrayDeque;
+import java.util.Stack;
 }
 
 @parser::members {
-public int inStructDepth = 0;
 }
 
 /* Top level */
 
 compilationUnit
-	: (declaration | functionDefinition)* EOF
+	: (functionDefinition | declaration | ';')* EOF
 	;
 
+// TODO : change initDeclaratorList -> declaratorList
 declaration
-locals [ ArrayList<Type> types = null, ArrayList<String> names = null, ArrayList<Initializer> inits = null, int n = 0 ]
-	: 'typedef' typeSpecifier declarators[$typeSpecifier.ret] ';'
-		{
-			$types = $declarators.types;
-			$names = $declarators.names;
-			$n = $types.size();
-			for (int i = 0; i < $n; ++i)
-				Environment.symbolNames.defineTypedefName($names.get(i), $types.get(i));
-		}
-	| typeSpecifier initDeclarators[$typeSpecifier.ret]? ';'
-		{
-			$types = $initDeclarators.types;
-			$names = $initDeclarators.names;
-			$inits = $initDeclarators.inits;
-			$n = $types.size();
-			for (int i = 0; i < $n; ++i) {
-				Environment.symbolNames.defineVariable($names.get(i), $types.get(i), $inits.get(i));
+locals [ ArrayList<Type> types, ArrayList<String> names, ArrayList<Initializer> inits, int n]
+@after {
+	TypeAnalyser.exit();
+}
+	:	'typedef'
+		typeSpecifier
+			{
+				TypeAnalyser.enter($typeSpecifier.ret);
 			}
-		}
+		(initDeclaratorList
+			{
+				$types = $initDeclaratorList.types;
+				$names = $initDeclaratorList.names;
+				$inits = $initDeclaratorList.inits;
+				$n = $types.size();
+				for (int i = 0; i < $n; ++i) {
+					if ($inits.get(i) != null)
+						throw new CompilationError("typedef cannot be used with initializers.");
+					Environment.symbolNames.defineTypedefName($names.get(i), $types.get(i));
+				}
+			}
+		)?
+		';'
+	|	typeSpecifier
+			{
+				TypeAnalyser.enter($typeSpecifier.ret);
+			}
+		(initDeclaratorList
+			{
+				$types = $initDeclaratorList.types;
+				$names = $initDeclaratorList.names;
+				$inits = $initDeclaratorList.inits;
+				$n = $types.size();
+				for (int i = 0; i < $n; ++i) {
+					Environment.symbolNames.defineVariable($names.get(i), $types.get(i), $inits.get(i));
+				}
+			}
+		)? ';'
 	;
 
 functionDefinition
-locals [ Type returnType, String name, ArrayList<Type> types = null, ArrayList<String> names = null, boolean hasVaList = false, Statement s = null ]
+locals [ Type type, String name, Statement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1]
 @after {
-	Environment.symbolNames.defineFunction(
-		$name,
-		$returnType,
-		$types,
-		$names,
-		$hasVaList,
-		$s
-	);
+	TypeAnalyser.exit();
 }
-	: typeSpecifier
-		plainDeclarator[$typeSpecifier.ret]
-			{
-				$returnType = $plainDeclarator.type;
-				$name = $plainDeclarator.name;
-			}
-		'(' (parameters
-				{
-					$types = $parameters.types;
-					$names = $parameters.names;
-					$hasVaList = $parameters.hasVaList;
-				}
-			) ? ')'
-		compoundStatement
-			{
-				$s = $compoundStatement.ret;
-			}
-	;
-
-/**
- * something like:
- *     int a, boolean b, struct X c, ...
- */
-parameters returns [ArrayList<Type> types = new ArrayList<Type>(), ArrayList<String> names = new ArrayList<String>(), boolean hasVaList = false]
-locals [int n = 0, Type type, String name]
-@init {
-	HashSet<String> existNames = new HashSet<String>();
-}
-	: p1 = plainDeclaration {
-			$type = $p1.type;
-			$name = $p1.name;
-			if (existNames.contains($name))
-				throw new CompilationError("Name appears more than once.");
-			existNames.add($name);
-			$types.add($type);
-			$names.add($name);
+	:	typeSpecifier { TypeAnalyser.enter($typeSpecifier.ret); }
+		declarator
+		{
+			$type = TypeAnalyser.analyse();
 		}
-		(',' p2 = plainDeclaration {
-			$type = $p2.type;
-			$name = $p2.name;
-			if (existNames.contains($name))
-				throw new CompilationError("Name appears more than once.");
-			existNames.add($name);
-			$types.add($type);
-			$names.add($name);
-		} )*
-		(',' '...' { $hasVaList = true; } )?
+		'('(parameterTypeList
+			{
+				$parameterTypes = $parameterTypeList.types;
+				$parameterNames = $parameterTypeList.names;
+				$hasVaList = $parameterTypeList.hasVaList;
+			}
+		)?')'
+		{
+			$type = new FunctionType($type, $parameterTypes, $parameterNames, $hasVaList);
+			$uId = Environment.symbolNames.defineVariable($name, $type, null);
+		}
+		compoundStatement
+		{
+			$s = $compoundStatement.ret;
+			Environment.symbolNames.defineVariable($uId, $type, $s);
+		}
 	;
 
-declarators[Type innerType] returns [ArrayList<Type> types = new ArrayList<Type>(), ArrayList<String> names = new ArrayList<String>()]
-	: declarator[innerType] { $types.add($declarator.type); $names.add($declarator.name); } (',' declarator[innerType] { $types.add($declarator.type); $names.add($declarator.name); } )*
-	;
-
-initDeclarators[Type innerType] returns [ArrayList<Type> types = new ArrayList<Type>(), ArrayList<String> names = new ArrayList<String>(), ArrayList<Initializer> inits = new ArrayList<Initializer>()]
-	: initDeclarator[innerType]
+initDeclaratorList returns [ArrayList<Type> types = new ArrayList<Type>(), ArrayList<String> names = new ArrayList<String>(), ArrayList<Initializer> inits = new ArrayList<Initializer>()]
+	: initDeclarator
 		{
 			$types.add($initDeclarator.type);
 			$names.add($initDeclarator.name);
 			$inits.add($initDeclarator.init);
 		}
-		(',' initDeclarator[innerType]
+		(',' initDeclarator
 			{
 				$types.add($initDeclarator.type);
 				$names.add($initDeclarator.name);
@@ -137,8 +124,190 @@ initDeclarators[Type innerType] returns [ArrayList<Type> types = new ArrayList<T
 		)*
 	;
 
-initDeclarator[Type innerType] returns [Type type, String name, Initializer init = null]
-	: declarator[innerType] {$type = $declarator.type; $name = $declarator.name; } ('=' initializer {$init = $initializer.ret; } )?
+initDeclarator returns [Type type, String name, Initializer init = null]
+	: declarator
+		{
+			$type = TypeAnalyser.analyse();
+			$name = $declarator.name;
+		}
+		('=' initializer
+			{
+				$init = $initializer.ret;
+			}
+		)?
+	;
+
+typeSpecifier returns [Type ret]
+	:	'void' { $ret = new VoidType(); }
+	|	'char' { $ret = new CharType(); }
+	|	'int' { $ret = new IntType();  }
+	|	typedefName { $ret = $typedefName.ret; }
+	|	structOrUnionSpecifier { $ret = $structOrUnionSpecifier.ret; }
+	;
+
+structOrUnionSpecifier returns [Type ret]
+locals [boolean isUnion, String name]
+@init {
+	$name = "";
+}
+	:	structOrUnion
+		{
+			$isUnion = $structOrUnion.isUnion;
+		}
+		(Identifier { $name = $Identifier.text; } )?
+		'{' { StructBuilder.enter($name, $isUnion); }
+			(structDeclaration
+				{
+					StructBuilder.addAttributes($structDeclaration.types, $structDeclaration.names);
+				}
+			)*
+		'}' { $ret = StructBuilder.exit(); }
+	|	structOrUnion { $isUnion = $structOrUnion.isUnion; }
+		Identifier
+		{
+			$name = $Identifier.text;
+			$ret = StructBuilder.decalreDirectly($name, $isUnion);
+		}
+	;
+
+structOrUnion returns [boolean isUnion]
+	:	'struct' { $isUnion = false; }
+	|	'union'  { $isUnion = true; }
+	;
+
+/**
+ * declaration inside struct / union
+ */
+structDeclaration returns [ArrayList<Type> types, ArrayList<String> names]
+@init {
+	$types = new ArrayList<Type>();
+	$names = new ArrayList<String>();
+}
+@after {
+	for (Type t : $types)
+		if (t instanceof FunctionType)
+			throw new CompilationError("Could not declare / define functions inside struct / union.");
+	TypeAnalyser.exit();
+}
+	:	typeSpecifier { TypeAnalyser.enter($typeSpecifier.ret); }
+		(
+			d1 = declarator
+			{
+				$types.add(TypeAnalyser.analyse());
+				$names.add($d1.name);
+			}
+			(
+				',' d2 = declarator
+				{
+					$types.add(TypeAnalyser.analyse());
+					$names.add($d2.name);
+				}
+			)*
+		)? ';'
+	;
+
+declarator returns [String name]
+locals [int n = 0]
+@after {
+	for (int i = 0; i < $n; ++i)
+		TypeAnalyser.addStar();
+}
+	:	('*' { ++$n; } )*
+		directDeclarator { $name = $directDeclarator.name; }
+	;
+
+directDeclarator returns [String name]
+	:	Identifier { $name = $Identifier.text; }
+	|	'(' declarator ')' { $name = $declarator.name; }
+	|	d1 = directDeclarator { $name = $d1.name; }
+		'[' constantExpression ']' { TypeAnalyser.addArray($constantExpression.ret); }
+	|	d2 = directDeclarator { $name = $d2.name;  }
+		'[' ']' { TypeAnalyser.addArray(null); }
+	|	d3 = directDeclarator { $name = $d3.name; }
+		'(' ')' { TypeAnalyser.addParameter(null, false); }
+	|	d4 = directDeclarator { $name = $d4.name; }
+		'(' parameterTypeList ')' { TypeAnalyser.addParameter($parameterTypeList.types, $parameterTypeList.hasVaList); }
+	;
+
+parameterTypeList returns [ArrayList<Type> types, ArrayList<String> names, boolean hasVaList = false]
+	:	parameterList
+		{
+			$types = $parameterList.types;
+			$names = $parameterList.names;
+		}
+		(',' '...' { $hasVaList = true; } )?
+	;
+
+parameterList returns [ArrayList<Type> types = new ArrayList<Type>(), ArrayList<String> names = new ArrayList<String>()]
+	:	p1 = parameterDeclaration
+		{
+			$types.add($p1.type);
+			$names.add($p1.name);
+		}
+		(',' p2 = parameterDeclaration
+			{
+				$types.add($p1.type);
+				$names.add($p1.name);
+			}
+		)?
+	;
+
+parameterDeclaration returns [Type type, String name]
+@after {
+	TypeAnalyser.exit();
+}
+	:	typeSpecifier
+		{
+			TypeAnalyser.enter($typeSpecifier.ret);
+			$type = $typeSpecifier.ret;
+			$name = "";
+		}
+	|	typeSpecifier { TypeAnalyser.enter($typeSpecifier.ret); }
+		declarator
+		{
+			$type = TypeAnalyser.analyse();
+			$name = $declarator.name;
+		}
+	|	typeSpecifier { TypeAnalyser.enter($typeSpecifier.ret); }
+		abstractDeclarator
+		{
+			$type = TypeAnalyser.analyse();
+			$name = "";
+		}
+	;
+
+abstractDeclarator
+locals [int n = 0]
+@after {
+	for (int i = 0; i < $n; ++i)
+		TypeAnalyser.addStar();
+}
+	:	('*' { ++$n; } )+
+	|	('*' { ++$n; } )*
+		directAbstractDeclarator
+	;
+
+directAbstractDeclarator
+	:	'(' abstractDeclarator ')'
+	|	'[' ']'
+			{ TypeAnalyser.addArray(null); }
+	|	'[' constantExpression ']'
+			{ TypeAnalyser.addArray($constantExpression.ret); }
+	|	'(' ')'
+			{ TypeAnalyser.addParameter(null, false); }
+	|	'(' parameterTypeList ')'
+			{ TypeAnalyser.addParameter($parameterTypeList.types, $parameterTypeList.hasVaList); }
+	|	directAbstractDeclarator '[' ']'
+	|	directAbstractDeclarator '[' constantExpression ']'
+			{ TypeAnalyser.addArray($constantExpression.ret); }
+	|	directAbstractDeclarator '(' ')'
+			{ TypeAnalyser.addParameter(null, false); }
+	|	directAbstractDeclarator '(' parameterTypeList? ')'
+			{ TypeAnalyser.addParameter($parameterTypeList.types, $parameterTypeList.hasVaList); }
+	;
+
+typedefName returns [Type ret]
+	:	{ Environment.isTypedefName($Identifier.text) }? Identifier
 	;
 
 initializer returns [Initializer ret]
@@ -149,128 +318,6 @@ initializer returns [Initializer ret]
 				$ret.list.add($i1.ret);
 			}
 		(',' i2 = initializer { $ret.list.add($i2.ret); })* '}'
-	;
-
-/**
- * something like:
- *     void
- *     struct x
- *     struct x { int a, b; }
- */
-typeSpecifier returns [Type ret]
-locals [String name = null, StructOrUnionDeclaration su = null, int uId = -1]
-	: 'void' { $ret = new VoidType(); }
-	| 'char' { $ret = new CharType(); }
-	| 'int'  { $ret = new IntType();  }
-	| typedefName { $ret = $typedefName.ret; }
-	| structOrUnion (Identifier { $name = $Identifier.text; } )?
-		'{'
-			{
-				$uId = Environment.classNames.declareStructOrUnion($name, $structOrUnion.isUnion);
-				Environment.enterScope();
-				$su = new StructOrUnionDeclaration(-1, $structOrUnion.isUnion, new HashMap<String, Type>(), new ArrayList<StructOrUnionType>());
-				++inStructDepth;
-			}
-			(t2 = typeSpecifier declarators[$t2.ret] ';'
-				{
-					$su.addAttributes($declarators.types, $declarators.names);
-				}
-			)+
-		'}'
-			{
-				$ret = (Type) (Environment.classNames.table.get($uId).ref);
-				Environment.classNames.defineStructOrUnion($uId, $structOrUnion.isUnion, $su.members, $su.anonymousMembers);
-				Environment.exitScope(true);
-				--inStructDepth;
-			}
-	| structOrUnion Identifier
-			{
-				$name = $Identifier.text;
-				$uId = Environment.classNames.declareStructOrUnion($name, $structOrUnion.isUnion);
-				$ret = (Type) (Environment.classNames.table.get($uId).ref);
-			}
-	;
-
-typedefName returns [Type ret]
-	: { Environment.isTypedefName($Identifier.text) }? Identifier
-	;
-
-structOrUnion returns [boolean isUnion]
-	: 'struct' { $isUnion = false; }
-	| 'union'  { $isUnion = true; }
-	;
-
-/**
- * something like:
- *     int a
- *     char **a
- */
-plainDeclaration returns [Type type, String name]
-	: typeSpecifier declarator[$typeSpecifier.ret]
-		{
-			$type = $declarator.type;
-			$name = $declarator.name;
-		}
-	;
-
-/**
- * something like:
- *     **a(int a, int b)
- *     *a[1][2][3]
- */
-declarator[Type innerType] returns [Type type, String name]
-locals [ArrayList<Expression> list = new ArrayList<Expression>() ]
-	: { inStructDepth == 0 }? plainDeclarator[$innerType] '(' ')'
-		{
-			$type = new FunctionPointerType(
-				$plainDeclarator.type,
-				new ArrayList<Type>(),
-				new ArrayList<String>(),
-				false
-			);
-			$name = $plainDeclarator.name;
-		}
-	| { inStructDepth == 0 }? plainDeclarator[$innerType] '(' parameters ')'
-		{
-			$type = new FunctionPointerType(
-				$plainDeclarator.type,
-				$parameters.types,
-				$parameters.names,
-				$parameters.hasVaList
-				);
-		}
-	| plainDeclarator[$innerType]
-		{
-			$type = $plainDeclarator.type;
-			$name = $plainDeclarator.name;
-		}
-	| plainDeclarator[$innerType]
-		'[' ']' { $list.add(null); } // the first dimension could be empty
-		('[' constantExpression { $list.add($constantExpression.ret); } ']')*
-		{
-			$type = new ArrayPointerType($plainDeclarator.type, $list);
-			$name = $plainDeclarator.name;
-		}
-	| plainDeclarator[$innerType] ('[' constantExpression { $list.add($constantExpression.ret); } ']')+
-		{
-			$type = new ArrayPointerType($plainDeclarator.type, $list);
-			$name = $plainDeclarator.name;
-		}
-	;
-
-/**
- * something like:
- *     **a
- */
-plainDeclarator[Type innerType] returns [Type type, String name]
-locals [int n = 0]
-	: (s = '*' { ++$n; } )* Identifier
-		{
-			$type = $innerType;
-			for (int i = 0; i < $n; ++i)
-				$type = new VariablePointerType($type);
-			$name = $Identifier.text;
-		}
 	;
 
 /* Statements */
@@ -297,7 +344,7 @@ locals [ ArrayList<Statement> statements = new ArrayList<Statement>(); ]
 	  '}'
 			{
 				$ret = new CompoundStatement(Environment.symbolNames.getVariablesInCurrentScope(), $statements);
-				Environment.exitScope(false);
+				Environment.exitScope();
 			}
 	;
 
@@ -481,12 +528,20 @@ castExpression returns [Expression ret]
 	;
 
 typeName returns [Type ret]
-	: typeSpecifier { $ret = $typeSpecifier.ret; }
-		('*'
+@after {
+	TypeAnalyser.exit();
+}
+	:	typeSpecifier
+		{
+			TypeAnalyser.enter($typeSpecifier.ret);
+			$ret = $typeSpecifier.ret;
+		}
+	|	typeSpecifier { TypeAnalyser.enter($typeSpecifier.ret); }
+		(abstractDeclarator
 			{
-				$ret = new VariablePointerType($ret);
+				$ret = TypeAnalyser.analyse();
 			}
-		)*
+		)?
 	;
 
 unaryExpression returns [Expression ret]

@@ -13,9 +13,12 @@ public class StringConstant extends Expression {
 	public StringConstant(final String c) {
 		this.c = c;
 		this.isLValue = false;
-		this.type = new ArrayPointerType(new CharType(), new ArrayList<Expression>() {{
-			add(new IntConstant(c.length() + 1));
-		}});
+		this.type = new ArrayPointerType(
+				new CharType(),
+				new ArrayList<Integer>() {{
+					add(c.length() + 1);
+				}}
+		);
 	}
 
 	/**
