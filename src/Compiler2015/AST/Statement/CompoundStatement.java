@@ -21,15 +21,16 @@ public class CompoundStatement extends Statement {
 
 	@Override
 	public String toString(int depth) {
-		StringBuilder sb = Utility.getIndent(depth);
-		StringBuilder indent = Utility.getIndent(depth + 1);
+		StringBuilder sb = new StringBuilder();
+		StringBuilder indent = Utility.getIndent(depth);
 		for (int x : variables) {
 			SymbolTableEntry e = Environment.symbolNames.table.get(x);
 			Type t = (Type) e.ref;
 			String name = e.name;
 			sb.append(indent).append(String.format("uId = %d, type = %s, name = %s", x, t.toString(), name)).append(Utility.NEW_LINE);
 		}
-		statements.forEach(sb::append);
+		for (Statement s : statements)
+			sb.append(s.toString(depth));
 		return sb.toString();
 	}
 }

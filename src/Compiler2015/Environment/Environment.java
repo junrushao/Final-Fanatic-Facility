@@ -1,17 +1,45 @@
 package Compiler2015.Environment;
 
-import Compiler2015.AST.Type.FunctionType;
-import Compiler2015.AST.Type.IntType;
-import Compiler2015.AST.Type.Type;
+import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
+import Compiler2015.AST.Statement.Statement;
+import Compiler2015.AST.Type.*;
+import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Tokens;
+import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class Environment {
 	public static SymbolTable classNames = new SymbolTable();
 	public static SymbolTable symbolNames = new SymbolTable();
 
-	static {
+	public static Stack<Statement> loopStack = new Stack<>();
+	public static Stack<Type> functionReturnStack = new Stack<>();
+
+	public static Statement getTopLoop() {
+		if (loopStack.isEmpty())
+			throw new CompilationError("No loops(for / while) to manipulate.");
+		return loopStack.peek();
+	}
+
+	public static void matchReturn(Type returnType) {
+		if (functionReturnStack.isEmpty())
+			throw new CompilationError("Could not return outside function scope.");
+		Type x = functionReturnStack.peek();
+		if (x instanceof VoidType && returnType instanceof VoidType)
+			return;
+		if (x instanceof VoidType || returnType instanceof VoidType)
+			throw new CompilationError("Return type not match.");
+		if (!CastExpression.castable(returnType, x))
+			throw new CompilationError("Return type not match.");
+	}
+
+	public static void init() {
+		classNames = new SymbolTable();
+		symbolNames = new SymbolTable();
+		loopStack = new Stack<>();
+		functionReturnStack = new Stack<>();
 		symbolNames.defineVariable(
 				".putchar",
 				new FunctionType(
@@ -27,7 +55,7 @@ public class Environment {
 				null
 		);
 		symbolNames.defineVariable(
-				".getchar",
+				"getchar",
 				new FunctionType(
 						new IntType(),
 						new ArrayList<Type>() {{
@@ -41,7 +69,7 @@ public class Environment {
 				null
 		);
 		symbolNames.defineVariable(
-				".malloc",
+				"malloc",
 				new FunctionType(
 						new IntType(),
 						new ArrayList<Type>() {{
@@ -53,6 +81,23 @@ public class Environment {
 						false),
 				null
 		);
+		symbolNames.defineVariable(
+				"printf",
+				new FunctionType(
+						new IntType(),
+						new ArrayList<Type>() {{
+							add(new VariablePointerType(new CharType()));
+						}},
+						new ArrayList<String>() {{
+							add("format");
+						}},
+						true),
+				null
+		);
+	}
+
+	static {
+		init();
 	}
 
 	public static void enterScope() {
@@ -62,7 +107,7 @@ public class Environment {
 
 	public static void exitScope() {
 		classNames.exitScope();
-		classNames.exitScope();
+		symbolNames.exitScope();
 	}
 
 	public static boolean isVariable(String name) {
@@ -73,5 +118,9 @@ public class Environment {
 	public static boolean isTypedefName(String name) {
 		SymbolTableEntry e = symbolNames.queryName(name);
 		return e != null && e.type == Tokens.TYPEDEF_NAME;
+	}
+
+	public static String toStr() {
+		return "Struct & Union:" + Utility.NEW_LINE + classNames.toString() + "Symbols:" + Utility.NEW_LINE + symbolNames.toString();
 	}
 }

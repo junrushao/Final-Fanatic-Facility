@@ -13,22 +13,14 @@ import java.util.ArrayList;
  * f(...)
  */
 public class FunctionCall extends Expression {
-	public FunctionType function;
+	public Expression function;
 	public Expression argumentExpressionList[];
 	public Expression VaList[];
 
-	public FunctionCall(FunctionPointerType function, Expression[] argumentExpressionList, Expression[] VaList) {
-		this.type = function.pointTo.returnType;
+	public FunctionCall(Expression e1, Expression[] argumentExpressionList, Expression[] VaList, Type returnType) {
+		this.type = e1.type;
 		this.isLValue = false;
-		this.function = function.pointTo;
-		this.argumentExpressionList = argumentExpressionList;
-		this.VaList = VaList;
-	}
-
-	public FunctionCall(FunctionType function, Expression[] argumentExpressionList, Expression[] VaList) {
-		this.type = function.returnType;
-		this.isLValue = false;
-		this.function = function;
+		this.function = e1;
 		this.argumentExpressionList = argumentExpressionList;
 		this.VaList = VaList;
 	}
@@ -36,16 +28,19 @@ public class FunctionCall extends Expression {
 	public static Expression getExpression(Expression e1, ArrayList<Expression> parameters) {
 		if (parameters == null) parameters = new ArrayList<>();
 
-		if (!(e1.type instanceof FunctionPointerType))
-			throw new CompilationError("Not a pointer to function.");
-		FunctionPointerType f = (FunctionPointerType) e1.type;
-		int size = f.pointTo.parameterNames.size(), sizeR = parameters.size();
-		if (f.pointTo.hasVaList) {
+		Type ff = e1.type;
+		if (ff instanceof FunctionPointerType)
+			ff = ((FunctionPointerType) ff).pointTo;
+		if (!(ff instanceof FunctionType))
+			throw new CompilationError("Not a function or a pointer to a function.");
+		FunctionType f = (FunctionType) e1.type;
+		int size = f.parameterNames.size(), sizeR = parameters.size();
+		if (f.hasVaList) {
 			if (size > sizeR)
-				throw new CompilationError("Parameter number mismatch");
+				throw new CompilationError("Parameter number mismatch.");
 		} else {
 			if (size != sizeR)
-				throw new CompilationError("Parameter number mismatch");
+				throw new CompilationError("Parameter number mismatch.");
 		}
 		for (int i = 0; i < sizeR; ++i) {
 			Expression e = parameters.get(i);
@@ -56,27 +51,30 @@ public class FunctionCall extends Expression {
 			}
 		}
 		for (int i = 0; i < size; ++i)
-			if (!Type.suitable(f.pointTo.parameterTypes.get(i), parameters.get(i).type))
+			if (!Type.suitable(f.parameterTypes.get(i), parameters.get(i).type))
 				throw new CompilationError("Parameter type mismatch");
 		Expression argList[] = new Expression[size];
 		Expression vaList[] = null;
 		for (int i = 0; i < size; ++i)
 			argList[i] = parameters.get(i);
-		if (f.pointTo.hasVaList) {
+		if (f.hasVaList) {
 			vaList = new Expression[sizeR - size];
 			for (int i = size; i < sizeR; ++i)
 				vaList[i - size] = parameters.get(i);
 		}
-		return new FunctionCall(f, argList, vaList);
+		return new FunctionCall(e1, argList, vaList, f.returnType);
 	}
 
 	@Override
 	public String toString(int depth) {
-		StringBuilder sb = Utility.getIndent(depth).append("[Call]").append(function.toString()).append(Utility.NEW_LINE);
+		StringBuilder sb =
+				Utility.getIndent(depth).append("[Call]").append(Utility.NEW_LINE).
+						append(function.toString(depth + 1));
 		for (Expression e : argumentExpressionList)
 			sb.append(e.toString(depth + 1));
-		for (Expression e : VaList)
-			sb.append(e.toString(depth + 1));
+		if (VaList != null)
+			for (Expression e : VaList)
+				sb.append(e.toString(depth + 1));
 		return sb.toString();
 	}
 }

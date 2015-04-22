@@ -11,4 +11,9 @@ public class FunctionPointerType extends Pointer {
 	public boolean equals(Object obj) {
 		return obj instanceof FunctionPointerType && pointTo.equals(((FunctionPointerType) obj).pointTo);
 	}
+
+	@Override
+	public String toString() {
+		return "FunctionPointerType(" + pointTo.toString() + ")";
+	}
 }

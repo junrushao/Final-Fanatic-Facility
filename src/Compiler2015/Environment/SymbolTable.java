@@ -1,16 +1,15 @@
 package Compiler2015.Environment;
 
-import Compiler2015.AST.Type.StructOrUnionType;
-import Compiler2015.AST.Type.Type;
-import Compiler2015.AST.Type.VoidType;
+import Compiler2015.AST.Initializer;
+import Compiler2015.AST.Statement.CompoundStatement;
+import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
+import Compiler2015.AST.Statement.ExpressionStatement.Expression;
+import Compiler2015.AST.Type.*;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Stack;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -24,8 +23,8 @@ import java.util.stream.Collectors;
  *     ref = type
  *     info = null
  * For struct / union
- *     ref = isUnion
- *     info = definition
+ *     ref = definition
+ *     info = status
  *
  * The operations in symbol table could be considered to has two main steps:
  *     + declaration
@@ -84,8 +83,10 @@ public class SymbolTable {
 		if (name == null)
 			return null;
 		try {
-			return table.get(name2UIds.get(name).peek());
+			return table.get(getUId(name).peek());
 		} catch (NullPointerException e) {
+			return null;
+		} catch (EmptyStackException e) {
 			return null;
 		}
 	}
@@ -94,6 +95,8 @@ public class SymbolTable {
 	 * @param uId uId of the variable
 	 * @param t type of the variable
 	 * @return uId of the function
+	 *
+	 * TODO: InitializerList is not well implemented
 	 */
 	public int defineVariable(int uId, Type t, Object init) {
 		SymbolTableEntry e = table.get(uId);
@@ -101,8 +104,26 @@ public class SymbolTable {
 			throw new CompilationError("Symbol already defined as other types.");
 		if (e.info != null && init != null)
 			throw new CompilationError("Variable already defined.");
-		if (!e.ref.equals(t))
+		if (e.ref != null && !e.ref.equals(t))
 			throw new CompilationError("Already defined as another variable type.");
+		if (!(e.ref instanceof FunctionType) && init != null) {
+			Initializer ini = (Initializer) init;
+			ArrayList<Expression> ae = ((Initializer) init).toArrayList();
+			if (e.ref instanceof ArrayPointerType) {
+				if (ini.single != null)
+					throw new CompilationError("Initializer dimension does not match.");
+//					matchInitializer(e.ref, )
+				for (Expression exp : ae)
+					if (!CastExpression.castable(exp.type, ((ArrayPointerType) e.ref).pointTo))
+						throw new CompilationError("Initializer type mismatch.");
+			} else {
+				if (ini.single == null)
+					throw new CompilationError("Initializer dimension does not match.");
+				for (Expression exp : ae)
+					if (!CastExpression.castable(exp.type, (Type) e.ref))
+						throw new CompilationError("Initializer type mismatch.");
+			}
+		}
 		e.info = init;
 		return e.uId;
 	}
@@ -129,6 +150,8 @@ public class SymbolTable {
 			} else {
 				uId = ++lastUId;
 				table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.VARIABLE, t, null));
+				scopes.peek().add(uId);
+				getUId(name).push(uId);
 				defineVariable(uId, t, init);
 			}
 			return uId;
@@ -144,6 +167,8 @@ public class SymbolTable {
 			} else {
 				uId = ++lastUId;
 				table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.VARIABLE, t, null));
+				scopes.peek().add(uId);
+				getUId(name).push(uId);
 				defineVariable(uId, t, init);
 			}
 			return uId;
@@ -152,42 +177,39 @@ public class SymbolTable {
 
 	/**
 	 * @param uId uId of the struct / union
-	 * @param isUnion is union or struct
-	 * @param t type of the struct
 	 */
-	public int defineStructOrUnion(int uId, boolean isUnion, StructOrUnionType t) {
+	public int defineStructOrUnion(int uId) {
 		SymbolTableEntry e = table.get(uId);
 		if (e.type != Tokens.STRUCT_OR_UNION)
 			throw new CompilationError("Symbol already defined as other types.");
-		if ((boolean) e.ref != isUnion)
-			throw new CompilationError("Struct / Union tag mismatch.");
-		if (!t.equals(e.info))
-			throw new CompilationError("Struct / Union already defined");
+		if (e.info == Tokens.DEFINED)
+			throw new CompilationError("Struct / Union already defined: " + e.name);
+		e.info = Tokens.DEFINED;
 		return e.uId;
 	}
 
 	/**
 	 * @param name name of the struct / union
-	 * @param isUnion is union or struct
-	 * @param type type of the struct
+	 * @param isUnion is it union or struct
 	 */
-	public int defineStructOrUnion(String name, boolean isUnion, Type type) {
-		if (!(type instanceof StructOrUnionType))
-			throw new CompilationError("Should be a function type.");
-		StructOrUnionType t = (StructOrUnionType) type;
+	public int declareStructOrUnion(String name, boolean isUnion) {
 		if (name == null || name.equals(""))
-			throw new CompilationError("Name of function is not allowed to be empty.");
+			throw new CompilationError("Name of struct / union is not allowed to be empty.");
 		SymbolTableEntry e = queryName(name);
-		int uId;
 		if (e != null && scopes.peek().contains(e.uId)) {
-			uId = e.uId;
-			defineStructOrUnion(uId, isUnion, t);
+			if (e.type != Tokens.STRUCT_OR_UNION)
+				throw new CompilationError("Symbol already defined as other types.");
+			if (((StructOrUnionType) e.ref).isUnion != isUnion)
+				throw new CompilationError("Struct / Union tag mismatch.");
+			return e.uId;
 		} else {
-			uId = ++lastUId;
-			table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.STRUCT_OR_UNION, t, null));
-			defineStructOrUnion(uId, isUnion, t);
+			int uId = ++lastUId;
+			StructOrUnionType newOne = new StructOrUnionType(uId, isUnion);
+			table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.STRUCT_OR_UNION, newOne, Tokens.DECLARED));
+			scopes.peek().add(uId);
+			getUId(name).push(uId);
+			return uId;
 		}
-		return uId;
 	}
 
 	/**
@@ -203,7 +225,7 @@ public class SymbolTable {
 			throw new CompilationError("Symbol already used.");
 		} else {
 			int uId = ++lastUId;
-			table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.STRUCT_OR_UNION, ref, null));
+			table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.TYPEDEF_NAME, ref, null));
 			scopes.peek().add(uId);
 			getUId(name).push(uId);
 			return uId;
@@ -224,15 +246,20 @@ public class SymbolTable {
 		for (SymbolTableEntry e : table) {
 			if (e == null) continue;
 			if (e.scope != 1) continue;
-			if (e.type == Tokens.VARIABLE) {
-				sb.append('(').append(e.ref).append(", ").append(e.name).append(")");
-				if (e.info != null)
-					sb.append(" init = ").append(e.info.toString());
-				sb.append(Utility.NEW_LINE);
-			} else if (e.type == Tokens.STRUCT_OR_UNION)
-				sb.append(e.ref.toString());
-//			else if (e.type == Tokens.FUNCTION)
-//				sb.append(e.ref.toString());
+			sb.append(Utility.getIndent(1)).append("#").append(e.uId).append(": ");
+//			if (e.type == Tokens.VARIABLE && !(e.ref instanceof FunctionType)) { // Variables
+			if (e.type == Tokens.VARIABLE) { // Variables
+				sb.append(String.format("Variable(name = %s, type = %s)", e.name, e.ref.toString())).append(Utility.NEW_LINE);
+				if (e.info != null) {
+					if (e.ref instanceof FunctionType)
+						sb.append(((CompoundStatement) e.info).toString(2)).append(Utility.NEW_LINE);
+					else
+						sb.append(Utility.getIndent(2)).append("init = ").append(e.info.toString()).append(Utility.NEW_LINE);
+				}
+			} else if (e.type == Tokens.STRUCT_OR_UNION) // Struct / Unions
+				sb.append(((StructOrUnionType) e.ref).deepToString()).append(Utility.NEW_LINE);
+			else if (e.type == Tokens.TYPEDEF_NAME) // Typedef Names
+				sb.append(Utility.getIndent(1)).append(e.name).append(" -> ").append(e.ref.toString()).append(Utility.NEW_LINE);
 		}
 		return sb.toString();
 	}

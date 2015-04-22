@@ -23,6 +23,10 @@ class AnalyserEntry {
 
 }
 
+/**
+ * @see <a href="http://unixwiz.net/techtips/reading-cdecl.html">Reading C type declarations</a>
+ * In fact, I just maintain a stack containing all operators and simply assemble them up.
+ */
 public final class TypeAnalyser {
 	public static Stack<Type> ss = new Stack<>();
 	public static Stack<Stack<AnalyserEntry>> se = new Stack<>();
@@ -62,7 +66,10 @@ public final class TypeAnalyser {
 				else
 					ret = new VariablePointerType(ret);
 			} else if (e.type == Tokens.PARAMETER_BRACKET) {
-				ret = new FunctionType(ret, e.types, null, e.hasVaList);
+				ArrayList<String> emptyNames = new ArrayList<>(e.types.size());
+				for (int i = 0; i < e.types.size(); ++i)
+					emptyNames.add("");
+				ret = new FunctionType(ret, e.types, emptyNames, e.hasVaList);
 			} else if (e.type == Tokens.ARRAY_BRACKET) {
 				if (e.e == null)
 					ret = ArrayPointerType.pushFromUndimensioned(ret);

@@ -26,4 +26,9 @@ public class CharConstant extends Constant {
 	public String toString(int depth) {
 		return Utility.getIndent(depth).append(c).append(Utility.NEW_LINE).toString();
 	}
+
+	@Override
+	public String toString() {
+		return Character.toString(c);
+	}
 }

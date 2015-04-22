@@ -24,7 +24,7 @@ public abstract class AssignClass extends BinaryExpression {
 		// Case 2
 		if ((a1.type instanceof StructOrUnionType) != (a2.type instanceof StructOrUnionType))
 			throw new CompilationError("Incompatible type.");
-		if (a1.type instanceof StructOrUnionType && (!operator.equals("=")) || !a1.type.equals(a2.type))
+		if (a1.type instanceof StructOrUnionType && (!operator.equals("=") || !a1.type.equals(a2.type)))
 			throw new CompilationError("Incompatible type.");
 
 		// Case 3

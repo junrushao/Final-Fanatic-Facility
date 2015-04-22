@@ -69,11 +69,16 @@ public class StringConstant extends Expression {
 						break;
 					}
 				}
+				if (i == n) {
+					done = true;
+					sb.append((char) toC);
+				}
 				if (!done)
 					throw new CompilationError("\\x used with no following hex digits.");
 			} else if ('0' <= nextC && nextC <= '7') {
 				int toC = nextC - '0';
-				for (i = i + 2; i < n; ++i) {
+				int cnt = 1;
+				for (i = i + 2; i < n && cnt < 3; ++i, ++cnt) {
 					char now = original.charAt(i);
 					if ('0' <= now && now <= '7')
 						toC = (toC << 3) + (now - '0');
@@ -133,15 +138,30 @@ public class StringConstant extends Expression {
 
 	public static Expression getExpression(ArrayList<String> s) {
 		StringBuilder sb = new StringBuilder();
-		for (String str : s) {
-			String ret = convert(str);
-			sb.append(ret);
-		}
+		for (String str : s)
+			sb.append(convert(str));
 		return new StringConstant(sb.toString());
+	}
+
+	public static String toPrintableString(String s) {
+		StringBuilder sb = new StringBuilder();
+		for (char c : s.toCharArray()) {
+			if (c <= 32 || c >= 127)
+				sb.append("\\").append(Integer.toOctalString(c));
+			else
+				sb.append(c);
+		}
+		return sb.toString();
 	}
 
 	@Override
 	public String toString(int depth) {
-		return Utility.getIndent(depth).append(c).append(Utility.NEW_LINE).toString();
+		return Utility.getIndent(depth).append("\"").append(toPrintableString(c)).append("\"").append(Utility.NEW_LINE).toString();
 	}
+
+	@Override
+	public String toString() {
+		return "\"" + toPrintableString(c) + "\"";
+	}
+
 }

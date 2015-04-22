@@ -1,9 +1,9 @@
 package Compiler2015.AST.Type;
 
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class FunctionType extends Type {
 	public Type returnType;
@@ -12,12 +12,16 @@ public class FunctionType extends Type {
 	public boolean hasVaList;
 
 	public FunctionType(Type returnType, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList) {
+		if (parameterTypes == null)
+			parameterTypes = new ArrayList<>();
+		if (parameterNames == null)
+			parameterNames = new ArrayList<>();
 		if (returnType instanceof ArrayPointerType)
 			throw new CompilationError("A function should not return an array.");
 		if (returnType instanceof FunctionType)
 			throw new CompilationError("A function should not return a function.");
-		if (parameterNames != null && (new HashSet<>(parameterNames).size()) != parameterNames.size())
-			throw new CompilationError("parameter should have different names");
+//		if (parameterNames.size() != 0 && (new HashSet<>(parameterNames).size()) != parameterNames.size())
+//			throw new CompilationError("parameter should have different names");
 
 		for (int i = 0, n = parameterTypes.size(); i < n; ++i) {
 			Type t = parameterTypes.get(i);
@@ -56,14 +60,8 @@ public class FunctionType extends Type {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder("FunctionType(return = ");
-		sb.append(returnType.toString()).append(", parameter =");
-		String sep = " <";
-		for (Type t : parameterTypes) {
-			sb.append(sep).append(t.toString());
-			sep = ", ";
-		}
-		sb.append(">, hasVaList = ").append(hasVaList).append(']');
-		return sb.toString();
+		return "FunctionType(return = " + returnType.toString() + ", parameter = "
+				+ Utility.toString(parameterTypes, parameterNames)
+				+ ", hasVaList = " + hasVaList + ')';
 	}
 }

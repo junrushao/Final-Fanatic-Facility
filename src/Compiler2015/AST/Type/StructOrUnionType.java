@@ -1,5 +1,7 @@
 package Compiler2015.AST.Type;
 
+import Compiler2015.Utility.Utility;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -10,10 +12,18 @@ public class StructOrUnionType extends Type {
 	public ArrayList<String> names;
 	public HashMap<String, Type> directlyAccessableMembers;
 
+	public StructOrUnionType(int uId, boolean isUnion) {
+		this.uId = uId;
+		this.isUnion = isUnion;
+		this.types = new ArrayList<>();
+		this.names = new ArrayList<>();
+		this.directlyAccessableMembers = new HashMap<>();
+	}
+
 	public StructOrUnionType() {
-		types = new ArrayList<>();
-		names = new ArrayList<>();
-		directlyAccessableMembers = new HashMap<>();
+		this.types = new ArrayList<>();
+		this.names = new ArrayList<>();
+		this.directlyAccessableMembers = new HashMap<>();
 	}
 
 	@Override
@@ -24,5 +34,26 @@ public class StructOrUnionType extends Type {
 	@Override
 	public int sizeof() {
 		return 0;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		if (!isUnion) {
+			return sb.append("[Union #").append(uId).append("] ").toString();
+		} else {
+			return sb.append("[Struct #").append(uId).append("] ").toString();
+		}
+	}
+
+	public String deepToString() {
+		StringBuilder sb = new StringBuilder();
+		if (!isUnion) {
+			sb.append("[Union #").append(uId).append("]");
+		} else {
+			sb.append("[Struct #").append(uId).append("]");
+		}
+		sb.append(Utility.toString(types, names)).append("    direct = ").append(Utility.toString(new ArrayList<>(directlyAccessableMembers.keySet())));
+		return sb.toString();
 	}
 }

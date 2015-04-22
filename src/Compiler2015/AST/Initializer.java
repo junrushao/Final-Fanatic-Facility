@@ -18,6 +18,17 @@ public class Initializer {
 		this.list = list;
 	}
 
+	public ArrayList<Expression> toArrayList() {
+		if (single != null)
+			return new ArrayList<Expression>() {{
+				add(single);
+			}};
+		ArrayList<Expression> ret = new ArrayList<>();
+		for (Initializer i : list)
+			ret.addAll(i.toArrayList());
+		return ret;
+	}
+
 	@Override
 	public String toString() {
 		if (single != null)

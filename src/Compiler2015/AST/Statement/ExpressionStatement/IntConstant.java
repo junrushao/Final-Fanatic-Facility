@@ -14,6 +14,8 @@ public class IntConstant extends Constant {
 
 	public static Expression getExpression(String s, int radixBase) {
 		try {
+			if (radixBase == 16)
+				s = s.substring(2);
 			return new IntConstant(Integer.parseInt(s, radixBase));
 		} catch (NumberFormatException e) {
 			throw new CompilationError("Number format error.");
@@ -23,5 +25,10 @@ public class IntConstant extends Constant {
 	@Override
 	public String toString(int depth) {
 		return Utility.getIndent(depth).append(c).append(Utility.NEW_LINE).toString();
+	}
+
+	@Override
+	public String toString() {
+		return Integer.toString(c);
 	}
 }

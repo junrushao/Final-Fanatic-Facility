@@ -3,29 +3,38 @@ package Compiler2015.Parser;
 import Compiler2015.AST.Type.StructOrUnionType;
 import Compiler2015.AST.Type.Type;
 import Compiler2015.Environment.Environment;
+import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.Utility.Tokens;
 
 import java.util.ArrayList;
 import java.util.Stack;
 
 public final class StructBuilder {
 	public static Stack<StructOrUnionType> stack = new Stack<>();
-	public static Stack<String> names = new Stack<>();
 
 	public static void enter(String name, boolean isUnion) {
-		StructOrUnionType p = new StructOrUnionType();
-		p.isUnion = isUnion;
-		stack.push(p);
-		names.push(name);
+		int uId = Environment.classNames.declareStructOrUnion(name, isUnion);
+		SymbolTableEntry e = Environment.classNames.table.get(uId);
+		if (e.info == Tokens.DEFINED)
+			throw new CompilationError("Struct / Union redefined: " + e.name);
+		if (e.info == Tokens.IN_PROCESS)
+			throw new CompilationError("Struct / Union nested redefined: " + e.name);
+		e.info = Tokens.IN_PROCESS;
+		stack.push((StructOrUnionType) e.ref);
 	}
 
 	public static Type exit() {
 		StructOrUnionType top = stack.pop();
-		return (Type) Environment.classNames.table.get(Environment.classNames.defineStructOrUnion(names.pop(), top.isUnion, top)).info;
+		int uId = top.uId;
+		Environment.classNames.defineStructOrUnion(uId);
+		return (Type) Environment.classNames.table.get(uId).ref;
 	}
 
-	public static Type decalreDirectly(String name, boolean isUnion) {
-		return (Type) Environment.classNames.table.get(Environment.classNames.defineStructOrUnion(name, isUnion, null)).info;
+	public static Type declareDirectly(String name, boolean isUnion) {
+		int uId = Environment.classNames.declareStructOrUnion(name, isUnion);
+		SymbolTableEntry e = Environment.classNames.table.get(uId);
+		return (Type) e.ref;
 	}
 
 	public static void addAttributes(ArrayList<Type> types, ArrayList<String> names) {

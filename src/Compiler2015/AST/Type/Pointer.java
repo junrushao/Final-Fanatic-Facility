@@ -1,7 +1,5 @@
 package Compiler2015.AST.Type;
 
-import Compiler2015.Exception.CompilationError;
-
 /**
  */
 public class Pointer extends Type {
@@ -15,7 +13,7 @@ public class Pointer extends Type {
 			return ((ArrayPointerType) x).pointTo;
 		if (x instanceof VariablePointerType)
 			return ((VariablePointerType) x).pointTo;
-		throw new CompilationError("Not a pointer to variable.");
+		return ((FunctionPointerType) x).pointTo;
 	}
 	@Override
 	public int sizeof() {

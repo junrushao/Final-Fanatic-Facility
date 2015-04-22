@@ -2,13 +2,15 @@ package Compiler2015.Utility;
 
 public enum Tokens {
 	VARIABLE,
-	//	FUNCTION,
 	TYPEDEF_NAME,
 	STRUCT_OR_UNION,
-	UNUSED,
+//	FUNCTION,
+//	UNUSED,
 
 	DECLARED,
+	IN_PROCESS,
 	DEFINED,
+
 
 	STAR,
 	ARRAY_BRACKET,

@@ -28,7 +28,7 @@ public class ArrayPointerType extends Pointer {
 		ret.pointTo = pointTo;
 		ret.dimensions = new ArrayList<>(n - 1);
 		for (int i = 1; i < n; ++i)
-			ret.dimensions.set(i - 1, dimensions.get(i));
+			ret.dimensions.add(dimensions.get(i));
 		return ret;
 	}
 

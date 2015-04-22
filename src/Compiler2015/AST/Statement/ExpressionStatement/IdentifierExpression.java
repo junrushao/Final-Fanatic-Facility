@@ -27,6 +27,6 @@ public class IdentifierExpression extends Expression {
 
 	@Override
 	public String toString(int depth) {
-		return Utility.getIndent(depth).append(uId).toString();
+		return Utility.getIndent(depth).append("#").append(uId).append(Utility.NEW_LINE).toString();
 	}
 }

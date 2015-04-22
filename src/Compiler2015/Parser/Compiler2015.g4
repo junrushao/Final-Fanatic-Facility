@@ -72,6 +72,10 @@ locals [ ArrayList<Type> types, ArrayList<String> names, ArrayList<Initializer> 
 
 functionDefinition
 locals [ Type type, String name, Statement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1]
+@init {
+	$parameterTypes = new ArrayList<Type>();
+	$parameterNames = new ArrayList<String>();
+}
 @after {
 	TypeAnalyser.exit();
 }
@@ -79,26 +83,36 @@ locals [ Type type, String name, Statement s = null, ArrayList<Type> parameterTy
 		declarator
 		{
 			$type = TypeAnalyser.analyse();
+			$name = $declarator.name;
 		}
 		'('(parameterTypeList
 			{
 				$parameterTypes = $parameterTypeList.types;
 				$parameterNames = $parameterTypeList.names;
 				$hasVaList = $parameterTypeList.hasVaList;
+				if ($parameterNames.size() != 0 && (new HashSet<>($parameterNames).size()) != $parameterNames.size())
+					throw new CompilationError("parameter should have different names");
 			}
 		)?')'
 		{
 			$type = new FunctionType($type, $parameterTypes, $parameterNames, $hasVaList);
 			$uId = Environment.symbolNames.defineVariable($name, $type, null);
+			Environment.functionReturnStack.push($type);
 		}
-		compoundStatement
+		compoundStatement[$parameterTypes, $parameterNames]
 		{
 			$s = $compoundStatement.ret;
 			Environment.symbolNames.defineVariable($uId, $type, $s);
+			Environment.functionReturnStack.pop();
 		}
 	;
 
-initDeclaratorList returns [ArrayList<Type> types = new ArrayList<Type>(), ArrayList<String> names = new ArrayList<String>(), ArrayList<Initializer> inits = new ArrayList<Initializer>()]
+initDeclaratorList returns [ArrayList<Type> types, ArrayList<String> names, ArrayList<Initializer> inits]
+@init {
+	$types = new ArrayList<Type>();
+	$names = new ArrayList<String>();
+	$inits = new ArrayList<Initializer>();
+}
 	: initDeclarator
 		{
 			$types.add($initDeclarator.type);
@@ -156,7 +170,7 @@ locals [boolean isUnion, String name]
 		Identifier
 		{
 			$name = $Identifier.text;
-			$ret = StructBuilder.decalreDirectly($name, $isUnion);
+			$ret = StructBuilder.declareDirectly($name, $isUnion);
 		}
 	;
 
@@ -228,7 +242,11 @@ parameterTypeList returns [ArrayList<Type> types, ArrayList<String> names, boole
 		(',' '...' { $hasVaList = true; } )?
 	;
 
-parameterList returns [ArrayList<Type> types = new ArrayList<Type>(), ArrayList<String> names = new ArrayList<String>()]
+parameterList returns [ArrayList<Type> types, ArrayList<String> names]
+@init {
+	$types = new ArrayList<Type>();
+	$names = new ArrayList<String>();
+}
 	:	p1 = parameterDeclaration
 		{
 			$types.add($p1.type);
@@ -236,10 +254,10 @@ parameterList returns [ArrayList<Type> types = new ArrayList<Type>(), ArrayList<
 		}
 		(',' p2 = parameterDeclaration
 			{
-				$types.add($p1.type);
-				$names.add($p1.name);
+				$types.add($p2.type);
+				$names.add($p2.name);
 			}
-		)?
+		)*
 	;
 
 parameterDeclaration returns [Type type, String name]
@@ -297,7 +315,7 @@ directAbstractDeclarator
 	;
 
 typedefName returns [Type ret]
-	:	{ Environment.isTypedefName($Identifier.text) }? Identifier
+	:	Identifier { Environment.isTypedefName($Identifier.text) }?
 	;
 
 initializer returns [Initializer ret]
@@ -312,20 +330,28 @@ initializer returns [Initializer ret]
 
 /* Statements */
 statement returns [Statement ret]
-	: expressionStatement	{ $ret = $expressionStatement.ret; }
-	| compoundStatement		{ $ret = $compoundStatement.ret; }
-	| selectionStatement	{ $ret = $selectionStatement.ret;  }
-	| iterationStatement	{ $ret = $iterationStatement.ret; }
-	| jumpStatement			{ $ret = $jumpStatement.ret; }
+	: expressionStatement { $ret = $expressionStatement.ret; }
+	| compoundStatement[null, null]  { $ret = $compoundStatement.ret; }
+	| selectionStatement  { $ret = $selectionStatement.ret;  }
+	| iterationStatement  { $ret = $iterationStatement.ret; }
+	| jumpStatement	  { $ret = $jumpStatement.ret; }
 	;
 
 expressionStatement returns [Statement ret = null]
 	: (expression { $ret = $expression.ret; })? ';'
 	;
 
-compoundStatement returns [CompoundStatement ret]
+compoundStatement[ArrayList<Type> toDefineTypes, ArrayList<String> toDefineNames] returns [CompoundStatement ret]
 locals [ ArrayList<Statement> statements = new ArrayList<Statement>(); ]
-	: '{' 					{ Environment.enterScope(); }
+	: '{'
+			{
+				Environment.enterScope();
+				if ($toDefineTypes != null) {
+					int n = $toDefineTypes.size();
+					for (int i = 0; i < n; ++i)
+						Environment.symbolNames.defineVariable($toDefineNames.get(i), $toDefineTypes.get(i), null);
+				}
+			}
 		(
 			declaration
 		|
@@ -347,18 +373,46 @@ locals [ Expression e1 = null, Statement s1 = null, Statement s2 = null ]
 	;
 
 iterationStatement returns [Statement ret]
-	: 'while' '(' expression ')' statement
-			{ $ret = new WhileStatement($expression.ret, $statement.ret); }
-	| 'for' '(' ex1 = expression? ';' ex2 = expression? ';' ex3 = expression? ')' statement
-			{ $ret = new ForStatement($ex1.ret, $ex2.ret, $ex3.ret, $statement.ret); }
+locals [WhileStatement whileS, ForStatement forS]
+	: 'while' '(' expression ')'
+			{
+				$whileS = new WhileStatement($expression.ret, null);
+				Environment.loopStack.push($ret);
+			}
+		statement
+			{
+				$whileS.a = $statement.ret;
+				Environment.loopStack.pop();
+				$ret = $whileS;
+			}
+	| 'for' '(' ex1 = expression? ';' ex2 = expression? ';' ex3 = expression? ')'
+			{
+				$forS = new ForStatement($ex1.ret, $ex2.ret, $ex3.ret, null);
+				Environment.loopStack.push($ret);
+			}
+		statement
+			{
+				$forS.d = $statement.ret;
+				Environment.loopStack.pop();
+				$ret = $forS;
+			}
 	;
 
 jumpStatement returns [Statement ret]
 locals [ Expression e = null ]
-	: 'continue' ';'				{ $ret = new ContinueStatement(); }
-	| 'break' ';'					{ $ret = new BreakStatement(); }
+	: 'continue' ';'
+		{
+			$ret = new ContinueStatement(Environment.getTopLoop());
+		}
+	| 'break' ';'
+		{
+			$ret = new BreakStatement(Environment.getTopLoop());
+		}
 	| 'return' (expression {$e = $expression.ret;} )? ';'
-									{ $ret = new ReturnStatement($e); }
+		{
+			Environment.matchReturn($e.type);
+			$ret = new ReturnStatement($e);
+		}
 	;
 
 /* Expressions  */
@@ -371,8 +425,8 @@ expression returns [Expression ret]
 
 assignmentExpression returns [Expression ret]
 	: logicalOrExpression { $ret = $logicalOrExpression.ret; }
-	| unaryExpression assignmentOperator assignmentExpression
-				{ $ret = AssignClass.getExpression($unaryExpression.ret, $assignmentExpression.ret, $assignmentOperator.text); }
+	| a = unaryExpression assignmentOperator b = assignmentExpression
+				{ $ret = AssignClass.getExpression($a.ret, $b.ret, $assignmentOperator.text); }
 	;
 
 assignmentOperator
@@ -511,9 +565,9 @@ multiplicativeOperator
 
 castExpression returns [Expression ret]
 	: unaryExpression { $ret = $unaryExpression.ret; }
-	| '(' typeName ')' castExpression
+	| '(' typeName ')' c1 = castExpression
 		{
-			$ret = CastExpression.getExpression($typeName.ret, $castExpression.ret);
+			$ret = CastExpression.getExpression($typeName.ret, $c1.ret);
 		}
 	;
 
@@ -536,8 +590,8 @@ typeName returns [Type ret]
 
 unaryExpression returns [Expression ret]
 	: postfixExpression { $ret = $postfixExpression.ret; }
-	| '++' unaryExpression { $ret = PrefixSelfInc.getExpression($unaryExpression.ret); }
-	| '--' unaryExpression { $ret = PrefixSelfDec.getExpression($unaryExpression.ret); }
+	| '++' u1 = unaryExpression { $ret = PrefixSelfInc.getExpression($u1.ret); }
+	| '--' u2 = unaryExpression { $ret = PrefixSelfDec.getExpression($u2.ret); }
 	| op = unaryOperator a2 = castExpression
 		{
 			if ($op.text.equals("&"))
@@ -553,7 +607,7 @@ unaryExpression returns [Expression ret]
 			else if ($op.text.equals("!"))
 				$ret = LogicalNot.getExpression($a2.ret);
 		}
-	| 'sizeof' unaryExpression { $ret = new Sizeof($unaryExpression.ret); }
+	| 'sizeof' u3 = unaryExpression { $ret = new Sizeof($u3.ret); }
 	| 'sizeof' '(' typeName ')' { $ret = new IntConstant($typeName.ret.sizeof()); }
 	;
 
@@ -572,7 +626,10 @@ locals [ ArrayList<Expression> arg = null ]
 	| p = postfixExpression '--' { $ret = PostfixSelfDec.getExpression($p.ret); }
 	;
 
-arguments returns [ArrayList<Expression> ret = new ArrayList<Expression>() ]
+arguments returns [ArrayList<Expression> ret ]
+@init {
+	$ret = new ArrayList<Expression>();
+}
 	: a1 = assignmentExpression { $ret.add($a1.ret); }
 		(',' a2 = assignmentExpression
 			{
@@ -582,8 +639,11 @@ arguments returns [ArrayList<Expression> ret = new ArrayList<Expression>() ]
 	;
 
 primaryExpression returns [Expression ret]
-locals [ ArrayList<String> s = new ArrayList<String>() ]
-	: { Environment.isVariable($Identifier.text) }? Identifier
+locals [ ArrayList<String> s ]
+@init {
+	$s = new ArrayList<String>();
+}
+	: Identifier { Environment.isVariable($Identifier.text) }?
 		{
 			$ret = IdentifierExpression.getExpression($Identifier.text);
 		}

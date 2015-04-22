@@ -14,12 +14,19 @@ public class Main {
 	public InputStream inputFile = System.in;
 
 	public void showSymbolTableAndASTTree() {
-		System.out.println(Environment.classNames.toString());
-		System.out.println(Environment.symbolNames.toString());
+		System.out.println(Environment.toStr());
 	}
 
 	public void argumentsInspect(String args[]) {
 		boolean hasInputFile = false;
+		if (Panel.DEBUG) {
+			hasInputFile = true;
+			try {
+				inputFile = new BufferedInputStream(new FileInputStream("input.c"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
 		for (String s : args) {
 			if (s.equals(Panel.prettyPrinter))
 				Panel.isPrettyPrinter = true;
@@ -50,7 +57,6 @@ public class Main {
 		ParseTree tree = parser.compilationUnit();
 		Environment.symbolNames.checkIncompleteVariableTypeInCurrentScope();
 		showSymbolTableAndASTTree();
-
 	}
 
 	public static void main(String args[]) {
