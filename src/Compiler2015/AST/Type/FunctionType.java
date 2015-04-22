@@ -5,7 +5,7 @@ import Compiler2015.Exception.CompilationError;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class FunctionType extends Pointer {
+public class FunctionType extends Type {
 	public Type returnType;
 	public ArrayList<Type> parameterTypes;
 	public ArrayList<String> parameterNames;

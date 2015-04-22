@@ -47,7 +47,6 @@ public class SymbolTable {
 	}};
 	public HashMap<String, Stack<Integer>> name2UIds = new HashMap<>();
 	public Stack<HashSet<Integer>> scopes = new Stack<>();
-//	public final static String basicTypes[] = {"int", "void", "char"};
 
 	public SymbolTable() {
 		enterScope();
@@ -90,53 +89,6 @@ public class SymbolTable {
 			return null;
 		}
 	}
-//
-//	/**
-//	 * @param uId uId of the function
-//	 * @param s function statement
-//	 * @return uId of the function
-//	 */
-//	public int defineFunction(int uId, FunctionType t, Statement s) {
-//		SymbolTableEntry e = table.get(uId);
-//		if (e.type != Tokens.FUNCTION)
-//			throw new CompilationError("Symbol already defined as other types.");
-//		if (e.info != null && s != null)
-//			throw new CompilationError("Function already defined.");
-//		if (!e.ref.equals(t))
-//			throw new CompilationError("Function parameter and return type should be the same.");
-//		e.info = s;
-//		return e.uId;
-//	}
-//
-//	/**
-//	 * @param name name of the function
-//	 * @param type type of the function
-//	 * @param s function statements
-//	 * @return uId of the function
-//	 */
-//	public int defineFunction(String name, Type type, Statement s) {
-//		if (!(type instanceof FunctionType))
-//			throw new CompilationError("Should be a function type.");
-//		FunctionType t = (FunctionType)type;
-//		if (name == null || name.equals(""))
-//			throw new CompilationError("Name of function is not allowed to be empty.");
-//		if (t.returnType instanceof ArrayPointerType)
-//			throw new CompilationError("A function should not return an array.");
-//		if (t.returnType instanceof FunctionType)
-//			throw new CompilationError("A function should not return a function.");
-//		SymbolTableEntry e = queryName(name);
-//		int uId;
-//		if (e != null && scopes.peek().contains(e.uId)) {
-//			uId = e.uId;
-//			defineFunction(uId, t, s);
-//		}
-//		else {
-//			uId = ++lastUId;
-//			table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.FUNCTION, t, null));
-//			defineFunction(uId, t, s);
-//		}
-//		return uId;
-//	}
 
 	/**
 	 * @param uId uId of the variable
@@ -232,7 +184,7 @@ public class SymbolTable {
 			defineStructOrUnion(uId, isUnion, t);
 		} else {
 			uId = ++lastUId;
-			table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.FUNCTION, t, null));
+			table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.STRUCT_OR_UNION, t, null));
 			defineStructOrUnion(uId, isUnion, t);
 		}
 		return uId;
@@ -273,15 +225,19 @@ public class SymbolTable {
 			if (e == null) continue;
 			if (e.scope != 1) continue;
 			if (e.type == Tokens.VARIABLE) {
-				sb.append('(').append((Type) e.ref).append(", ").append(e.name).append(")");
+				sb.append('(').append(e.ref).append(", ").append(e.name).append(")");
 				if (e.info != null)
 					sb.append(" init = ").append(e.info.toString());
 				sb.append(Utility.NEW_LINE);
 			} else if (e.type == Tokens.STRUCT_OR_UNION)
 				sb.append(e.ref.toString());
-			else if (e.type == Tokens.FUNCTION)
-				sb.append(e.ref.toString());
+//			else if (e.type == Tokens.FUNCTION)
+//				sb.append(e.ref.toString());
 		}
 		return sb.toString();
+	}
+
+	// TODO
+	public void checkIncompleteVariableTypeInCurrentScope() {
 	}
 }

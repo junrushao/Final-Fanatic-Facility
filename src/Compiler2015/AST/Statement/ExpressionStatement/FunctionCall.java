@@ -2,6 +2,7 @@ package Compiler2015.AST.Statement.ExpressionStatement;
 
 import Compiler2015.AST.Type.ArrayPointerType;
 import Compiler2015.AST.Type.FunctionPointerType;
+import Compiler2015.AST.Type.FunctionType;
 import Compiler2015.AST.Type.Type;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Utility;
@@ -12,12 +13,20 @@ import java.util.ArrayList;
  * f(...)
  */
 public class FunctionCall extends Expression {
-	public FunctionPointerType function;
+	public FunctionType function;
 	public Expression argumentExpressionList[];
 	public Expression VaList[];
 
 	public FunctionCall(FunctionPointerType function, Expression[] argumentExpressionList, Expression[] VaList) {
 		this.type = function.pointTo.returnType;
+		this.isLValue = false;
+		this.function = function.pointTo;
+		this.argumentExpressionList = argumentExpressionList;
+		this.VaList = VaList;
+	}
+
+	public FunctionCall(FunctionType function, Expression[] argumentExpressionList, Expression[] VaList) {
+		this.type = function.returnType;
 		this.isLValue = false;
 		this.function = function;
 		this.argumentExpressionList = argumentExpressionList;

@@ -1,15 +1,5 @@
 grammar Compiler2015;
 
-/* TODO:
- * 0. FunctionCall should support (FunctionType | FunctionPointerType)
- * 1. Scope in structures seems not correct;
- * 2. Need to declare a constant function pointer once a function is declared;
- * 3. Check whether a type is well defined after AST is built;
- * 4. Check function main exists;
- * 5. Consider functions without return types(default return int)
- * 6. In declaration, array size should be determined, except that it has initializer list.
- * 7. ArrayPointerType in parameter type should first be converted into
- */
 @parser::header {
 import Compiler2015.AST.*;
 import Compiler2015.AST.Statement.*;
