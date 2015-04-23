@@ -55,7 +55,6 @@ public class Main {
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		Compiler2015Parser parser = new Compiler2015Parser(tokens);
 		ParseTree tree = parser.compilationUnit();
-		Environment.symbolNames.checkIncompleteVariableTypeInCurrentScope();
 		showSymbolTableAndASTTree();
 	}
 

@@ -4,16 +4,16 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 
 import java.util.ArrayList;
 
-public class Initializer {
+public class SimpleInitializerList {
 	public Expression single;
-	public ArrayList<Initializer> list;
+	public ArrayList<SimpleInitializerList> list;
 
-	public Initializer(Expression single) {
+	public SimpleInitializerList(Expression single) {
 		this.single = single;
 		this.list = null;
 	}
 
-	public Initializer(ArrayList<Initializer> list) {
+	public SimpleInitializerList(ArrayList<SimpleInitializerList> list) {
 		this.single = null;
 		this.list = list;
 	}
@@ -24,7 +24,7 @@ public class Initializer {
 				add(single);
 			}};
 		ArrayList<Expression> ret = new ArrayList<>();
-		for (Initializer i : list)
+		for (SimpleInitializerList i : list)
 			ret.addAll(i.toArrayList());
 		return ret;
 	}
@@ -35,7 +35,7 @@ public class Initializer {
 			return single.toString();
 		StringBuilder sb = new StringBuilder();
 		String sep = "{";
-		for (Initializer i : list) {
+		for (SimpleInitializerList i : list) {
 			sb.append(sep).append(i.toString());
 			sep = ", ";
 		}

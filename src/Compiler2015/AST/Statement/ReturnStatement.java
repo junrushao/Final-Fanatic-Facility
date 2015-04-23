@@ -15,6 +15,8 @@ public class ReturnStatement extends Statement {
 	@Override
 	public String toString(int depth) {
 		StringBuilder sb = Utility.getIndent(depth).append("[return]").append(Utility.NEW_LINE);
-		return sb.append(e.toString(depth + 1)).toString();
+		if (e != null)
+			sb.append(e.toString(depth + 1));
+		return sb.toString();
 	}
 }

@@ -1,9 +1,8 @@
 package Compiler2015.Environment;
 
-import Compiler2015.AST.Initializer;
+import Compiler2015.AST.Initializers;
+import Compiler2015.AST.SimpleInitializerList;
 import Compiler2015.AST.Statement.CompoundStatement;
-import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
-import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Type.*;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Tokens;
@@ -95,8 +94,6 @@ public class SymbolTable {
 	 * @param uId uId of the variable
 	 * @param t type of the variable
 	 * @return uId of the function
-	 *
-	 * TODO: InitializerList is not well implemented
 	 */
 	public int defineVariable(int uId, Type t, Object init) {
 		SymbolTableEntry e = table.get(uId);
@@ -107,29 +104,31 @@ public class SymbolTable {
 		if (e.ref != null && !e.ref.equals(t))
 			throw new CompilationError("Already defined as another variable type.");
 		if (!(e.ref instanceof FunctionType) && init != null) {
-			Initializer ini = (Initializer) init;
-			ArrayList<Expression> ae = ((Initializer) init).toArrayList();
+			SimpleInitializerList ini = (SimpleInitializerList) init;
+			ArrayList<Integer> dimensions;
+			Type type;
 			if (e.ref instanceof ArrayPointerType) {
-				if (ini.single != null)
+				if (ini.single != null) {
 					throw new CompilationError("Initializer dimension does not match.");
-//					matchInitializer(e.ref, )
-				for (Expression exp : ae)
-					if (!CastExpression.castable(exp.type, ((ArrayPointerType) e.ref).pointTo))
-						throw new CompilationError("Initializer type mismatch.");
+				}
+				dimensions = ((ArrayPointerType) e.ref).dimensions;
+				type = ((ArrayPointerType) e.ref).pointTo;
+				// undimensioned -> dimensioned
+				if (((ArrayPointerType) e.ref).dimensions.get(0) == -1)
+					((ArrayPointerType) e.ref).dimensions.set(0, ini.list.size());
 			} else {
-				if (ini.single == null)
-					throw new CompilationError("Initializer dimension does not match.");
-				for (Expression exp : ae)
-					if (!CastExpression.castable(exp.type, (Type) e.ref))
-						throw new CompilationError("Initializer type mismatch.");
+				dimensions = new ArrayList<>();
+				type = t;
 			}
+			e.info = new Initializers.Constructor().get(dimensions, ini, type);
+		} else {
+			e.info = init;
 		}
-		e.info = init;
 		return e.uId;
 	}
 
 	/**
-	 * TODO : misbehave in local scope in function declaration
+	 * TODO : misbehave in local scope when a function is declared
 	 * Attention: global variables allows redefinition if there is at most one place that it is assigned the initial value.
 	 *
 	 * @param name name of the variable
@@ -165,6 +164,8 @@ public class SymbolTable {
 			if (e != null && scopes.peek().contains(e.uId)) {
 				throw new CompilationError("Symbol already defined.");
 			} else {
+				if (t instanceof StructOrUnionType && table.get(((StructOrUnionType) t).uId).info != Tokens.DECLARED)
+					throw new CompilationError("Storage size is not known.");
 				uId = ++lastUId;
 				table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.VARIABLE, t, null));
 				scopes.peek().add(uId);
@@ -264,7 +265,4 @@ public class SymbolTable {
 		return sb.toString();
 	}
 
-	// TODO
-	public void checkIncompleteVariableTypeInCurrentScope() {
-	}
 }

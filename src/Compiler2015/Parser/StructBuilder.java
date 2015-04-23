@@ -32,9 +32,16 @@ public final class StructBuilder {
 	}
 
 	public static Type declareDirectly(String name, boolean isUnion) {
-		int uId = Environment.classNames.declareStructOrUnion(name, isUnion);
-		SymbolTableEntry e = Environment.classNames.table.get(uId);
-		return (Type) e.ref;
+		Stack<Integer> uIds = Environment.symbolNames.getUId(name);
+		if (uIds.isEmpty()) {
+			int uId = Environment.classNames.declareStructOrUnion(name, isUnion);
+			SymbolTableEntry e = Environment.classNames.table.get(uId);
+			return (Type) e.ref;
+		} else {
+			int uId = uIds.peek();
+			SymbolTableEntry e = Environment.classNames.table.get(uId);
+			return (Type) e.ref;
+		}
 	}
 
 	public static void addAttributes(ArrayList<Type> types, ArrayList<String> names) {

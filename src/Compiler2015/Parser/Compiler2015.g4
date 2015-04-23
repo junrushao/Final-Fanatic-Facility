@@ -6,7 +6,6 @@ import Compiler2015.AST.Statement.*;
 import Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression.*;
 import Compiler2015.AST.Statement.ExpressionStatement.*;
 import Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression.*;
-import Compiler2015.AST.Declaration.*;
 import Compiler2015.AST.Type.*;
 import Compiler2015.Environment.*;
 import Compiler2015.Exception.*;
@@ -30,7 +29,7 @@ compilationUnit
 
 // TODO : change initDeclaratorList -> declaratorList
 declaration
-locals [ ArrayList<Type> types, ArrayList<String> names, ArrayList<Initializer> inits, int n]
+locals [ ArrayList<Type> types, ArrayList<String> names, ArrayList<SimpleInitializerList> inits, int n]
 @after {
 	TypeAnalyser.exit();
 }
@@ -107,11 +106,11 @@ locals [ Type type, String name, Statement s = null, ArrayList<Type> parameterTy
 		}
 	;
 
-initDeclaratorList returns [ArrayList<Type> types, ArrayList<String> names, ArrayList<Initializer> inits]
+initDeclaratorList returns [ArrayList<Type> types, ArrayList<String> names, ArrayList<SimpleInitializerList> inits]
 @init {
 	$types = new ArrayList<Type>();
 	$names = new ArrayList<String>();
-	$inits = new ArrayList<Initializer>();
+	$inits = new ArrayList<SimpleInitializerList>();
 }
 	: initDeclarator
 		{
@@ -128,7 +127,7 @@ initDeclaratorList returns [ArrayList<Type> types, ArrayList<String> names, Arra
 		)*
 	;
 
-initDeclarator returns [Type type, String name, Initializer init = null]
+initDeclarator returns [Type type, String name, SimpleInitializerList init = null]
 	: declarator
 		{
 			$type = TypeAnalyser.analyse();
@@ -318,11 +317,11 @@ typedefName returns [Type ret]
 	:	Identifier { Environment.isTypedefName($Identifier.text) }?
 	;
 
-initializer returns [Initializer ret]
-	: assignmentExpression { $ret = new Initializer($assignmentExpression.ret); }
+initializer returns [SimpleInitializerList ret]
+	: assignmentExpression { $ret = new SimpleInitializerList($assignmentExpression.ret); }
 	| '{' i1 = initializer
 			{
-				$ret = new Initializer(new ArrayList<Initializer>());
+				$ret = new SimpleInitializerList(new ArrayList<SimpleInitializerList>());
 				$ret.list.add($i1.ret);
 			}
 		(',' i2 = initializer { $ret.list.add($i2.ret); })* '}'
@@ -410,7 +409,10 @@ locals [ Expression e = null ]
 		}
 	| 'return' (expression {$e = $expression.ret;} )? ';'
 		{
-			Environment.matchReturn($e.type);
+			if ($e != null)
+				Environment.matchReturn($e.type);
+			else
+				Environment.matchReturn(new VoidType());
 			$ret = new ReturnStatement($e);
 		}
 	;
