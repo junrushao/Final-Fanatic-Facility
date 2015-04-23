@@ -4,9 +4,11 @@ import Compiler2015.Environment.Environment;
 import Compiler2015.Panel.Panel;
 import Compiler2015.Parser.Compiler2015Lexer;
 import Compiler2015.Parser.Compiler2015Parser;
+import Compiler2015.Parser.PrettyPrinterListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.io.*;
 
@@ -28,8 +30,11 @@ public class Main {
 			}
 		}
 		for (String s : args) {
-			if (s.equals(Panel.prettyPrinter))
-				Panel.isPrettyPrinter = true;
+			if (s.equals(Panel.msPrinter)) {
+				Panel.prettyPrinterType = Panel.msPrinter;
+			} else if (s.equals(Panel.krPrinter)) {
+				Panel.prettyPrinterType = Panel.krPrinter;
+			}
 			else if (!s.startsWith("-") && !hasInputFile) {
 				hasInputFile = true;
 				try {
@@ -54,9 +59,13 @@ public class Main {
 		Compiler2015Lexer lexer = new Compiler2015Lexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		Compiler2015Parser parser = new Compiler2015Parser(tokens);
-		ParseTree tree = parser.compilationUnit();
+		RuleContext tree = parser.compilationUnit();
 
 		showSymbolTableAndASTTree();
+		if (Panel.prettyPrinterType != null) {
+			ParseTreeWalker walker = new ParseTreeWalker();
+			walker.walk(new PrettyPrinterListener(tokens), tree);
+		}
 	}
 
 	public static void main(String args[]) {

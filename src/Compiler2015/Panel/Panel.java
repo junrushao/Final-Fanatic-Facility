@@ -1,9 +1,10 @@
 package Compiler2015.Panel;
 
 public final class Panel {
-	public static boolean isPrettyPrinter = false;
+	public static String prettyPrinterType = null;
 
-	public final static String prettyPrinter = "--pp";
+	public final static String msPrinter = "--ms";
+	public final static String krPrinter = "--kr";
 
 	public final static boolean DEBUG = true;
 }
