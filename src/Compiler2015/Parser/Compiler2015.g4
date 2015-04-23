@@ -314,7 +314,8 @@ directAbstractDeclarator
 	;
 
 typedefName returns [Type ret]
-	:	Identifier { Environment.isTypedefName($Identifier.text) }?
+	:	{ Environment.isTypedefName(_input.LT(1).getText()) }? Identifier
+		{ $ret = (Type)Environment.symbolNames.queryName($Identifier.text).ref; }
 	;
 
 initializer returns [SimpleInitializerList ret]
@@ -645,8 +646,10 @@ locals [ ArrayList<String> s ]
 @init {
 	$s = new ArrayList<String>();
 }
-	: Identifier { Environment.isVariable($Identifier.text) }?
+	: Identifier
 		{
+			if (!Environment.isVariable($Identifier.text))
+				throw new CompilationError("Not properly defined.");
 			$ret = IdentifierExpression.getExpression($Identifier.text);
 		}
 	| constant

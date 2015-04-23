@@ -211,7 +211,6 @@ int is_basic_type(struct Type *this) {
 }
 
 struct Expression *parse_const_expr() {
-//TODO: parse expression (grammar) & check if const (meaning)
 	parse_assign_expr();
 	return 0;
 }
@@ -1250,7 +1249,6 @@ void parse_program() {
 				look = next_token();
 			}
 		} else {
-			//TODO: I wanna get bonus!
 		}
 	}
 }
