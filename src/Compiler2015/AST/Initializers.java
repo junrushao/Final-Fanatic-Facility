@@ -30,7 +30,7 @@ public class Initializers extends ASTNode {
 				else sb.append(", ");
 				sb.append(i);
 			}
-			return sb.append("}, ").append(Expression.toInt(value)).append(">").toString();
+			return sb.append("}, ").append(value.toString()).append(">").toString();
 		}
 	}
 
@@ -88,7 +88,7 @@ public class Initializers extends ASTNode {
 	public ArrayList<InitEntry> entries;
 
 	public Initializers(ArrayList<InitEntry> entries) {
-		this.entries = entries;
+		this.entries = new ArrayList<>(entries);
 	}
 
 	@Override

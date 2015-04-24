@@ -12,11 +12,12 @@ import Compiler2015.Utility.Utility;
 public class WhileStatement extends Statement {
 	public Expression e;
 	public Statement a;
-	public WhileStatement(Expression e, Statement a) {
+
+	public WhileStatement(Expression e) {
 		if (!CastExpression.castable(e.type, new IntType()))
 			throw new CompilationError("Expression inside while statement could not be converted to int type.");
 		this.e = e;
-		this.a = a;
+		this.a = null;
 	}
 
 	@Override

@@ -12,13 +12,14 @@ import Compiler2015.Utility.Utility;
 public class ForStatement extends Statement {
 	public Expression a, b, c;
 	public Statement d;
-	public ForStatement(Expression a, Expression b, Expression c, Statement d) {
+
+	public ForStatement(Expression a, Expression b, Expression c) {
 		if (b != null && !CastExpression.castable(b.type, new IntType()))
 			throw new CompilationError("Expression inside for statement could not be converted to int type.");
 		this.a = a;
 		this.b = b;
 		this.c = c;
-		this.d = d;
+		this.d = null;
 	}
 
 	@Override

@@ -27,7 +27,10 @@ public class CompoundStatement extends Statement {
 			SymbolTableEntry e = Environment.symbolNames.table.get(x);
 			Type t = (Type) e.ref;
 			String name = e.name;
-			sb.append(indent).append(String.format("Variable(#%d, %s, %s)", x, t.toString(), name)).append(Utility.NEW_LINE);
+			sb.append(indent).append(String.format("Variable(#%d, %s, %s)", x, t.toString(), name));
+			if (e.info != null)
+				sb.append("  init = ").append(e.info.toString());
+			sb.append(Utility.NEW_LINE);
 		}
 		for (Statement s : statements)
 			sb.append(s.deepToString(depth + 1));

@@ -79,7 +79,7 @@ public class SymbolTable {
 	}
 
 	public SymbolTableEntry queryName(String name) {
-		if (name == null || name == "")
+		if (name == null || name.equals(""))
 			return null;
 		try {
 			return table.get(getUId(name).peek());
@@ -247,20 +247,24 @@ public class SymbolTable {
 		for (SymbolTableEntry e : table) {
 			if (e == null) continue;
 			if (e.scope != 1) continue;
-			sb.append(Utility.getIndent(1)).append("#").append(e.uId).append(": ");
+			if (e.type != Tokens.STRUCT_OR_UNION)
+				sb.append(Utility.getIndent(1)).append("#").append(e.uId).append(": ");
 //			if (e.type == Tokens.VARIABLE && !(e.ref instanceof FunctionType)) { // Variables
 			if (e.type == Tokens.VARIABLE) { // Variables
 				sb.append(String.format("Variable(name = %s, type = %s)", e.name, e.ref.toString())).append(Utility.NEW_LINE);
 				if (e.info != null) {
 					if (e.ref instanceof FunctionType)
 						sb.append(((CompoundStatement) e.info).deepToString(2)).append(Utility.NEW_LINE);
-					else
-						sb.append(Utility.getIndent(2)).append("init = ").append(e.info.toString()).append(Utility.NEW_LINE);
+					else {
+						int len = sb.length();
+						sb.setCharAt(len - 1, ' ');
+						sb.append(" init = ").append(e.info.toString()).append(Utility.NEW_LINE);
+					}
 				}
 			} else if (e.type == Tokens.STRUCT_OR_UNION) // Struct / Unions
 				sb.append(((StructOrUnionType) e.ref).deepToString(1)).append(Utility.NEW_LINE);
 			else if (e.type == Tokens.TYPEDEF_NAME) // Typedef Names
-				sb.append(Utility.getIndent(1)).append(e.name).append(" -> ").append(e.ref.toString()).append(Utility.NEW_LINE);
+				sb.append(e.name).append(" -> ").append(e.ref.toString()).append(Utility.NEW_LINE);
 		}
 		return sb.toString();
 	}

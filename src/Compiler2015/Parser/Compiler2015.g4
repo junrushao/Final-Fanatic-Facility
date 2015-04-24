@@ -18,16 +18,12 @@ import java.util.ArrayDeque;
 import java.util.Stack;
 }
 
-@parser::members {
-}
-
 /* Top level */
 
 compilationUnit
 	: (functionDefinition | declaration | Semi)* EOF
 	;
 
-// TODO : change initDeclaratorList -> declaratorList
 declaration
 locals [ ArrayList<Type> types, ArrayList<String> names, ArrayList<SimpleInitializerList> inits, int n]
 @after {
@@ -38,17 +34,13 @@ locals [ ArrayList<Type> types, ArrayList<String> names, ArrayList<SimpleInitial
 			{
 				TypeAnalyser.enter($typeSpecifier.ret);
 			}
-		(initDeclaratorList
+		(declaratorList
 			{
-				$types = $initDeclaratorList.types;
-				$names = $initDeclaratorList.names;
-				$inits = $initDeclaratorList.inits;
+				$types = $declaratorList.types;
+				$names = $declaratorList.names;
 				$n = $types.size();
-				for (int i = 0; i < $n; ++i) {
-					if ($inits.get(i) != null)
-						throw new CompilationError("typedef cannot be used with initializers.");
+				for (int i = 0; i < $n; ++i)
 					Environment.symbolNames.defineTypedefName($names.get(i), $types.get(i));
-				}
 			}
 		)?
 		Semi #declaration1
@@ -56,17 +48,7 @@ locals [ ArrayList<Type> types, ArrayList<String> names, ArrayList<SimpleInitial
 			{
 				TypeAnalyser.enter($typeSpecifier.ret);
 			}
-		(initDeclaratorList
-			{
-				$types = $initDeclaratorList.types;
-				$names = $initDeclaratorList.names;
-				$inits = $initDeclaratorList.inits;
-				$n = $types.size();
-				for (int i = 0; i < $n; ++i) {
-					Environment.symbolNames.defineVariable($names.get(i), $types.get(i), $inits.get(i));
-				}
-			}
-		)? Semi #declaration2
+		(initDeclaratorList)? Semi #declaration2
 	;
 
 functionDefinition
@@ -83,6 +65,8 @@ locals [ Type type, String name, Statement s = null, ArrayList<Type> parameterTy
 		{
 			$type = TypeAnalyser.analyse();
 			$name = $declarator.name;
+			if (!Environment.isCompleteType($type))
+				throw new CompilationError("Incomplete type.");
 		}
 		L1 (parameterTypeList
 			{
@@ -90,7 +74,7 @@ locals [ Type type, String name, Statement s = null, ArrayList<Type> parameterTy
 				$parameterNames = $parameterTypeList.names;
 				$hasVaList = $parameterTypeList.hasVaList;
 				if ($parameterNames.size() != 0 && (new HashSet<>($parameterNames).size()) != $parameterNames.size())
-					throw new CompilationError("parameter should have different names");
+					throw new CompilationError("parameter should have different names.");
 			}
 		)? R1
 		{
@@ -106,36 +90,22 @@ locals [ Type type, String name, Statement s = null, ArrayList<Type> parameterTy
 		}
 	;
 
-initDeclaratorList returns [ArrayList<Type> types, ArrayList<String> names, ArrayList<SimpleInitializerList> inits]
-@init {
-	$types = new ArrayList<Type>();
-	$names = new ArrayList<String>();
-	$inits = new ArrayList<SimpleInitializerList>();
-}
-	: initDeclarator
-		{
-			$types.add($initDeclarator.type);
-			$names.add($initDeclarator.name);
-			$inits.add($initDeclarator.init);
-		}
-		(Comma initDeclarator
-			{
-				$types.add($initDeclarator.type);
-				$names.add($initDeclarator.name);
-				$inits.add($initDeclarator.init);
-			}
-		)*
+initDeclaratorList
+	: initDeclarator (Comma initDeclarator )*
 	;
 
-initDeclarator returns [Type type, String name, SimpleInitializerList init = null]
+initDeclarator
+locals [Type type, String name, SimpleInitializerList init = null, int uId]
 	: declarator
 		{
 			$type = TypeAnalyser.analyse();
 			$name = $declarator.name;
+			$uId = Environment.symbolNames.defineVariable($name, $type, null);
 		}
 		(EQ initializer
 			{
 				$init = $initializer.ret;
+				Environment.symbolNames.defineVariable($uId, $type, $init);
 			}
 		)?
 	;
@@ -217,6 +187,32 @@ locals [int n = 0]
 }
 	:	(STAR { ++$n; } )*
 		directDeclarator { $name = $directDeclarator.name; }
+	;
+
+plainDeclarator returns [Type type, String name]
+	: declarator
+		{
+			$type = TypeAnalyser.analyse();
+			$name = $declarator.name;
+		}
+	;
+
+declaratorList returns [ArrayList<Type> types, ArrayList<String> names]
+@init {
+	$types = new ArrayList<Type>();
+	$names = new ArrayList<String>();
+}
+	: plainDeclarator
+		{
+			$types.add($plainDeclarator.type);
+			$names.add($plainDeclarator.name);
+		}
+		(Comma plainDeclarator
+			{
+				$types.add($plainDeclarator.type);
+				$names.add($plainDeclarator.name);
+			}
+		)*
 	;
 
 directDeclarator returns [String name]
@@ -380,7 +376,7 @@ iterationStatement returns [Statement ret]
 locals [WhileStatement whileS, ForStatement forS, Expression e1 = null, Expression e2 = null, Expression e3]
 	: While L1 expression R1
 			{
-				$whileS = new WhileStatement($expression.ret, null);
+				$whileS = new WhileStatement($expression.ret);
 				Environment.loopStack.push($whileS);
 			}
 		statement
@@ -394,7 +390,7 @@ locals [WhileStatement whileS, ForStatement forS, Expression e1 = null, Expressi
 			 (ex3 = expression {$e3 = $ex3.ret;} )?
 			R1
 			{
-				$forS = new ForStatement($e1, $e2, $e3, null);
+				$forS = new ForStatement($e1, $e2, $e3);
 				Environment.loopStack.push($forS);
 			}
 		statement
@@ -778,7 +774,7 @@ DigitSequence
 	;
 
 CharacterConstant
-	:	'\'' CharSequence '\''
+	:	'\'' CCharSequence '\''
 	;
 
 fragment
@@ -817,7 +813,29 @@ HexadecimalEscapeSequence
 	;
 
 StringLiteral
-	:	'"' CharSequence? '"'
+	:	'"' SCharSequence? '"'
+	;
+
+fragment
+SCharSequence
+	:	SChar+
+	;
+
+fragment
+SChar
+	:   ~["\\\r\n]
+	|   EscapeSequence
+	;
+
+fragment
+CCharSequence
+	:	CChar+
+	;
+
+fragment
+CChar
+	:	~['\\\r\n]
+	|	EscapeSequence
 	;
 
 Preprocessing
@@ -839,10 +857,10 @@ Newline
 
 BlockComment
 	:	'/*' .*? '*/'
-		-> skip
+		-> channel(HIDDEN)
 	;
 
 LineComment
 	:	'//' ~[\r\n]*
-		-> skip
+		-> channel(HIDDEN)
 	;

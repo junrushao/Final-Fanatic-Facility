@@ -4,6 +4,7 @@ import Compiler2015.Environment.Environment;
 import Compiler2015.Panel.Panel;
 import Compiler2015.Parser.Compiler2015Lexer;
 import Compiler2015.Parser.Compiler2015Parser;
+import Compiler2015.Parser.ParseErrorListener;
 import Compiler2015.Parser.PrettyPrinterListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -58,7 +59,10 @@ public class Main {
 		}
 		Compiler2015Lexer lexer = new Compiler2015Lexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		tokens.fill();
 		Compiler2015Parser parser = new Compiler2015Parser(tokens);
+		parser.removeErrorListeners();
+		parser.addErrorListener(new ParseErrorListener());
 		RuleContext tree = parser.compilationUnit();
 
 		showSymbolTableAndASTTree();

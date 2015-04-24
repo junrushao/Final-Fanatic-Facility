@@ -120,7 +120,17 @@ public class Environment {
 		return e != null && e.type == Tokens.TYPEDEF_NAME;
 	}
 
+	public static boolean isCompleteType(Type t) {
+		if (t instanceof StructOrUnionType) {
+			int uId = ((StructOrUnionType) t).uId;
+			SymbolTableEntry e = classTable.get(uId);
+			return e.info == Tokens.DEFINED;
+		}
+		return true;
+	}
+
 	public static String toStr() {
 		return "Struct & Union:" + Utility.NEW_LINE + classNames.toString() + "Symbols:" + Utility.NEW_LINE + symbolNames.toString();
 	}
+
 }

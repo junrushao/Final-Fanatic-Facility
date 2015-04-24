@@ -224,10 +224,6 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 	}
 
 	@Override
-	public void exitParameterDeclaration1(@NotNull Compiler2015Parser.ParameterDeclaration1Context ctx) {
-	}
-
-	@Override
 	public void exitParameterDeclaration2(@NotNull Compiler2015Parser.ParameterDeclaration2Context ctx) {
 		setWSR(ctx.typeSpecifier().getStop().getTokenIndex());
 	}
@@ -235,10 +231,6 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 	@Override
 	public void exitParameterDeclaration3(@NotNull Compiler2015Parser.ParameterDeclaration3Context ctx) {
 		setWSR(ctx.typeSpecifier().getStop().getTokenIndex());
-	}
-
-	@Override
-	public void exitInitializer1(@NotNull Compiler2015Parser.Initializer1Context ctx) {
 	}
 
 	@Override
