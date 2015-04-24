@@ -4,7 +4,6 @@ import Compiler2015.AST.Type.StructOrUnionType;
 import Compiler2015.AST.Type.Type;
 import Compiler2015.AST.Type.VoidType;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.Utility.Utility;
 
 /**
  * (castTo)e
@@ -42,7 +41,7 @@ public class CastExpression extends Expression {
 	}
 
 	@Override
-	public String toString(int depth) {
-		return Utility.getIndent(depth).append("Cast").append(Utility.NEW_LINE).append(Utility.getIndent(depth + 1)).append(type.toString()).append(Utility.NEW_LINE).append(e.toString(depth + 1)).toString();
+	public String toString() {
+		return String.format("(CastTo %s %s)", castTo, e);
 	}
 }

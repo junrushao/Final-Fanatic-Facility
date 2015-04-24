@@ -1,7 +1,5 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
-import Compiler2015.Utility.Utility;
-
 /**
  * a ? b : c
  */
@@ -17,7 +15,7 @@ public class ConditionalExpression extends Expression {
 	}
 
 	@Override
-	public String toString(int depth) {
-		return Utility.getIndent(depth).append("Conditional Expression").append(Utility.NEW_LINE).append(condition.toString(depth + 1)).append(ifTrue.toString(depth + 1)).append(ifFalse.toString(depth + 1)).append(Utility.NEW_LINE).toString();
+	public String toString() {
+		return String.format("(%s ? %s : %s)", condition, ifTrue, ifFalse);
 	}
 }

@@ -6,11 +6,12 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Statement.ExpressionStatement.StringConstant;
 import Compiler2015.AST.Type.Type;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Initializers {
+public class Initializers extends ASTNode {
 	public static class InitEntry {
 		int position[];
 		Expression value;
@@ -101,4 +102,10 @@ public class Initializers {
 		}
 		return sb.append("}").toString();
 	}
+
+	@Override
+	public String deepToString(int depth) {
+		return Utility.getIndent(depth).append(toString()).append(Utility.NEW_LINE).toString();
+	}
+
 }

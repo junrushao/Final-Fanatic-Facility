@@ -253,16 +253,17 @@ public class SymbolTable {
 				sb.append(String.format("Variable(name = %s, type = %s)", e.name, e.ref.toString())).append(Utility.NEW_LINE);
 				if (e.info != null) {
 					if (e.ref instanceof FunctionType)
-						sb.append(((CompoundStatement) e.info).toString(2)).append(Utility.NEW_LINE);
+						sb.append(((CompoundStatement) e.info).deepToString(2)).append(Utility.NEW_LINE);
 					else
 						sb.append(Utility.getIndent(2)).append("init = ").append(e.info.toString()).append(Utility.NEW_LINE);
 				}
 			} else if (e.type == Tokens.STRUCT_OR_UNION) // Struct / Unions
-				sb.append(((StructOrUnionType) e.ref).deepToString()).append(Utility.NEW_LINE);
+				sb.append(((StructOrUnionType) e.ref).deepToString(1)).append(Utility.NEW_LINE);
 			else if (e.type == Tokens.TYPEDEF_NAME) // Typedef Names
 				sb.append(Utility.getIndent(1)).append(e.name).append(" -> ").append(e.ref.toString()).append(Utility.NEW_LINE);
 		}
 		return sb.toString();
 	}
+
 
 }

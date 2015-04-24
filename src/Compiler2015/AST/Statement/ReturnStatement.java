@@ -13,10 +13,13 @@ public class ReturnStatement extends Statement {
 	}
 
 	@Override
-	public String toString(int depth) {
-		StringBuilder sb = Utility.getIndent(depth).append("[return]").append(Utility.NEW_LINE);
-		if (e != null)
-			sb.append(e.toString(depth + 1));
-		return sb.toString();
+	public String deepToString(int depth) {
+		return Utility.getIndent(depth).append(toString()).toString();
+	}
+
+	@Override
+	public String toString() {
+		String s = e == null ? "null" : e.toString();
+		return "return " + s + Utility.NEW_LINE;
 	}
 }

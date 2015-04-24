@@ -22,8 +22,21 @@ public class ForStatement extends Statement {
 	}
 
 	@Override
-	public String toString(int depth) {
-		StringBuilder sb = Utility.getIndent(depth).append("[for]").append(Utility.NEW_LINE);
-		return sb.append(a.toString(depth + 1)).append(b.toString(depth + 1)).append(c.toString(depth + 1)).append(d.toString(depth + 1)).toString();
+	public String deepToString(int depth) {
+		StringBuilder sb = Utility.getIndent(depth).append("FOR");
+		StringBuilder indent = Utility.getIndent(depth + 1);
+		String aa = a == null ? indent.append("null").toString() : a.deepToString(depth + 1);
+		String bb = b == null ? indent.append("null").toString() : b.deepToString(depth + 1);
+		String cc = c == null ? indent.append("null").toString() : c.deepToString(depth + 1);
+		String dd = d == null ? indent.append("null").toString() : d.deepToString(depth + 1);
+		return sb.append(indent).append(aa).append(Utility.NEW_LINE)
+				.append(indent).append(bb).append(Utility.NEW_LINE)
+				.append(indent).append(cc).append(Utility.NEW_LINE)
+				.append(indent).append(dd).toString();
+	}
+
+	@Override
+	public String toString() {
+		return deepToString(0);
 	}
 }

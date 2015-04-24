@@ -16,4 +16,5 @@ public class FunctionPointerType extends Pointer {
 	public String toString() {
 		return "FunctionPointerType(" + pointTo.toString() + ")";
 	}
+
 }

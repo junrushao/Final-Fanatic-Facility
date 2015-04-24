@@ -13,7 +13,12 @@ public class BreakStatement extends Statement {
 	}
 
 	@Override
-	public String toString(int depth) {
-		return Utility.getIndent(depth).append("break;").append(Utility.NEW_LINE).toString();
+	public String toString() {
+		return "break;";
+	}
+
+	@Override
+	public String deepToString(int depth) {
+		return Utility.getIndent(depth).append(toString()).append(Utility.NEW_LINE).toString();
 	}
 }

@@ -8,6 +8,7 @@ import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * f(...)
@@ -18,7 +19,7 @@ public class FunctionCall extends Expression {
 	public Expression VaList[];
 
 	public FunctionCall(Expression e1, Expression[] argumentExpressionList, Expression[] VaList, Type returnType) {
-		this.type = e1.type;
+		this.type = returnType;
 		this.isLValue = false;
 		this.function = e1;
 		this.argumentExpressionList = argumentExpressionList;
@@ -66,15 +67,10 @@ public class FunctionCall extends Expression {
 	}
 
 	@Override
-	public String toString(int depth) {
-		StringBuilder sb =
-				Utility.getIndent(depth).append("[Call]").append(Utility.NEW_LINE).
-						append(function.toString(depth + 1));
-		for (Expression e : argumentExpressionList)
-			sb.append(e.toString(depth + 1));
-		if (VaList != null)
-			for (Expression e : VaList)
-				sb.append(e.toString(depth + 1));
-		return sb.toString();
+	public String toString() {
+		return String.format("(Call %s %s %s)",
+				function.toString(),
+				Utility.toString(Arrays.asList(argumentExpressionList)),
+				Utility.toString(Arrays.asList(VaList)));
 	}
 }

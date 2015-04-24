@@ -7,7 +7,6 @@ import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Tokens;
-import Compiler2015.Utility.Utility;
 
 public class IdentifierExpression extends Expression {
 	public int uId;
@@ -26,7 +25,7 @@ public class IdentifierExpression extends Expression {
 	}
 
 	@Override
-	public String toString(int depth) {
-		return Utility.getIndent(depth).append("#").append(uId).append(Utility.NEW_LINE).toString();
+	public String toString() {
+		return String.format("#%d", uId);
 	}
 }

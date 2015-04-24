@@ -60,8 +60,9 @@ public class FunctionType extends Type {
 
 	@Override
 	public String toString() {
-		return "FunctionType(return = " + returnType.toString() + ", parameter = "
-				+ Utility.toString(parameterTypes, parameterNames)
-				+ ", hasVaList = " + hasVaList + ')';
+		return "FunctionType(return = " + returnType.toString()
+				+ ", parameter = " + Utility.toString(parameterTypes, parameterNames)
+				+ (hasVaList ? "" : ", ...");
 	}
+
 }

@@ -1,10 +1,11 @@
 package Compiler2015.AST;
 
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
+import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
 
-public class SimpleInitializerList {
+public class SimpleInitializerList extends ASTNode {
 	public Expression single;
 	public ArrayList<SimpleInitializerList> list;
 
@@ -41,5 +42,10 @@ public class SimpleInitializerList {
 		}
 		sb.append("}");
 		return sb.toString();
+	}
+
+	@Override
+	public String deepToString(int depth) {
+		return Utility.getIndent(depth).append(toString()).append(Utility.NEW_LINE).toString();
 	}
 }

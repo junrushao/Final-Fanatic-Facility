@@ -1,7 +1,6 @@
 package Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression;
 
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
-import Compiler2015.Utility.Utility;
 
 public abstract class UnaryExpression extends Expression {
 	public Expression e;
@@ -13,7 +12,7 @@ public abstract class UnaryExpression extends Expression {
 	public abstract String getOperator();
 
 	@Override
-	public String toString(int depth) {
-		return Utility.getIndent(depth).append(getOperator()).append(Utility.NEW_LINE).append(e.toString(depth + 1)).toString();
+	public String toString() {
+		return String.format("(%s %s)", getOperator(), e.toString());
 	}
 }

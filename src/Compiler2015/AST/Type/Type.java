@@ -2,6 +2,7 @@ package Compiler2015.AST.Type;
 
 import Compiler2015.AST.ASTNode;
 import Compiler2015.AST.SizeMeasurable;
+import Compiler2015.Utility.Utility;
 
 public abstract class Type extends ASTNode implements SizeMeasurable {
 	/**
@@ -28,4 +29,10 @@ public abstract class Type extends ASTNode implements SizeMeasurable {
 	public static boolean isNumeric(Type x) {
 		return (x instanceof IntType) || (x instanceof CharType);
 	}
+
+	@Override
+	public String deepToString(int depth) {
+		return Utility.getIndent(depth).append(toString()).append(Utility.NEW_LINE).toString();
+	}
+
 }

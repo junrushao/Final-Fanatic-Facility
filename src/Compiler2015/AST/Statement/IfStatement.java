@@ -22,11 +22,19 @@ public class IfStatement extends Statement {
 	}
 
 	@Override
-	public String toString(int depth) {
-		StringBuilder sb = Utility.getIndent(depth).append("[if]").append(Utility.NEW_LINE);
-		sb.append(e.toString(depth + 1)).append(ifTrue.toString(depth + 1));
-		if (ifFalse != null)
-			sb.append(ifFalse.toString(depth + 1));
-		return sb.toString();
+	public String deepToString(int depth) {
+		StringBuilder sb = Utility.getIndent(depth).append("IF");
+		StringBuilder indent = Utility.getIndent(depth + 1);
+		String aa = e == null ? indent.append("null").toString() : e.deepToString(depth + 1);
+		String bb = ifTrue == null ? indent.append("null").append(Utility.NEW_LINE).toString() : ifTrue.deepToString(depth + 1);
+		String cc = ifFalse == null ? indent.append("null").append(Utility.NEW_LINE).toString() : ifFalse.deepToString(depth + 1);
+		return sb.append(indent).append(aa).append(Utility.NEW_LINE)
+				.append(indent).append(bb)
+				.append(indent).append(cc).toString();
+	}
+
+	@Override
+	public String toString() {
+		return deepToString(0);
 	}
 }

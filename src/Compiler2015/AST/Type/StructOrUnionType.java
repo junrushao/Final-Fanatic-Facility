@@ -38,22 +38,22 @@ public class StructOrUnionType extends Type {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
 		if (!isUnion) {
-			return sb.append("[Union #").append(uId).append("] ").toString();
+			return String.format("[Union #%d]", uId);
 		} else {
-			return sb.append("[Struct #").append(uId).append("] ").toString();
+			return String.format("[Struct #%d]", uId);
 		}
 	}
 
-	public String deepToString() {
-		StringBuilder sb = new StringBuilder();
-		if (!isUnion) {
-			sb.append("[Union #").append(uId).append("]");
-		} else {
-			sb.append("[Struct #").append(uId).append("]");
+	@Override
+	public String deepToString(int depth) {
+		StringBuilder sb = Utility.getIndent(depth).append(toString()).append(Utility.NEW_LINE);
+		StringBuilder indent = Utility.getIndent(depth + 1);
+		for (int i = 0, n = types.size(); i < n; ++i) {
+			String aa = types.get(i).toString();
+			String bb = names.get(i) == null || names.get(i).equals("") ? "##" : names.get(i);
+			sb.append(indent).append(String.format("%s %s", aa, bb)).append(Utility.NEW_LINE);
 		}
-		sb.append(Utility.toString(types, names)).append("    direct = ").append(Utility.toString(new ArrayList<>(directlyAccessableMembers.keySet())));
 		return sb.toString();
 	}
 }

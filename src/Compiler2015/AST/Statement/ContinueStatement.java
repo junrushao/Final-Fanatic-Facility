@@ -13,8 +13,12 @@ public class ContinueStatement extends Statement {
 	}
 
 	@Override
-	public String toString(int depth) {
-		StringBuilder sb = Utility.getIndent(depth).append("[continue]").append(Utility.NEW_LINE);
-		return sb.toString();
+	public String toString() {
+		return "continue";
+	}
+
+	@Override
+	public String deepToString(int depth) {
+		return Utility.getIndent(depth).append(toString()).append(Utility.NEW_LINE).toString();
 	}
 }

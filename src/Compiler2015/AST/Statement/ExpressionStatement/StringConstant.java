@@ -3,7 +3,6 @@ package Compiler2015.AST.Statement.ExpressionStatement;
 import Compiler2015.AST.Type.ArrayPointerType;
 import Compiler2015.AST.Type.CharType;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
 
@@ -152,11 +151,6 @@ public class StringConstant extends Expression {
 				sb.append(c);
 		}
 		return sb.toString();
-	}
-
-	@Override
-	public String toString(int depth) {
-		return Utility.getIndent(depth).append("\"").append(toPrintableString(c)).append("\"").append(Utility.NEW_LINE).toString();
 	}
 
 	@Override

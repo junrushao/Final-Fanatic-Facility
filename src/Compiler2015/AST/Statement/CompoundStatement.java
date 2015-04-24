@@ -20,17 +20,23 @@ public class CompoundStatement extends Statement {
 	}
 
 	@Override
-	public String toString(int depth) {
-		StringBuilder sb = new StringBuilder();
-		StringBuilder indent = Utility.getIndent(depth);
+	public String deepToString(int depth) {
+		StringBuilder sb = Utility.getIndent(depth).append("{").append(Utility.NEW_LINE);
+		StringBuilder indent = Utility.getIndent(depth + 1);
 		for (int x : variables) {
 			SymbolTableEntry e = Environment.symbolNames.table.get(x);
 			Type t = (Type) e.ref;
 			String name = e.name;
-			sb.append(indent).append(String.format("uId = %d, type = %s, name = %s", x, t.toString(), name)).append(Utility.NEW_LINE);
+			sb.append(indent).append(String.format("(#%d, %s, %s)", x, t.toString(), name)).append(Utility.NEW_LINE);
 		}
 		for (Statement s : statements)
-			sb.append(s.toString(depth));
+			sb.append(s.deepToString(depth + 1));
+		sb.append(Utility.getIndent(depth)).append("}").append(Utility.NEW_LINE);
 		return sb.toString();
+	}
+
+	@Override
+	public String toString() {
+		return deepToString(0);
 	}
 }

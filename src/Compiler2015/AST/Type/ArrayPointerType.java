@@ -37,48 +37,6 @@ public class ArrayPointerType extends Pointer {
 		return new VariablePointerType(t);
 	}
 
-	@Override
-	public int sizeof() { // assume there is no integer overflow
-		int ret = pointTo.sizeof();
-		if (ret == 0)
-			return 0;
-		for (int d : dimensions)
-			if (d == -1 || d == 0)
-				return 0;
-			else
-				ret *= d;
-		return ret;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof ArrayPointerType))
-			return false;
-		ArrayPointerType other = (ArrayPointerType) obj;
-		if (!pointTo.equals(other.pointTo))
-			return false;
-		int n = dimensions.size();
-		if (n != other.dimensions.size())
-			return false;
-		for (int i = 0; i < n; ++i)
-			if (!dimensions.get(i).equals(other.dimensions.get(i)))
-				return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Array");
-		for (int i : dimensions) {
-			sb.append('[');
-			if (i != -1)
-				sb.append(i);
-			sb.append(']');
-		}
-		sb.append('(').append(pointTo.toString()).append(')');
-		return sb.toString();
-	}
 
 	public static Type pushFromUndimensioned(Type t) {
 		ArrayPointerType ret = new ArrayPointerType();
@@ -121,5 +79,48 @@ public class ArrayPointerType extends Pointer {
 			}};
 		}
 		return ret;
+	}
+
+	@Override
+	public int sizeof() { // assume there is no integer overflow
+		int ret = pointTo.sizeof();
+		if (ret == 0)
+			return 0;
+		for (int d : dimensions)
+			if (d == -1 || d == 0)
+				return 0;
+			else
+				ret *= d;
+		return ret;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof ArrayPointerType))
+			return false;
+		ArrayPointerType other = (ArrayPointerType) obj;
+		if (!pointTo.equals(other.pointTo))
+			return false;
+		int n = dimensions.size();
+		if (n != other.dimensions.size())
+			return false;
+		for (int i = 0; i < n; ++i)
+			if (!dimensions.get(i).equals(other.dimensions.get(i)))
+				return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Array");
+		for (int i : dimensions) {
+			sb.append('[');
+			if (i != -1)
+				sb.append(i);
+			sb.append(']');
+		}
+		sb.append('(').append(pointTo.toString()).append(')');
+		return sb.toString();
 	}
 }
