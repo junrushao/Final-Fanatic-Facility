@@ -145,7 +145,7 @@ public class StringConstant extends Expression {
 	public static String toPrintableString(String s) {
 		StringBuilder sb = new StringBuilder();
 		for (char c : s.toCharArray()) {
-			if (c <= 32 || c >= 127)
+			if (c < 32 || c >= 127)
 				sb.append("\\").append(Integer.toOctalString(c));
 			else
 				sb.append(c);

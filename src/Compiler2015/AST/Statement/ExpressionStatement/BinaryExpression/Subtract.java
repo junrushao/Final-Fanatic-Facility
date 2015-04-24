@@ -26,7 +26,7 @@ public class Subtract extends BinaryExpression {
 		}
 		if (a2.type instanceof CharType) {
 			Integer v = Expression.toInt(a2);
-			a1 = v != null ? new IntConstant(v) : new CastExpression(new IntType(), a2);
+			a2 = v != null ? new IntConstant(v) : new CastExpression(new IntType(), a2);
 		}
 		if (a1.type instanceof ArrayPointerType) {
 			if (a2.type instanceof FunctionPointerType)

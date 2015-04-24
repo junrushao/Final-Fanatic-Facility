@@ -16,14 +16,14 @@ import java.util.Arrays;
 public class FunctionCall extends Expression {
 	public Expression function;
 	public Expression argumentExpressionList[];
-	public Expression VaList[];
+	public Expression vaList[];
 
 	public FunctionCall(Expression e1, Expression[] argumentExpressionList, Expression[] VaList, Type returnType) {
 		this.type = returnType;
 		this.isLValue = false;
 		this.function = e1;
 		this.argumentExpressionList = argumentExpressionList;
-		this.VaList = VaList;
+		this.vaList = VaList;
 	}
 
 	public static Expression getExpression(Expression e1, ArrayList<Expression> parameters) {
@@ -70,7 +70,7 @@ public class FunctionCall extends Expression {
 	public String toString() {
 		return String.format("(Call %s %s %s)",
 				function.toString(),
-				Utility.toString(Arrays.asList(argumentExpressionList)),
-				Utility.toString(Arrays.asList(VaList)));
+				argumentExpressionList == null ? "null" : Utility.toString(Arrays.asList(argumentExpressionList)),
+				vaList == null ? "null" : Utility.toString(Arrays.asList(vaList)));
 	}
 }

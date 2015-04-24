@@ -1,5 +1,6 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
+import Compiler2015.AST.Type.IntType;
 import Compiler2015.AST.Type.StructOrUnionType;
 import Compiler2015.AST.Type.Type;
 import Compiler2015.AST.Type.VoidType;
@@ -40,6 +41,15 @@ public class CastExpression extends Expression {
 		return true;
 	}
 
+	public static Expression castToNumeric(Expression e) {
+		if (!Type.isNumeric(e.type)) {
+			if (CastExpression.castable(e.type, new IntType()))
+				e = CastExpression.getExpression(new IntType(), e);
+			else
+				throw new CompilationError("Cannot cast to numeric types.");
+		}
+		return e;
+	}
 	@Override
 	public String toString() {
 		return String.format("(CastTo %s %s)", castTo, e);

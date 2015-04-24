@@ -79,7 +79,7 @@ public class SymbolTable {
 	}
 
 	public SymbolTableEntry queryName(String name) {
-		if (name == null)
+		if (name == null || name == "")
 			return null;
 		try {
 			return table.get(getUId(name).peek());
@@ -164,7 +164,7 @@ public class SymbolTable {
 			if (e != null && scopes.peek().contains(e.uId)) {
 				throw new CompilationError("Symbol already defined.");
 			} else {
-				if (t instanceof StructOrUnionType && table.get(((StructOrUnionType) t).uId).info != Tokens.DECLARED)
+				if (t instanceof StructOrUnionType && Environment.classTable.get(((StructOrUnionType) t).uId).info != Tokens.DEFINED)
 					throw new CompilationError("Storage size is not known.");
 				uId = ++lastUId;
 				table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.VARIABLE, t, null));
@@ -195,7 +195,7 @@ public class SymbolTable {
 	 */
 	public int declareStructOrUnion(String name, boolean isUnion) {
 		if (name == null || name.equals(""))
-			throw new CompilationError("Name of struct / union is not allowed to be empty.");
+			name = "";
 		SymbolTableEntry e = queryName(name);
 		if (e != null && scopes.peek().contains(e.uId)) {
 			if (e.type != Tokens.STRUCT_OR_UNION)

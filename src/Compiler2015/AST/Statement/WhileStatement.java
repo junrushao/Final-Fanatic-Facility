@@ -24,7 +24,7 @@ public class WhileStatement extends Statement {
 		StringBuilder sb = Utility.getIndent(depth).append("WHILE").append(Utility.NEW_LINE);
 		String aa = e.deepToString(depth + 1);
 		String bb = a.deepToString(depth + 1);
-		return sb.append(aa).append(Utility.NEW_LINE).append(bb).toString();
+		return sb.append(aa).append(bb).toString();
 	}
 
 	@Override

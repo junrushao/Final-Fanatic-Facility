@@ -1,8 +1,9 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
 import Compiler2015.AST.Type.ArrayPointerType;
-import Compiler2015.AST.Type.FunctionPointerType;
+import Compiler2015.AST.Type.FunctionType;
 import Compiler2015.AST.Type.Type;
+import Compiler2015.AST.Type.VoidType;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
@@ -13,7 +14,7 @@ public class IdentifierExpression extends Expression {
 
 	public IdentifierExpression(int uId, Type type) {
 		this.type = type;
-		this.isLValue = !(type instanceof ArrayPointerType) && !(type instanceof FunctionPointerType);
+		this.isLValue = !(type instanceof ArrayPointerType) && !(type instanceof FunctionType) && !(type instanceof VoidType);
 		this.uId = uId;
 	}
 

@@ -11,11 +11,13 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class Environment {
-	public static SymbolTable classNames = new SymbolTable();
-	public static SymbolTable symbolNames = new SymbolTable();
+	public static SymbolTable classNames;
+	public static SymbolTable symbolNames;
 
-	public static Stack<Statement> loopStack = new Stack<>();
-	public static Stack<Type> functionReturnStack = new Stack<>();
+	public static Stack<Statement> loopStack;
+	public static Stack<Type> functionReturnStack;
+
+	public static ArrayList<SymbolTableEntry> classTable;
 
 	public static Statement getTopLoop() {
 		if (loopStack.isEmpty())
@@ -40,8 +42,10 @@ public class Environment {
 		symbolNames = new SymbolTable();
 		loopStack = new Stack<>();
 		functionReturnStack = new Stack<>();
+		classTable = classNames.table;
+
 		symbolNames.defineVariable(
-				".putchar",
+				"putchar",
 				new FunctionType(
 						new IntType(),
 						new ArrayList<Type>() {{
@@ -58,12 +62,8 @@ public class Environment {
 				"getchar",
 				new FunctionType(
 						new IntType(),
-						new ArrayList<Type>() {{
-							add(new IntType());
-						}},
-						new ArrayList<String>() {{
-							add("c");
-						}},
+						new ArrayList<Type>(),
+						new ArrayList<String>(),
 						false
 				),
 				null

@@ -23,14 +23,14 @@ public class IfStatement extends Statement {
 
 	@Override
 	public String deepToString(int depth) {
-		StringBuilder sb = Utility.getIndent(depth).append("IF");
+		StringBuilder sb = Utility.getIndent(depth).append("IF").append(Utility.NEW_LINE);
 		StringBuilder indent = Utility.getIndent(depth + 1);
 		String aa = e == null ? indent.append("null").toString() : e.deepToString(depth + 1);
 		String bb = ifTrue == null ? indent.append("null").append(Utility.NEW_LINE).toString() : ifTrue.deepToString(depth + 1);
 		String cc = ifFalse == null ? indent.append("null").append(Utility.NEW_LINE).toString() : ifFalse.deepToString(depth + 1);
-		return sb.append(indent).append(aa).append(Utility.NEW_LINE)
-				.append(indent).append(bb)
-				.append(indent).append(cc).toString();
+		return sb.append(aa)
+				.append(bb)
+				.append(cc).toString();
 	}
 
 	@Override

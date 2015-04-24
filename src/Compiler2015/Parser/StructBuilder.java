@@ -28,11 +28,17 @@ public final class StructBuilder {
 		StructOrUnionType top = stack.pop();
 		int uId = top.uId;
 		Environment.classNames.defineStructOrUnion(uId);
-		return (Type) Environment.classNames.table.get(uId).ref;
+		SymbolTableEntry e = Environment.classNames.table.get(uId);
+		if (e.name == null || e.name.equals("")) {
+			if (!stack.isEmpty()) {
+				addAttributes(top.types, top.names);
+			}
+		}
+		return (Type) e.ref;
 	}
 
 	public static Type declareDirectly(String name, boolean isUnion) {
-		Stack<Integer> uIds = Environment.symbolNames.getUId(name);
+		Stack<Integer> uIds = Environment.classNames.getUId(name);
 		if (uIds.isEmpty()) {
 			int uId = Environment.classNames.declareStructOrUnion(name, isUnion);
 			SymbolTableEntry e = Environment.classNames.table.get(uId);

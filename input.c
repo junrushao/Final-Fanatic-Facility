@@ -84,7 +84,7 @@ struct Environment *Environment_(struct Environment *pre, int env){
 struct Function {
 	char *id;
 	struct Variable *args;
-	struct Funcion *nxt;
+	struct Function *nxt;
 };
 
 struct Token {
@@ -1031,9 +1031,9 @@ struct Type *parse_type_specifier() {
 						if (!my_strcmp(sub_type->_literal, "")) {
 							//puts("anonymous gadget inside!");
 							if (sub_type->is_struct) {
-								puts("namae no na i struct");
+//								puts("namae no na i struct");
 							} else {
-								puts("namae no na i union");
+//								puts("namae no na i union");
 							}
 							struct Variable *mem = sub_type->mem, *tmp = 0;
 							while (mem) {
@@ -1061,7 +1061,7 @@ struct Type *parse_type_specifier() {
 				look = next_token();
 				return res;
 			} else {
-				puts("Declaration or pre-declaration...");
+//				puts("Declaration or pre-declaration...");
 				return res;
 			}
 		}
@@ -1069,6 +1069,7 @@ struct Type *parse_type_specifier() {
 	}
 	return 0;
 }
+
 
 void parse_parameters() {
 	if (!my_strcmp(look._literal, "(")) {
@@ -1252,6 +1253,7 @@ void parse_program() {
 		}
 	}
 }
+
 
 void read_src() {
 	char ch;

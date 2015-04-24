@@ -62,7 +62,7 @@ public class FunctionType extends Type {
 	public String toString() {
 		return "FunctionType(return = " + returnType.toString()
 				+ ", parameter = " + Utility.toString(parameterTypes, parameterNames)
-				+ (hasVaList ? "" : ", ...");
+				+ (hasVaList ? ", ..." : "") + ")";
 	}
 
 }

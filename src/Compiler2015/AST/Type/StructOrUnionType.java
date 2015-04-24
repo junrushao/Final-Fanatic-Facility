@@ -38,7 +38,7 @@ public class StructOrUnionType extends Type {
 
 	@Override
 	public String toString() {
-		if (!isUnion) {
+		if (isUnion) {
 			return String.format("[Union #%d]", uId);
 		} else {
 			return String.format("[Struct #%d]", uId);

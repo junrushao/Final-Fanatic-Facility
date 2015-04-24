@@ -94,9 +94,9 @@ locals [ Type type, String name, Statement s = null, ArrayList<Type> parameterTy
 			}
 		)? R1
 		{
+			Environment.functionReturnStack.push($type);
 			$type = new FunctionType($type, $parameterTypes, $parameterNames, $hasVaList);
 			$uId = Environment.symbolNames.defineVariable($name, $type, null);
-			Environment.functionReturnStack.push($type);
 		}
 		compoundStatement[$parameterTypes, $parameterNames]
 		{
@@ -377,11 +377,11 @@ locals [ Expression e1 = null, Statement s1 = null, Statement s2 = null ]
 	;
 
 iterationStatement returns [Statement ret]
-locals [WhileStatement whileS, ForStatement forS]
+locals [WhileStatement whileS, ForStatement forS, Expression e1 = null, Expression e2 = null, Expression e3]
 	: While L1 expression R1
 			{
 				$whileS = new WhileStatement($expression.ret, null);
-				Environment.loopStack.push($ret);
+				Environment.loopStack.push($whileS);
 			}
 		statement
 			{
@@ -389,10 +389,13 @@ locals [WhileStatement whileS, ForStatement forS]
 				Environment.loopStack.pop();
 				$ret = $whileS;
 			} #iterationStatement1
-	| For L1 ex1 = expression? Semi ex2 = expression? Semi ex3 = expression? R1
+	| For L1 (ex1 = expression {$e1 = $ex1.ret;} )? Semi
+			 (ex2 = expression {$e2 = $ex2.ret;} )? Semi
+			 (ex3 = expression {$e3 = $ex3.ret;} )?
+			R1
 			{
-				$forS = new ForStatement($ex1.ret, $ex2.ret, $ex3.ret, null);
-				Environment.loopStack.push($ret);
+				$forS = new ForStatement($e1, $e2, $e3, null);
+				Environment.loopStack.push($forS);
 			}
 		statement
 			{
