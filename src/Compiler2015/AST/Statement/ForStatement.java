@@ -23,16 +23,16 @@ public class ForStatement extends Statement {
 
 	@Override
 	public String deepToString(int depth) {
-		StringBuilder sb = Utility.getIndent(depth).append("FOR");
+		StringBuilder sb = Utility.getIndent(depth).append("FOR").append(Utility.NEW_LINE);
 		StringBuilder indent = Utility.getIndent(depth + 1);
 		String aa = a == null ? indent.append("null").toString() : a.deepToString(depth + 1);
 		String bb = b == null ? indent.append("null").toString() : b.deepToString(depth + 1);
 		String cc = c == null ? indent.append("null").toString() : c.deepToString(depth + 1);
 		String dd = d == null ? indent.append("null").toString() : d.deepToString(depth + 1);
-		return sb.append(indent).append(aa).append(Utility.NEW_LINE)
-				.append(indent).append(bb).append(Utility.NEW_LINE)
-				.append(indent).append(cc).append(Utility.NEW_LINE)
-				.append(indent).append(dd).toString();
+		return sb.append(aa)
+				.append(bb)
+				.append(cc)
+				.append(dd).toString();
 	}
 
 	@Override
