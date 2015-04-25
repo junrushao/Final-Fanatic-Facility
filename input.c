@@ -1,10 +1,7 @@
-int main()
-{
-    int *p,*q;
-    struct A{int *now;} *a;
-    p-q;
-    p-*q;
-    *p-*q;
-    *p=&q;
-    a->now-p;
+
+typedef int A;
+typedef int A;
+
+int main() {
+    return 0;
 }

@@ -2,7 +2,7 @@ package Compiler2015.Parser;
 
 import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.Panel.Panel;
+import Compiler2015.Utility.Panel;
 import Compiler2015.Utility.Utility;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.Token;
@@ -182,6 +182,7 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 	public void exitDeclaration1(@NotNull Compiler2015Parser.Declaration1Context ctx) {
 		setIndent(ctx.Typedef().getSymbol().getTokenIndex(), indent);
 		setWSR(ctx.Typedef().getSymbol().getTokenIndex());
+		setWSL(ctx.declaratorList().getStart().getTokenIndex());
 
 		setNL(ctx.Semi().getSymbol().getTokenIndex());
 	}
@@ -190,7 +191,6 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 	public void exitDeclaration2(@NotNull Compiler2015Parser.Declaration2Context ctx) {
 		setIndent(ctx.typeSpecifier().getStart().getTokenIndex(), indent);
 		setWSR(ctx.typeSpecifier().getStop().getTokenIndex());
-
 		setNL(ctx.Semi().getSymbol().getTokenIndex());
 	}
 

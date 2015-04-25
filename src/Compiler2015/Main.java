@@ -1,11 +1,11 @@
 package Compiler2015;
 
 import Compiler2015.Environment.Environment;
-import Compiler2015.Panel.Panel;
 import Compiler2015.Parser.Compiler2015Lexer;
 import Compiler2015.Parser.Compiler2015Parser;
 import Compiler2015.Parser.ParseErrorListener;
 import Compiler2015.Parser.PrettyPrinterListener;
+import Compiler2015.Utility.Panel;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RuleContext;

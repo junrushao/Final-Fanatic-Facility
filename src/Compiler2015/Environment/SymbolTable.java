@@ -237,7 +237,9 @@ public class SymbolTable {
 			throw new CompilationError("Typedef name should be non-empty.");
 		SymbolTableEntry e = queryName(name);
 		if (e != null && scopes.peek().contains(e.uId)) {
-			throw new CompilationError("Symbol already used.");
+			if (!e.ref.equals(ref))
+				throw new CompilationError("Symbol already used.");
+			return e.uId;
 		} else {
 			int uId = ++lastUId;
 			table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.TYPEDEF_NAME, ref, null));

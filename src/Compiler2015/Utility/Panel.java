@@ -1,4 +1,4 @@
-package Compiler2015.Panel;
+package Compiler2015.Utility;
 
 public final class Panel {
 	public static String prettyPrinterType = null;
