@@ -56,6 +56,8 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 			return s;
 		if (s.startsWith("//"))
 			return "/*" + s.substring(2) + "*/";
+		if (s.startsWith("#"))
+			return s;
 		throw new CompilationError("WTF");
 	}
 
@@ -71,8 +73,12 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 		for (int i = 0; i < n; ++i) {
 			Token t = tokenList.get(i);
 			if (t.getChannel() == Token.HIDDEN_CHANNEL) {
-				setWSL(i);
-				setWSR(i);
+				if (!t.getText().startsWith("#")) {
+					setWSL(i);
+					setWSR(i);
+				} else {
+					setNL(i);
+				}
 			}
 			Config c = configs.get(i);
 			if (c.indent == -2) {
@@ -88,21 +94,25 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 			}
 			if (c.indent >= 0) {
 				int len = sb.length();
-				if (len != 0 && sb.charAt(len - 1) == ')')
+				if (len > 0 && sb.charAt(len - 1) == ')')
 					sb.append(Utility.NEW_LINE).append(Utility.getIndent(++lastIndent));
 				else {
+					if (sb.charAt(len - 1) == ' ')
+						sb.append(Utility.NEW_LINE);
 					sb.append(Utility.getIndent(c.indent));
 					lastIndent = c.indent;
 				}
 			} else if (c.wsL) {
 				int len = sb.length();
-				if (len == 0 || sb.charAt(len - 1) != '\t')
+				if (len == 0 || (sb.charAt(len - 1) != '\t' && sb.charAt(len - 1) != ' ' && !sb.toString().endsWith(Utility.NEW_LINE)))
 					sb.append(' ');
 			}
-			if (t.getChannel() == Token.HIDDEN_CHANNEL)
-				sb.append(convertComment(t.toString()));
+			String text = t.getText().trim();
+			if (t.getChannel() == Token.HIDDEN_CHANNEL) {
+				sb.append(convertComment(text));
+			}
 			else
-				sb.append(t.toString());
+				sb.append(text);
 			if (c.wsR) sb.append(' ');
 			if (c.nl) {
 				int len = sb.length();
@@ -213,7 +223,8 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 
 	@Override
 	public void enterParameterTypeList(@NotNull Compiler2015Parser.ParameterTypeListContext ctx) {
-		setWSR(ctx.Comma().getSymbol().getTokenIndex());
+		if (ctx.Comma() != null)
+			setWSR(ctx.Comma().getSymbol().getTokenIndex());
 	}
 
 	@Override
@@ -258,14 +269,14 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 		setWSL(ctx.L3().getSymbol().getTokenIndex());
 		setNL(ctx.L3().getSymbol().getTokenIndex());
 		setIndent(ctx.R3().getSymbol().getTokenIndex(), indent);
-		setWSR(ctx.R3().getSymbol().getTokenIndex());
+		setNL(ctx.R3().getSymbol().getTokenIndex());
 	}
 
 	@Override
 	public void enterSelectionStatement(@NotNull Compiler2015Parser.SelectionStatementContext ctx) {
 		setIndent(ctx.If().getSymbol().getTokenIndex(), indent);
 		setWSR(ctx.If().getSymbol().getTokenIndex());
-		setWSR(ctx.R1().getSymbol().getTokenIndex());
+//		setWSR(ctx.R1().getSymbol().getTokenIndex());
 		if (ctx.Else() != null) {
 			setIndent(ctx.Else().getSymbol().getTokenIndex(), indent);
 			setWSR(ctx.Else().getSymbol().getTokenIndex());

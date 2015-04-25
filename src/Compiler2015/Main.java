@@ -21,30 +21,34 @@ public class Main {
 	}
 
 	public void argumentsInspect(String args[]) {
-		boolean hasInputFile = false;
 		if (Panel.DEBUG) {
-			hasInputFile = true;
 			try {
 				inputFile = new BufferedInputStream(new FileInputStream("input.c"));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
-		}
-		for (String s : args) {
-			if (s.equals(Panel.msPrinter)) {
-				Panel.prettyPrinterType = Panel.msPrinter;
-			} else if (s.equals(Panel.krPrinter)) {
-				Panel.prettyPrinterType = Panel.krPrinter;
-			}
-			else if (!s.startsWith("-") && !hasInputFile) {
-				hasInputFile = true;
-				try {
-					inputFile = new BufferedInputStream(new FileInputStream(s));
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
+			Panel.prettyPrinterType = Panel.msPrinter;
+			Panel.emitAST = true;
+		} else {
+			boolean hasInputFile = false;
+			hasInputFile = true;
+			for (String s : args) {
+				if (s.equals(Panel.msPrinter)) {
+					Panel.prettyPrinterType = Panel.msPrinter;
+				} else if (s.equals(Panel.krPrinter)) {
+					Panel.prettyPrinterType = Panel.krPrinter;
+				} else if (s.equals("-emit-ast")) {
+					Panel.emitAST = true;
+				} else if (!s.startsWith("-") && !hasInputFile) {
+					hasInputFile = true;
+					try {
+						inputFile = new BufferedInputStream(new FileInputStream(s));
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
+				} else {
+					System.err.println("Unknown arg: " + s);
 				}
-			} else {
-				System.err.println("Unknown arg: " + s);
 			}
 		}
 	}
@@ -65,10 +69,14 @@ public class Main {
 		parser.addErrorListener(new ParseErrorListener());
 		RuleContext tree = parser.compilationUnit();
 
-		showSymbolTableAndASTTree();
+		if (Panel.emitAST) {
+			showSymbolTableAndASTTree();
+		}
 		if (Panel.prettyPrinterType != null) {
 			ParseTreeWalker walker = new ParseTreeWalker();
-			walker.walk(new PrettyPrinterListener(tokens), tree);
+			PrettyPrinterListener printer = new PrettyPrinterListener(tokens);
+			walker.walk(printer, tree);
+			System.out.println(printer.toString());
 		}
 	}
 

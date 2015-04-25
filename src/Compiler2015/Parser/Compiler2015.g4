@@ -818,7 +818,7 @@ CChar
 
 Preprocessing
 	:	'#' ~[\r\n]* ('\r' | '\n' | ('\r''\n'))
-		-> skip
+		-> channel(HIDDEN)
 	;
 
 Whitespace
