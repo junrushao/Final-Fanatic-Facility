@@ -1,5 +1,6 @@
 package Compiler2015.Parser;
 
+import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.Panel.Panel;
 import Compiler2015.Utility.Utility;
@@ -61,6 +62,45 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 		throw new CompilationError("WTF");
 	}
 
+	public int lastIndent;
+
+	public boolean endsWith(StringBuilder sb, String s) {
+		int n = sb.length(), m = s.length();
+		if (n < m) return false;
+		while (m > 0)
+			if (sb.charAt(--n) != s.charAt(--m))
+				return false;
+		return true;
+	}
+
+	public void addWS(StringBuilder sb) {
+		int len = sb.length();
+		if (len == 0)
+			return;
+		if (sb.charAt(len - 1) == ' ' || sb.charAt(len - 1) == '\t' || endsWith(sb, Utility.NEW_LINE))
+			return;
+		sb.append(' ');
+	}
+
+	public void addIndent(StringBuilder sb, int d) {
+		boolean wsFront = false;
+		int len = sb.length();
+		while (len >= 1 && sb.charAt(len - 1) == ' ') {
+			sb.deleteCharAt(--len);
+			wsFront = true;
+		}
+		if (wsFront) addNL(sb);
+		sb.append(Utility.getIndent(d));
+		lastIndent = d;
+	}
+
+	public void addNL(StringBuilder sb) {
+		int len = sb.length();
+		while (len >= 1 && sb.charAt(len - 1) == ' ')
+			sb.deleteCharAt(--len);
+		sb.append(Utility.NEW_LINE);
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -68,8 +108,8 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 		List<Token> tokenList = tokenStream.getTokens();
 		int n = tokenList.size() - 1;  // excluding EOF
 		ensureCapacity(n);
-		int lastIndent = 0;
 
+		lastIndent = 0;
 		for (int i = 0; i < n; ++i) {
 			Token t = tokenList.get(i);
 			if (t.getChannel() == Token.HIDDEN_CHANNEL) {
@@ -79,38 +119,27 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 				} else {
 					setNL(i);
 				}
+				setIndent(i, 0);
 			}
 			Config c = configs.get(i);
 			if (c.indent == -2) {
 				if (Panel.prettyPrinterType.equals(Panel.krPrinter)) {
-					int len = sb.length();
-					if (len == 0 || sb.charAt(len - 1) != ' ')
-						sb.append(' ');
-					sb.append('{').append(Utility.NEW_LINE);
+					addWS(sb);
+					sb.append('{');
+					addNL(sb);
 				} else {
-					sb.append(Utility.NEW_LINE).append(Utility.getIndent(lastIndent)).append("{").append(Utility.NEW_LINE);
+					addNL(sb);
+					addIndent(sb, lastIndent);
+					sb.append("{");
+					addNL(sb);
 				}
 				continue;
 			}
 			if (c.indent >= 0) {
-				int len = sb.length();
-				if (len >= 1 && sb.charAt(len - 1) == ')')
-					sb.append(Utility.NEW_LINE).append(Utility.getIndent(++lastIndent));
-				else if (len >= 2 && sb.charAt(len - 2) == ')' && sb.charAt(len - 1) == ' ')
-					sb.append(Utility.NEW_LINE).append(Utility.getIndent(++lastIndent));
-				else if (len >= 4 && sb.charAt(len - 4) == 'e' && sb.charAt(len - 3) == 'l' && sb.charAt(len - 2) == 's' && sb.charAt(len - 1) == 'e')
-					sb.append(Utility.NEW_LINE).append(Utility.getIndent(++lastIndent));
-				else if (len >= 5 && sb.charAt(len - 5) == 'e' && sb.charAt(len - 4) == 'l' && sb.charAt(len - 3) == 's' && sb.charAt(len - 2) == 'e' && sb.charAt(len - 1) == ' ')
-					sb.append(Utility.NEW_LINE).append(Utility.getIndent(++lastIndent));
-				else {
-					if (len > 0 && sb.charAt(len - 1) == ' ')
-						sb.append(Utility.NEW_LINE);
-					sb.append(Utility.getIndent(lastIndent = c.indent));
-				}
-			} else if (c.wsL) {
-				int len = sb.length();
-				if (len == 0 || (sb.charAt(len - 1) != '\t' && sb.charAt(len - 1) != ' ' && !sb.toString().endsWith(Utility.NEW_LINE)))
-					sb.append(' ');
+				addIndent(sb, c.indent);
+			}
+			if (c.wsL) {
+				addWS(sb);
 			}
 			String text = t.getText().trim();
 			if (t.getChannel() == Token.HIDDEN_CHANNEL) {
@@ -123,12 +152,11 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 				}
 				sb.append(text);
 			}
-			if (c.wsR) sb.append(' ');
+			if (c.wsR) {
+				addWS(sb);
+			}
 			if (c.nl) {
-				int len = sb.length();
-				while (len > 0 && sb.charAt(len - 1) == ' ')
-					sb.deleteCharAt(--len);
-				sb.append(Utility.NEW_LINE);
+				addNL(sb);
 			}
 		}
 		return sb.toString();
@@ -287,12 +315,32 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 //		setWSR(ctx.R1().getSymbol().getTokenIndex());
 		if (ctx.Else() != null) {
 			setIndent(ctx.Else().getSymbol().getTokenIndex(), indent);
-			setWSR(ctx.Else().getSymbol().getTokenIndex());
+			setNL(ctx.Else().getSymbol().getTokenIndex());
+		}
+		if (!(ctx.s1 instanceof CompoundStatement)) {
+			++indent;
+			setNL(ctx.R1().getSymbol().getTokenIndex());
 		}
 	}
 
 	@Override
+	public void exitSelectionStatement(@NotNull Compiler2015Parser.SelectionStatementContext ctx) {
+		if (!(ctx.s1 instanceof CompoundStatement))
+			--indent;
+	}
+
+	@Override
+	public void enterIterationStatement1(@NotNull Compiler2015Parser.IterationStatement1Context ctx) {
+		if (!(ctx.whileS.a instanceof CompoundStatement))
+			++indent;
+	}
+
+	@Override
 	public void exitIterationStatement1(@NotNull Compiler2015Parser.IterationStatement1Context ctx) {
+		if (!(ctx.whileS.a instanceof CompoundStatement)) {
+			--indent;
+			setNL(ctx.R1().getSymbol().getTokenIndex());
+		}
 		setIndent(ctx.While().getSymbol().getTokenIndex(), indent);
 		setWSR(ctx.While().getSymbol().getTokenIndex());
 	}
@@ -304,6 +352,16 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 		for (TerminalNode i : ctx.Semi())
 			setWSR(i.getSymbol().getTokenIndex());
 		setWSR(ctx.R1().getSymbol().getTokenIndex());
+		if (!(ctx.forS.d instanceof CompoundStatement)) {
+			++indent;
+			setNL(ctx.R1().getSymbol().getTokenIndex());
+		}
+	}
+
+	@Override
+	public void exitIterationStatement2(@NotNull Compiler2015Parser.IterationStatement2Context ctx) {
+		if (!(ctx.forS.d instanceof CompoundStatement))
+			--indent;
 	}
 
 	@Override

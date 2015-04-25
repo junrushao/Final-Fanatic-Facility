@@ -26,6 +26,8 @@ public class LogicalOr extends BinaryExpression {
 		Integer v1 = toInt(a1), v2 = toInt(a2);
 		if (v1 != null && v2 != null)
 			return new IntConstant(((v1 != 0) || (v2 != 0)) ? 1 : 0);
+		if (v1 != null && v1 != 0)
+			return new IntConstant(1);
 		if (!(a1.type instanceof IntType))
 			a1 = new CastExpression(new IntType(), a1);
 		if (!(a2.type instanceof IntType))
