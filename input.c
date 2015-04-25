@@ -1,10 +1,6 @@
-int main()
-{
-    int *p,*q;
-    struct A{int *now;} *a;
-    p-q;
-    p-*q;
-    *p-*q;
-    *p=&q;
-    a->now-p;
+
+int a[][5][7][1] = {1, 2, 3, {2, 6, 4, 8}, {{1, 3, 5, 7}, {1}, {3, 5, 7, 9, {1, 3, 8, 8}}}};
+
+int main() {
+	return 0;
 }

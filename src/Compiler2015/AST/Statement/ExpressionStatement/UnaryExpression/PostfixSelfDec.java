@@ -30,6 +30,6 @@ public class PostfixSelfDec extends UnaryExpression {
 			return new IntConstant(((IntConstant) a1).c - 1);
 		if (a1 instanceof CharConstant)
 			return new CharConstant((char) (((CharConstant) a1).c - 1));
-		return new PrefixSelfDec(a1);
+		return new PostfixSelfDec(a1);
 	}
 }

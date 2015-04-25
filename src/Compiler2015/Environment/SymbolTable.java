@@ -3,6 +3,7 @@ package Compiler2015.Environment;
 import Compiler2015.AST.Initializers;
 import Compiler2015.AST.SimpleInitializerList;
 import Compiler2015.AST.Statement.CompoundStatement;
+import Compiler2015.AST.Statement.ExpressionStatement.StringConstant;
 import Compiler2015.AST.Type.*;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Tokens;
@@ -109,18 +110,31 @@ public class SymbolTable {
 			Type type;
 			if (e.ref instanceof ArrayPointerType) {
 				if (ini.single != null) {
-					throw new CompilationError("Initializer dimension does not match.");
+					if (ini.single instanceof StringConstant) {
+						ini.list = new ArrayList<SimpleInitializerList>() {{
+							add(new SimpleInitializerList(ini.single));
+						}};
+						ini.single = null;
+					} else
+						throw new CompilationError("Initializer dimension does not match.");
 				}
 				dimensions = ((ArrayPointerType) e.ref).dimensions;
 				type = ((ArrayPointerType) e.ref).pointTo;
 				// undimensioned -> dimensioned
-				if (((ArrayPointerType) e.ref).dimensions.get(0) == -1)
-					((ArrayPointerType) e.ref).dimensions.set(0, ini.list.size());
+//				if (((ArrayPointerType) e.ref).dimensions.get(0) == -1)
+//					((ArrayPointerType) e.ref).dimensions.set(0, ini.list.size());
 			} else {
 				dimensions = new ArrayList<>();
 				type = t;
 			}
 			e.info = new Initializers.Constructor().get(dimensions, ini, type);
+			if (e.ref instanceof ArrayPointerType && ((ArrayPointerType) e.ref).dimensions.get(0) == -1) {
+				int max = -1;
+				for (Initializers.InitEntry i : ((Initializers) e.info).entries) {
+					max = Math.max(max, i.position[0]);
+				}
+				((ArrayPointerType) e.ref).dimensions.set(0, max + 1);
+			}
 		} else {
 			e.info = init;
 		}

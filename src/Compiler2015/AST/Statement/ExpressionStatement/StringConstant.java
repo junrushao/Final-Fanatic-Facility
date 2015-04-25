@@ -10,12 +10,14 @@ public class StringConstant extends Expression {
 	public String c;
 
 	public StringConstant(final String c) {
+		if (!c.endsWith("\0"))
+			throw new CompilationError("Internal Error.");
 		this.c = c;
 		this.isLValue = false;
 		this.type = new ArrayPointerType(
 				new CharType(),
 				new ArrayList<Integer>() {{
-					add(c.length() + 1);
+					add(c.length());
 				}}
 		);
 	}
@@ -132,6 +134,7 @@ public class StringConstant extends Expression {
 				}
 			}
 		}
+		sb.append('\0');
 		return sb.toString();
 	}
 

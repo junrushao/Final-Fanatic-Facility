@@ -34,7 +34,7 @@ public class FunctionCall extends Expression {
 			ff = ((FunctionPointerType) ff).pointTo;
 		if (!(ff instanceof FunctionType))
 			throw new CompilationError("Not a function or a pointer to a function.");
-		FunctionType f = (FunctionType) e1.type;
+		FunctionType f = (FunctionType) ff;
 		int size = f.parameterNames.size(), sizeR = parameters.size();
 		if (f.hasVaList) {
 			if (size > sizeR)

@@ -25,7 +25,6 @@ compilationUnit
 	;
 
 declaration
-locals [ ArrayList<Type> types, ArrayList<String> names, ArrayList<SimpleInitializerList> inits, int n]
 @after {
 	TypeAnalyser.exit();
 }
@@ -34,15 +33,7 @@ locals [ ArrayList<Type> types, ArrayList<String> names, ArrayList<SimpleInitial
 			{
 				TypeAnalyser.enter($typeSpecifier.ret);
 			}
-		(declaratorList
-			{
-				$types = $declaratorList.types;
-				$names = $declaratorList.names;
-				$n = $types.size();
-				for (int i = 0; i < $n; ++i)
-					Environment.symbolNames.defineTypedefName($names.get(i), $types.get(i));
-			}
-		)?
+		(declaratorList)?
 		Semi #declaration1
 	|	typeSpecifier
 			{
@@ -194,25 +185,12 @@ plainDeclarator returns [Type type, String name]
 		{
 			$type = TypeAnalyser.analyse();
 			$name = $declarator.name;
+			Environment.symbolNames.defineTypedefName($name, $type);
 		}
 	;
 
-declaratorList returns [ArrayList<Type> types, ArrayList<String> names]
-@init {
-	$types = new ArrayList<Type>();
-	$names = new ArrayList<String>();
-}
-	: plainDeclarator
-		{
-			$types.add($plainDeclarator.type);
-			$names.add($plainDeclarator.name);
-		}
-		(Comma plainDeclarator
-			{
-				$types.add($plainDeclarator.type);
-				$names.add($plainDeclarator.name);
-			}
-		)*
+declaratorList
+	: plainDeclarator (Comma plainDeclarator)*
 	;
 
 directDeclarator returns [String name]

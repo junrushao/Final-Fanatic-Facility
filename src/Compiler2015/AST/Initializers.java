@@ -13,8 +13,8 @@ import java.util.Arrays;
 
 public class Initializers extends ASTNode {
 	public static class InitEntry {
-		int position[];
-		Expression value;
+		public int position[];
+		public Expression value;
 
 		public InitEntry(int position[], Expression value) {
 			this.position = Arrays.copyOf(position, position.length);
@@ -35,13 +35,13 @@ public class Initializers extends ASTNode {
 	}
 
 	public static class Constructor {
-		ArrayList<InitEntry> entries = new ArrayList<>();
-		ArrayList<Integer> dimensions;
-		Type t;
-		int now[];
+		public ArrayList<InitEntry> entries = new ArrayList<>();
+		public ArrayList<Integer> dimensions;
+		public Type t;
+		public int now[];
 
 		void DFS(int n, SimpleInitializerList pos) {
-			if (pos.list != null && pos.list.size() == 0 && pos.list.get(0).single != null && pos.list.get(0).single instanceof StringConstant) {
+			if (pos.list != null && pos.list.size() == 1 && pos.list.get(0).single != null && pos.list.get(0).single instanceof StringConstant) {
 				StringConstant e = (StringConstant) pos.list.get(0).single;
 				pos.list = null;
 				pos.single = e;
@@ -56,10 +56,16 @@ public class Initializers extends ASTNode {
 			}
 			if (pos.single != null) { // leaf node
 				Expression e = pos.single;
+//				if (e instanceof StringConstant && n + 1 == dimensions.size()) {
+
+//					return;
+//				}
+//				else {
 				if (!CastExpression.castable(e.type, t))
 					throw new CompilationError("Type not convertable.");
 				entries.add(new InitEntry(now, e));
 				return;
+//				}
 			}
 			if (n == dimensions.size()) { // depth limit reached
 				Expression e = pos.toArrayList().get(0);
