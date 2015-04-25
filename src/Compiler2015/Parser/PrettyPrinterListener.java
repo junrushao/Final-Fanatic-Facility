@@ -94,13 +94,18 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 			}
 			if (c.indent >= 0) {
 				int len = sb.length();
-				if (len > 0 && sb.charAt(len - 1) == ')')
+				if (len >= 1 && sb.charAt(len - 1) == ')')
+					sb.append(Utility.NEW_LINE).append(Utility.getIndent(++lastIndent));
+				else if (len >= 2 && sb.charAt(len - 2) == ')' && sb.charAt(len - 1) == ' ')
+					sb.append(Utility.NEW_LINE).append(Utility.getIndent(++lastIndent));
+				else if (len >= 4 && sb.charAt(len - 4) == 'e' && sb.charAt(len - 3) == 'l' && sb.charAt(len - 2) == 's' && sb.charAt(len - 1) == 'e')
+					sb.append(Utility.NEW_LINE).append(Utility.getIndent(++lastIndent));
+				else if (len >= 5 && sb.charAt(len - 5) == 'e' && sb.charAt(len - 4) == 'l' && sb.charAt(len - 3) == 's' && sb.charAt(len - 2) == 'e' && sb.charAt(len - 1) == ' ')
 					sb.append(Utility.NEW_LINE).append(Utility.getIndent(++lastIndent));
 				else {
-					if (sb.charAt(len - 1) == ' ')
+					if (len > 0 && sb.charAt(len - 1) == ' ')
 						sb.append(Utility.NEW_LINE);
-					sb.append(Utility.getIndent(c.indent));
-					lastIndent = c.indent;
+					sb.append(Utility.getIndent(lastIndent = c.indent));
 				}
 			} else if (c.wsL) {
 				int len = sb.length();
@@ -110,16 +115,19 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 			String text = t.getText().trim();
 			if (t.getChannel() == Token.HIDDEN_CHANNEL) {
 				sb.append(convertComment(text));
-			}
-			else
+			} else {
+				if (text.equals(";")) {
+					int len = sb.length();
+					while (len > 0 && sb.charAt(len - 1) == ' ')
+						sb.deleteCharAt(--len);
+				}
 				sb.append(text);
+			}
 			if (c.wsR) sb.append(' ');
 			if (c.nl) {
 				int len = sb.length();
-				while (len > 0 && sb.charAt(len - 1) == ' ') {
-					sb.deleteCharAt(len - 1);
-					len -= 1;
-				}
+				while (len > 0 && sb.charAt(len - 1) == ' ')
+					sb.deleteCharAt(--len);
 				sb.append(Utility.NEW_LINE);
 			}
 		}

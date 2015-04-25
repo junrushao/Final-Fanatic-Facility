@@ -30,12 +30,13 @@ public class StringConstant extends Expression {
 	 * <p/>
 	 * Also, in format strings, we should pay attention to '%', which is also ignored here.
 	 */
+	public static boolean isToAppendBack = true;
 	public static String convert(String original) {
 		int n = original.length();
 		original = original.substring(1, n - 1);
 		n -= 2;
 		if (n == 0)
-			return "";
+			return "\0";
 
 		StringBuilder sb = new StringBuilder(original.length());
 		if (sb.length() != 0)
@@ -134,15 +135,19 @@ public class StringConstant extends Expression {
 				}
 			}
 		}
-		sb.append('\0');
+		if (isToAppendBack)
+			sb.append('\0');
 		return sb.toString();
 	}
 
 	public static Expression getExpression(ArrayList<String> s) {
 		StringBuilder sb = new StringBuilder();
-		for (String str : s)
+		isToAppendBack = false;
+		for (String str : s) {
 			sb.append(convert(str));
-		return new StringConstant(sb.toString());
+		}
+		isToAppendBack = true;
+		return new StringConstant(sb.append("\0").toString());
 	}
 
 	public static String toPrintableString(String s) {

@@ -29,7 +29,7 @@ public class Subtract extends BinaryExpression {
 			a2 = v != null ? new IntConstant(v) : new CastExpression(new IntType(), a2);
 		}
 		if (a1.type instanceof ArrayPointerType) {
-			if (a2.type instanceof FunctionPointerType)
+			if (a2.type instanceof FunctionPointerType || a2.type instanceof FunctionType)
 				throw new CompilationError("Incompatible types.");
 			if (a2.type instanceof ArrayPointerType)
 				return new Subtract(a1, a2, new IntType());
@@ -42,14 +42,14 @@ public class Subtract extends BinaryExpression {
 		if (a1.type instanceof FunctionPointerType) {
 			if (a2.type instanceof ArrayPointerType || a2.type instanceof VariablePointerType)
 				throw new CompilationError("Incompatible types.");
-			if (a2.type instanceof FunctionPointerType)
+			if (a2.type instanceof FunctionPointerType || a2.type instanceof FunctionType)
 				return new Subtract(a1, a2, new IntType());
 			if (a2.type instanceof IntType)
 				return new Subtract(a1, a2, a1.type);
 			throw new CompilationError("Internal Error.");
 		}
 		if (a1.type instanceof VariablePointerType) {
-			if (a2.type instanceof FunctionPointerType)
+			if (a2.type instanceof FunctionPointerType || a2.type instanceof FunctionType)
 				throw new CompilationError("Incompatible types.");
 			if (a2.type instanceof ArrayPointerType)
 				return new Subtract(a1, a2, new IntType());
@@ -60,6 +60,8 @@ public class Subtract extends BinaryExpression {
 			throw new CompilationError("Internal Error.");
 		}
 		if (a1.type instanceof IntType) {
+			if (a2.type instanceof VariablePointerType || a2.type instanceof ArrayPointerType || a2.type instanceof FunctionPointerType || a2.type instanceof FunctionType)
+				throw new CompilationError("Incompatible types.");
 			if (a2.type instanceof IntType) {
 				Integer v1 = Expression.toInt(a1);
 				Integer v2 = Expression.toInt(a2);
