@@ -52,7 +52,6 @@ public class Initializers extends ASTNode {
 				pos.list = new ArrayList<>();
 				for (char c : e.c.toCharArray())
 					pos.list.add(new SimpleInitializerList(new CharConstant(c)));
-				pos.list.add(new SimpleInitializerList(new CharConstant('\0')));
 			}
 			if (pos.single != null) { // leaf node
 				Expression e = pos.single;

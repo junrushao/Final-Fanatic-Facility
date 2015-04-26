@@ -119,7 +119,6 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 				} else {
 					setNL(i);
 				}
-				setIndent(i, 0);
 			}
 			Config c = configs.get(i);
 			if (c.indent == -2) {

@@ -27,7 +27,7 @@ public class Main {
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
-			Panel.prettyPrinterType = Panel.msPrinter;
+			Panel.prettyPrinterType = Panel.krPrinter;
 			Panel.emitAST = true;
 		} else {
 			boolean hasInputFile = false;
