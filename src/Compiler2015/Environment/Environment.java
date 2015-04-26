@@ -2,8 +2,8 @@ package Compiler2015.Environment;
 
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.Statement;
-import Compiler2015.AST.Type.*;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.Type.*;
 import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 

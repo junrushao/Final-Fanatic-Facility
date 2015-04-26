@@ -4,8 +4,8 @@ import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.CharConstant;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Statement.ExpressionStatement.StringConstant;
-import Compiler2015.AST.Type.Type;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.Type.Type;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;

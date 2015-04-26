@@ -1,10 +1,10 @@
 package Compiler2015.Parser;
 
-import Compiler2015.AST.Type.StructOrUnionType;
-import Compiler2015.AST.Type.Type;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.Type.StructOrUnionType;
+import Compiler2015.Type.Type;
 import Compiler2015.Utility.Tokens;
 
 import java.util.ArrayList;

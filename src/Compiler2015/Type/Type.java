@@ -1,4 +1,4 @@
-package Compiler2015.AST.Type;
+package Compiler2015.Type;
 
 import Compiler2015.AST.ASTNode;
 import Compiler2015.AST.SizeMeasurable;

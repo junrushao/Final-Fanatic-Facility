@@ -1,4 +1,4 @@
-package Compiler2015.AST.Type;
+package Compiler2015.Type;
 
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Utility;

@@ -2,10 +2,10 @@ package Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression;
 
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
-import Compiler2015.AST.Type.IntType;
-import Compiler2015.AST.Type.StructOrUnionType;
-import Compiler2015.AST.Type.VoidType;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.Type.IntType;
+import Compiler2015.Type.StructOrUnionType;
+import Compiler2015.Type.VoidType;
 
 public abstract class AssignClass extends BinaryExpression {
 	public AssignClass(Expression left, Expression right) {
@@ -31,25 +31,25 @@ public abstract class AssignClass extends BinaryExpression {
 		if (operator.equals("="))
 			return new Assign(a1, a2);
 		if (operator.equals("*="))
-			return new MultiplyAssign(a1, a2);
+			return new Assign(a1, new Multiply(a1, a2));
 		if (operator.equals("/="))
-			return new DivideAssign(a1, a2);
+			return new Assign(a1, new Divide(a1, a2));
 		if (operator.equals("%="))
-			return new ModuloAssign(a1, a2);
+			return new Assign(a1, new Modulo(a1, a2));
 		if (operator.equals("+="))
-			return new AddAssign(a1, a2);
+			return new Assign(a1, new Add(a1, a2, a1.type));
 		if (operator.equals("-="))
-			return new SubtractAssign(a1, a2);
+			return new Assign(a1, new Subtract(a1, a2, a1.type));
 		if (operator.equals("<<="))
-			return new ShiftLeftAssign(a1, a2);
+			return new Assign(a1, new ShiftLeft(a1, a2));
 		if (operator.equals(">>="))
-			return new ShiftRightAssign(a1, a2);
+			return new Assign(a1, new ShiftRight(a1, a2));
 		if (operator.equals("&="))
-			return new BitwiseAndAssign(a1, a2);
+			return new Assign(a1, new BitwiseAnd(a1, a2));
 		if (operator.equals("^="))
-			return new BitwiseXORAssign(a1, a2);
+			return new Assign(a1, new BitwiseXOR(a1, a2));
 		if (operator.equals("|="))
-			return new BitwiseOrAssign(a1, a2);
+			return new Assign(a1, new BitwiseOr(a1, a2));
 		throw new CompilationError("Internal Error");
 	}
 }

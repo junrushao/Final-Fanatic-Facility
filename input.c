@@ -1,6 +1,9 @@
 #include <stdio.h>
 
-char *(*(**foo[][8])())[];
+typedef char *(*(**Memeda[][8])())[];
+
+Memeda foo;
+
 char *c1 = "abcdefg";
 char *c2 = {"abcdefg"};
 char c3[] = "abcdefg";

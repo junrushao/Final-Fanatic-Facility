@@ -1,9 +1,9 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
-import Compiler2015.AST.Type.Pointer;
-import Compiler2015.AST.Type.StructOrUnionType;
-import Compiler2015.AST.Type.Type;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.Type.Pointer;
+import Compiler2015.Type.StructOrUnionType;
+import Compiler2015.Type.Type;
 
 /**
  * a->b

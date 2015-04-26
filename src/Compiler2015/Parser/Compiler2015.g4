@@ -6,7 +6,7 @@ import Compiler2015.AST.Statement.*;
 import Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression.*;
 import Compiler2015.AST.Statement.ExpressionStatement.*;
 import Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression.*;
-import Compiler2015.AST.Type.*;
+import Compiler2015.Type.*;
 import Compiler2015.Environment.*;
 import Compiler2015.Exception.*;
 import Compiler2015.Utility.*;

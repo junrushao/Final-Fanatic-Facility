@@ -1,10 +1,10 @@
 package Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression;
 
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
-import Compiler2015.AST.Type.ArrayPointerType;
-import Compiler2015.AST.Type.FunctionType;
-import Compiler2015.AST.Type.Pointer;
-import Compiler2015.AST.Type.VoidType;
+import Compiler2015.Type.ArrayPointerType;
+import Compiler2015.Type.FunctionType;
+import Compiler2015.Type.Pointer;
+import Compiler2015.Type.VoidType;
 
 /**
  * *e

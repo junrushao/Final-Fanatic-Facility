@@ -2,7 +2,7 @@ package Compiler2015.AST.Statement.ExpressionStatement;
 
 import Compiler2015.AST.SizeMeasurable;
 import Compiler2015.AST.Statement.Statement;
-import Compiler2015.AST.Type.Type;
+import Compiler2015.Type.Type;
 import Compiler2015.Utility.Utility;
 
 public abstract class Expression extends Statement implements SizeMeasurable {

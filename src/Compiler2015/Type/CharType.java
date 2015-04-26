@@ -1,4 +1,4 @@
-package Compiler2015.AST.Type;
+package Compiler2015.Type;
 
 public class CharType extends Type {
 	public static CharType instance = new CharType();

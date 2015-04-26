@@ -4,8 +4,8 @@ import Compiler2015.AST.Initializers;
 import Compiler2015.AST.SimpleInitializerList;
 import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.AST.Statement.ExpressionStatement.StringConstant;
-import Compiler2015.AST.Type.*;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.Type.*;
 import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
