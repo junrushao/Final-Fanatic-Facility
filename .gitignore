@@ -1,0 +1,5 @@
+*.class
+*.swp
+
+out/
+input.c
