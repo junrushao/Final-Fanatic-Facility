@@ -1,4 +1,4 @@
-// Generated from Compiler2015.g4 by ANTLR 4.5
+// Generated from /home/junrushao/IdeaProjects/compiler2015/src/Compiler2015/Parser/Compiler2015.g4 by ANTLR 4.5
 package Compiler2015.Parser;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
@@ -94,7 +94,7 @@ public class Compiler2015Lexer extends Lexer {
 	}
 
 	@Override
-
+	@NotNull
 	public Vocabulary getVocabulary() {
 		return VOCABULARY;
 	}

@@ -66,6 +66,9 @@ locals [ Type type, String name, Statement s = null, ArrayList<Type> parameterTy
 				$hasVaList = $parameterTypeList.hasVaList;
 				if ($parameterNames.size() != 0 && (new HashSet<>($parameterNames).size()) != $parameterNames.size())
 					throw new CompilationError("parameter should have different names.");
+				for (String name : $parameterNames)
+					if (name == null || name.equals(""))
+						throw new CompilationError("No parameter name.");
 			}
 		)? R1
 		{
@@ -654,6 +657,50 @@ locals [ ArrayList<String> s ]
 		{
 			$ret = $expression.ret;
 		} #primaryExpression4
+	| lambdaExpression
+		{
+			$ret = $lambdaExpression.ret;
+		} #primaryExpression5
+	;
+
+lambdaExpression returns [Expression ret]
+locals [ Type type = null, Statement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1]
+@init {
+	$parameterTypes = new ArrayList<Type>();
+	$parameterNames = new ArrayList<String>();
+}
+	:
+	'[' ']'
+		'(' (parameterTypeList
+			{
+				$parameterTypes = $parameterTypeList.types;
+				$parameterNames = $parameterTypeList.names;
+				$hasVaList = $parameterTypeList.hasVaList;
+				if ($parameterNames.size() != 0 && (new HashSet<>($parameterNames).size()) != $parameterNames.size())
+					throw new CompilationError("parameter should have different names.");
+				for (String name : $parameterNames)
+					if (name == null || name.equals(""))
+						throw new CompilationError("No parameter name.");
+			}
+		)? ')'
+		('->' typeName
+			{
+				$type = $typeName.ret;
+			}
+		)?
+		{
+			Environment.functionReturnStack.push($type);
+			if ($type == null) $type = new VoidType();
+			$type = new FunctionType($type, $parameterTypes, $parameterNames, $hasVaList);
+			$uId = Environment.symbolNames.defineLocalFunction("", $type, null);
+		}
+		compoundStatement[$parameterTypes, $parameterNames]
+		{
+			$s = $compoundStatement.ret;
+			Environment.symbolNames.defineVariable($uId, $type, $s);
+			Environment.functionReturnStack.pop();
+			$ret = IdentifierExpression.getExpression($uId);
+		}
 	;
 
 constant returns [Expression ret]

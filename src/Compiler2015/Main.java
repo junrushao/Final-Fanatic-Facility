@@ -20,7 +20,7 @@ public class Main {
 	public void argumentsInspect(String args[]) {
 		if (Panel.DEBUG) {
 			try {
-				inputFile = new BufferedInputStream(new FileInputStream("./test/input.c"));
+				inputFile = new BufferedInputStream(new FileInputStream("./input.c"));
 			} catch (FileNotFoundException e) {
 				inputFile = System.in;
 			}

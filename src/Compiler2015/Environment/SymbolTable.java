@@ -10,6 +10,7 @@ import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * For function
@@ -71,6 +72,8 @@ public class SymbolTable {
 		for (Integer uId : peek) {
 			SymbolTableEntry e = table.get(uId);
 			String name = e.name;
+			if (name == null || name.equals(""))
+				continue;
 			int pop = getUId(name).pop();
 			if (pop != uId)
 				throw new CompilationError("Internal Error.");
@@ -283,16 +286,10 @@ public class SymbolTable {
 
 	/**
 	 * @return variables in current scope
-	 * FXXK Functional programming is not fully supported in Open JDK 1.8
 	 */
 	public ArrayList<Integer> getVariablesInCurrentScope() {
-		ArrayList<Integer> ret = new ArrayList<>();
-		for (int x : scopes.peek())
-			if (table.get(x).type == Tokens.VARIABLE)
-				ret.add(x);
-		return ret;
-//		return scopes.peek().stream().filter(x -> table.get(x).type == Tokens.VARIABLE)
-//				.collect(Collectors.toCollection(ArrayList::new));
+		return scopes.peek().stream().filter(x -> table.get(x).type == Tokens.VARIABLE)
+				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	@Override
