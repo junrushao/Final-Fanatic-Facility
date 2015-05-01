@@ -179,6 +179,9 @@ public class SymbolTable {
 			return uId;
 		} else { // local
 			SymbolTableEntry e = queryName(name);
+			if (t instanceof ArrayPointerType && ((ArrayPointerType) t).dimensions.get(0) == -1 && init == null) {
+				throw new CompilationError("Array size should be determined");
+			}
 			int uId;
 			if (e != null && scopes.peek().contains(e.uId)) {
 				throw new CompilationError("Symbol already defined.");

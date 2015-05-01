@@ -33,7 +33,14 @@ public class StructOrUnionType extends Type {
 
 	@Override
 	public int sizeof() {
-		return 0;
+		int ans = 0;
+		if (isUnion)
+			for (Type t : types)
+				ans = Math.max(ans, t.sizeof());
+		else
+			for (Type t : types)
+				ans += t.sizeof();
+		return ans;
 	}
 
 	@Override

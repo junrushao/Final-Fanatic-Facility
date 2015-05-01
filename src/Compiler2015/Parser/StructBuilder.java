@@ -3,6 +3,7 @@ package Compiler2015.Parser;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.Type.FunctionType;
 import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
 import Compiler2015.Utility.Tokens;
@@ -26,6 +27,9 @@ public final class StructBuilder {
 
 	public static Type exit() {
 		StructOrUnionType top = stack.pop();
+		for (Type t : top.types)
+			if (t instanceof FunctionType)
+				throw new CompilationError("Function definition should not be inside structure.");
 		int uId = top.uId;
 		Environment.classNames.defineStructOrUnion(uId);
 		SymbolTableEntry e = Environment.classNames.table.get(uId);

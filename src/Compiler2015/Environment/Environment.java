@@ -133,4 +133,9 @@ public class Environment {
 		return "Struct & Union:" + Utility.NEW_LINE + classNames.toString() + "Symbols:" + Utility.NEW_LINE + symbolNames.toString();
 	}
 
+	public static void finalCheck() {
+		SymbolTableEntry e = symbolNames.queryName("main");
+		if (e == null)
+			throw new CompilationError("No main exists.");
+	}
 }

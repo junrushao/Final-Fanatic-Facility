@@ -1,7 +1,7 @@
 package Compiler2015.Type;
 
-/**
- */
+import Compiler2015.Utility.Panel;
+
 public class Pointer extends Type {
 	public static Type getPointTo(Type x) {
 		if (x instanceof ArrayPointerType)
@@ -10,9 +10,9 @@ public class Pointer extends Type {
 			return ((VariablePointerType) x).pointTo;
 		return ((FunctionPointerType) x).pointTo;
 	}
+
 	@Override
 	public int sizeof() {
-		return 8;
+		return Panel.architecture.equals(Panel.MIPS) ? 4 : 8;
 	}
-
 }

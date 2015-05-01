@@ -37,7 +37,7 @@ public class FunctionType extends Type {
 
 	@Override
 	public int sizeof() {
-		return 8;
+		return 1;
 	}
 
 	@Override

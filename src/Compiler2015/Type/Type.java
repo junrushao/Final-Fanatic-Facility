@@ -1,10 +1,9 @@
 package Compiler2015.Type;
 
 import Compiler2015.AST.ASTNode;
-import Compiler2015.AST.SizeMeasurable;
 import Compiler2015.Utility.Utility;
 
-public abstract class Type extends ASTNode implements SizeMeasurable {
+public abstract class Type extends ASTNode {
 	/**
 	 * @param a one type
 	 * @param b the other type
@@ -35,4 +34,5 @@ public abstract class Type extends ASTNode implements SizeMeasurable {
 		return Utility.getIndent(depth).append(toString()).append(Utility.NEW_LINE).toString();
 	}
 
+	public abstract int sizeof();
 }

@@ -17,52 +17,56 @@ import java.io.*;
 public class Main {
 	public InputStream inputFile = System.in;
 
-	public void showSymbolTableAndASTTree() {
-		System.out.println(Environment.toStr());
-	}
-
 	public void argumentsInspect(String args[]) {
 		if (Panel.DEBUG) {
 			try {
 				inputFile = new BufferedInputStream(new FileInputStream("./test/input.c"));
 			} catch (FileNotFoundException e) {
-//				e.printStackTrace();
 				inputFile = System.in;
 			}
 			Panel.prettyPrinterType = null;
 			Panel.emitAST = true;
-		} else {
-			boolean hasInputFile = false;
-			hasInputFile = true;
-			for (String s : args) {
-				if (s.equals(Panel.msPrinter)) {
-					Panel.prettyPrinterType = Panel.msPrinter;
-				} else if (s.equals(Panel.krPrinter)) {
-					Panel.prettyPrinterType = Panel.krPrinter;
-				} else if (s.equals("-emit-ast")) {
-					Panel.emitAST = true;
-				} else if (!s.startsWith("-") && !hasInputFile) {
-					hasInputFile = true;
-					try {
-						inputFile = new BufferedInputStream(new FileInputStream(s));
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					}
-				} else {
-					System.err.println("Unknown arg: " + s);
+			return;
+		}
+		for (String s : args) {
+			if (s.equals(Panel.msPrinter)) {
+				Panel.prettyPrinterType = Panel.msPrinter;
+			} else if (s.equals(Panel.krPrinter)) {
+				Panel.prettyPrinterType = Panel.krPrinter;
+			} else if (s.equals("-emit-ast")) {
+				Panel.emitAST = true;
+			} else if (!s.startsWith("-")) {
+				try {
+					inputFile = new BufferedInputStream(new FileInputStream(s));
+				} catch (FileNotFoundException e) {
+					System.err.println("File not exist, will use stdin as input.");
+					inputFile = System.in;
 				}
+			} else if (s.equals(Panel.MIPS)) {
+				Panel.architecture = Panel.MIPS;
+			} else if (s.equals(Panel.JVM)) {
+				Panel.architecture = Panel.JVM;
+			} else if (s.equals(Panel.X86)) {
+				Panel.architecture = Panel.X86;
+			} else {
+				System.err.println("Unknown arg: " + s);
 			}
 		}
 	}
 
 	public void compile(String args[]) {
+		// analyze the arguments
 		argumentsInspect(args);
+
+		// open input file
 		ANTLRInputStream input = null;
 		try {
 			input = new ANTLRInputStream(inputFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		// parse
 		Compiler2015Lexer lexer = new Compiler2015Lexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		tokens.fill();
@@ -71,9 +75,15 @@ public class Main {
 		parser.addErrorListener(new ParseErrorListener());
 		RuleContext tree = parser.compilationUnit();
 
+		// final check
+		Environment.finalCheck();
+
+		// emit AST
 		if (Panel.emitAST) {
-			showSymbolTableAndASTTree();
+			System.out.println(Environment.toStr());
 		}
+
+		// do pretty printer
 		if (Panel.prettyPrinterType != null) {
 			ParseTreeWalker walker = new ParseTreeWalker();
 			PrettyPrinterListener printer = new PrettyPrinterListener(tokens);
