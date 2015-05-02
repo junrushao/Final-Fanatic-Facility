@@ -1,6 +1,7 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.IRStream;
 import Compiler2015.Type.IntType;
 import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
@@ -35,11 +36,7 @@ public class CastExpression extends Expression {
 	}
 
 	public static boolean castable(Type from, Type to) {
-		if (from.equals(to))
-			return true;
-		if (from instanceof StructOrUnionType || to instanceof StructOrUnionType)
-			return false;
-		return true;
+		return from.equals(to) || !(from instanceof StructOrUnionType || to instanceof StructOrUnionType);
 	}
 
 	public static Expression castToNumeric(Expression e) {
@@ -54,5 +51,10 @@ public class CastExpression extends Expression {
 	@Override
 	public String toString() {
 		return String.format("(CastTo %s %s)", castTo, e);
+	}
+
+	@Override
+	public void emitIR(IRStream stream) {
+		// Do nothing
 	}
 }

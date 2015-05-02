@@ -42,7 +42,7 @@ public class StructOrUnionType extends Type {
 				}
 			}
 			if (!isUnion)
-				last += (type.sizeof() + 3) / 4;
+				last += type.sizeof();
 		}
 	}
 
@@ -66,7 +66,7 @@ public class StructOrUnionType extends Type {
 		else
 			for (Type t : types)
 				ans += t.sizeof();
-		return ans;
+		return (ans + 3) / 4;
 	}
 
 	@Override

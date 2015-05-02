@@ -43,13 +43,16 @@ declaration
 	;
 
 functionDefinition
-locals [ Type type, String name, Statement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1]
+locals [ Type type, String name, Statement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1, Stack<Statement> loopStack = null]
 @init {
 	$parameterTypes = new ArrayList<Type>();
 	$parameterNames = new ArrayList<String>();
+	$loopStack = Environment.loopStack;
+	Environment.loopStack = new Stack<Statement>();
 }
 @after {
 	TypeAnalyser.exit();
+	Environment.loopStack = $loopStack;
 }
 	:	typeSpecifier { TypeAnalyser.enter($typeSpecifier.ret); }
 		declarator

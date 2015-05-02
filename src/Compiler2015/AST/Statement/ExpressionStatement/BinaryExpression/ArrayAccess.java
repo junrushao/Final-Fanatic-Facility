@@ -1,16 +1,18 @@
 package Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression;
 
-import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.Type.*;
-import sun.security.provider.JavaKeyStore;
+import Compiler2015.IR.IRStream;
+import Compiler2015.Type.ArrayPointerType;
+import Compiler2015.Type.Type;
+import Compiler2015.Type.VariablePointerType;
 
 /**
  * a[b]
  */
 public class ArrayAccess extends BinaryExpression {
+
 	public ArrayAccess(Expression left, Expression right, Type pointTo, boolean isLValue) {
 		super(left, right);
 		this.type = pointTo;
@@ -23,19 +25,26 @@ public class ArrayAccess extends BinaryExpression {
 			a1 = a2;
 			a2 = tmp;
 		}
-		if (!Type.isNumeric(a2.type) || !(a1.type instanceof ArrayPointerType || a1.type instanceof VariablePointerType))
-			throw new CompilationError("Type Error");
-		return new Add(
-				a1,
-				Multiply.getExpression(
-						a2,
-						new IntConstant(Pointer.getPointTo(a1.type).sizeof())),
-				a1.type
-		);
+		if (!Type.isNumeric(a2.type))
+			throw new CompilationError("Incompatible type.");
+		if (a1.type instanceof VariablePointerType)
+			return new ArrayAccess(a1, a2, ((VariablePointerType) a1.type).pointTo, true);
+		if (a1.type instanceof ArrayPointerType)
+			return new ArrayAccess(a1, a2, ((ArrayPointerType) a1.type).lower(), ((ArrayPointerType) a1.type).dimensions.size() == 1);
+		throw new CompilationError("Incompatible type.");
 	}
 
 	@Override
 	public String getOperator() {
 		return "[]";
+	}
+
+	@Override
+	public void emitIR(IRStream stream) {
+		Expression delta = Multiply.getExpression(right, new IntConstant(type.sizeof()));
+		Expression add = Add.getExpression(left, delta);
+		add.emitIR(stream);
+		add.eliminateLValue(stream);
+		tempRegister = add.tempRegister;
 	}
 }

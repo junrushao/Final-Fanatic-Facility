@@ -363,6 +363,7 @@ public class Compiler2015Parser extends Parser {
 		public ArrayList<String> parameterNames;
 		public boolean hasVaList =  false;
 		public int uId =  -1;
+		public Stack<Statement> loopStack =  null;
 		public TypeSpecifierContext typeSpecifier;
 		public DeclaratorContext declarator;
 		public ParameterTypeListContext parameterTypeList;
@@ -401,6 +402,8 @@ public class Compiler2015Parser extends Parser {
 
 			((FunctionDefinitionContext)_localctx).parameterTypes =  new ArrayList<Type>();
 			((FunctionDefinitionContext)_localctx).parameterNames =  new ArrayList<String>();
+			((FunctionDefinitionContext)_localctx).loopStack =  Environment.loopStack;
+			Environment.loopStack = new Stack<Statement>();
 
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -457,6 +460,7 @@ public class Compiler2015Parser extends Parser {
 			}
 
 				TypeAnalyser.exit();
+				Environment.loopStack = _localctx.loopStack;
 
 		}
 		catch (RecognitionException re) {
