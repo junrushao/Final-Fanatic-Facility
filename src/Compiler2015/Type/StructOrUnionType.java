@@ -1,9 +1,11 @@
 package Compiler2015.Type;
 
+import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class StructOrUnionType extends Type {
 	public int uId = -1;
@@ -11,6 +13,7 @@ public class StructOrUnionType extends Type {
 	public ArrayList<Type> types;
 	public ArrayList<String> names;
 	public HashMap<String, Type> directlyAccessableMembers;
+	public HashMap<String, Integer> memberDelta;
 
 	public StructOrUnionType(int uId, boolean isUnion) {
 		this.uId = uId;
@@ -18,6 +21,29 @@ public class StructOrUnionType extends Type {
 		this.types = new ArrayList<>();
 		this.names = new ArrayList<>();
 		this.directlyAccessableMembers = new HashMap<>();
+		this.memberDelta = null;
+	}
+
+	public void calcMemberDelta() {
+		int n = types.size();
+		int last = 0;
+		for (int i = 0; i < n; ++i) {
+			String name = names.get(i);
+			Type type = types.get(i);
+			if (name == null || name.equals("")) {
+				if (!(type instanceof StructOrUnionType))
+					throw new CompilationError("Internal Error.");
+				for (Map.Entry<String, Integer> e : ((StructOrUnionType) type).memberDelta.entrySet()) {
+					String subName = e.getKey();
+					int subDelta = e.getValue();
+					if (memberDelta.containsKey(subName))
+						throw new CompilationError("Internal Error");
+					memberDelta.put(subName, last + subDelta);
+				}
+			}
+			if (!isUnion)
+				last += (type.sizeof() + 3) / 4;
+		}
 	}
 
 	public StructOrUnionType() {

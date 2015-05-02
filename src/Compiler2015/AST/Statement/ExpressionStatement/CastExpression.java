@@ -19,6 +19,7 @@ public class CastExpression extends Expression {
 		this.e = e;
 	}
 
+	// TODO: I don't think it is completely right
 	public static Expression getExpression(Type t, Expression c) {
 		if (t instanceof VoidType)
 			throw new CompilationError("Cannot cast to void");

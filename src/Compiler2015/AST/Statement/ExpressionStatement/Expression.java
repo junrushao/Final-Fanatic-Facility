@@ -7,6 +7,7 @@ import Compiler2015.Utility.Utility;
 public abstract class Expression extends Statement {
 	public Type type = null;
 	public boolean isLValue = false;
+	public int tempRegister = -1;
 
 	public static Integer toInt(Expression x) {
 		if (x instanceof IntConstant)

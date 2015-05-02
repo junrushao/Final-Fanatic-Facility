@@ -27,6 +27,7 @@ public final class StructBuilder {
 
 	public static Type exit() {
 		StructOrUnionType top = stack.pop();
+		top.calcMemberDelta();
 		for (Type t : top.types)
 			if (t instanceof FunctionType)
 				throw new CompilationError("Function definition should not be inside structure.");

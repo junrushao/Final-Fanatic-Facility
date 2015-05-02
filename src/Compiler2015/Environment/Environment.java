@@ -18,6 +18,7 @@ public class Environment {
 	public static Stack<Type> functionReturnStack;
 
 	public static ArrayList<SymbolTableEntry> classTable;
+	public static int totalTempRegisters;
 
 	public static Statement getTopLoop() {
 		if (loopStack.isEmpty())
@@ -43,6 +44,7 @@ public class Environment {
 		loopStack = new Stack<>();
 		functionReturnStack = new Stack<>();
 		classTable = classNames.table;
+		totalTempRegisters = 0;
 
 		symbolNames.defineVariable(
 				".putchar",

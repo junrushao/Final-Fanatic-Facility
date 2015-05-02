@@ -10,7 +10,7 @@ public class CommaExpression extends Expression {
 		this.e1 = e1;
 		this.e2 = e2;
 		this.type = e2.type;
-		this.isLValue = e2.isLValue;
+		this.isLValue = false;
 	}
 
 	public static Expression getExpression(Expression e1, Expression e2) {
