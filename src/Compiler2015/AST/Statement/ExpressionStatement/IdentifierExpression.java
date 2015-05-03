@@ -3,11 +3,7 @@ package Compiler2015.AST.Statement.ExpressionStatement;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.IRStream;
-import Compiler2015.Type.ArrayPointerType;
-import Compiler2015.Type.FunctionType;
 import Compiler2015.Type.Type;
-import Compiler2015.Type.VoidType;
 import Compiler2015.Utility.Tokens;
 
 public class IdentifierExpression extends Expression {
@@ -15,7 +11,7 @@ public class IdentifierExpression extends Expression {
 
 	public IdentifierExpression(int uId, Type type) {
 		this.type = type;
-		this.isLValue = !(type instanceof ArrayPointerType) && !(type instanceof FunctionType) && !(type instanceof VoidType);
+		this.isLValue = true;
 		this.uId = uId;
 	}
 
@@ -36,12 +32,5 @@ public class IdentifierExpression extends Expression {
 	@Override
 	public String toString() {
 		return String.format("#%d", uId);
-	}
-
-	@Override
-	public void emitIR(IRStream stream) {
-		if (this.isLValue) {
-
-		}
 	}
 }

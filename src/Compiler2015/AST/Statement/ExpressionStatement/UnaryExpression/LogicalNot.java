@@ -6,6 +6,7 @@ import Compiler2015.Exception.CompilationError;
 import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.IntType;
 import Compiler2015.Type.StructOrUnionType;
+import Compiler2015.Type.VoidType;
 
 /**
  * !e
@@ -22,7 +23,7 @@ public class LogicalNot extends UnaryExpression {
 	}
 
 	public static Expression getExpression(Expression e) {
-		if (e.type instanceof StructOrUnionType)
+		if (e.type instanceof VoidType || e.type instanceof StructOrUnionType)
 			throw new CompilationError("Incompatible type.");
 		if (e.type instanceof ArrayPointerType)
 			return new IntConstant(0);

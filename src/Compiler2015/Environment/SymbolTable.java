@@ -25,6 +25,9 @@ import java.util.stream.Collectors;
  * For struct / union
  *     ref = definition
  *     info = status
+ * For string constant
+ *     ref = string
+ *     info = null
  *
  * The operations in symbol table could be considered to has two main steps:
  *     + declaration
@@ -318,5 +321,14 @@ public class SymbolTable {
 		return sb.toString();
 	}
 
-
+	/**
+	 * @param c the string constant
+	 * @return uId of the string
+	 */
+	public int defineStringConstant(String c) {
+		int uId = ++lastUId;
+		table.add(new SymbolTableEntry(uId, c, 1, Tokens.STRING_CONSTANT, c, null));
+//		scopes.get(1).add(uId);
+		return uId;
+	}
 }

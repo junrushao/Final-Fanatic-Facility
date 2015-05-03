@@ -3,11 +3,7 @@ package Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
-import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.Arithmetic.AddRegImm;
-import Compiler2015.IR.Arithmetic.AddRegReg;
-import Compiler2015.IR.IRStream;
 import Compiler2015.Type.*;
 
 /**
@@ -130,34 +126,8 @@ public class Add extends BinaryExpression {
 		}
 		throw new CompilationError("Internal Error.");
 	}
-
 	@Override
 	public String getOperator() {
 		return "+";
 	}
-
-	@Override
-	public void emitIR(IRStream stream) {
-		tempRegister = ++Environment.totalTempRegisters;
-		left.emitIR(stream);
-		left.eliminateLValue(stream);
-		right.emitIR(stream);
-		right.eliminateLValue(stream);
-		if (left instanceof IntConstant) {
-			if (right instanceof IntConstant) // imm + imm
-				throw new CompilationError("Internal Error.");
-			else { // imm + reg
-				stream.pool.add(new AddRegImm(right.tempRegister, ((IntConstant) left).c, tempRegister));
-			}
-		}
-		else  {
-			if (right instanceof IntConstant) { // reg + imm
-				stream.pool.add(new AddRegImm(left.tempRegister, ((IntConstant) right).c, tempRegister));
-			}
-			else { // reg + reg
-				stream.pool.add(new AddRegReg(left.tempRegister, right.tempRegister, tempRegister));
-			}
-		}
-	}
-
 }

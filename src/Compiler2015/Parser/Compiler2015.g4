@@ -43,7 +43,7 @@ declaration
 	;
 
 functionDefinition
-locals [ Type type, String name, Statement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1, Stack<Statement> loopStack = null]
+locals [ Type type, String name, CompoundStatement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1, Stack<Statement> loopStack = null]
 @init {
 	$parameterTypes = new ArrayList<Type>();
 	$parameterNames = new ArrayList<String>();
@@ -85,6 +85,7 @@ locals [ Type type, String name, Statement s = null, ArrayList<Type> parameterTy
 		compoundStatement[$parameterTypes, $parameterNames]
 		{
 			$s = $compoundStatement.ret;
+			$s.youAreAFrame(Environment.symbolNames.currentScope);
 			Environment.symbolNames.defineVariable($uId, $type, $s);
 			Environment.functionReturnStack.pop();
 		}
@@ -667,10 +668,15 @@ locals [ ArrayList<String> s ]
 	;
 
 lambdaExpression returns [Expression ret]
-locals [ Type type = null, Statement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1]
+locals [ Type type = null, Statement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1, Stack<Statement> loopStack = null]
 @init {
 	$parameterTypes = new ArrayList<Type>();
 	$parameterNames = new ArrayList<String>();
+	$loopStack = Environment.loopStack;
+	Environment.loopStack = new Stack<Statement>();
+}
+@after {
+	Environment.loopStack = $loopStack;
 }
 	:
 	'[' ']'

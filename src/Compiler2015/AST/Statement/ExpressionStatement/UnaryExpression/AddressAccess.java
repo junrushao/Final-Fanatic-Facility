@@ -1,10 +1,8 @@
 package Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression;
 
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
-import Compiler2015.Type.ArrayPointerType;
-import Compiler2015.Type.FunctionType;
-import Compiler2015.Type.Pointer;
-import Compiler2015.Type.VoidType;
+import Compiler2015.Exception.CompilationError;
+import Compiler2015.Type.*;
 
 /**
  * *e
@@ -21,6 +19,18 @@ public class AddressAccess extends UnaryExpression {
 	}
 
 	public static Expression getExpression(Expression e) {
+		if (e.type instanceof VoidType) {
+			throw new CompilationError("Type Error");
+		}
+		if (e.type instanceof IntType) {
+			throw new CompilationError("Type Error");
+		}
+		if (e.type instanceof CharType) {
+			throw new CompilationError("Type Error");
+		}
+		if (e.type instanceof StructOrUnionType) {
+			throw new CompilationError("Type Error");
+		}
 		return new AddressAccess(e);
 	}
 }

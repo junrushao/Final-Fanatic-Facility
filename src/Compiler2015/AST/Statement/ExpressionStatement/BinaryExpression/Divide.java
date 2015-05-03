@@ -3,10 +3,7 @@ package Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
-import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.Arithmetic.DivideReg;
-import Compiler2015.IR.IRStream;
 import Compiler2015.Type.IntType;
 import Compiler2015.Type.Type;
 
@@ -38,17 +35,4 @@ public class Divide extends BinaryExpression {
 			a2 = new CastExpression(new IntType(), a2);
 		return new Divide(a1, a2);
 	}
-
-	@Override
-	public void emitIR(IRStream stream) {
-		left.emitIR(stream);
-		left.eliminateLValue(stream);
-		left.loadImm(stream);
-		right.emitIR(stream);
-		right.eliminateLValue(stream);
-		right.loadImm(stream);
-		tempRegister = ++Environment.totalTempRegisters;
-		stream.pool.add(new DivideReg(left.tempRegister, right.tempRegister, tempRegister));
-	}
-
 }

@@ -34,4 +34,5 @@ public class PointerMemberAccess extends Expression {
 	public String toString() {
 		return String.format("(->%s %s)", memberName, su.toString());
 	}
+
 }

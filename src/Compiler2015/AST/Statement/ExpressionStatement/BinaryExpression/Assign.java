@@ -2,12 +2,7 @@ package Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression;
 
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
-import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.Arithmetic.AddRegImm;
-import Compiler2015.IR.IRStream;
-import Compiler2015.IR.Load;
-import Compiler2015.IR.Store;
 import Compiler2015.Type.IntType;
 import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.VoidType;
@@ -66,31 +61,4 @@ public class Assign extends BinaryExpression {
 		throw new CompilationError("Internal Error");
 	}
 
-	@Override
-	public void emitIR(IRStream stream) {
-		left.emitIR(stream);
-		right.emitIR(stream);
-		if (left.type instanceof StructOrUnionType) {
-			if (!left.type.equals(right.type))
-				throw new CompilationError("Internal Error.");
-			int size = left.type.sizeof();
-			int t0 = this.tempRegister = ++Environment.totalTempRegisters;
-			for (int i = 4; i < size; i += 4) {
-				int t1 = ++Environment.totalTempRegisters;
-				int t2 = ++Environment.totalTempRegisters;
-				stream.pool.add(new AddRegImm(left.tempRegister, i, t1));
-				stream.pool.add(new AddRegImm(right.tempRegister, i, t2));
-				stream.pool.add(new Load(t2, t0));
-				stream.pool.add(new Store(t0, t1));
-			}
-			stream.pool.add(new Load(right.tempRegister, t0));
-			stream.pool.add(new Store(t0, left.tempRegister));
-		}
-		else {
-			right.loadImm(stream);
-			right.eliminateLValue(stream);
-			stream.pool.add(new Store(right.tempRegister, left.tempRegister));
-			this.tempRegister = right.tempRegister;
-		}
-	}
 }

@@ -1,9 +1,6 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
-import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.Call;
-import Compiler2015.IR.IRStream;
 import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.FunctionPointerType;
 import Compiler2015.Type.FunctionType;
@@ -75,28 +72,5 @@ public class FunctionCall extends Expression {
 				function.toString(),
 				argumentExpressionList == null ? "null" : Utility.toString(Arrays.asList(argumentExpressionList)),
 				vaList == null ? "null" : Utility.toString(Arrays.asList(vaList)));
-	}
-
-	@Override
-	public void emitIR(IRStream stream) {
-		function.emitIR(stream);
-		function.eliminateLValue(stream);
-		function.loadImm(stream);
-		int parameters[] = new int[argumentExpressionList.length + vaList.length];
-		int cnt = 0;
-		for (Expression e : argumentExpressionList) {
-			e.emitIR(stream);
-			e.eliminateLValue(stream);
-			e.loadImm(stream);
-			parameters[cnt++] = e.tempRegister;
-		}
-		for (Expression e : vaList) {
-			e.emitIR(stream);
-			e.eliminateLValue(stream);
-			e.loadImm(stream);
-			parameters[cnt++] = e.tempRegister;
-		}
-		this.tempRegister = ++Environment.totalTempRegisters;
-		stream.pool.add(new Call(function.tempRegister, parameters, tempRegister));
 	}
 }

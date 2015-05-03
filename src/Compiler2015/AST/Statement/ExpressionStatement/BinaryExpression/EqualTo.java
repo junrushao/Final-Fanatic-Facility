@@ -3,9 +3,6 @@ package Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
-import Compiler2015.Environment.Environment;
-import Compiler2015.IR.Arithmetic.SetEqualTo;
-import Compiler2015.IR.IRStream;
 import Compiler2015.Type.IntType;
 
 /**
@@ -36,15 +33,4 @@ public class EqualTo extends BinaryExpression {
 		return new EqualTo(a1, a2);
 	}
 
-	@Override
-	public void emitIR(IRStream stream) {
-		left.emitIR(stream);
-		left.eliminateLValue(stream);
-		left.loadImm(stream);
-		right.emitIR(stream);
-		right.eliminateLValue(stream);
-		right.loadImm(stream);
-		tempRegister = ++Environment.totalTempRegisters;
-		stream.pool.add(new SetEqualTo(left.tempRegister, right.tempRegister, tempRegister));
-	}
 }

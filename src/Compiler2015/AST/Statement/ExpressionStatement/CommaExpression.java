@@ -1,7 +1,5 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
-import Compiler2015.IR.IRStream;
-
 /**
  * a, b, c
  */
@@ -26,14 +24,5 @@ public class CommaExpression extends Expression {
 	@Override
 	public String toString() {
 		return String.format("(, %s %s)", e1, e2);
-	}
-
-	@Override
-	public void emitIR(IRStream stream) {
-		e1.emitIR(stream);
-		e2.emitIR(stream);
-		e2.eliminateLValue(stream);
-		e2.loadImm(stream);
-		this.tempRegister = e2.tempRegister;
 	}
 }

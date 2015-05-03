@@ -55,16 +55,10 @@ public class Initializers extends ASTNode {
 			}
 			if (pos.single != null) { // leaf node
 				Expression e = pos.single;
-//				if (e instanceof StringConstant && n + 1 == dimensions.size()) {
-
-//					return;
-//				}
-//				else {
 				if (!CastExpression.castable(e.type, t))
 					throw new CompilationError("Type not convertable.");
 				entries.add(new InitEntry(now, e));
 				return;
-//				}
 			}
 			if (n == dimensions.size()) { // depth limit reached
 				Expression e = pos.toArrayList().get(0);

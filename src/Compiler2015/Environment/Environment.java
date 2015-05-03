@@ -8,6 +8,7 @@ import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Stack;
 
 public class Environment {
@@ -16,9 +17,11 @@ public class Environment {
 
 	public static Stack<Statement> loopStack;
 	public static Stack<Type> functionReturnStack;
+	public static Stack<Integer> definedVariableInCurrentFrame;
 
 	public static ArrayList<SymbolTableEntry> classTable;
 	public static int totalTempRegisters;
+	public static HashMap<Integer, Integer> variableDelta;
 
 	public static Statement getTopLoop() {
 		if (loopStack.isEmpty())
@@ -43,8 +46,10 @@ public class Environment {
 		symbolNames = new SymbolTable();
 		loopStack = new Stack<>();
 		functionReturnStack = new Stack<>();
+		definedVariableInCurrentFrame = new Stack<>();
 		classTable = classNames.table;
 		totalTempRegisters = 0;
+		variableDelta = new HashMap<>();
 
 		symbolNames.defineVariable(
 				".putchar",

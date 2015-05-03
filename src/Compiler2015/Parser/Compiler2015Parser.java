@@ -358,7 +358,7 @@ public class Compiler2015Parser extends Parser {
 	public static class FunctionDefinitionContext extends ParserRuleContext {
 		public Type type;
 		public String name;
-		public Statement s =  null;
+		public CompoundStatement s =  null;
 		public ArrayList<Type> parameterTypes;
 		public ArrayList<String> parameterNames;
 		public boolean hasVaList =  false;
@@ -454,6 +454,7 @@ public class Compiler2015Parser extends Parser {
 			((FunctionDefinitionContext)_localctx).compoundStatement = compoundStatement(_localctx.parameterTypes, _localctx.parameterNames);
 
 						((FunctionDefinitionContext)_localctx).s =  ((FunctionDefinitionContext)_localctx).compoundStatement.ret;
+						_localctx.s.youAreAFrame(Environment.symbolNames.currentScope);
 						Environment.symbolNames.defineVariable(_localctx.uId, _localctx.type, _localctx.s);
 						Environment.functionReturnStack.pop();
 					
@@ -4832,6 +4833,7 @@ public class Compiler2015Parser extends Parser {
 		public ArrayList<String> parameterNames;
 		public boolean hasVaList =  false;
 		public int uId =  -1;
+		public Stack<Statement> loopStack =  null;
 		public ParameterTypeListContext parameterTypeList;
 		public TypeNameContext typeName;
 		public CompoundStatementContext compoundStatement;
@@ -4864,6 +4866,8 @@ public class Compiler2015Parser extends Parser {
 
 			((LambdaExpressionContext)_localctx).parameterTypes =  new ArrayList<Type>();
 			((LambdaExpressionContext)_localctx).parameterNames =  new ArrayList<String>();
+			((LambdaExpressionContext)_localctx).loopStack =  Environment.loopStack;
+			Environment.loopStack = new Stack<Statement>();
 
 		int _la;
 		try {
@@ -4925,6 +4929,9 @@ public class Compiler2015Parser extends Parser {
 						((LambdaExpressionContext)_localctx).ret =  IdentifierExpression.getExpression(_localctx.uId);
 					
 			}
+
+				Environment.loopStack = _localctx.loopStack;
+
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;

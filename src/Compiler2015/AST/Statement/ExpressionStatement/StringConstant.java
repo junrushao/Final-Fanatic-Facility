@@ -1,5 +1,6 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
+import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.CharType;
@@ -8,11 +9,13 @@ import java.util.ArrayList;
 
 public class StringConstant extends Expression {
 	public String c;
+	public int uId;
 
 	public StringConstant(final String c) {
 		if (!c.endsWith("\0"))
 			throw new CompilationError("Internal Error.");
 		this.c = c;
+		this.uId = Environment.symbolNames.defineStringConstant(c);
 		this.isLValue = false;
 		this.type = new ArrayPointerType(
 				new CharType(),
@@ -165,5 +168,4 @@ public class StringConstant extends Expression {
 	public String toString() {
 		return "\"" + toPrintableString(c) + "\"";
 	}
-
 }

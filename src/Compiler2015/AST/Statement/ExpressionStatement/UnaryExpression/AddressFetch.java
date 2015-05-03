@@ -3,6 +3,7 @@ package Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.Type.VariablePointerType;
+import Compiler2015.Type.VoidType;
 
 /**
  * &e
@@ -21,6 +22,8 @@ public class AddressFetch extends UnaryExpression {
 	public static Expression getExpression(Expression e) {
 		if (!e.isLValue)
 			throw new CompilationError("Not LValue.");
+		if (e.type instanceof VoidType)
+			throw new CompilationError("Type Error");
 		return new AddressFetch(e);
 	}
 }

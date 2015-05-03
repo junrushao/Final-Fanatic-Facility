@@ -18,6 +18,19 @@ public class CompoundStatement extends Statement {
 	public CompoundStatement(ArrayList<Integer> variables, ArrayList<Statement> statements) {
 		this.variables = variables;
 		this.statements = statements;
+		Environment.definedVariableInCurrentFrame.addAll(variables);
+	}
+
+	public void youAreAFrame(int currentScope) {
+		int last = 0;
+		while (!Environment.definedVariableInCurrentFrame.isEmpty()) {
+			int uId = Environment.definedVariableInCurrentFrame.peek();
+			SymbolTableEntry e = Environment.symbolNames.table.get(uId);
+			if (e.scope < currentScope)
+				break;
+			Environment.variableDelta.put(uId, last);
+			last += ((Type) e.ref).sizeof();
+		}
 	}
 
 	@Override
