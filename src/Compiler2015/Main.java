@@ -25,7 +25,7 @@ public class Main {
 				inputFile = System.in;
 			}
 			Panel.prettyPrinterType = null;
-			Panel.emitAST = true;
+			Panel.emitAST = false;
 			return;
 		}
 		for (String s : args) {

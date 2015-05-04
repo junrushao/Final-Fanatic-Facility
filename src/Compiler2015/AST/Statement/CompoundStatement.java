@@ -28,6 +28,9 @@ public class CompoundStatement extends Statement {
 			SymbolTableEntry e = Environment.symbolNames.table.get(uId);
 			if (e.scope < currentScope)
 				break;
+			Environment.definedVariableInCurrentFrame.pop();
+			if (e.ref instanceof FunctionType)
+				continue;
 			Environment.variableDelta.put(uId, last);
 			last += ((Type) e.ref).sizeof();
 		}

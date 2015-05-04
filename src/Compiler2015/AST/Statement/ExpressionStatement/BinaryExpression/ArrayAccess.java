@@ -28,7 +28,7 @@ public class ArrayAccess extends BinaryExpression {
 		if (a1.type instanceof VariablePointerType)
 			return new ArrayAccess(a1, a2, ((VariablePointerType) a1.type).pointTo, true);
 		if (a1.type instanceof ArrayPointerType)
-			return new ArrayAccess(a1, a2, ((ArrayPointerType) a1.type).lower(), ((ArrayPointerType) a1.type).dimensions.size() == 1);
+			return new ArrayAccess(a1, a2, ((ArrayPointerType) a1.type).lower(), true);
 		throw new CompilationError("Incompatible type.");
 	}
 

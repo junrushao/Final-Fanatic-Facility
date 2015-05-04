@@ -1,4 +1,4 @@
-// Generated from /home/junrushao/IdeaProjects/compiler2015/src/Compiler2015/Parser/Compiler2015.g4 by ANTLR 4.5
+// Generated from Compiler2015.g4 by ANTLR 4.5
 package Compiler2015.Parser;
 
 import Compiler2015.AST.*;
@@ -34,912 +34,912 @@ public class Compiler2015BaseListener implements Compiler2015Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCompilationUnit(@NotNull Compiler2015Parser.CompilationUnitContext ctx) { }
+	@Override public void enterCompilationUnit(Compiler2015Parser.CompilationUnitContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCompilationUnit(@NotNull Compiler2015Parser.CompilationUnitContext ctx) { }
+	@Override public void exitCompilationUnit(Compiler2015Parser.CompilationUnitContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaration1(@NotNull Compiler2015Parser.Declaration1Context ctx) { }
+	@Override public void enterDeclaration1(Compiler2015Parser.Declaration1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaration1(@NotNull Compiler2015Parser.Declaration1Context ctx) { }
+	@Override public void exitDeclaration1(Compiler2015Parser.Declaration1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaration2(@NotNull Compiler2015Parser.Declaration2Context ctx) { }
+	@Override public void enterDeclaration2(Compiler2015Parser.Declaration2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaration2(@NotNull Compiler2015Parser.Declaration2Context ctx) { }
+	@Override public void exitDeclaration2(Compiler2015Parser.Declaration2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunctionDefinition(@NotNull Compiler2015Parser.FunctionDefinitionContext ctx) { }
+	@Override public void enterFunctionDefinition(Compiler2015Parser.FunctionDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFunctionDefinition(@NotNull Compiler2015Parser.FunctionDefinitionContext ctx) { }
+	@Override public void exitFunctionDefinition(Compiler2015Parser.FunctionDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInitDeclaratorList(@NotNull Compiler2015Parser.InitDeclaratorListContext ctx) { }
+	@Override public void enterInitDeclaratorList(Compiler2015Parser.InitDeclaratorListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitInitDeclaratorList(@NotNull Compiler2015Parser.InitDeclaratorListContext ctx) { }
+	@Override public void exitInitDeclaratorList(Compiler2015Parser.InitDeclaratorListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInitDeclarator(@NotNull Compiler2015Parser.InitDeclaratorContext ctx) { }
+	@Override public void enterInitDeclarator(Compiler2015Parser.InitDeclaratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitInitDeclarator(@NotNull Compiler2015Parser.InitDeclaratorContext ctx) { }
+	@Override public void exitInitDeclarator(Compiler2015Parser.InitDeclaratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypeSpecifier(@NotNull Compiler2015Parser.TypeSpecifierContext ctx) { }
+	@Override public void enterTypeSpecifier(Compiler2015Parser.TypeSpecifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTypeSpecifier(@NotNull Compiler2015Parser.TypeSpecifierContext ctx) { }
+	@Override public void exitTypeSpecifier(Compiler2015Parser.TypeSpecifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStructOrUnionSpecifier1(@NotNull Compiler2015Parser.StructOrUnionSpecifier1Context ctx) { }
+	@Override public void enterStructOrUnionSpecifier1(Compiler2015Parser.StructOrUnionSpecifier1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStructOrUnionSpecifier1(@NotNull Compiler2015Parser.StructOrUnionSpecifier1Context ctx) { }
+	@Override public void exitStructOrUnionSpecifier1(Compiler2015Parser.StructOrUnionSpecifier1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStructOrUnionSpecifier2(@NotNull Compiler2015Parser.StructOrUnionSpecifier2Context ctx) { }
+	@Override public void enterStructOrUnionSpecifier2(Compiler2015Parser.StructOrUnionSpecifier2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStructOrUnionSpecifier2(@NotNull Compiler2015Parser.StructOrUnionSpecifier2Context ctx) { }
+	@Override public void exitStructOrUnionSpecifier2(Compiler2015Parser.StructOrUnionSpecifier2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStructOrUnion(@NotNull Compiler2015Parser.StructOrUnionContext ctx) { }
+	@Override public void enterStructOrUnion(Compiler2015Parser.StructOrUnionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStructOrUnion(@NotNull Compiler2015Parser.StructOrUnionContext ctx) { }
+	@Override public void exitStructOrUnion(Compiler2015Parser.StructOrUnionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStructDeclaration(@NotNull Compiler2015Parser.StructDeclarationContext ctx) { }
+	@Override public void enterStructDeclaration(Compiler2015Parser.StructDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStructDeclaration(@NotNull Compiler2015Parser.StructDeclarationContext ctx) { }
+	@Override public void exitStructDeclaration(Compiler2015Parser.StructDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclarator(@NotNull Compiler2015Parser.DeclaratorContext ctx) { }
+	@Override public void enterDeclarator(Compiler2015Parser.DeclaratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclarator(@NotNull Compiler2015Parser.DeclaratorContext ctx) { }
+	@Override public void exitDeclarator(Compiler2015Parser.DeclaratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPlainDeclarator(@NotNull Compiler2015Parser.PlainDeclaratorContext ctx) { }
+	@Override public void enterPlainDeclarator(Compiler2015Parser.PlainDeclaratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPlainDeclarator(@NotNull Compiler2015Parser.PlainDeclaratorContext ctx) { }
+	@Override public void exitPlainDeclarator(Compiler2015Parser.PlainDeclaratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaratorList(@NotNull Compiler2015Parser.DeclaratorListContext ctx) { }
+	@Override public void enterDeclaratorList(Compiler2015Parser.DeclaratorListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaratorList(@NotNull Compiler2015Parser.DeclaratorListContext ctx) { }
+	@Override public void exitDeclaratorList(Compiler2015Parser.DeclaratorListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDirectDeclarator(@NotNull Compiler2015Parser.DirectDeclaratorContext ctx) { }
+	@Override public void enterDirectDeclarator(Compiler2015Parser.DirectDeclaratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDirectDeclarator(@NotNull Compiler2015Parser.DirectDeclaratorContext ctx) { }
+	@Override public void exitDirectDeclarator(Compiler2015Parser.DirectDeclaratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParameterTypeList(@NotNull Compiler2015Parser.ParameterTypeListContext ctx) { }
+	@Override public void enterParameterTypeList(Compiler2015Parser.ParameterTypeListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParameterTypeList(@NotNull Compiler2015Parser.ParameterTypeListContext ctx) { }
+	@Override public void exitParameterTypeList(Compiler2015Parser.ParameterTypeListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParameterList(@NotNull Compiler2015Parser.ParameterListContext ctx) { }
+	@Override public void enterParameterList(Compiler2015Parser.ParameterListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParameterList(@NotNull Compiler2015Parser.ParameterListContext ctx) { }
+	@Override public void exitParameterList(Compiler2015Parser.ParameterListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParameterDeclaration1(@NotNull Compiler2015Parser.ParameterDeclaration1Context ctx) { }
+	@Override public void enterParameterDeclaration1(Compiler2015Parser.ParameterDeclaration1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParameterDeclaration1(@NotNull Compiler2015Parser.ParameterDeclaration1Context ctx) { }
+	@Override public void exitParameterDeclaration1(Compiler2015Parser.ParameterDeclaration1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParameterDeclaration2(@NotNull Compiler2015Parser.ParameterDeclaration2Context ctx) { }
+	@Override public void enterParameterDeclaration2(Compiler2015Parser.ParameterDeclaration2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParameterDeclaration2(@NotNull Compiler2015Parser.ParameterDeclaration2Context ctx) { }
+	@Override public void exitParameterDeclaration2(Compiler2015Parser.ParameterDeclaration2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParameterDeclaration3(@NotNull Compiler2015Parser.ParameterDeclaration3Context ctx) { }
+	@Override public void enterParameterDeclaration3(Compiler2015Parser.ParameterDeclaration3Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParameterDeclaration3(@NotNull Compiler2015Parser.ParameterDeclaration3Context ctx) { }
+	@Override public void exitParameterDeclaration3(Compiler2015Parser.ParameterDeclaration3Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAbstractDeclarator(@NotNull Compiler2015Parser.AbstractDeclaratorContext ctx) { }
+	@Override public void enterAbstractDeclarator(Compiler2015Parser.AbstractDeclaratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAbstractDeclarator(@NotNull Compiler2015Parser.AbstractDeclaratorContext ctx) { }
+	@Override public void exitAbstractDeclarator(Compiler2015Parser.AbstractDeclaratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDirectAbstractDeclarator(@NotNull Compiler2015Parser.DirectAbstractDeclaratorContext ctx) { }
+	@Override public void enterDirectAbstractDeclarator(Compiler2015Parser.DirectAbstractDeclaratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDirectAbstractDeclarator(@NotNull Compiler2015Parser.DirectAbstractDeclaratorContext ctx) { }
+	@Override public void exitDirectAbstractDeclarator(Compiler2015Parser.DirectAbstractDeclaratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypedefName(@NotNull Compiler2015Parser.TypedefNameContext ctx) { }
+	@Override public void enterTypedefName(Compiler2015Parser.TypedefNameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTypedefName(@NotNull Compiler2015Parser.TypedefNameContext ctx) { }
+	@Override public void exitTypedefName(Compiler2015Parser.TypedefNameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInitializer1(@NotNull Compiler2015Parser.Initializer1Context ctx) { }
+	@Override public void enterInitializer1(Compiler2015Parser.Initializer1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitInitializer1(@NotNull Compiler2015Parser.Initializer1Context ctx) { }
+	@Override public void exitInitializer1(Compiler2015Parser.Initializer1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInitializer2(@NotNull Compiler2015Parser.Initializer2Context ctx) { }
+	@Override public void enterInitializer2(Compiler2015Parser.Initializer2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitInitializer2(@NotNull Compiler2015Parser.Initializer2Context ctx) { }
+	@Override public void exitInitializer2(Compiler2015Parser.Initializer2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatement(@NotNull Compiler2015Parser.StatementContext ctx) { }
+	@Override public void enterStatement(Compiler2015Parser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStatement(@NotNull Compiler2015Parser.StatementContext ctx) { }
+	@Override public void exitStatement(Compiler2015Parser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpressionStatement(@NotNull Compiler2015Parser.ExpressionStatementContext ctx) { }
+	@Override public void enterExpressionStatement(Compiler2015Parser.ExpressionStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpressionStatement(@NotNull Compiler2015Parser.ExpressionStatementContext ctx) { }
+	@Override public void exitExpressionStatement(Compiler2015Parser.ExpressionStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCompoundStatement(@NotNull Compiler2015Parser.CompoundStatementContext ctx) { }
+	@Override public void enterCompoundStatement(Compiler2015Parser.CompoundStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCompoundStatement(@NotNull Compiler2015Parser.CompoundStatementContext ctx) { }
+	@Override public void exitCompoundStatement(Compiler2015Parser.CompoundStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSelectionStatement(@NotNull Compiler2015Parser.SelectionStatementContext ctx) { }
+	@Override public void enterSelectionStatement(Compiler2015Parser.SelectionStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSelectionStatement(@NotNull Compiler2015Parser.SelectionStatementContext ctx) { }
+	@Override public void exitSelectionStatement(Compiler2015Parser.SelectionStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIterationStatement1(@NotNull Compiler2015Parser.IterationStatement1Context ctx) { }
+	@Override public void enterIterationStatement1(Compiler2015Parser.IterationStatement1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIterationStatement1(@NotNull Compiler2015Parser.IterationStatement1Context ctx) { }
+	@Override public void exitIterationStatement1(Compiler2015Parser.IterationStatement1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIterationStatement2(@NotNull Compiler2015Parser.IterationStatement2Context ctx) { }
+	@Override public void enterIterationStatement2(Compiler2015Parser.IterationStatement2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIterationStatement2(@NotNull Compiler2015Parser.IterationStatement2Context ctx) { }
+	@Override public void exitIterationStatement2(Compiler2015Parser.IterationStatement2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJumpStatement1(@NotNull Compiler2015Parser.JumpStatement1Context ctx) { }
+	@Override public void enterJumpStatement1(Compiler2015Parser.JumpStatement1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJumpStatement1(@NotNull Compiler2015Parser.JumpStatement1Context ctx) { }
+	@Override public void exitJumpStatement1(Compiler2015Parser.JumpStatement1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJumpStatement2(@NotNull Compiler2015Parser.JumpStatement2Context ctx) { }
+	@Override public void enterJumpStatement2(Compiler2015Parser.JumpStatement2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJumpStatement2(@NotNull Compiler2015Parser.JumpStatement2Context ctx) { }
+	@Override public void exitJumpStatement2(Compiler2015Parser.JumpStatement2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJumpStatement3(@NotNull Compiler2015Parser.JumpStatement3Context ctx) { }
+	@Override public void enterJumpStatement3(Compiler2015Parser.JumpStatement3Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJumpStatement3(@NotNull Compiler2015Parser.JumpStatement3Context ctx) { }
+	@Override public void exitJumpStatement3(Compiler2015Parser.JumpStatement3Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpression(@NotNull Compiler2015Parser.ExpressionContext ctx) { }
+	@Override public void enterExpression(Compiler2015Parser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpression(@NotNull Compiler2015Parser.ExpressionContext ctx) { }
+	@Override public void exitExpression(Compiler2015Parser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssignmentExpression1(@NotNull Compiler2015Parser.AssignmentExpression1Context ctx) { }
+	@Override public void enterAssignmentExpression1(Compiler2015Parser.AssignmentExpression1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssignmentExpression1(@NotNull Compiler2015Parser.AssignmentExpression1Context ctx) { }
+	@Override public void exitAssignmentExpression1(Compiler2015Parser.AssignmentExpression1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssignmentExpression2(@NotNull Compiler2015Parser.AssignmentExpression2Context ctx) { }
+	@Override public void enterAssignmentExpression2(Compiler2015Parser.AssignmentExpression2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssignmentExpression2(@NotNull Compiler2015Parser.AssignmentExpression2Context ctx) { }
+	@Override public void exitAssignmentExpression2(Compiler2015Parser.AssignmentExpression2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssignmentOperator(@NotNull Compiler2015Parser.AssignmentOperatorContext ctx) { }
+	@Override public void enterAssignmentOperator(Compiler2015Parser.AssignmentOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssignmentOperator(@NotNull Compiler2015Parser.AssignmentOperatorContext ctx) { }
+	@Override public void exitAssignmentOperator(Compiler2015Parser.AssignmentOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConstantExpression(@NotNull Compiler2015Parser.ConstantExpressionContext ctx) { }
+	@Override public void enterConstantExpression(Compiler2015Parser.ConstantExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConstantExpression(@NotNull Compiler2015Parser.ConstantExpressionContext ctx) { }
+	@Override public void exitConstantExpression(Compiler2015Parser.ConstantExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLogicalOrExpression(@NotNull Compiler2015Parser.LogicalOrExpressionContext ctx) { }
+	@Override public void enterLogicalOrExpression(Compiler2015Parser.LogicalOrExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLogicalOrExpression(@NotNull Compiler2015Parser.LogicalOrExpressionContext ctx) { }
+	@Override public void exitLogicalOrExpression(Compiler2015Parser.LogicalOrExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLogicalAndExpression(@NotNull Compiler2015Parser.LogicalAndExpressionContext ctx) { }
+	@Override public void enterLogicalAndExpression(Compiler2015Parser.LogicalAndExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLogicalAndExpression(@NotNull Compiler2015Parser.LogicalAndExpressionContext ctx) { }
+	@Override public void exitLogicalAndExpression(Compiler2015Parser.LogicalAndExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInclusiveOrExpression(@NotNull Compiler2015Parser.InclusiveOrExpressionContext ctx) { }
+	@Override public void enterInclusiveOrExpression(Compiler2015Parser.InclusiveOrExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitInclusiveOrExpression(@NotNull Compiler2015Parser.InclusiveOrExpressionContext ctx) { }
+	@Override public void exitInclusiveOrExpression(Compiler2015Parser.InclusiveOrExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExclusiveOrExpression(@NotNull Compiler2015Parser.ExclusiveOrExpressionContext ctx) { }
+	@Override public void enterExclusiveOrExpression(Compiler2015Parser.ExclusiveOrExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExclusiveOrExpression(@NotNull Compiler2015Parser.ExclusiveOrExpressionContext ctx) { }
+	@Override public void exitExclusiveOrExpression(Compiler2015Parser.ExclusiveOrExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAndExpression(@NotNull Compiler2015Parser.AndExpressionContext ctx) { }
+	@Override public void enterAndExpression(Compiler2015Parser.AndExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAndExpression(@NotNull Compiler2015Parser.AndExpressionContext ctx) { }
+	@Override public void exitAndExpression(Compiler2015Parser.AndExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEqualityExpression(@NotNull Compiler2015Parser.EqualityExpressionContext ctx) { }
+	@Override public void enterEqualityExpression(Compiler2015Parser.EqualityExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEqualityExpression(@NotNull Compiler2015Parser.EqualityExpressionContext ctx) { }
+	@Override public void exitEqualityExpression(Compiler2015Parser.EqualityExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEqualityOperator(@NotNull Compiler2015Parser.EqualityOperatorContext ctx) { }
+	@Override public void enterEqualityOperator(Compiler2015Parser.EqualityOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEqualityOperator(@NotNull Compiler2015Parser.EqualityOperatorContext ctx) { }
+	@Override public void exitEqualityOperator(Compiler2015Parser.EqualityOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRelationalExpression(@NotNull Compiler2015Parser.RelationalExpressionContext ctx) { }
+	@Override public void enterRelationalExpression(Compiler2015Parser.RelationalExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRelationalExpression(@NotNull Compiler2015Parser.RelationalExpressionContext ctx) { }
+	@Override public void exitRelationalExpression(Compiler2015Parser.RelationalExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRelationalOperator(@NotNull Compiler2015Parser.RelationalOperatorContext ctx) { }
+	@Override public void enterRelationalOperator(Compiler2015Parser.RelationalOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRelationalOperator(@NotNull Compiler2015Parser.RelationalOperatorContext ctx) { }
+	@Override public void exitRelationalOperator(Compiler2015Parser.RelationalOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterShiftExpression(@NotNull Compiler2015Parser.ShiftExpressionContext ctx) { }
+	@Override public void enterShiftExpression(Compiler2015Parser.ShiftExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitShiftExpression(@NotNull Compiler2015Parser.ShiftExpressionContext ctx) { }
+	@Override public void exitShiftExpression(Compiler2015Parser.ShiftExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterShiftOperator(@NotNull Compiler2015Parser.ShiftOperatorContext ctx) { }
+	@Override public void enterShiftOperator(Compiler2015Parser.ShiftOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitShiftOperator(@NotNull Compiler2015Parser.ShiftOperatorContext ctx) { }
+	@Override public void exitShiftOperator(Compiler2015Parser.ShiftOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAdditiveExpression(@NotNull Compiler2015Parser.AdditiveExpressionContext ctx) { }
+	@Override public void enterAdditiveExpression(Compiler2015Parser.AdditiveExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAdditiveExpression(@NotNull Compiler2015Parser.AdditiveExpressionContext ctx) { }
+	@Override public void exitAdditiveExpression(Compiler2015Parser.AdditiveExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAdditiveOperator(@NotNull Compiler2015Parser.AdditiveOperatorContext ctx) { }
+	@Override public void enterAdditiveOperator(Compiler2015Parser.AdditiveOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAdditiveOperator(@NotNull Compiler2015Parser.AdditiveOperatorContext ctx) { }
+	@Override public void exitAdditiveOperator(Compiler2015Parser.AdditiveOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMultiplicativeExpression(@NotNull Compiler2015Parser.MultiplicativeExpressionContext ctx) { }
+	@Override public void enterMultiplicativeExpression(Compiler2015Parser.MultiplicativeExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMultiplicativeExpression(@NotNull Compiler2015Parser.MultiplicativeExpressionContext ctx) { }
+	@Override public void exitMultiplicativeExpression(Compiler2015Parser.MultiplicativeExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMultiplicativeOperator(@NotNull Compiler2015Parser.MultiplicativeOperatorContext ctx) { }
+	@Override public void enterMultiplicativeOperator(Compiler2015Parser.MultiplicativeOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMultiplicativeOperator(@NotNull Compiler2015Parser.MultiplicativeOperatorContext ctx) { }
+	@Override public void exitMultiplicativeOperator(Compiler2015Parser.MultiplicativeOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCastExpression1(@NotNull Compiler2015Parser.CastExpression1Context ctx) { }
+	@Override public void enterCastExpression1(Compiler2015Parser.CastExpression1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCastExpression1(@NotNull Compiler2015Parser.CastExpression1Context ctx) { }
+	@Override public void exitCastExpression1(Compiler2015Parser.CastExpression1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCastExpression2(@NotNull Compiler2015Parser.CastExpression2Context ctx) { }
+	@Override public void enterCastExpression2(Compiler2015Parser.CastExpression2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCastExpression2(@NotNull Compiler2015Parser.CastExpression2Context ctx) { }
+	@Override public void exitCastExpression2(Compiler2015Parser.CastExpression2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypeName1(@NotNull Compiler2015Parser.TypeName1Context ctx) { }
+	@Override public void enterTypeName1(Compiler2015Parser.TypeName1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTypeName1(@NotNull Compiler2015Parser.TypeName1Context ctx) { }
+	@Override public void exitTypeName1(Compiler2015Parser.TypeName1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypeName2(@NotNull Compiler2015Parser.TypeName2Context ctx) { }
+	@Override public void enterTypeName2(Compiler2015Parser.TypeName2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTypeName2(@NotNull Compiler2015Parser.TypeName2Context ctx) { }
+	@Override public void exitTypeName2(Compiler2015Parser.TypeName2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnaryExpression1(@NotNull Compiler2015Parser.UnaryExpression1Context ctx) { }
+	@Override public void enterUnaryExpression1(Compiler2015Parser.UnaryExpression1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnaryExpression1(@NotNull Compiler2015Parser.UnaryExpression1Context ctx) { }
+	@Override public void exitUnaryExpression1(Compiler2015Parser.UnaryExpression1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnaryExpression2(@NotNull Compiler2015Parser.UnaryExpression2Context ctx) { }
+	@Override public void enterUnaryExpression2(Compiler2015Parser.UnaryExpression2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnaryExpression2(@NotNull Compiler2015Parser.UnaryExpression2Context ctx) { }
+	@Override public void exitUnaryExpression2(Compiler2015Parser.UnaryExpression2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnaryExpression3(@NotNull Compiler2015Parser.UnaryExpression3Context ctx) { }
+	@Override public void enterUnaryExpression3(Compiler2015Parser.UnaryExpression3Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnaryExpression3(@NotNull Compiler2015Parser.UnaryExpression3Context ctx) { }
+	@Override public void exitUnaryExpression3(Compiler2015Parser.UnaryExpression3Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnaryExpression4(@NotNull Compiler2015Parser.UnaryExpression4Context ctx) { }
+	@Override public void enterUnaryExpression4(Compiler2015Parser.UnaryExpression4Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnaryExpression4(@NotNull Compiler2015Parser.UnaryExpression4Context ctx) { }
+	@Override public void exitUnaryExpression4(Compiler2015Parser.UnaryExpression4Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnaryExpression5(@NotNull Compiler2015Parser.UnaryExpression5Context ctx) { }
+	@Override public void enterUnaryExpression5(Compiler2015Parser.UnaryExpression5Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnaryExpression5(@NotNull Compiler2015Parser.UnaryExpression5Context ctx) { }
+	@Override public void exitUnaryExpression5(Compiler2015Parser.UnaryExpression5Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnaryExpression6(@NotNull Compiler2015Parser.UnaryExpression6Context ctx) { }
+	@Override public void enterUnaryExpression6(Compiler2015Parser.UnaryExpression6Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnaryExpression6(@NotNull Compiler2015Parser.UnaryExpression6Context ctx) { }
+	@Override public void exitUnaryExpression6(Compiler2015Parser.UnaryExpression6Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnaryOperator(@NotNull Compiler2015Parser.UnaryOperatorContext ctx) { }
+	@Override public void enterUnaryOperator(Compiler2015Parser.UnaryOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnaryOperator(@NotNull Compiler2015Parser.UnaryOperatorContext ctx) { }
+	@Override public void exitUnaryOperator(Compiler2015Parser.UnaryOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPostfixExpression(@NotNull Compiler2015Parser.PostfixExpressionContext ctx) { }
+	@Override public void enterPostfixExpression(Compiler2015Parser.PostfixExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPostfixExpression(@NotNull Compiler2015Parser.PostfixExpressionContext ctx) { }
+	@Override public void exitPostfixExpression(Compiler2015Parser.PostfixExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArguments(@NotNull Compiler2015Parser.ArgumentsContext ctx) { }
+	@Override public void enterArguments(Compiler2015Parser.ArgumentsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArguments(@NotNull Compiler2015Parser.ArgumentsContext ctx) { }
+	@Override public void exitArguments(Compiler2015Parser.ArgumentsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrimaryExpression1(@NotNull Compiler2015Parser.PrimaryExpression1Context ctx) { }
+	@Override public void enterPrimaryExpression1(Compiler2015Parser.PrimaryExpression1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrimaryExpression1(@NotNull Compiler2015Parser.PrimaryExpression1Context ctx) { }
+	@Override public void exitPrimaryExpression1(Compiler2015Parser.PrimaryExpression1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrimaryExpression2(@NotNull Compiler2015Parser.PrimaryExpression2Context ctx) { }
+	@Override public void enterPrimaryExpression2(Compiler2015Parser.PrimaryExpression2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrimaryExpression2(@NotNull Compiler2015Parser.PrimaryExpression2Context ctx) { }
+	@Override public void exitPrimaryExpression2(Compiler2015Parser.PrimaryExpression2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrimaryExpression3(@NotNull Compiler2015Parser.PrimaryExpression3Context ctx) { }
+	@Override public void enterPrimaryExpression3(Compiler2015Parser.PrimaryExpression3Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrimaryExpression3(@NotNull Compiler2015Parser.PrimaryExpression3Context ctx) { }
+	@Override public void exitPrimaryExpression3(Compiler2015Parser.PrimaryExpression3Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrimaryExpression4(@NotNull Compiler2015Parser.PrimaryExpression4Context ctx) { }
+	@Override public void enterPrimaryExpression4(Compiler2015Parser.PrimaryExpression4Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrimaryExpression4(@NotNull Compiler2015Parser.PrimaryExpression4Context ctx) { }
+	@Override public void exitPrimaryExpression4(Compiler2015Parser.PrimaryExpression4Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrimaryExpression5(@NotNull Compiler2015Parser.PrimaryExpression5Context ctx) { }
+	@Override public void enterPrimaryExpression5(Compiler2015Parser.PrimaryExpression5Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrimaryExpression5(@NotNull Compiler2015Parser.PrimaryExpression5Context ctx) { }
+	@Override public void exitPrimaryExpression5(Compiler2015Parser.PrimaryExpression5Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLambdaExpression(@NotNull Compiler2015Parser.LambdaExpressionContext ctx) { }
+	@Override public void enterLambdaExpression(Compiler2015Parser.LambdaExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLambdaExpression(@NotNull Compiler2015Parser.LambdaExpressionContext ctx) { }
+	@Override public void exitLambdaExpression(Compiler2015Parser.LambdaExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConstant(@NotNull Compiler2015Parser.ConstantContext ctx) { }
+	@Override public void enterConstant(Compiler2015Parser.ConstantContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConstant(@NotNull Compiler2015Parser.ConstantContext ctx) { }
+	@Override public void exitConstant(Compiler2015Parser.ConstantContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEveryRule(@NotNull ParserRuleContext ctx) { }
+	@Override public void enterEveryRule(ParserRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEveryRule(@NotNull ParserRuleContext ctx) { }
+	@Override public void exitEveryRule(ParserRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void visitTerminal(@NotNull TerminalNode node) { }
+	@Override public void visitTerminal(TerminalNode node) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void visitErrorNode(@NotNull ErrorNode node) { }
+	@Override public void visitErrorNode(ErrorNode node) { }
 }

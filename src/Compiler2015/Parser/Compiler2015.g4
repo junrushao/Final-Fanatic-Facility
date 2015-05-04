@@ -85,7 +85,7 @@ locals [ Type type, String name, CompoundStatement s = null, ArrayList<Type> par
 		compoundStatement[$parameterTypes, $parameterNames]
 		{
 			$s = $compoundStatement.ret;
-			$s.youAreAFrame(Environment.symbolNames.currentScope);
+			$s.youAreAFrame(Environment.symbolNames.currentScope + 1);
 			Environment.symbolNames.defineVariable($uId, $type, $s);
 			Environment.functionReturnStack.pop();
 		}
@@ -668,7 +668,7 @@ locals [ ArrayList<String> s ]
 	;
 
 lambdaExpression returns [Expression ret]
-locals [ Type type = null, Statement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1, Stack<Statement> loopStack = null]
+locals [ Type type = null, CompoundStatement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1, Stack<Statement> loopStack = null]
 @init {
 	$parameterTypes = new ArrayList<Type>();
 	$parameterNames = new ArrayList<String>();
@@ -707,6 +707,7 @@ locals [ Type type = null, Statement s = null, ArrayList<Type> parameterTypes, A
 		{
 			$s = $compoundStatement.ret;
 			Environment.symbolNames.defineVariable($uId, $type, $s);
+			$s.youAreAFrame(Environment.symbolNames.currentScope + 1);
 			Environment.functionReturnStack.pop();
 			$ret = IdentifierExpression.getExpression($uId);
 		}

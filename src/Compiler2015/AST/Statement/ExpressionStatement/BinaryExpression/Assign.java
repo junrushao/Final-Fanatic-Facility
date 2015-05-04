@@ -3,9 +3,7 @@ package Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.Type.IntType;
-import Compiler2015.Type.StructOrUnionType;
-import Compiler2015.Type.VoidType;
+import Compiler2015.Type.*;
 
 /**
  * a = b
@@ -26,6 +24,69 @@ public class Assign extends BinaryExpression {
 
 		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
 			throw new CompilationError("Cannot operate on void.");
+
+		if (a1.type instanceof IntType) {
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof CharType) {
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof StructOrUnionType) {
+			if (a2.type instanceof IntType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof CharType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof ArrayPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof VariablePointerType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof FunctionType) {
+			if (a2.type instanceof IntType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof CharType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof ArrayPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof VariablePointerType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof FunctionPointerType) {
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof ArrayPointerType) {
+			if (a2.type instanceof IntType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof CharType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof ArrayPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof VariablePointerType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof VariablePointerType) {
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+		}
 
 		if ((a1.type instanceof StructOrUnionType) != (a2.type instanceof StructOrUnionType))
 			throw new CompilationError("Incompatible type.");

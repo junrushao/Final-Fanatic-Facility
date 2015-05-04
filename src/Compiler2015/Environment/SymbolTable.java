@@ -317,6 +317,8 @@ public class SymbolTable {
 				sb.append(((StructOrUnionType) e.ref).deepToString(1)).append(Utility.NEW_LINE);
 			else if (e.type == Tokens.TYPEDEF_NAME) // Typedef Names
 				sb.append(e.name).append(" -> ").append(e.ref.toString()).append(Utility.NEW_LINE);
+			else if (e.type == Tokens.STRING_CONSTANT)
+				sb.append(e.name).append(Utility.NEW_LINE);
 		}
 		return sb.toString();
 	}
