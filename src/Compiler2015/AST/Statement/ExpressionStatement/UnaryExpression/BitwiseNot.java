@@ -28,4 +28,9 @@ public class BitwiseNot extends UnaryExpression {
 			return new IntConstant(~v);
 		return new BitwiseNot(e);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

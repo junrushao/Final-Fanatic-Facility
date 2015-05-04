@@ -32,4 +32,9 @@ public class LogicalNot extends UnaryExpression {
 			return new IntConstant(v == 0 ? 1 : 0);
 		return new LogicalNot(e);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

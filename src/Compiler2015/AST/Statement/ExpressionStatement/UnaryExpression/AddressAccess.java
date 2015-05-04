@@ -33,4 +33,9 @@ public class AddressAccess extends UnaryExpression {
 		}
 		return new AddressAccess(e);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

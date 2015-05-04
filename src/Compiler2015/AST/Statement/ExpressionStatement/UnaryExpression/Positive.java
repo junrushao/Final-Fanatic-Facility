@@ -25,4 +25,9 @@ public class Positive extends UnaryExpression {
 		e.isLValue = false;
 		return e;
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

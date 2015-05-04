@@ -33,4 +33,8 @@ public class EqualTo extends BinaryExpression {
 		return new EqualTo(a1, a2);
 	}
 
+	@Override
+	public void emitCFG() {
+
+	}
 }

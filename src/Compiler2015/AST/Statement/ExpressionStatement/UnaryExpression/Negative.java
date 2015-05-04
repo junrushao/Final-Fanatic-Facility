@@ -28,4 +28,9 @@ public class Negative extends UnaryExpression {
 			return new IntConstant(-v);
 		return new Negative(e);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

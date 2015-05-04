@@ -73,4 +73,9 @@ public class FunctionCall extends Expression {
 				argumentExpressionList == null ? "null" : Utility.toString(Arrays.asList(argumentExpressionList)),
 				vaList == null ? "null" : Utility.toString(Arrays.asList(vaList)));
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

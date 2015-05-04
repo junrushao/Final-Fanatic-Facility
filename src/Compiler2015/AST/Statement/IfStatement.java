@@ -37,4 +37,9 @@ public class IfStatement extends Statement {
 	public String toString() {
 		return deepToString(0);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

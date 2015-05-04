@@ -13,4 +13,9 @@ public class Sizeof extends UnaryExpression {
 	public String getOperator() {
 		return "Sizeof";
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

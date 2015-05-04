@@ -3,15 +3,17 @@ package Compiler2015.AST.Statement;
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.Type.IntType;
 import Compiler2015.Utility.Utility;
 
 /**
  * for (a; b; c) d
  */
-public class ForStatement extends Statement {
+public class ForStatement extends Statement implements Loop {
 	public Expression a, b, c;
 	public Statement d;
+	public CFGVertex begin, end;
 
 	public ForStatement(Expression a, Expression b, Expression c) {
 		if (b != null && !CastExpression.castable(b.type, new IntType()))
@@ -39,5 +41,10 @@ public class ForStatement extends Statement {
 	@Override
 	public String toString() {
 		return deepToString(0);
+	}
+
+	@Override
+	public void emitCFG() {
+
 	}
 }

@@ -35,4 +35,9 @@ public class Modulo extends BinaryExpression {
 			a2 = new CastExpression(new IntType(), a2);
 		return new Modulo(a1, a2);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

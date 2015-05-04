@@ -65,4 +65,9 @@ public class CompoundStatement extends Statement {
 	public String toString() {
 		return deepToString(0);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

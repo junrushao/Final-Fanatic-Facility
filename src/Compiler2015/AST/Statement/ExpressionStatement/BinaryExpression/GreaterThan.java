@@ -31,4 +31,9 @@ public class GreaterThan extends BinaryExpression {
 			a2 = new CastExpression(new IntType(), a2);
 		return new GreaterThan(a1, a2);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

@@ -52,4 +52,8 @@ public class CastExpression extends Expression {
 		return String.format("(CastTo %s %s)", castTo, e);
 	}
 
+	@Override
+	public void emitCFG() {
+
+	}
 }

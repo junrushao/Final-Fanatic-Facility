@@ -35,4 +35,8 @@ public class PointerMemberAccess extends Expression {
 		return String.format("(->%s %s)", memberName, su.toString());
 	}
 
+	@Override
+	public void emitCFG() {
+
+	}
 }

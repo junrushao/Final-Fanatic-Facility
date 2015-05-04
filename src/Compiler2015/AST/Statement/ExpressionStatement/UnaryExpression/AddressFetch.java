@@ -26,4 +26,9 @@ public class AddressFetch extends UnaryExpression {
 			throw new CompilationError("Type Error");
 		return new AddressFetch(e);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

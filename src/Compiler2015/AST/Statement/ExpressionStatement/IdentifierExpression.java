@@ -33,4 +33,9 @@ public class IdentifierExpression extends Expression {
 	public String toString() {
 		return String.format("#%d", uId);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

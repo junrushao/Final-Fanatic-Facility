@@ -32,4 +32,9 @@ public class LE extends BinaryExpression {
 			a2 = new CastExpression(new IntType(), a2);
 		return new LE(a1, a2);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

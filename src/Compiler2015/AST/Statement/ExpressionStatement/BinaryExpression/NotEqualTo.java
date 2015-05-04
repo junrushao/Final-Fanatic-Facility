@@ -32,4 +32,9 @@ public class NotEqualTo extends BinaryExpression {
 			a2 = new CastExpression(new IntType(), a2);
 		return new NotEqualTo(a1, a2);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

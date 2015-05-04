@@ -32,4 +32,9 @@ public class PrefixSelfInc extends UnaryExpression {
 			return new CharConstant((char) (((CharConstant) a1).c + 1));
 		return new PrefixSelfInc(a1);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

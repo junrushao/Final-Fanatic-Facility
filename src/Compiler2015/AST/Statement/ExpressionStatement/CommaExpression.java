@@ -25,4 +25,9 @@ public class CommaExpression extends Expression {
 	public String toString() {
 		return String.format("(, %s %s)", e1, e2);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

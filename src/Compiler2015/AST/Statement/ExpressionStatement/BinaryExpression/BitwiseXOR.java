@@ -32,4 +32,9 @@ public class BitwiseXOR extends BinaryExpression {
 			a2 = new CastExpression(new IntType(), a2);
 		return new BitwiseXOR(a1, a2);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

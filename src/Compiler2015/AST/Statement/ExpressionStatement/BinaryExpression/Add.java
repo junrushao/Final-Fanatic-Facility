@@ -130,4 +130,9 @@ public class Add extends BinaryExpression {
 	public String getOperator() {
 		return "+";
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

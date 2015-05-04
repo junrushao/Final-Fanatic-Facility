@@ -100,4 +100,8 @@ public class Subtract extends BinaryExpression {
 		return "-";
 	}
 
+	@Override
+	public void emitCFG() {
+
+	}
 }

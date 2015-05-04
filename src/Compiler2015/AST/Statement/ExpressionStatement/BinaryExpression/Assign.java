@@ -122,4 +122,8 @@ public class Assign extends BinaryExpression {
 		throw new CompilationError("Internal Error");
 	}
 
+	@Override
+	public void emitCFG() {
+
+	}
 }

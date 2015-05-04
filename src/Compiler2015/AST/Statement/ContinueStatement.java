@@ -21,4 +21,9 @@ public class ContinueStatement extends Statement {
 	public String deepToString(int depth) {
 		return Utility.getIndent(depth).append(toString()).append(Utility.NEW_LINE).toString();
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

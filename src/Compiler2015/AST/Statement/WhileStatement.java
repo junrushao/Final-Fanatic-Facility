@@ -9,7 +9,7 @@ import Compiler2015.Utility.Utility;
 /**
  * while (e) a;
  */
-public class WhileStatement extends Statement {
+public class WhileStatement extends Statement implements Loop {
 	public Expression e;
 	public Statement a;
 
@@ -31,5 +31,10 @@ public class WhileStatement extends Statement {
 	@Override
 	public String toString() {
 		return null;
+	}
+
+	@Override
+	public void emitCFG() {
+		
 	}
 }

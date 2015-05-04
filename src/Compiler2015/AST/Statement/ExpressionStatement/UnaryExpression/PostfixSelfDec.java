@@ -32,4 +32,9 @@ public class PostfixSelfDec extends UnaryExpression {
 			return new CharConstant((char) (((CharConstant) a1).c - 1));
 		return new PostfixSelfDec(a1);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

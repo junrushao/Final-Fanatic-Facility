@@ -25,4 +25,9 @@ public class CharConstant extends Constant {
 	public String toString() {
 		return Character.toString(c);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

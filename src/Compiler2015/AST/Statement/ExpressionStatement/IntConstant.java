@@ -25,4 +25,9 @@ public class IntConstant extends Constant {
 	public String toString() {
 		return Integer.toString(c);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

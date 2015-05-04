@@ -22,4 +22,9 @@ public class ReturnStatement extends Statement {
 		String s = e == null ? "null" : e.toString();
 		return "return " + s + Utility.NEW_LINE;
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

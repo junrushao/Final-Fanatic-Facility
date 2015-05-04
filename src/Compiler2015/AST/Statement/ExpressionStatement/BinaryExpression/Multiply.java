@@ -33,4 +33,8 @@ public class Multiply extends BinaryExpression {
 		return new Multiply(a1, a2);
 	}
 
+	@Override
+	public void emitCFG() {
+
+	}
 }

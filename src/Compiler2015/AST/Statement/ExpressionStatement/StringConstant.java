@@ -168,4 +168,9 @@ public class StringConstant extends Expression {
 	public String toString() {
 		return "\"" + toPrintableString(c) + "\"";
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }

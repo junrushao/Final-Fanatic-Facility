@@ -18,4 +18,9 @@ public class ConditionalExpression extends Expression {
 	public String toString() {
 		return String.format("(%s ? %s : %s)", condition, ifTrue, ifFalse);
 	}
+
+	@Override
+	public void emitCFG() {
+
+	}
 }
