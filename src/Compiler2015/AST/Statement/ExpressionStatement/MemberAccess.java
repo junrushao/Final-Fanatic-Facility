@@ -1,6 +1,7 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
 
@@ -34,7 +35,7 @@ public class MemberAccess extends Expression {
 	}
 
 	@Override
-	public void emitCFG() {
-
+	public void emitCFG(CFGVertex fromHere) {
+		// TODO
 	}
 }

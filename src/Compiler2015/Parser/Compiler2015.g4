@@ -43,12 +43,12 @@ declaration
 	;
 
 functionDefinition
-locals [ Type type, String name, CompoundStatement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1, Stack<Statement> loopStack = null]
+locals [ Type type, String name, CompoundStatement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1, Stack<Loop> loopStack = null]
 @init {
 	$parameterTypes = new ArrayList<Type>();
 	$parameterNames = new ArrayList<String>();
 	$loopStack = Environment.loopStack;
-	Environment.loopStack = new Stack<Statement>();
+	Environment.loopStack = new Stack<>();
 }
 @after {
 	TypeAnalyser.exit();
@@ -668,12 +668,12 @@ locals [ ArrayList<String> s ]
 	;
 
 lambdaExpression returns [Expression ret]
-locals [ Type type = null, CompoundStatement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1, Stack<Statement> loopStack = null]
+locals [ Type type = null, CompoundStatement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1, Stack<Loop> loopStack = null]
 @init {
 	$parameterTypes = new ArrayList<Type>();
 	$parameterNames = new ArrayList<String>();
 	$loopStack = Environment.loopStack;
-	Environment.loopStack = new Stack<Statement>();
+	Environment.loopStack = new Stack<>();
 }
 @after {
 	Environment.loopStack = $loopStack;

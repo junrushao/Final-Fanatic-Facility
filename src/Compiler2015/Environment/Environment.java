@@ -1,8 +1,9 @@
 package Compiler2015.Environment;
 
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
-import Compiler2015.AST.Statement.Statement;
+import Compiler2015.AST.Statement.Loop;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.Type.*;
 import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
@@ -15,7 +16,7 @@ public class Environment {
 	public static SymbolTable classNames;
 	public static SymbolTable symbolNames;
 
-	public static Stack<Statement> loopStack;
+	public static Stack<Loop> loopStack;
 	public static Stack<Type> functionReturnStack;
 	public static Stack<Integer> definedVariableInCurrentFrame;
 
@@ -23,7 +24,9 @@ public class Environment {
 	public static int totalTempRegisters;
 	public static HashMap<Integer, Integer> variableDelta;
 
-	public static Statement getTopLoop() {
+	public static CFGVertex functionOutVertex;
+
+	public static Loop getTopLoop() {
 		if (loopStack.isEmpty())
 			throw new CompilationError("No loops(for / while) to manipulate.");
 		return loopStack.peek();

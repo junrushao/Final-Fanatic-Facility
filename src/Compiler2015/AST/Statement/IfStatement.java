@@ -3,18 +3,19 @@ package Compiler2015.AST.Statement;
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.Type.IntType;
 import Compiler2015.Utility.Utility;
 
 /**
  * if (e) ifTrue else ifFalse
  */
-
 public class IfStatement extends Statement {
 	public Expression e;
 	public Statement ifTrue, ifFalse;
+
 	public IfStatement(Expression e, Statement ifTrue, Statement ifFalse) {
-		if (!CastExpression.castable(e.type, new IntType()))
+		if (!CastExpression.castable(e.type, IntType.instance))
 			throw new CompilationError("Expression inside if statement could not be converted to int type.");
 		this.e = e;
 		this.ifTrue = ifTrue;
@@ -40,6 +41,24 @@ public class IfStatement extends Statement {
 
 	@Override
 	public void emitCFG() {
+		// TODO
+		e.emitCFG();
+		ifTrue.emitCFG();
+		if (ifFalse != null)
+			ifFalse.emitCFG();
 
+		beginCFGBlock = e.beginCFGBlock;
+		endCFGBlock = ControlFlowGraph.getNewVertex();
+
+		e.endCFGBlock.unconditionalNext = ifTrue.beginCFGBlock;
+		if (ifFalse != null)
+			e.endCFGBlock.branchIfFalse = ifFalse.beginCFGBlock;
+		ifTrue.endCFGBlock.unconditionalNext = endCFGBlock;
+		ifTrue.endCFGBlock.branchIfFalse = null;
+
+		if (ifFalse != null) {
+			ifFalse.endCFGBlock.unconditionalNext = endCFGBlock;
+			ifFalse.endCFGBlock.branchIfFalse = null;
+		}
 	}
 }

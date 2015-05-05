@@ -1,14 +1,15 @@
 package Compiler2015.AST.Statement;
 
+import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.Utility.Utility;
 
 /**
  * continue;
  */
 public class ContinueStatement extends Statement {
-	public Statement continueTo;
+	public Loop continueTo;
 
-	public ContinueStatement(Statement continueTo) {
+	public ContinueStatement(Loop continueTo) {
 		this.continueTo = continueTo;
 	}
 
@@ -24,6 +25,8 @@ public class ContinueStatement extends Statement {
 
 	@Override
 	public void emitCFG() {
-
+		beginCFGBlock = endCFGBlock = ControlFlowGraph.getNewVertex();
+		endCFGBlock.branchIfFalse = null;
+		endCFGBlock.unconditionalNext = continueTo.getLoop();
 	}
 }

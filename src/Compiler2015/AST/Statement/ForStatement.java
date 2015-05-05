@@ -4,6 +4,7 @@ import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
+import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.Type.IntType;
 import Compiler2015.Utility.Utility;
 
@@ -13,7 +14,17 @@ import Compiler2015.Utility.Utility;
 public class ForStatement extends Statement implements Loop {
 	public Expression a, b, c;
 	public Statement d;
-	public CFGVertex begin, end;
+	public CFGVertex loop;
+
+	@Override
+	public CFGVertex getLoop() {
+		return loop;
+	}
+
+	@Override
+	public CFGVertex getOut() {
+		return endCFGBlock;
+	}
 
 	public ForStatement(Expression a, Expression b, Expression c) {
 		if (b != null && !CastExpression.castable(b.type, new IntType()))
@@ -45,6 +56,51 @@ public class ForStatement extends Statement implements Loop {
 
 	@Override
 	public void emitCFG() {
+		// TODO
+		CFGVertex gB;
+		CFGVertex gC;
 
+		endCFGBlock = ControlFlowGraph.getNewVertex();
+
+		if (b != null) {
+			b.emitCFG();
+			gB = b.endCFGBlock;
+		}
+		else {
+			gB = ControlFlowGraph.getNewVertex();
+		}
+
+		if (a != null) {
+			a.emitCFG();
+			beginCFGBlock = a.endCFGBlock;
+		}
+		else {
+			beginCFGBlock = gB;
+		}
+		loop = beginCFGBlock;
+
+		if (c != null) {
+			c.emitCFG();
+			gC = c.endCFGBlock;
+		}
+		else {
+			gC = ControlFlowGraph.getNewVertex();
+		}
+
+		if (d != null)
+			d.emitCFG();
+		else
+			throw new CompilationError("Internal Error.");
+
+		if (a != null) {
+			a.endCFGBlock.unconditionalNext = gB;
+			a.endCFGBlock.branchIfFalse = null;
+		}
+		gB.unconditionalNext = d.beginCFGBlock;
+		gB.branchIfFalse = endCFGBlock;
+		gC.unconditionalNext = gB;
+		gC.branchIfFalse = null;
+		d.endCFGBlock.branchIfFalse = null;
+		d.endCFGBlock.unconditionalNext = gC;
 	}
 }

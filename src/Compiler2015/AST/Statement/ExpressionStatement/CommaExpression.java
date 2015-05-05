@@ -1,5 +1,7 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
+import Compiler2015.IR.CFG.CFGVertex;
+
 /**
  * a, b, c
  */
@@ -27,7 +29,7 @@ public class CommaExpression extends Expression {
 	}
 
 	@Override
-	public void emitCFG() {
-
+	public void emitCFG(CFGVertex fromHere) {
+		// TODO
 	}
 }

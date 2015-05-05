@@ -1,14 +1,15 @@
 package Compiler2015.AST.Statement;
 
+import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.Utility.Utility;
 
 /**
  * break;
  */
 public class BreakStatement extends Statement {
-	public Statement breakTo;
+	public Loop breakTo;
 
-	public BreakStatement(Statement breakTo) {
+	public BreakStatement(Loop breakTo) {
 		this.breakTo = breakTo;
 	}
 
@@ -24,6 +25,9 @@ public class BreakStatement extends Statement {
 
 	@Override
 	public void emitCFG() {
-
+		// TODO
+		beginCFGBlock = endCFGBlock = ControlFlowGraph.getNewVertex();
+		endCFGBlock.branchIfFalse = null;
+		endCFGBlock.unconditionalNext = breakTo.getOut();
 	}
 }

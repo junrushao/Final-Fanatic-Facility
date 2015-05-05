@@ -4,6 +4,7 @@ import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.Type.*;
 
 /**
@@ -101,7 +102,7 @@ public class Subtract extends BinaryExpression {
 	}
 
 	@Override
-	public void emitCFG() {
-
+	public void emitCFG(CFGVertex fromHere) {
+		// TODO
 	}
 }
