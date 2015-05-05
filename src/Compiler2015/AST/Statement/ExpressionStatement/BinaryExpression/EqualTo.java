@@ -3,7 +3,9 @@ package Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
-import Compiler2015.IR.CFG.CFGVertex;
+import Compiler2015.Environment.Environment;
+import Compiler2015.IR.Arithmetic.SetEqualTo;
+import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.Type.IntType;
 
 /**
@@ -35,7 +37,10 @@ public class EqualTo extends BinaryExpression {
 	}
 
 	@Override
-	public void emitCFG(CFGVertex fromHere) {
-		// TODO
+	public void emitCFG(ExpressionCFGBuilder builder) {
+		left.emitCFG(builder);
+		right.emitCFG(builder);
+		tempRegister = Environment.getTemporaryRegister();
+		builder.addInstruction(new SetEqualTo(tempRegister, left.tempRegister, right.tempRegister));
 	}
 }

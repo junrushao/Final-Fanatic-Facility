@@ -1,10 +1,7 @@
-*.class
 *.swp
 
-./out
-./test
-./bin
+out/
+test/
+bin/
 
 input.c
-
-src/Compiler2015/AST/Statement/CompoundStatement.java

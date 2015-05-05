@@ -2,8 +2,11 @@ package Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression;
 
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
+import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.CFG.CFGVertex;
+import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.Move;
+import Compiler2015.IR.WriteArray;
 import Compiler2015.Type.*;
 
 /**
@@ -124,7 +127,11 @@ public class Assign extends BinaryExpression {
 	}
 
 	@Override
-	public void emitCFG(CFGVertex fromHere) {
-		// TODO
+	public void emitCFG(ExpressionCFGBuilder builder) {
+		left.emitCFG(builder);
+		right.emitCFG(builder);
+		tempRegister = Environment.getTemporaryRegister();
+		builder.addInstruction(new Move(left.tempRegister, right.tempRegister));
+		builder.addInstruction(new WriteArray(left.tempRegister, Environment.getImmRegister(builder, 0), right.tempRegister));
 	}
 }

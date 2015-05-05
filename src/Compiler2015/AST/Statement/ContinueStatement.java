@@ -26,7 +26,6 @@ public class ContinueStatement extends Statement {
 	@Override
 	public void emitCFG() {
 		beginCFGBlock = endCFGBlock = ControlFlowGraph.getNewVertex();
-		endCFGBlock.branchIfFalse = null;
 		endCFGBlock.unconditionalNext = continueTo.getLoop();
 	}
 }

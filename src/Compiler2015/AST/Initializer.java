@@ -11,7 +11,7 @@ import Compiler2015.Utility.Utility;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Initializers extends ASTNode {
+public class Initializer extends ASTNode {
 	public static class InitEntry {
 		public int position[];
 		public Expression value;
@@ -75,18 +75,18 @@ public class Initializers extends ASTNode {
 			}
 		}
 
-		public Initializers get(ArrayList<Integer> dimensions, SimpleInitializerList list, Type t) {
+		public Initializer get(ArrayList<Integer> dimensions, SimpleInitializerList list, Type t) {
 			this.dimensions = dimensions;
 			this.t = t;
 			this.now = new int[dimensions.size()];
 			DFS(0, list);
-			return new Initializers(entries);
+			return new Initializer(entries);
 		}
 	}
 
 	public ArrayList<InitEntry> entries;
 
-	public Initializers(ArrayList<InitEntry> entries) {
+	public Initializer(ArrayList<InitEntry> entries) {
 		this.entries = new ArrayList<>(entries);
 	}
 

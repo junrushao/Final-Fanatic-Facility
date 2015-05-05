@@ -1,7 +1,9 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
+import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.CFG.CFGVertex;
+import Compiler2015.IR.ReadArray;
+import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
 
@@ -35,7 +37,17 @@ public class MemberAccess extends Expression {
 	}
 
 	@Override
-	public void emitCFG(CFGVertex fromHere) {
-		// TODO
+	public void emitCFG(ExpressionCFGBuilder builder) {
+		if (!(su.type instanceof StructOrUnionType))
+			throw new CompilationError("Internal Error.");
+		StructOrUnionType type = (StructOrUnionType) su.type;
+		int delta = type.memberDelta.get(memberName);
+		if (delta == 0) {
+			tempRegister = su.tempRegister;
+		}
+		else {
+			tempRegister = Environment.getTemporaryRegister();
+			builder.addInstruction(new ReadArray(tempRegister, su.tempRegister, Environment.getImmRegister(builder, delta)));
+		}
 	}
 }

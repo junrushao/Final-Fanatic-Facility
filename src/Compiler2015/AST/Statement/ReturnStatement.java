@@ -35,6 +35,5 @@ public class ReturnStatement extends Statement {
 			beginCFGBlock = endCFGBlock = e.endCFGBlock;
 		}
 		endCFGBlock.unconditionalNext = Environment.functionOutVertex;
-		endCFGBlock.branchIfFalse = null;
 	}
 }

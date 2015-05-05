@@ -3,15 +3,20 @@ package Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
+import Compiler2015.AST.Statement.Logical;
+import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
+import Compiler2015.IR.CFG.ControlFlowGraph;
+import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.MoveConstant;
 import Compiler2015.Type.IntType;
 import Compiler2015.Type.Type;
 
 /**
  * a && b
  */
-public class LogicalAnd extends BinaryExpression {
+public class LogicalAnd extends BinaryExpression implements Logical {
 	public LogicalAnd(Expression left, Expression right) {
 		super(left, right);
 	}
@@ -37,7 +42,56 @@ public class LogicalAnd extends BinaryExpression {
 	}
 
 	@Override
-	public void emitCFG(CFGVertex fromHere) {
-		// TODO
+	public void emitCFG(CFGVertex trueTo, CFGVertex falseTo, ExpressionCFGBuilder builder) {
+		if (left instanceof Logical && right instanceof Logical) {
+			Logical leftP = (Logical) left;
+			Logical rightP = (Logical) right;
+			rightP.emitCFG(trueTo, falseTo, builder);
+			leftP.emitCFG(rightP.getStartNode(), trueTo, builder);
+		}
+		else if (left instanceof Logical) { // left is Logical but right is not
+			Logical leftP = (Logical) left;
+			right.emitCFG(builder);
+			right.endCFGBlock.unconditionalNext = trueTo;
+			right.endCFGBlock.branchIfFalse = falseTo;
+			leftP.emitCFG(right.beginCFGBlock, falseTo, builder);
+		}
+		else if (right instanceof Logical) { // left is not Logical but right is
+			Logical rightP = (Logical) right;
+			rightP.emitCFG(trueTo, falseTo, builder);
+			left.emitCFG(builder);
+			left.endCFGBlock.unconditionalNext = right.beginCFGBlock;
+			left.endCFGBlock.branchIfFalse = falseTo;
+		}
+		else { // left is not Logical while right is not neither
+			left.emitCFG(builder);
+			right.emitCFG(builder);
+			left.endCFGBlock.unconditionalNext = right.beginCFGBlock;
+			left.endCFGBlock.branchIfFalse = falseTo;
+			right.endCFGBlock.unconditionalNext = trueTo;
+			right.endCFGBlock.branchIfFalse = falseTo;
+		}
+	}
+
+	@Override
+	public CFGVertex getStartNode() {
+		return beginCFGBlock;
+	}
+
+	@Override
+	public void emitCFG(ExpressionCFGBuilder builder) {
+		CFGVertex out = endCFGBlock = ControlFlowGraph.getNewVertex();
+		CFGVertex trueTo = ControlFlowGraph.getNewVertex();
+		CFGVertex falseTo = ControlFlowGraph.getNewVertex();
+
+		tempRegister = Environment.getTemporaryRegister();
+		trueTo.internal.add(new MoveConstant(tempRegister, 1));
+		falseTo.internal.add(new MoveConstant(tempRegister, 0));
+
+		trueTo.unconditionalNext = out;
+		falseTo.unconditionalNext = out;
+		emitCFG(trueTo, falseTo, builder);
+
+		builder.addBlock(endCFGBlock);
 	}
 }

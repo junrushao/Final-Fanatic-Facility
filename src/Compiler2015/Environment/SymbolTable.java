@@ -1,6 +1,6 @@
 package Compiler2015.Environment;
 
-import Compiler2015.AST.Initializers;
+import Compiler2015.AST.Initializer;
 import Compiler2015.AST.SimpleInitializerList;
 import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.AST.Statement.ExpressionStatement.StringConstant;
@@ -129,13 +129,13 @@ public class SymbolTable {
 				dimensions = new ArrayList<>();
 				type = t;
 			}
-			e.info = new Initializers.Constructor().get(dimensions, ini, type);
-			if (e.ref instanceof IntType && ((Initializers) e.info).entries.get(0).value.type instanceof ArrayPointerType && ((ArrayPointerType) ((Initializers) e.info).entries.get(0).value.type).pointTo instanceof CharType) {
+			e.info = new Initializer.Constructor().get(dimensions, ini, type);
+			if (e.ref instanceof IntType && ((Initializer) e.info).entries.get(0).value.type instanceof ArrayPointerType && ((ArrayPointerType) ((Initializer) e.info).entries.get(0).value.type).pointTo instanceof CharType) {
 				throw new CompilationError("FXXK");
 			}
 			if (e.ref instanceof ArrayPointerType && ((ArrayPointerType) e.ref).dimensions.get(0) == -1) {
 				int max = -1;
-				for (Initializers.InitEntry i : ((Initializers) e.info).entries) {
+				for (Initializer.InitEntry i : ((Initializer) e.info).entries) {
 					max = Math.max(max, i.position[0]);
 				}
 				((ArrayPointerType) e.ref).dimensions.set(0, max + 1);
@@ -331,6 +331,15 @@ public class SymbolTable {
 		int uId = ++lastUId;
 		table.add(new SymbolTableEntry(uId, c, 1, Tokens.STRING_CONSTANT, c, null));
 //		scopes.get(1).add(uId);
+		return uId;
+	}
+
+	/**
+	 * @return uId of the register
+	 */
+	public int defineTemporaryRegister() {
+		int uId = ++lastUId;
+		table.add(new SymbolTableEntry(uId, "#", -1, Tokens.TEMPORARY_REGISTER, null, null));
 		return uId;
 	}
 }

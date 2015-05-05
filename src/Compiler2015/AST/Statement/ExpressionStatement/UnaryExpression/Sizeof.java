@@ -1,7 +1,8 @@
 package Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression;
 
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
-import Compiler2015.IR.CFG.CFGVertex;
+import Compiler2015.Environment.Environment;
+import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.Type.IntType;
 
 public class Sizeof extends UnaryExpression {
@@ -16,7 +17,8 @@ public class Sizeof extends UnaryExpression {
 	}
 
 	@Override
-	public void emitCFG(CFGVertex fromHere) {
-		// TODO
+	public void emitCFG(ExpressionCFGBuilder builder) {
+		e.emitCFG(builder);
+		tempRegister = Environment.getImmRegister(builder, e.type.sizeof());
 	}
 }

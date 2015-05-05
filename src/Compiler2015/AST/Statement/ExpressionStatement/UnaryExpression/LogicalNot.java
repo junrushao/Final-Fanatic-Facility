@@ -2,8 +2,13 @@ package Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression;
 
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
+import Compiler2015.AST.Statement.Logical;
+import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
+import Compiler2015.IR.CFG.ControlFlowGraph;
+import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.MoveConstant;
 import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.IntType;
 import Compiler2015.Type.StructOrUnionType;
@@ -12,7 +17,7 @@ import Compiler2015.Type.VoidType;
 /**
  * !e
  */
-public class LogicalNot extends UnaryExpression {
+public class LogicalNot extends UnaryExpression implements Logical {
 	public LogicalNot(Expression e) {
 		super(e);
 		this.type = new IntType();
@@ -35,7 +40,36 @@ public class LogicalNot extends UnaryExpression {
 	}
 
 	@Override
-	public void emitCFG(CFGVertex fromHere) {
-		// TODO
+	public void emitCFG(CFGVertex trueTo, CFGVertex falseTo, ExpressionCFGBuilder builder) {
+		if (e instanceof Logical) {
+			((Logical) e).emitCFG(falseTo, trueTo, builder);
+		}
+		else {
+			e.emitCFG(builder);
+			e.endCFGBlock.unconditionalNext = falseTo;
+			e.endCFGBlock.branchIfFalse = trueTo;
+		}
+	}
+
+	@Override
+	public CFGVertex getStartNode() {
+		return beginCFGBlock;
+	}
+
+	@Override
+	public void emitCFG(ExpressionCFGBuilder builder) {
+		CFGVertex out = endCFGBlock = ControlFlowGraph.getNewVertex();
+		CFGVertex trueTo = ControlFlowGraph.getNewVertex();
+		CFGVertex falseTo = ControlFlowGraph.getNewVertex();
+
+		tempRegister = Environment.getTemporaryRegister();
+		trueTo.internal.add(new MoveConstant(tempRegister, 1));
+		falseTo.internal.add(new MoveConstant(tempRegister, 0));
+
+		trueTo.unconditionalNext = out;
+		falseTo.unconditionalNext = out;
+		emitCFG(trueTo, falseTo, builder);
+
+		builder.addBlock(endCFGBlock);
 	}
 }

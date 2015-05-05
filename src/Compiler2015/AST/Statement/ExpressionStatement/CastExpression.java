@@ -1,7 +1,7 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.CFG.CFGVertex;
+import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.Type.IntType;
 import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
@@ -48,13 +48,15 @@ public class CastExpression extends Expression {
 		}
 		return e;
 	}
+
 	@Override
 	public String toString() {
 		return String.format("(CastTo %s %s)", castTo, e);
 	}
 
 	@Override
-	public void emitCFG(CFGVertex fromHere) {
-		// TODO
+	public void emitCFG(ExpressionCFGBuilder builder) {
+		e.emitCFG(builder);
+		tempRegister = e.tempRegister;
 	}
 }

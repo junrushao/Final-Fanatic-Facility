@@ -1,7 +1,11 @@
 package Compiler2015.AST.Statement;
 
+import Compiler2015.AST.Initializer;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
+import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.WriteArray;
+import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.FunctionType;
 import Compiler2015.Type.Type;
 import Compiler2015.Utility.Utility;
@@ -68,6 +72,36 @@ public class CompoundStatement extends Statement {
 
 	@Override
 	public void emitCFG() {
-		// TODO
+		ExpressionCFGBuilder builder = new ExpressionCFGBuilder();
+		// initialize
+		for (int x : variables) {
+			SymbolTableEntry e = Environment.symbolNames.table.get(x);
+			Type tp = (Type) e.ref;
+			if (tp instanceof FunctionType)
+				continue;
+			Initializer init = (Initializer) e.info;
+			for (Initializer.InitEntry entry : init.entries) {
+				if (entry.position.length == 0) {
+					entry.value.emitCFG(builder);
+					builder.addInstruction(new WriteArray(x, Environment.getImmRegister(builder, 0), entry.value.tempRegister));
+				}
+				else {
+					ArrayPointerType t = (ArrayPointerType) tp;
+					int pos = 0, mul = 1;
+					for (int i = entry.position.length - 1; i >= 0; --i) {
+						pos += entry.position[i] * mul;
+						mul *= t.dimensions.get(i);
+					}
+					builder.addInstruction(new WriteArray(x, Environment.getImmRegister(builder, pos), entry.value.tempRegister));
+				}
+			}
+		}
+		// statement
+		for (Statement statement : statements) {
+			statement.emitCFG();
+			builder.addBlock(statement.beginCFGBlock, statement.endCFGBlock);
+		}
+		beginCFGBlock = builder.s;
+		endCFGBlock = builder.t;
 	}
 }

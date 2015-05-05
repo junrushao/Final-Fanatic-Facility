@@ -5,6 +5,7 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.IR.CFG.ControlFlowGraph;
+import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.Type.IntType;
 import Compiler2015.Utility.Utility;
 
@@ -37,17 +38,22 @@ public class WhileStatement extends Statement implements Loop {
 
 	@Override
 	public void emitCFG() {
-		// TODO
-		e.emitCFG();
-		beginCFGBlock = e.beginCFGBlock;
-		endCFGBlock = ControlFlowGraph.getNewVertex();
+		CFGVertex loop = beginCFGBlock = ControlFlowGraph.getNewVertex();
+		CFGVertex out = endCFGBlock = ControlFlowGraph.getNewVertex();
 		a.emitCFG();
-
-		beginCFGBlock.unconditionalNext = a.beginCFGBlock;
-		beginCFGBlock.branchIfFalse = endCFGBlock;
-
-		a.endCFGBlock.unconditionalNext = beginCFGBlock;
-		a.endCFGBlock.branchIfFalse = null;
+		a.endCFGBlock.unconditionalNext = loop;
+		if (e instanceof Logical) {
+			Logical ep = (Logical) e;
+			ExpressionCFGBuilder builder = new ExpressionCFGBuilder();
+			ep.emitCFG(a.beginCFGBlock, out, builder);
+			loop.unconditionalNext = ep.getStartNode();
+		}
+		else {
+			e.emitCFG();
+			e.endCFGBlock.unconditionalNext = a.beginCFGBlock;
+			e.endCFGBlock.branchIfFalse = out;
+			loop.unconditionalNext = e.beginCFGBlock;
+		}
 	}
 
 	@Override

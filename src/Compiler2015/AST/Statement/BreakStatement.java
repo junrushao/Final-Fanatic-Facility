@@ -25,9 +25,7 @@ public class BreakStatement extends Statement {
 
 	@Override
 	public void emitCFG() {
-		// TODO
 		beginCFGBlock = endCFGBlock = ControlFlowGraph.getNewVertex();
-		endCFGBlock.branchIfFalse = null;
 		endCFGBlock.unconditionalNext = breakTo.getOut();
 	}
 }

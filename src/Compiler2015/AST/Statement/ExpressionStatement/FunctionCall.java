@@ -1,7 +1,10 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
+import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.CFG.CFGVertex;
+import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.Call;
+import Compiler2015.IR.PushStack;
 import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.FunctionPointerType;
 import Compiler2015.Type.FunctionType;
@@ -76,7 +79,18 @@ public class FunctionCall extends Expression {
 	}
 
 	@Override
-	public void emitCFG(CFGVertex fromHere) {
-		// TODO
+	public void emitCFG(ExpressionCFGBuilder builder) {
+		function.emitCFG(builder);
+		for (Expression e : argumentExpressionList)
+			e.emitCFG(builder);
+		for (Expression e : vaList)
+			e.emitCFG(builder);
+		for (Expression e : argumentExpressionList)
+			builder.addInstruction(new PushStack(e.tempRegister));
+		for (Expression e : vaList)
+			builder.addInstruction(new PushStack(e.tempRegister));
+
+		tempRegister = Environment.getTemporaryRegister();
+		builder.addInstruction(new Call(tempRegister, function.tempRegister));
 	}
 }

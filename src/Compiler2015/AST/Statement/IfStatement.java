@@ -3,7 +3,9 @@ package Compiler2015.AST.Statement;
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.IR.CFG.ControlFlowGraph;
+import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.Type.IntType;
 import Compiler2015.Utility.Utility;
 
@@ -41,24 +43,30 @@ public class IfStatement extends Statement {
 
 	@Override
 	public void emitCFG() {
-		// TODO
-		e.emitCFG();
+		CFGVertex out = endCFGBlock = ControlFlowGraph.getNewVertex();
 		ifTrue.emitCFG();
-		if (ifFalse != null)
-			ifFalse.emitCFG();
+		ifTrue.endCFGBlock.unconditionalNext = out;
 
-		beginCFGBlock = e.beginCFGBlock;
-		endCFGBlock = ControlFlowGraph.getNewVertex();
-
-		e.endCFGBlock.unconditionalNext = ifTrue.beginCFGBlock;
-		if (ifFalse != null)
-			e.endCFGBlock.branchIfFalse = ifFalse.beginCFGBlock;
-		ifTrue.endCFGBlock.unconditionalNext = endCFGBlock;
-		ifTrue.endCFGBlock.branchIfFalse = null;
-
+		CFGVertex Then = ifTrue.beginCFGBlock;
+		CFGVertex Else = out;
 		if (ifFalse != null) {
-			ifFalse.endCFGBlock.unconditionalNext = endCFGBlock;
-			ifFalse.endCFGBlock.branchIfFalse = null;
+			ifFalse.emitCFG();
+			ifFalse.endCFGBlock.unconditionalNext = out;
+			Else = ifFalse.beginCFGBlock;
+		}
+		if (e instanceof Logical) {
+			Logical ep = (Logical) e;
+			ExpressionCFGBuilder builder = new ExpressionCFGBuilder();
+			ep.emitCFG(Then, Else, builder);
+			beginCFGBlock = builder.s;
+//			ep.getEndNode().unconditionalNext = Then;
+//			ep.getEndNode().branchIfFalse = Else;
+		}
+		else {
+			e.emitCFG();
+			beginCFGBlock = e.beginCFGBlock;
+			e.endCFGBlock.unconditionalNext = Then;
+			e.endCFGBlock.branchIfFalse = Else;
 		}
 	}
 }

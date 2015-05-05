@@ -5,6 +5,7 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.IR.CFG.ControlFlowGraph;
+import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.Type.IntType;
 import Compiler2015.Utility.Utility;
 
@@ -56,51 +57,41 @@ public class ForStatement extends Statement implements Loop {
 
 	@Override
 	public void emitCFG() {
-		// TODO
-		CFGVertex gB;
-		CFGVertex gC;
-
-		endCFGBlock = ControlFlowGraph.getNewVertex();
-
-		if (b != null) {
-			b.emitCFG();
-			gB = b.endCFGBlock;
-		}
-		else {
-			gB = ControlFlowGraph.getNewVertex();
-		}
-
+		CFGVertex out = endCFGBlock = ControlFlowGraph.getNewVertex();
+		loop = ControlFlowGraph.getNewVertex();
 		if (a != null) {
 			a.emitCFG();
-			beginCFGBlock = a.endCFGBlock;
+			beginCFGBlock = a.beginCFGBlock;
+			a.endCFGBlock.unconditionalNext = loop;
 		}
 		else {
-			beginCFGBlock = gB;
+			beginCFGBlock = loop;
 		}
-		loop = beginCFGBlock;
-
+		d.emitCFG();
 		if (c != null) {
 			c.emitCFG();
-			gC = c.endCFGBlock;
+			d.endCFGBlock.unconditionalNext = c.beginCFGBlock;
+			c.endCFGBlock = loop;
 		}
 		else {
-			gC = ControlFlowGraph.getNewVertex();
+			d.endCFGBlock.unconditionalNext = loop;
 		}
-
-		if (d != null)
-			d.emitCFG();
-		else
-			throw new CompilationError("Internal Error.");
-
-		if (a != null) {
-			a.endCFGBlock.unconditionalNext = gB;
-			a.endCFGBlock.branchIfFalse = null;
+		if (b != null) {
+			if (b instanceof Logical) {
+				Logical bp = (Logical) b;
+				ExpressionCFGBuilder builder = new ExpressionCFGBuilder();
+				bp.emitCFG(d.beginCFGBlock, out, builder);
+				loop.unconditionalNext = builder.s;
+			}
+			else {
+				b.emitCFG();
+				b.endCFGBlock.unconditionalNext = d.beginCFGBlock;
+				b.endCFGBlock.branchIfFalse = out;
+				loop.unconditionalNext = b.beginCFGBlock;
+			}
 		}
-		gB.unconditionalNext = d.beginCFGBlock;
-		gB.branchIfFalse = endCFGBlock;
-		gC.unconditionalNext = gB;
-		gC.branchIfFalse = null;
-		d.endCFGBlock.branchIfFalse = null;
-		d.endCFGBlock.unconditionalNext = gC;
+		else {
+			loop.unconditionalNext = d.beginCFGBlock;
+		}
 	}
 }
