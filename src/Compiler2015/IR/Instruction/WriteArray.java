@@ -1,4 +1,4 @@
-package Compiler2015.IR;
+package Compiler2015.IR.Instruction;
 
 /**
  * a[b] = rs

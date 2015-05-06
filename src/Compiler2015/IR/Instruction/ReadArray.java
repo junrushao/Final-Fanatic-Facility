@@ -1,6 +1,6 @@
-package Compiler2015.IR;
+package Compiler2015.IR.Instruction;
 
-import Compiler2015.IR.Arithmetic.Arithmetic;
+import Compiler2015.IR.Instruction.Arithmetic.Arithmetic;
 
 /**
  * rd = a[b]

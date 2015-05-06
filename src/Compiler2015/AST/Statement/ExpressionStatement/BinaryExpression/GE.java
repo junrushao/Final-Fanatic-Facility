@@ -4,7 +4,7 @@ import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
 import Compiler2015.Environment.Environment;
-import Compiler2015.IR.Arithmetic.SetGE;
+import Compiler2015.IR.Instruction.Arithmetic.SetGE;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.Type.IntType;
 

@@ -1,7 +1,7 @@
 package Compiler2015.IR.CFG;
 
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.IRInstruction;
+import Compiler2015.IR.Instruction.IRInstruction;
 
 public class ExpressionCFGBuilder {
 	public CFGVertex s, t;

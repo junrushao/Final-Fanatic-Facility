@@ -9,7 +9,7 @@ import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
-import Compiler2015.IR.MoveConstant;
+import Compiler2015.IR.Instruction.MoveConstant;
 import Compiler2015.Type.IntType;
 import Compiler2015.Type.Type;
 

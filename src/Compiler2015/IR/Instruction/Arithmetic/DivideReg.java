@@ -1,4 +1,4 @@
-package Compiler2015.IR.Arithmetic;
+package Compiler2015.IR.Instruction.Arithmetic;
 
 /**
  * rd = rs / rt

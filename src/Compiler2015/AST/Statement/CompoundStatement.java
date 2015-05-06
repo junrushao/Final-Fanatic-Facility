@@ -4,7 +4,7 @@ import Compiler2015.AST.Initializer;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
-import Compiler2015.IR.WriteArray;
+import Compiler2015.IR.Instruction.WriteArray;
 import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.FunctionType;
 import Compiler2015.Type.Type;

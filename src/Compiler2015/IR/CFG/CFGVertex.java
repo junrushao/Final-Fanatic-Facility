@@ -1,6 +1,6 @@
 package Compiler2015.IR.CFG;
 
-import Compiler2015.IR.IRInstruction;
+import Compiler2015.IR.Instruction.IRInstruction;
 
 import java.util.ArrayList;
 
