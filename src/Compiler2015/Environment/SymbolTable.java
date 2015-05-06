@@ -159,12 +159,29 @@ public class SymbolTable {
 		if (currentScope > 1 && t instanceof FunctionType && init == null && !name.equals("")) {
 			// Special case: declare that there is a global function named $name
 			SymbolTableEntry e = queryName(name);
-			if (e != null)
-				return e.uId;
-			int uId = ++lastUId;
-			table.add(new SymbolTableEntry(uId, name, 1, Tokens.VARIABLE, t, null));
-			scopes.get(0).add(uId);
-			getUId(name).push(uId);
+			if (e != null && scopes.peek().contains(e.uId))
+				throw new CompilationError("Already defined as another variable type.");
+			Stack<Integer> s = name2UIds.get(name);
+			int uId;
+			int backupLastUId = lastUId;
+			if (s == null || s.size() == 0)
+				uId = ++lastUId;
+			else {
+				int x = s.get(0);
+				if (table.get(x).scope == 1)
+					uId = x;
+				else
+					uId = ++lastUId;
+			}
+			if (uId == backupLastUId + 1) {
+				table.add(new SymbolTableEntry(uId, name, 1, Tokens.VARIABLE, t, null));
+				scopes.get(0).add(uId);
+
+				Stack<Integer> newStack = new Stack<>();
+				newStack.push(uId);
+				newStack.addAll(getUId(name));
+				name2UIds.put(name, newStack);
+			}
 			defineVariable(uId, t, null);
 			return uId;
 		}
