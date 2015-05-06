@@ -2,8 +2,12 @@ package Compiler2015.AST.Statement.ExpressionStatement;
 
 import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.Instruction.ReadArray;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.IRRegister.ArrayRegister;
+import Compiler2015.IR.IRRegister.ImmediateValue;
+import Compiler2015.IR.IRRegister.VirtualRegister;
+import Compiler2015.IR.Instruction.Arithmetic.AddReg;
+import Compiler2015.IR.Instruction.ReadArray;
 import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
 
@@ -40,14 +44,29 @@ public class MemberAccess extends Expression {
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		if (!(su.type instanceof StructOrUnionType))
 			throw new CompilationError("Internal Error.");
+		su.emitCFG(builder);
+//		su.eliminateLValue(builder);
 		StructOrUnionType type = (StructOrUnionType) su.type;
 		int delta = type.memberDelta.get(memberName);
 		if (delta == 0) {
 			tempRegister = su.tempRegister;
 		}
+		else if (su.tempRegister instanceof ArrayRegister) {
+			VirtualRegister t = Environment.getTemporaryRegister();
+			builder.addInstruction(new AddReg(t, ((ArrayRegister) su.tempRegister).b, new ImmediateValue(delta)));
+			tempRegister = new ArrayRegister(((ArrayRegister) su.tempRegister).a, t);
+		}
 		else {
-			tempRegister = Environment.getTemporaryRegister();
-			builder.addInstruction(new ReadArray(tempRegister, su.tempRegister, Environment.getImmRegister(builder, delta)));
+			tempRegister = new ArrayRegister(su.tempRegister, new ImmediateValue(delta));
+		}
+	}
+
+	@Override
+	public void eliminateLValue(ExpressionCFGBuilder builder) {
+		if (tempRegister instanceof ArrayRegister) {
+			VirtualRegister newReg = Environment.getTemporaryRegister();
+			builder.addInstruction(new ReadArray(newReg, (ArrayRegister) tempRegister));
+			tempRegister = newReg;
 		}
 	}
 }

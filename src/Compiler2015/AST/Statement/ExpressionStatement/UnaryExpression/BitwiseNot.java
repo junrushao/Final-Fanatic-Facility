@@ -35,6 +35,7 @@ public class BitwiseNot extends UnaryExpression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e.emitCFG(builder);
+		e.eliminateLValue(builder);
 		tempRegister = Environment.getTemporaryRegister();
 		builder.addInstruction(new BitwiseNotReg(tempRegister, e.tempRegister));
 	}

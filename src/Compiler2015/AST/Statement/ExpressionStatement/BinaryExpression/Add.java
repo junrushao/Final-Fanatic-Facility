@@ -5,8 +5,8 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.Instruction.Arithmetic.AddReg;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.Instruction.Arithmetic.AddReg;
 import Compiler2015.Type.*;
 
 /**
@@ -138,7 +138,9 @@ public class Add extends BinaryExpression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		left.emitCFG(builder);
+		left.eliminateLValue(builder);
 		right.emitCFG(builder);
+		right.eliminateLValue(builder);
 		tempRegister = Environment.getTemporaryRegister();
 		builder.addInstruction(new AddReg(tempRegister, left.tempRegister, right.tempRegister));
 	}

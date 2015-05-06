@@ -1,8 +1,8 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
-import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.Type.CharType;
 
 /**
@@ -30,6 +30,6 @@ public class CharConstant extends Constant {
 
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
-		tempRegister = Environment.getImmRegister(builder, (int)c);
+		tempRegister = new ImmediateValue((int) c);
 	}
 }

@@ -5,7 +5,14 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.IRRegister.ArrayRegister;
+import Compiler2015.IR.IRRegister.IRRegister;
+import Compiler2015.IR.IRRegister.ImmediateValue;
+import Compiler2015.IR.IRRegister.VirtualRegister;
+import Compiler2015.IR.Instruction.Arithmetic.AddReg;
+import Compiler2015.IR.Instruction.Arithmetic.MultiplyReg;
 import Compiler2015.IR.Instruction.Move;
+import Compiler2015.IR.Instruction.ReadArray;
 import Compiler2015.IR.Instruction.WriteArray;
 import Compiler2015.Type.*;
 
@@ -130,8 +137,36 @@ public class Assign extends BinaryExpression {
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		left.emitCFG(builder);
 		right.emitCFG(builder);
-		tempRegister = Environment.getTemporaryRegister();
-		builder.addInstruction(new Move(left.tempRegister, right.tempRegister));
-		builder.addInstruction(new WriteArray(left.tempRegister, Environment.getImmRegister(builder, 0), right.tempRegister));
+		right.eliminateLValue(builder);
+//		tempRegister = Environment.getTemporaryRegister();
+		if (left.type instanceof StructOrUnionType) {
+			// right-hand side must be a instance of StructOrUnionType as well, which will not do any lvalue self-elimination
+			// a = b = c should be taken into consideration
+			IRRegister t1, t2 = right.tempRegister;
+			if (left.tempRegister instanceof ArrayRegister) {
+				t1 = Environment.getTemporaryRegister();
+				IRRegister t3 = Environment.getTemporaryRegister();
+				builder.addInstruction(new MultiplyReg(t3, ((ArrayRegister) left.tempRegister).b, new ImmediateValue(type.sizeof())));
+				builder.addInstruction(new AddReg(t1, ((ArrayRegister) left.tempRegister).a, t3));
+			}
+			else {
+				t1 = left.tempRegister;
+			}
+
+			StructOrUnionType type = (StructOrUnionType) left.type;
+			int size = type.sizeof();
+			for (int i = 0; i < size; i += 4) {
+				VirtualRegister t = Environment.getTemporaryRegister();
+				builder.addInstruction(new ReadArray(t, new ArrayRegister(t2, new ImmediateValue(i))));
+				builder.addInstruction(new WriteArray(new ArrayRegister(t1, new ImmediateValue(i)), t));
+			}
+			tempRegister = t1;
+		}
+		else if (left.tempRegister instanceof ArrayRegister) {
+			builder.addInstruction(new WriteArray((ArrayRegister) left.tempRegister, right.tempRegister));
+		}
+		else {
+			builder.addInstruction(new Move(left.tempRegister, right.tempRegister));
+		}
 	}
 }

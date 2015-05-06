@@ -9,7 +9,8 @@ import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
-import Compiler2015.IR.Instruction.MoveConstant;
+import Compiler2015.IR.IRRegister.ImmediateValue;
+import Compiler2015.IR.Instruction.Move;
 import Compiler2015.Type.IntType;
 import Compiler2015.Type.Type;
 
@@ -85,8 +86,8 @@ public class LogicalOr extends BinaryExpression implements Logical {
 		CFGVertex falseTo = ControlFlowGraph.getNewVertex();
 
 		tempRegister = Environment.getTemporaryRegister();
-		trueTo.internal.add(new MoveConstant(tempRegister, 1));
-		falseTo.internal.add(new MoveConstant(tempRegister, 0));
+		trueTo.internal.add(new Move(tempRegister, new ImmediateValue(1)));
+		falseTo.internal.add(new Move(tempRegister, new ImmediateValue(0)));
 
 		trueTo.unconditionalNext = out;
 		falseTo.unconditionalNext = out;

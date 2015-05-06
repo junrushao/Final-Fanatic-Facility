@@ -106,9 +106,10 @@ public class Subtract extends BinaryExpression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		left.emitCFG(builder);
+		left.eliminateLValue(builder);
 		right.emitCFG(builder);
+		right.eliminateLValue(builder);
 		tempRegister = Environment.getTemporaryRegister();
 		builder.addInstruction(new SubtractReg(tempRegister, left.tempRegister, right.tempRegister));
 	}
-
 }

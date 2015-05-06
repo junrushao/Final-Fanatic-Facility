@@ -3,6 +3,8 @@ package Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.IRRegister.ImmediateValue;
+import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.Arithmetic.AddReg;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.Instruction.Move;
@@ -41,11 +43,11 @@ public class PostfixSelfInc extends UnaryExpression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e.emitCFG(builder);
+		e.eliminateLValue(builder);
 		tempRegister = Environment.getTemporaryRegister();
 		builder.addInstruction(new Move(tempRegister, e.tempRegister));
-		int tp = Environment.getTemporaryRegister();
-		builder.addInstruction(new AddReg(tp, tempRegister, Environment.getImmRegister(builder, 1)));
+		VirtualRegister tp = Environment.getTemporaryRegister();
+		builder.addInstruction(new AddReg(tp, tempRegister, new ImmediateValue(1)));
 		builder.addInstruction(new Move(e.tempRegister, tp));
 	}
-
 }

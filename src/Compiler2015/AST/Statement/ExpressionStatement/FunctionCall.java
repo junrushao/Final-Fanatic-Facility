@@ -81,10 +81,14 @@ public class FunctionCall extends Expression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		function.emitCFG(builder);
-		for (Expression e : argumentExpressionList)
+		for (Expression e : argumentExpressionList) {
 			e.emitCFG(builder);
-		for (Expression e : vaList)
+			e.eliminateLValue(builder);
+		}
+		for (Expression e : vaList) {
 			e.emitCFG(builder);
+			e.eliminateLValue(builder);
+		}
 		for (Expression e : argumentExpressionList)
 			builder.addInstruction(new PushStack(e.tempRegister));
 		for (Expression e : vaList)

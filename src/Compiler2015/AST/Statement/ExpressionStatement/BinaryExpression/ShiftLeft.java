@@ -39,7 +39,9 @@ public class ShiftLeft extends BinaryExpression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		left.emitCFG(builder);
+		left.eliminateLValue(builder);
 		right.emitCFG(builder);
+		right.eliminateLValue(builder);
 		tempRegister = Environment.getTemporaryRegister();
 		builder.addInstruction(new ShiftLeftReg(tempRegister, left.tempRegister, right.tempRegister));
 	}

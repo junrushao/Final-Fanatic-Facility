@@ -1,7 +1,9 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
+import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.Instruction.Move;
 import Compiler2015.Type.IntType;
 import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
@@ -57,6 +59,12 @@ public class CastExpression extends Expression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e.emitCFG(builder);
-		tempRegister = e.tempRegister;
+		e.eliminateLValue(builder);
+		if (e.type.sizeof() == castTo.sizeof())
+			tempRegister = e.tempRegister;
+		else {
+			tempRegister = Environment.getTemporaryRegister();
+			builder.addInstruction(new Move(tempRegister, e.tempRegister));
+		}
 	}
 }

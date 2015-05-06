@@ -1,14 +1,21 @@
 package Compiler2015.IR.Instruction.Arithmetic;
 
+import Compiler2015.IR.IRRegister.IRRegister;
+
 /**
  * rd = rs + rt
  */
 public class AddReg extends Arithmetic {
-	public int rd, rs, rt;
+	public IRRegister rd, rs, rt;
 
-	public AddReg(int rd, int rs, int rt) {
+	public AddReg(IRRegister rd, IRRegister rs, IRRegister rt) {
 		this.rd = rd;
 		this.rs = rs;
 		this.rt = rt;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s = %s + %s", rd, rs, rt);
 	}
 }

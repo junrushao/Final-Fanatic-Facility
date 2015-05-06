@@ -32,6 +32,7 @@ public class CommaExpression extends Expression {
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e1.emitCFG(builder);
 		e2.emitCFG(builder);
+		e2.eliminateLValue(builder);
 		tempRegister = e2.tempRegister;
 	}
 }

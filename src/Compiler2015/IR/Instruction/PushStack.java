@@ -1,9 +1,16 @@
 package Compiler2015.IR.Instruction;
 
-public class PushStack extends IRInstruction {
-	public int rd;
+import Compiler2015.IR.IRRegister.IRRegister;
 
-	public PushStack(int rd) {
+public class PushStack extends IRInstruction {
+	public IRRegister rd;
+
+	public PushStack(IRRegister rd) {
 		this.rd = rd;
+	}
+
+	@Override
+	public String toString() {
+		return "Push " + rd;
 	}
 }

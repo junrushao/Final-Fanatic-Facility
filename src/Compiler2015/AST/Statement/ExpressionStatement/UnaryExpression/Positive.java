@@ -30,5 +30,6 @@ public class Positive extends UnaryExpression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e.emitCFG(builder);
+		tempRegister = e.tempRegister;
 	}
 }

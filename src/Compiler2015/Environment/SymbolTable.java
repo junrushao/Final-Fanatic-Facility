@@ -5,6 +5,7 @@ import Compiler2015.AST.SimpleInitializerList;
 import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.AST.Statement.ExpressionStatement.StringConstant;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.*;
 import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
@@ -354,9 +355,9 @@ public class SymbolTable {
 	/**
 	 * @return uId of the register
 	 */
-	public int defineTemporaryRegister() {
+	public VirtualRegister defineTemporaryRegister() {
 		int uId = ++lastUId;
 		table.add(new SymbolTableEntry(uId, "#", -1, Tokens.TEMPORARY_REGISTER, null, null));
-		return uId;
+		return new VirtualRegister(uId);
 	}
 }

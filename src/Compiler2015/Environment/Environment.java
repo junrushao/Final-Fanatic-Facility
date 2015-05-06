@@ -4,8 +4,8 @@ import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.Loop;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
-import Compiler2015.IR.CFG.ExpressionCFGBuilder;
-import Compiler2015.IR.Instruction.MoveConstant;
+import Compiler2015.IR.IRRegister.IRRegister;
+import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.*;
 import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
@@ -28,14 +28,8 @@ public class Environment {
 
 	public static CFGVertex functionOutVertex;
 
-	public static int getTemporaryRegister() {
+	public static VirtualRegister getTemporaryRegister() {
 		return symbolNames.defineTemporaryRegister();
-	}
-
-	public static int getImmRegister(ExpressionCFGBuilder builder, int number) {
-		int r = getTemporaryRegister();
-		builder.addInstruction(new MoveConstant(r, number));
-		return r;
 	}
 
 	public static Loop getTopLoop() {

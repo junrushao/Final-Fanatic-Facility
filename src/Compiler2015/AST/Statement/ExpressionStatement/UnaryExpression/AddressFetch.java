@@ -33,6 +33,7 @@ public class AddressFetch extends UnaryExpression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e.emitCFG(builder);
+		e.eliminateLValue(builder);
 		tempRegister = Environment.getTemporaryRegister();
 		builder.addInstruction(new AddressFetchReg(tempRegister, e.tempRegister));
 	}

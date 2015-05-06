@@ -4,8 +4,8 @@ import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
 import Compiler2015.Environment.Environment;
-import Compiler2015.IR.Instruction.Arithmetic.SetEqualTo;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.Instruction.Arithmetic.SetEqualTo;
 import Compiler2015.Type.IntType;
 
 /**
@@ -14,7 +14,7 @@ import Compiler2015.Type.IntType;
 public class EqualTo extends BinaryExpression {
 	public EqualTo(Expression left, Expression right) {
 		super(left, right);
-		this.type = new IntType();
+		this.type = IntType.instance;
 	}
 
 	@Override
@@ -39,7 +39,9 @@ public class EqualTo extends BinaryExpression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		left.emitCFG(builder);
+		left.eliminateLValue(builder);
 		right.emitCFG(builder);
+		right.eliminateLValue(builder);
 		tempRegister = Environment.getTemporaryRegister();
 		builder.addInstruction(new SetEqualTo(tempRegister, left.tempRegister, right.tempRegister));
 	}
