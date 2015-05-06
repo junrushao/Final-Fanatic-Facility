@@ -8,6 +8,7 @@ public final class Panel {
 	public final static String X86 = "-x86";
 	public final static String JVM = "-jvm";
 
+	public static boolean checkMain = false;
 	public static boolean emitAST = false;
 	public static String prettyPrinterType = null;
 	public static String architecture = MIPS;

@@ -25,7 +25,7 @@ public class Main {
 				inputFile = System.in;
 			}
 			Panel.prettyPrinterType = null;
-			Panel.emitAST = false;
+			Panel.emitAST = true;
 			return;
 		}
 		for (String s : args) {
@@ -76,7 +76,8 @@ public class Main {
 		RuleContext tree = parser.compilationUnit();
 
 		// final check
-		Environment.finalCheck();
+		if (Panel.checkMain)
+			Environment.finalCheck();
 
 		// emit AST
 		if (Panel.emitAST) {

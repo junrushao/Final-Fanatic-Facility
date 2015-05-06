@@ -43,7 +43,7 @@ declaration
 	;
 
 functionDefinition
-locals [ Type type, String name, CompoundStatement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1, Stack<Loop> loopStack = null]
+locals [ FunctionType type, String name, CompoundStatement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1, Stack<Loop> loopStack = null]
 @init {
 	$parameterTypes = new ArrayList<Type>();
 	$parameterNames = new ArrayList<String>();
@@ -56,12 +56,6 @@ locals [ Type type, String name, CompoundStatement s = null, ArrayList<Type> par
 }
 	:	typeSpecifier { TypeAnalyser.enter($typeSpecifier.ret); }
 		declarator
-		{
-			$type = TypeAnalyser.analyse();
-			$name = $declarator.name;
-			if (!Environment.isCompleteType($type))
-				throw new CompilationError("Incomplete type.");
-		}
 		L1 (parameterTypeList
 			{
 				$parameterTypes = $parameterTypeList.types;
@@ -75,12 +69,21 @@ locals [ Type type, String name, CompoundStatement s = null, ArrayList<Type> par
 			}
 		)? R1
 		{
-			Environment.functionReturnStack.push($type);
-			$type = new FunctionType($type, $parameterTypes, $parameterNames, $hasVaList);
+			TypeAnalyser.addParameter($parameterTypes, $parameterNames, $hasVaList);
+			$type = (FunctionType) TypeAnalyser.analyse(true);
+			$name = $declarator.name;
+
+			if (!Environment.isCompleteType($type))
+				throw new CompilationError("Incomplete type.");
+
+			Environment.functionReturnStack.push($type.returnType);
 			if (Environment.symbolNames.currentScope == 1)
 				$uId = Environment.symbolNames.defineVariable($name, $type, null);
 			else
 				$uId = Environment.symbolNames.defineLocalFunction($name, $type, null);
+
+			$parameterTypes = $type.parameterTypes;
+			$parameterNames = $type.parameterNames;
 		}
 		compoundStatement[$parameterTypes, $parameterNames]
 		{
@@ -213,7 +216,7 @@ directDeclarator returns [String name]
 	|	d3 = directDeclarator { $name = $d3.name; }
 		'(' ')' { TypeAnalyser.addParameter(null, false); }
 	|	d4 = directDeclarator { $name = $d4.name; }
-		'(' parameterTypeList ')' { TypeAnalyser.addParameter($parameterTypeList.types, $parameterTypeList.hasVaList); }
+		'(' parameterTypeList ')' { TypeAnalyser.addParameter($parameterTypeList.types, $parameterTypeList.names, $parameterTypeList.hasVaList); }
 	;
 
 parameterTypeList returns [ArrayList<Type> types, ArrayList<String> names, boolean hasVaList = false]
@@ -287,14 +290,15 @@ directAbstractDeclarator
 	|	'(' ')'
 			{ TypeAnalyser.addParameter(null, false); }
 	|	'(' parameterTypeList ')'
-			{ TypeAnalyser.addParameter($parameterTypeList.types, $parameterTypeList.hasVaList); }
+			{ TypeAnalyser.addParameter($parameterTypeList.types, $parameterTypeList.names, $parameterTypeList.hasVaList); }
 	|	directAbstractDeclarator '[' ']'
+			{ TypeAnalyser.addArray(null); }
 	|	directAbstractDeclarator '[' constantExpression ']'
 			{ TypeAnalyser.addArray($constantExpression.ret); }
 	|	directAbstractDeclarator '(' ')'
 			{ TypeAnalyser.addParameter(null, false); }
 	|	directAbstractDeclarator '(' parameterTypeList? ')'
-			{ TypeAnalyser.addParameter($parameterTypeList.types, $parameterTypeList.hasVaList); }
+			{ TypeAnalyser.addParameter($parameterTypeList.types, $parameterTypeList.names, $parameterTypeList.hasVaList); }
 	;
 
 typedefName returns [Type ret]
