@@ -13,4 +13,10 @@ public abstract class BinaryExpression extends Expression {
 	}
 
 	public abstract String getOperator();
+
+	@Override
+	public String toString() {
+		return String.format("(%s %s %s)", getOperator(), left.toString(), right.toString());
+	}
+
 }
