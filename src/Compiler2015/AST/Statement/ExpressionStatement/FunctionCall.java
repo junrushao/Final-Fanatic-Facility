@@ -83,11 +83,11 @@ public class FunctionCall extends Expression {
 		function.emitCFG(builder);
 		for (Expression e : argumentExpressionList) {
 			e.emitCFG(builder);
-			e.eliminateLValue(builder);
+			e.eliminateArrayRegister(builder);
 		}
 		for (Expression e : vaList) {
 			e.emitCFG(builder);
-			e.eliminateLValue(builder);
+			e.eliminateArrayRegister(builder);
 		}
 		for (Expression e : argumentExpressionList)
 			builder.addInstruction(new PushStack(e.tempRegister));

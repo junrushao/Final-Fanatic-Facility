@@ -14,6 +14,6 @@ public class VirtualRegister implements IRRegister {
 
 	@Override
 	public String toString() {
-		return Integer.toString(uId);
+		return "#" + Integer.toString(uId);
 	}
 }

@@ -17,6 +17,16 @@ import java.io.*;
 public class Main {
 	public InputStream inputFile = System.in;
 
+	public static void main(String args[]) {
+		try {
+			new Main().compile(args);
+		} catch (CompilationError e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		System.exit(0);
+	}
+
 	public void argumentsInspect(String args[]) {
 		if (Panel.DEBUG) {
 			try {
@@ -26,6 +36,7 @@ public class Main {
 			}
 			Panel.prettyPrinterType = null;
 			Panel.emitAST = true;
+			Panel.emitRawCFG = true;
 			return;
 		}
 		for (String s : args) {
@@ -66,7 +77,7 @@ public class Main {
 			e.printStackTrace();
 		}
 
-		// parse
+		// parse & AST construction
 		Compiler2015Lexer lexer = new Compiler2015Lexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		tokens.fill();
@@ -84,22 +95,15 @@ public class Main {
 			System.out.println(Environment.toStr());
 		}
 
-		// do pretty printer
+		// pretty printer
 		if (Panel.prettyPrinterType != null) {
 			ParseTreeWalker walker = new ParseTreeWalker();
 			PrettyPrinterListener printer = new PrettyPrinterListener(tokens);
 			walker.walk(printer, tree);
 			System.out.println(printer.toString());
 		}
-	}
 
-	public static void main(String args[]) {
-		try {
-			new Main().compile(args);
-		} catch (CompilationError e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-		System.exit(0);
+		// make control flow graph
+		Environment.symbolNames.emitCFG();
 	}
 }

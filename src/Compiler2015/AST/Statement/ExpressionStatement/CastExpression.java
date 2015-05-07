@@ -43,8 +43,8 @@ public class CastExpression extends Expression {
 
 	public static Expression castToNumeric(Expression e) {
 		if (!Type.isNumeric(e.type)) {
-			if (CastExpression.castable(e.type, new IntType()))
-				e = CastExpression.getExpression(new IntType(), e);
+			if (CastExpression.castable(e.type, IntType.instance))
+				e = CastExpression.getExpression(IntType.instance, e);
 			else
 				throw new CompilationError("Cannot cast to numeric types.");
 		}
@@ -59,7 +59,7 @@ public class CastExpression extends Expression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e.emitCFG(builder);
-		e.eliminateLValue(builder);
+		e.eliminateArrayRegister(builder);
 		if (e.type.sizeof() == castTo.sizeof())
 			tempRegister = e.tempRegister;
 		else {

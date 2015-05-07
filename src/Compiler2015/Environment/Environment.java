@@ -4,7 +4,6 @@ import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.Loop;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
-import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.*;
 import Compiler2015.Utility.Tokens;
@@ -27,6 +26,10 @@ public class Environment {
 	public static HashMap<Integer, Integer> variableDelta;
 
 	public static CFGVertex functionOutVertex;
+
+	static {
+		init();
+	}
 
 	public static VirtualRegister getTemporaryRegister() {
 		return symbolNames.defineTemporaryRegister();
@@ -63,57 +66,49 @@ public class Environment {
 		symbolNames.defineVariable(
 				".putchar",
 				new FunctionType(
-						new IntType(),
+						IntType.instance,
 						new ArrayList<Type>() {{
-							add(new IntType());
+							add(IntType.instance);
 						}},
 						new ArrayList<String>() {{
 							add("c");
 						}},
 						false
-				),
-				null
+				)
 		);
 		symbolNames.defineVariable(
 				"getchar",
 				new FunctionType(
-						new IntType(),
+						IntType.instance,
 						new ArrayList<>(),
 						new ArrayList<>(),
 						false
-				),
-				null
+				)
 		);
 		symbolNames.defineVariable(
 				"malloc",
 				new FunctionType(
-						new IntType(),
+						IntType.instance,
 						new ArrayList<Type>() {{
-							add(new IntType());
+							add(IntType.instance);
 						}},
 						new ArrayList<String>() {{
 							add("c");
 						}},
-						false),
-				null
+						false)
 		);
 		symbolNames.defineVariable(
 				"printf",
 				new FunctionType(
-						new IntType(),
+						IntType.instance,
 						new ArrayList<Type>() {{
-							add(new VariablePointerType(new CharType()));
+							add(new VariablePointerType(CharType.instance));
 						}},
 						new ArrayList<String>() {{
 							add("format");
 						}},
-						true),
-				null
+						true)
 		);
-	}
-
-	static {
-		init();
 	}
 
 	public static void enterScope() {

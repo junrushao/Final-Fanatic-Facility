@@ -49,9 +49,9 @@ public class ArrayAccess extends BinaryExpression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		left.emitCFG(builder);
-		left.eliminateLValue(builder);
+		left.eliminateArrayRegister(builder);
 		right.emitCFG(builder);
-		right.eliminateLValue(builder);
+		right.eliminateArrayRegister(builder);
 		tempRegister = Environment.getTemporaryRegister();
 		if (type instanceof Pointer) {
 			VirtualRegister r = Environment.getTemporaryRegister();
@@ -64,7 +64,7 @@ public class ArrayAccess extends BinaryExpression {
 	}
 
 	@Override
-	public void eliminateLValue(ExpressionCFGBuilder builder) {
+	public void eliminateArrayRegister(ExpressionCFGBuilder builder) {
 		if (tempRegister instanceof ArrayRegister) {
 			VirtualRegister newReg = Environment.getTemporaryRegister();
 			builder.addInstruction(new ReadArray(newReg, (ArrayRegister) tempRegister));

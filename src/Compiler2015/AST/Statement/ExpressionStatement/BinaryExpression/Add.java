@@ -138,9 +138,9 @@ public class Add extends BinaryExpression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		left.emitCFG(builder);
-		left.eliminateLValue(builder);
+		left.eliminateArrayRegister(builder);
 		right.emitCFG(builder);
-		right.eliminateLValue(builder);
+		right.eliminateArrayRegister(builder);
 		tempRegister = Environment.getTemporaryRegister();
 		builder.addInstruction(new AddReg(tempRegister, left.tempRegister, right.tempRegister));
 	}

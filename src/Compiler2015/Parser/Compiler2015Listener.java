@@ -1,22 +1,6 @@
 // Generated from /home/junrushao/IdeaProjects/compiler2015/src/Compiler2015/Parser/Compiler2015.g4 by ANTLR 4.5
 package Compiler2015.Parser;
 
-import Compiler2015.AST.*;
-import Compiler2015.AST.Statement.*;
-import Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression.*;
-import Compiler2015.AST.Statement.ExpressionStatement.*;
-import Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression.*;
-import Compiler2015.Type.*;
-import Compiler2015.Environment.*;
-import Compiler2015.Exception.*;
-import Compiler2015.Utility.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.ArrayDeque;
-import java.util.Stack;
-
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 

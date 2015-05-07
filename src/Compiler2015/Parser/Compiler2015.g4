@@ -9,12 +9,9 @@ import Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression.*;
 import Compiler2015.Type.*;
 import Compiler2015.Environment.*;
 import Compiler2015.Exception.*;
-import Compiler2015.Utility.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.ArrayDeque;
 import java.util.Stack;
 }
 
@@ -78,9 +75,9 @@ locals [ FunctionType type, String name, CompoundStatement s = null, ArrayList<T
 
 			Environment.functionReturnStack.push($type.returnType);
 			if (Environment.symbolNames.currentScope == 1)
-				$uId = Environment.symbolNames.defineVariable($name, $type, null);
+				$uId = Environment.symbolNames.defineVariable($name, $type);
 			else
-				$uId = Environment.symbolNames.defineLocalFunction($name, $type, null);
+				$uId = Environment.symbolNames.defineLocalFunction($name, $type);
 
 			$parameterTypes = $type.parameterTypes;
 			$parameterNames = $type.parameterNames;
@@ -104,7 +101,7 @@ locals [Type type, String name, SimpleInitializerList init = null, int uId]
 		{
 			$type = TypeAnalyser.analyse();
 			$name = $declarator.name;
-			$uId = Environment.symbolNames.defineVariable($name, $type, null);
+			$uId = Environment.symbolNames.defineVariable($name, $type);
 		}
 		(EQ initializer
 			{
@@ -115,9 +112,9 @@ locals [Type type, String name, SimpleInitializerList init = null, int uId]
 	;
 
 typeSpecifier returns [Type ret]
-	:	'void' { $ret = new VoidType(); }
-	|	'char' { $ret = new CharType(); }
-	|	'int' { $ret = new IntType();  }
+	:	'void' { $ret = VoidType.instance; }
+	|	'char' { $ret = CharType.instance; }
+	|	'int' { $ret = IntType.instance;  }
 	|	typedefName { $ret = $typedefName.ret; }
 	|	structOrUnionSpecifier { $ret = $structOrUnionSpecifier.ret; }
 	;
@@ -214,7 +211,7 @@ directDeclarator returns [String name]
 	|	d2 = directDeclarator { $name = $d2.name;  }
 		'[' ']' { TypeAnalyser.addArray(null); }
 	|	d3 = directDeclarator { $name = $d3.name; }
-		'(' ')' { TypeAnalyser.addParameter(null, false); }
+		'(' ')' { TypeAnalyser.addParameter(); }
 	|	d4 = directDeclarator { $name = $d4.name; }
 		'(' parameterTypeList ')' { TypeAnalyser.addParameter($parameterTypeList.types, $parameterTypeList.names, $parameterTypeList.hasVaList); }
 	;
@@ -288,7 +285,7 @@ directAbstractDeclarator
 	|	'[' constantExpression ']'
 			{ TypeAnalyser.addArray($constantExpression.ret); }
 	|	'(' ')'
-			{ TypeAnalyser.addParameter(null, false); }
+			{ TypeAnalyser.addParameter(); }
 	|	'(' parameterTypeList ')'
 			{ TypeAnalyser.addParameter($parameterTypeList.types, $parameterTypeList.names, $parameterTypeList.hasVaList); }
 	|	directAbstractDeclarator '[' ']'
@@ -296,7 +293,7 @@ directAbstractDeclarator
 	|	directAbstractDeclarator '[' constantExpression ']'
 			{ TypeAnalyser.addArray($constantExpression.ret); }
 	|	directAbstractDeclarator '(' ')'
-			{ TypeAnalyser.addParameter(null, false); }
+			{ TypeAnalyser.addParameter(); }
 	|	directAbstractDeclarator '(' parameterTypeList? ')'
 			{ TypeAnalyser.addParameter($parameterTypeList.types, $parameterTypeList.names, $parameterTypeList.hasVaList); }
 	;
@@ -340,7 +337,7 @@ locals [ ArrayList<Statement> statements = new ArrayList<Statement>(); ]
 				if ($toDefineTypes != null) {
 					int n = $toDefineTypes.size();
 					for (int i = 0; i < n; ++i)
-						Environment.symbolNames.defineVariable($toDefineNames.get(i), $toDefineTypes.get(i), null);
+						Environment.symbolNames.defineVariable($toDefineNames.get(i), $toDefineTypes.get(i));
 				}
 			}
 		(
@@ -410,7 +407,7 @@ locals [ Expression e = null ]
 			if ($e != null)
 				Environment.matchReturn($e.type);
 			else
-				Environment.matchReturn(new VoidType());
+				Environment.matchReturn(VoidType.instance);
 			$ret = new ReturnStatement($e);
 		} #jumpStatement3
 	;
@@ -703,9 +700,9 @@ locals [ Type type = null, CompoundStatement s = null, ArrayList<Type> parameter
 		)?
 		{
 			Environment.functionReturnStack.push($type);
-			if ($type == null) $type = new VoidType();
+			if ($type == null) $type = VoidType.instance;
 			$type = new FunctionType($type, $parameterTypes, $parameterNames, $hasVaList);
-			$uId = Environment.symbolNames.defineLocalFunction("", $type, null);
+			$uId = Environment.symbolNames.defineLocalFunction("", $type);
 		}
 		compoundStatement[$parameterTypes, $parameterNames]
 		{

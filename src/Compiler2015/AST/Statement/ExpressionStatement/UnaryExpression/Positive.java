@@ -12,12 +12,7 @@ import Compiler2015.Type.Type;
 public class Positive extends UnaryExpression {
 	public Positive(Expression e) {
 		super(e);
-		this.type = new IntType();
-	}
-
-	@Override
-	public String getOperator() {
-		return "+";
+		this.type = IntType.instance;
 	}
 
 	public static Expression getExpression(Expression e) {
@@ -25,6 +20,11 @@ public class Positive extends UnaryExpression {
 			throw new CompilationError("Cannot put unary plus before this type");
 		e.isLValue = false;
 		return e;
+	}
+
+	@Override
+	public String getOperator() {
+		return "+";
 	}
 
 	@Override

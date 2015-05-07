@@ -3,7 +3,7 @@ package Compiler2015.Type;
 public class VoidType extends Type {
 	public static VoidType instance = new VoidType();
 
-	public VoidType() {
+	private VoidType() {
 	}
 
 	@Override

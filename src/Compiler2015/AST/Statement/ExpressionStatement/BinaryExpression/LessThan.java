@@ -17,11 +17,6 @@ public class LessThan extends BinaryExpression {
 		this.type = IntType.instance;
 	}
 
-	@Override
-	public String getOperator() {
-		return "<";
-	}
-
 	public static Expression getExpression(Expression a1, Expression a2) {
 		a1 = CastExpression.castToNumeric(a1);
 		a2 = CastExpression.castToNumeric(a2);
@@ -29,18 +24,23 @@ public class LessThan extends BinaryExpression {
 		if (v1 != null && v2 != null)
 			return new IntConstant(v1 < v2 ? 1 : 0);
 		if (!(a1.type instanceof IntType))
-			a1 = new CastExpression(new IntType(), a1);
+			a1 = new CastExpression(IntType.instance, a1);
 		if (!(a2.type instanceof IntType))
-			a2 = new CastExpression(new IntType(), a2);
+			a2 = new CastExpression(IntType.instance, a2);
 		return new LessThan(a1, a2);
+	}
+
+	@Override
+	public String getOperator() {
+		return "<";
 	}
 
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		left.emitCFG(builder);
-		left.eliminateLValue(builder);
+		left.eliminateArrayRegister(builder);
 		right.emitCFG(builder);
-		right.eliminateLValue(builder);
+		right.eliminateArrayRegister(builder);
 		tempRegister = Environment.getTemporaryRegister();
 		builder.addInstruction(new SetLessThan(tempRegister, left.tempRegister, right.tempRegister));
 	}

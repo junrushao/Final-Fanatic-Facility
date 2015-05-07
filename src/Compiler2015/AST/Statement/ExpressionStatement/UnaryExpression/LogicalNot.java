@@ -21,12 +21,7 @@ import Compiler2015.Type.VoidType;
 public class LogicalNot extends UnaryExpression implements Logical {
 	public LogicalNot(Expression e) {
 		super(e);
-		this.type = new IntType();
-	}
-
-	@Override
-	public String getOperator() {
-		return "!";
+		this.type = IntType.instance;
 	}
 
 	public static Expression getExpression(Expression e) {
@@ -38,6 +33,11 @@ public class LogicalNot extends UnaryExpression implements Logical {
 		if (v != null)
 			return new IntConstant(v == 0 ? 1 : 0);
 		return new LogicalNot(e);
+	}
+
+	@Override
+	public String getOperator() {
+		return "!";
 	}
 
 	@Override

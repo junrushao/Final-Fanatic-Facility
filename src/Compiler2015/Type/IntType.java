@@ -3,7 +3,7 @@ package Compiler2015.Type;
 public class IntType extends Type {
 	public static IntType instance = new IntType();
 
-	public IntType() {
+	private IntType() {
 	}
 
 	@Override

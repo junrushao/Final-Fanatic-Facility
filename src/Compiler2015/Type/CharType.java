@@ -3,7 +3,7 @@ package Compiler2015.Type;
 public class CharType extends Type {
 	public static CharType instance = new CharType();
 
-	public CharType() {
+	private CharType() {
 	}
 
 	@Override

@@ -22,11 +22,6 @@ public class LogicalAnd extends BinaryExpression implements Logical {
 		super(left, right);
 	}
 
-	@Override
-	public String getOperator() {
-		return "&&";
-	}
-
 	public static Expression getExpression(Expression a1, Expression a2) {
 		if (!Type.isNumeric(a1.type) || !Type.isNumeric(a2.type))
 			throw new CompilationError("&& must be operated on numeric types");
@@ -36,10 +31,15 @@ public class LogicalAnd extends BinaryExpression implements Logical {
 		if (v1 != null && v1 == 0)
 			return new IntConstant(0);
 		if (!(a1.type instanceof IntType))
-			a1 = new CastExpression(new IntType(), a1);
+			a1 = new CastExpression(IntType.instance, a1);
 		if (!(a2.type instanceof IntType))
-			a2 = new CastExpression(new IntType(), a2);
+			a2 = new CastExpression(IntType.instance, a2);
 		return new LogicalAnd(a1, a2);
+	}
+
+	@Override
+	public String getOperator() {
+		return "&&";
 	}
 
 	@Override

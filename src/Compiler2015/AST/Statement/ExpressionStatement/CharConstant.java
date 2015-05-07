@@ -13,7 +13,7 @@ public class CharConstant extends Constant {
 
 	public CharConstant(Character c) {
 		this.c = c;
-		this.type = new CharType();
+		this.type = CharType.instance;
 	}
 
 	public static Expression getExpression(String s) {

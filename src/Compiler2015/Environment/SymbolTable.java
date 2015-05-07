@@ -5,6 +5,7 @@ import Compiler2015.AST.SimpleInitializerList;
 import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.AST.Statement.ExpressionStatement.StringConstant;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.*;
 import Compiler2015.Utility.Tokens;
@@ -154,10 +155,10 @@ public class SymbolTable {
 	 * @param t    type of the variable
 	 * @return uId of the function
 	 */
-	public int defineVariable(String name, Type t, Object init) {
+	public int defineVariable(String name, Type t) {
 		if (t instanceof VoidType)
 			throw new CompilationError("Void-type variable is not allowed.");
-		if (currentScope > 1 && t instanceof FunctionType && init == null && !name.equals("")) {
+		if (currentScope > 1 && t instanceof FunctionType && !name.equals("")) {
 			// Special case: declare that there is a global function named $name
 			SymbolTableEntry e = queryName(name);
 			if (e != null && scopes.peek().contains(e.uId))
@@ -191,19 +192,19 @@ public class SymbolTable {
 			int uId;
 			if (e != null && scopes.peek().contains(e.uId)) {
 				uId = e.uId;
-				defineVariable(uId, t, init);
+				defineVariable(uId, t, null);
 			} else {
 				uId = ++lastUId;
 				table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.VARIABLE, t, null));
 				scopes.peek().add(uId);
 				if (name != null && !name.equals(""))
 					getUId(name).push(uId);
-				defineVariable(uId, t, init);
+				defineVariable(uId, t, null);
 			}
 			return uId;
 		} else { // local
 			SymbolTableEntry e = queryName(name);
-			if (t instanceof ArrayPointerType && ((ArrayPointerType) t).dimensions.get(0) == -1 && init == null) {
+			if (t instanceof ArrayPointerType && ((ArrayPointerType) t).dimensions.get(0) == -1) {
 				throw new CompilationError("Array size should be determined");
 			}
 			int uId;
@@ -217,7 +218,7 @@ public class SymbolTable {
 				scopes.peek().add(uId);
 				if (name != null && !name.equals(""))
 					getUId(name).push(uId);
-				defineVariable(uId, t, init);
+				defineVariable(uId, t, null);
 			}
 			return uId;
 		}
@@ -228,7 +229,7 @@ public class SymbolTable {
 	 * @param t    type of the function
 	 * @return uId of the function
 	 */
-	public int defineLocalFunction(String name, Type t, Object init) {
+	public int defineLocalFunction(String name, Type t) {
 		if (!(t instanceof FunctionType))
 			throw new CompilationError("Internal Error.");
 		SymbolTableEntry e = queryName(name);
@@ -241,7 +242,7 @@ public class SymbolTable {
 			scopes.peek().add(uId);
 			if (name != null && !name.equals(""))
 				getUId(name).push(uId);
-			defineVariable(uId, t, init);
+			defineVariable(uId, t, null);
 		}
 		return uId;
 	}
@@ -313,6 +314,36 @@ public class SymbolTable {
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
+	/**
+	 * @param c the string constant
+	 * @return uId of the string
+	 */
+	public int defineStringConstant(String c) {
+		int uId = ++lastUId;
+		table.add(new SymbolTableEntry(uId, c, 1, Tokens.STRING_CONSTANT, c, null));
+//		scopes.get(1).add(uId);
+		return uId;
+	}
+
+	/**
+	 * @return uId of the register
+	 */
+	public VirtualRegister defineTemporaryRegister() {
+		int uId = ++lastUId;
+		table.add(new SymbolTableEntry(uId, "#", -1, Tokens.TEMPORARY_REGISTER, null, null));
+		return new VirtualRegister(uId);
+	}
+
+	public void emitCFG() {
+		for (int i = 0, size = table.size(); i < size; ++i) { // prevent scanning the added registers
+			SymbolTableEntry entry = table.get(i);
+			if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionType && entry.info != null) {
+				ControlFlowGraph.process((FunctionType) entry.ref, (CompoundStatement) entry.info, entry.uId);
+				System.out.println(ControlFlowGraph.toStr());
+			}
+		}
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -339,25 +370,5 @@ public class SymbolTable {
 				sb.append(e.name).append(Utility.NEW_LINE);
 		}
 		return sb.toString();
-	}
-
-	/**
-	 * @param c the string constant
-	 * @return uId of the string
-	 */
-	public int defineStringConstant(String c) {
-		int uId = ++lastUId;
-		table.add(new SymbolTableEntry(uId, c, 1, Tokens.STRING_CONSTANT, c, null));
-//		scopes.get(1).add(uId);
-		return uId;
-	}
-
-	/**
-	 * @return uId of the register
-	 */
-	public VirtualRegister defineTemporaryRegister() {
-		int uId = ++lastUId;
-		table.add(new SymbolTableEntry(uId, "#", -1, Tokens.TEMPORARY_REGISTER, null, null));
-		return new VirtualRegister(uId);
 	}
 }

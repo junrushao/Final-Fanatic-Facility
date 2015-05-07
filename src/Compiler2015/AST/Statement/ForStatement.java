@@ -1,6 +1,7 @@
 package Compiler2015.AST.Statement;
 
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
+import Compiler2015.AST.Statement.ExpressionStatement.Constant;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
@@ -17,6 +18,15 @@ public class ForStatement extends Statement implements Loop {
 	public Statement d;
 	public CFGVertex loop;
 
+	public ForStatement(Expression a, Expression b, Expression c) {
+		if (b != null && !CastExpression.castable(b.type, IntType.instance))
+			throw new CompilationError("Expression inside for statement could not be converted to int type.");
+		this.a = a;
+		this.b = b;
+		this.c = c;
+		this.d = null;
+	}
+
 	@Override
 	public CFGVertex getLoop() {
 		return loop;
@@ -25,15 +35,6 @@ public class ForStatement extends Statement implements Loop {
 	@Override
 	public CFGVertex getOut() {
 		return endCFGBlock;
-	}
-
-	public ForStatement(Expression a, Expression b, Expression c) {
-		if (b != null && !CastExpression.castable(b.type, new IntType()))
-			throw new CompilationError("Expression inside for statement could not be converted to int type.");
-		this.a = a;
-		this.b = b;
-		this.c = c;
-		this.d = null;
 	}
 
 	@Override
@@ -59,6 +60,21 @@ public class ForStatement extends Statement implements Loop {
 	public void emitCFG() {
 		CFGVertex out = endCFGBlock = ControlFlowGraph.getNewVertex();
 		loop = ControlFlowGraph.getNewVertex();
+		Integer vb = Constant.toInt(b);
+		if (vb != null) {
+			if (vb == 0) {
+				if (a != null) {
+					a.emitCFG();
+					beginCFGBlock = a.beginCFGBlock;
+					endCFGBlock = a.endCFGBlock;
+				} else {
+					beginCFGBlock = endCFGBlock = ControlFlowGraph.getNewVertex();
+				}
+				return;
+			} else {
+				b = null;
+			}
+		}
 		if (a != null) {
 			a.emitCFG();
 			beginCFGBlock = a.beginCFGBlock;

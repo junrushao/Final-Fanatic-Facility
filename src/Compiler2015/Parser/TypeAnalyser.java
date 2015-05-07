@@ -15,16 +15,16 @@ class AnalyserEntry {
 	ArrayList<String> names = null;
 	boolean hasVaList = false;
 
-	public AnalyserEntry(Tokens type, Expression e, ArrayList<Type> types, boolean hasVaList) {
+	public AnalyserEntry(Tokens type, Expression e, ArrayList<Type> types) {
 		this.type = type;
 		this.e = e;
 		this.types = types;
-		this.hasVaList = hasVaList;
+		this.hasVaList = false;
 	}
 
-	public AnalyserEntry(Tokens type, Expression e, ArrayList<Type> types, ArrayList<String> names, boolean hasVaList) {
-		this.type = type;
-		this.e = e;
+	public AnalyserEntry(ArrayList<Type> types, ArrayList<String> names, boolean hasVaList) {
+		this.type = Tokens.PARAMETER_BRACKET;
+		this.e = null;
 		this.types = types;
 		this.names = names;
 		this.hasVaList = hasVaList;
@@ -50,23 +50,21 @@ public final class TypeAnalyser {
 	}
 
 	public static void addStar() {
-		se.peek().push(new AnalyserEntry(Tokens.STAR, null, null, false));
+		se.peek().push(new AnalyserEntry(Tokens.STAR, null, null));
 	}
 
 	public static void addParameter(ArrayList<Type> types, ArrayList<String> names, boolean hasVaList) {
 		if (types == null)
 			types = new ArrayList<>();
-		se.peek().push(new AnalyserEntry(Tokens.PARAMETER_BRACKET, null, types, names, hasVaList));
+		se.peek().push(new AnalyserEntry(types, names, hasVaList));
 	}
 
-	public static void addParameter(ArrayList<Type> types, boolean hasVaList) {
-		if (types == null)
-			types = new ArrayList<>();
-		se.peek().push(new AnalyserEntry(Tokens.PARAMETER_BRACKET, null, types, hasVaList));
+	public static void addParameter() {
+		se.peek().push(new AnalyserEntry(Tokens.PARAMETER_BRACKET, null, new ArrayList<>()));
 	}
 
 	public static void addArray(Expression e) {
-		se.peek().push(new AnalyserEntry(Tokens.ARRAY_BRACKET, e, null, false));
+		se.peek().push(new AnalyserEntry(Tokens.ARRAY_BRACKET, e, null));
 	}
 
 	public static Type analyse(boolean reserve) {

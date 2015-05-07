@@ -5,8 +5,8 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.Instruction.Arithmetic.ModuloReg;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.Instruction.Arithmetic.ModuloReg;
 import Compiler2015.Type.IntType;
 import Compiler2015.Type.Type;
 
@@ -16,11 +16,6 @@ import Compiler2015.Type.Type;
 public class Modulo extends BinaryExpression {
 	public Modulo(Expression left, Expression right) {
 		super(left, right);
-	}
-
-	@Override
-	public String getOperator() {
-		return "%";
 	}
 
 	public static Expression getExpression(Expression a1, Expression a2) {
@@ -33,18 +28,23 @@ public class Modulo extends BinaryExpression {
 			return new IntConstant(v1 % v2);
 		}
 		if (!(a1.type instanceof IntType))
-			a1 = new CastExpression(new IntType(), a1);
+			a1 = new CastExpression(IntType.instance, a1);
 		if (!(a2.type instanceof IntType))
-			a2 = new CastExpression(new IntType(), a2);
+			a2 = new CastExpression(IntType.instance, a2);
 		return new Modulo(a1, a2);
+	}
+
+	@Override
+	public String getOperator() {
+		return "%";
 	}
 
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		left.emitCFG(builder);
-		left.eliminateLValue(builder);
+		left.eliminateArrayRegister(builder);
 		right.emitCFG(builder);
-		right.eliminateLValue(builder);
+		right.eliminateArrayRegister(builder);
 		tempRegister = Environment.getTemporaryRegister();
 		builder.addInstruction(new ModuloReg(tempRegister, left.tempRegister, right.tempRegister));
 	}

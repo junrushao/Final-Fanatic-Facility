@@ -3,10 +3,10 @@ package Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.Arithmetic.AddReg;
-import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.Instruction.Move;
 import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.StructOrUnionType;
@@ -19,11 +19,6 @@ public class PostfixSelfInc extends UnaryExpression {
 	public PostfixSelfInc(Expression e) {
 		super(e);
 		this.type = e.type;
-	}
-
-	@Override
-	public String getOperator() {
-		return "Postfix ++";
 	}
 
 	public static Expression getExpression(Expression a1) {
@@ -41,9 +36,14 @@ public class PostfixSelfInc extends UnaryExpression {
 	}
 
 	@Override
+	public String getOperator() {
+		return "Postfix ++";
+	}
+
+	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e.emitCFG(builder);
-		e.eliminateLValue(builder);
+		e.eliminateArrayRegister(builder);
 		tempRegister = Environment.getTemporaryRegister();
 		builder.addInstruction(new Move(tempRegister, e.tempRegister));
 		VirtualRegister tp = Environment.getTemporaryRegister();

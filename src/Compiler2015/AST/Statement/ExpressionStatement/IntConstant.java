@@ -9,7 +9,7 @@ public class IntConstant extends Constant {
 	public Integer c;
 
 	public IntConstant(Integer c) {
-		this.type = new IntType();
+		this.type = IntType.instance;
 		this.c = c;
 	}
 

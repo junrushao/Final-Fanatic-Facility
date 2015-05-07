@@ -4,6 +4,11 @@ import Compiler2015.AST.Initializer;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.IRRegister.ArrayRegister;
+import Compiler2015.IR.IRRegister.ImmediateValue;
+import Compiler2015.IR.IRRegister.VirtualRegister;
+import Compiler2015.IR.Instruction.Move;
+import Compiler2015.IR.Instruction.ReadArray;
 import Compiler2015.IR.Instruction.WriteArray;
 import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.FunctionType;
@@ -77,13 +82,19 @@ public class CompoundStatement extends Statement {
 		for (int x : variables) {
 			SymbolTableEntry e = Environment.symbolNames.table.get(x);
 			Type tp = (Type) e.ref;
-			if (tp instanceof FunctionType)
+			if (tp instanceof FunctionType) // functions are processed in global scope
 				continue;
 			Initializer init = (Initializer) e.info;
 			for (Initializer.InitEntry entry : init.entries) {
-				if (entry.position.length == 0) {
+				VirtualRegister rx = new VirtualRegister(x);
+				if (entry.position.length == 0) { // single variable
 					entry.value.emitCFG(builder);
-					builder.addInstruction(new WriteArray(x, Environment.getImmRegister(builder, 0), entry.value.tempRegister));
+					entry.value.eliminateArrayRegister(builder);
+					if (entry.value.tempRegister instanceof ArrayRegister) {
+						builder.addInstruction(new ReadArray(rx, (ArrayRegister) entry.value.tempRegister));
+					} else {
+						builder.addInstruction(new Move(rx, entry.value.tempRegister));
+					}
 				}
 				else {
 					ArrayPointerType t = (ArrayPointerType) tp;
@@ -92,7 +103,8 @@ public class CompoundStatement extends Statement {
 						pos += entry.position[i] * mul;
 						mul *= t.dimensions.get(i);
 					}
-					builder.addInstruction(new WriteArray(x, Environment.getImmRegister(builder, pos), entry.value.tempRegister));
+					entry.value.eliminateArrayRegister(builder);
+					builder.addInstruction(new WriteArray(new ArrayRegister(rx, new ImmediateValue(pos)), entry.value.tempRegister));
 				}
 			}
 		}

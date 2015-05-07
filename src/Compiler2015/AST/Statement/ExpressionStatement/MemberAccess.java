@@ -45,7 +45,7 @@ public class MemberAccess extends Expression {
 		if (!(su.type instanceof StructOrUnionType))
 			throw new CompilationError("Internal Error.");
 		su.emitCFG(builder);
-//		su.eliminateLValue(builder);
+//		su.eliminateArrayRegister(builder);
 		StructOrUnionType type = (StructOrUnionType) su.type;
 		int delta = type.memberDelta.get(memberName);
 		if (delta == 0) {
@@ -62,7 +62,7 @@ public class MemberAccess extends Expression {
 	}
 
 	@Override
-	public void eliminateLValue(ExpressionCFGBuilder builder) {
+	public void eliminateArrayRegister(ExpressionCFGBuilder builder) {
 		if (tempRegister instanceof ArrayRegister) {
 			VirtualRegister newReg = Environment.getTemporaryRegister();
 			builder.addInstruction(new ReadArray(newReg, (ArrayRegister) tempRegister));

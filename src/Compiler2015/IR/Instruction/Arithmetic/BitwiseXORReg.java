@@ -18,5 +18,4 @@ public class BitwiseXORReg extends Arithmetic {
 	public String toString() {
 		return String.format("%s = %s ^ %s", rd, rs, rt);
 	}
-
 }

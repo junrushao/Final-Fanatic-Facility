@@ -24,11 +24,6 @@ public class Assign extends BinaryExpression {
 		super(left, right);
 	}
 
-	@Override
-	public String getOperator() {
-		return "=";
-	}
-
 	public static Expression getExpression(Expression a1, Expression a2, String operator) {
 		if (!a1.isLValue)
 			throw new CompilationError("Expression to the left of = is not left-value.");
@@ -105,7 +100,7 @@ public class Assign extends BinaryExpression {
 			throw new CompilationError("Incompatible type.");
 
 		if (!(a1.type instanceof StructOrUnionType || a2.type instanceof StructOrUnionType)
-				&& (!CastExpression.castable(a1.type, new IntType()) || !CastExpression.castable(a2.type, new IntType())))
+				&& (!CastExpression.castable(a1.type, IntType.instance) || !CastExpression.castable(a2.type, IntType.instance)))
 			throw new CompilationError("Incompatible type.");
 
 		if (operator.equals("="))
@@ -134,10 +129,15 @@ public class Assign extends BinaryExpression {
 	}
 
 	@Override
+	public String getOperator() {
+		return "=";
+	}
+
+	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		left.emitCFG(builder);
 		right.emitCFG(builder);
-		right.eliminateLValue(builder);
+		right.eliminateArrayRegister(builder);
 //		tempRegister = Environment.getTemporaryRegister();
 		if (left.type instanceof StructOrUnionType) {
 			// right-hand side must be a instance of StructOrUnionType as well, which will not do any lvalue self-elimination

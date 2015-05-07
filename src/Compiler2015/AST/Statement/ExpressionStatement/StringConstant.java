@@ -10,6 +10,15 @@ import Compiler2015.Type.CharType;
 import java.util.ArrayList;
 
 public class StringConstant extends Expression {
+	/**
+	 * @see <a href="http://en.wikipedia.org/wiki/Escape_sequences_in_C">Escape Sequences in C</a>
+	 * For hex number, if the resulting integer value is too large to fit in a single character, the actual numerical value assigned is implementation-defined.
+	 * <p>
+	 * In my implementation, I ignored this situation.
+	 * <p>
+	 * Also, in format strings, we should pay attention to '%', which is also ignored here.
+	 */
+	public static boolean isToAppendBack = true;
 	public String c;
 	public int uId;
 
@@ -20,22 +29,13 @@ public class StringConstant extends Expression {
 		this.uId = Environment.symbolNames.defineStringConstant(c);
 		this.isLValue = false;
 		this.type = new ArrayPointerType(
-				new CharType(),
+				CharType.instance,
 				new ArrayList<Integer>() {{
 					add(c.length());
 				}}
 		);
 	}
 
-	/**
-	 * @see <a href="http://en.wikipedia.org/wiki/Escape_sequences_in_C">Escape Sequences in C</a>
-	 * For hex number, if the resulting integer value is too large to fit in a single character, the actual numerical value assigned is implementation-defined.
-	 * <p/>
-	 * In my implementation, I ignored this situation.
-	 * <p/>
-	 * Also, in format strings, we should pay attention to '%', which is also ignored here.
-	 */
-	public static boolean isToAppendBack = true;
 	public static String convert(String original) {
 		int n = original.length();
 		original = original.substring(1, n - 1);

@@ -2,7 +2,7 @@ package Compiler2015.Type;
 
 import Compiler2015.Utility.Panel;
 
-public class Pointer extends Type {
+public abstract class Pointer extends Type {
 	public static Type getPointTo(Type x) {
 		if (x instanceof ArrayPointerType)
 			return ((ArrayPointerType) x).pointTo;

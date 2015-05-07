@@ -21,6 +21,12 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 	public BufferedTokenStream tokenStream;
 	public ArrayList<Config> configs;
 	public int indent = 0;
+	public int lastIndent;
+
+	public PrettyPrinterListener(BufferedTokenStream tokenStream) {
+		this.tokenStream = tokenStream;
+		this.configs = new ArrayList<>();
+	}
 
 	public void ensureCapacity(int n) { // [0, n]
 		while (configs.size() <= n)
@@ -47,11 +53,6 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 		configs.get(n).nl = true;
 	}
 
-	public PrettyPrinterListener(BufferedTokenStream tokenStream) {
-		this.tokenStream = tokenStream;
-		this.configs = new ArrayList<>();
-	}
-
 	public String convertComment(String s) {
 		if (s.startsWith("/*"))
 			return s;
@@ -62,13 +63,11 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 		throw new CompilationError("WTF");
 	}
 
-	public int lastIndent;
-
-	public boolean endsWith(StringBuilder sb, String s) {
-		int n = sb.length(), m = s.length();
+	public boolean endsWithNL(StringBuilder sb) {
+		int n = sb.length(), m = Utility.NEW_LINE.length();
 		if (n < m) return false;
 		while (m > 0)
-			if (sb.charAt(--n) != s.charAt(--m))
+			if (sb.charAt(--n) != Utility.NEW_LINE.charAt(--m))
 				return false;
 		return true;
 	}
@@ -77,7 +76,7 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 		int len = sb.length();
 		if (len == 0)
 			return;
-		if (sb.charAt(len - 1) == ' ' || sb.charAt(len - 1) == '\t' || endsWith(sb, Utility.NEW_LINE))
+		if (sb.charAt(len - 1) == ' ' || sb.charAt(len - 1) == '\t' || endsWithNL(sb))
 			return;
 		sb.append(' ');
 	}

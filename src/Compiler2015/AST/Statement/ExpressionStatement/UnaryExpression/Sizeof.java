@@ -8,7 +8,7 @@ import Compiler2015.Type.IntType;
 public class Sizeof extends UnaryExpression {
 	public Sizeof(Expression e) {
 		super(e);
-		this.type = new IntType();
+		this.type = IntType.instance;
 	}
 
 	@Override

@@ -33,4 +33,7 @@ public abstract class Type {
 	}
 
 	public abstract int sizeof();
+
+	@Override
+	public abstract String toString();
 }
