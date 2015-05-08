@@ -37,6 +37,7 @@ public class Main {
 			Panel.prettyPrinterType = null;
 			Panel.emitAST = true;
 			Panel.emitRawCFG = true;
+			Panel.checkMain = false;
 			return;
 		}
 		for (String s : args) {

@@ -3,7 +3,6 @@ package Compiler2015.Environment;
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.Loop;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.*;
 import Compiler2015.Utility.Tokens;
@@ -24,8 +23,6 @@ public class Environment {
 	public static ArrayList<SymbolTableEntry> classTable;
 	public static int totalTempRegisters;
 	public static HashMap<Integer, Integer> variableDelta;
-
-	public static CFGVertex functionOutVertex;
 
 	static {
 		init();
@@ -99,6 +96,18 @@ public class Environment {
 		);
 		symbolNames.defineVariable(
 				"printf",
+				new FunctionType(
+						IntType.instance,
+						new ArrayList<Type>() {{
+							add(new VariablePointerType(CharType.instance));
+						}},
+						new ArrayList<String>() {{
+							add("format");
+						}},
+						true)
+		);
+		symbolNames.defineVariable(
+				"scanf",
 				new FunctionType(
 						IntType.instance,
 						new ArrayList<Type>() {{

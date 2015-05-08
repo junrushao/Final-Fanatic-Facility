@@ -3,11 +3,13 @@ package Compiler2015.IR.CFG;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.Instruction.IRInstruction;
 
+import java.util.ArrayList;
+
 public class ExpressionCFGBuilder {
 	public CFGVertex s, t;
 
 	public ExpressionCFGBuilder() {
-		s = t = new CFGVertex();
+		s = t = ControlFlowGraph.getNewVertex();
 	}
 
 	public void addInstruction(IRInstruction i) {
@@ -15,7 +17,7 @@ public class ExpressionCFGBuilder {
 			t.internal.add(i);
 		}
 		else {
-			CFGVertex newT = new CFGVertex();
+			CFGVertex newT = ControlFlowGraph.getNewVertex();
 			if (t.unconditionalNext != null)
 				throw new CompilationError("Internal Error.");
 			t.unconditionalNext = newT;
@@ -25,13 +27,14 @@ public class ExpressionCFGBuilder {
 	}
 
 	public void addBlock(CFGVertex sp, CFGVertex tp) {
+		if (sp == null || tp == null)
+			throw new CompilationError("Internal Error.");
 		if (t.unconditionalNext == null && t.branchIfFalse == null) {
 			t.internal.addAll(sp.internal);
-			t.unconditionalNext = sp.unconditionalNext;
+			sp.internal = new ArrayList<>(0);
+			t.unconditionalNext = sp;
 			t.branchIfFalse = sp.branchIfFalse;
-			ControlFlowGraph.deleteVertex(t); // merge two nodes
-
-			sp.internal = null; // help GC
+			sp.branchIfFalse = null;
 			t = tp;
 		}
 		else {

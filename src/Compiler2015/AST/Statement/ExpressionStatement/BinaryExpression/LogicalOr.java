@@ -43,34 +43,38 @@ public class LogicalOr extends BinaryExpression implements Logical {
 	}
 
 	@Override
-	public void emitCFG(CFGVertex trueTo, CFGVertex falseTo, ExpressionCFGBuilder builder) {
+	public void emitCFG(CFGVertex trueTo, CFGVertex falseTo) {
 		if (left instanceof Logical && right instanceof Logical) {
 			Logical leftP = (Logical) left;
 			Logical rightP = (Logical) right;
-			rightP.emitCFG(trueTo, falseTo, builder);
-			leftP.emitCFG(trueTo, rightP.getStartNode(), builder);
+			rightP.emitCFG(trueTo, falseTo);
+			leftP.emitCFG(trueTo, rightP.getStartNode());
+			beginCFGBlock = leftP.getStartNode();
 		}
 		else if (left instanceof Logical) { // left is Logical but right is not
 			Logical leftP = (Logical) left;
-			right.emitCFG(builder);
+			right.emitCFG();
 			right.endCFGBlock.unconditionalNext = trueTo;
 			right.endCFGBlock.branchIfFalse = falseTo;
-			leftP.emitCFG(trueTo, right.beginCFGBlock, builder);
+			leftP.emitCFG(trueTo, right.beginCFGBlock);
+			beginCFGBlock = leftP.getStartNode();
 		}
 		else if (right instanceof Logical) { // left is not Logical but right is
 			Logical rightP = (Logical) right;
-			rightP.emitCFG(trueTo, falseTo, builder);
-			left.emitCFG(builder);
+			rightP.emitCFG(trueTo, falseTo);
+			left.emitCFG();
 			left.endCFGBlock.unconditionalNext = trueTo;
 			left.endCFGBlock.branchIfFalse = right.beginCFGBlock;
+			beginCFGBlock = left.beginCFGBlock;
 		}
 		else { // left is not Logical while right is not neither
-			left.emitCFG(builder);
-			right.emitCFG(builder);
+			left.emitCFG();
+			right.emitCFG();
 			left.endCFGBlock.unconditionalNext = trueTo;
 			left.endCFGBlock.branchIfFalse = right.beginCFGBlock;
 			right.endCFGBlock.unconditionalNext = trueTo;
 			right.endCFGBlock.branchIfFalse = falseTo;
+			beginCFGBlock = left.beginCFGBlock;
 		}
 	}
 
@@ -91,8 +95,8 @@ public class LogicalOr extends BinaryExpression implements Logical {
 
 		trueTo.unconditionalNext = out;
 		falseTo.unconditionalNext = out;
-		emitCFG(trueTo, falseTo, builder);
+		emitCFG(trueTo, falseTo);
 
-		builder.addBlock(endCFGBlock);
+		builder.addBlock(beginCFGBlock, endCFGBlock);
 	}
 }

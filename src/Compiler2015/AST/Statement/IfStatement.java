@@ -6,9 +6,10 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.IR.CFG.ControlFlowGraph;
-import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.Type.IntType;
 import Compiler2015.Utility.Utility;
+
+import java.util.ArrayList;
 
 /**
  * if (e) ifTrue else ifFalse
@@ -21,7 +22,7 @@ public class IfStatement extends Statement {
 		if (!CastExpression.castable(e.type, IntType.instance))
 			throw new CompilationError("Expression inside if statement could not be converted to int type.");
 		this.e = e;
-		this.ifTrue = ifTrue;
+		this.ifTrue = ifTrue != null ? ifTrue : new CompoundStatement(new ArrayList<>(0), new ArrayList<>(0));
 		this.ifFalse = ifFalse;
 	}
 
@@ -63,20 +64,21 @@ public class IfStatement extends Statement {
 		else {
 			CFGVertex out = endCFGBlock = ControlFlowGraph.getNewVertex();
 			ifTrue.emitCFG();
-			ifTrue.endCFGBlock.unconditionalNext = out;
+			if (ifTrue.endCFGBlock.unconditionalNext == null)
+				ifTrue.endCFGBlock.unconditionalNext = out;
 
 			CFGVertex Then = ifTrue.beginCFGBlock;
 			CFGVertex Else = out;
 			if (ifFalse != null) {
 				ifFalse.emitCFG();
-				ifFalse.endCFGBlock.unconditionalNext = out;
+				if (ifFalse.endCFGBlock.unconditionalNext == null)
+					ifFalse.endCFGBlock.unconditionalNext = out;
 				Else = ifFalse.beginCFGBlock;
 			}
 			if (e instanceof Logical) {
 				Logical ep = (Logical) e;
-				ExpressionCFGBuilder builder = new ExpressionCFGBuilder();
-				ep.emitCFG(Then, Else, builder);
-				beginCFGBlock = builder.s;
+				ep.emitCFG(Then, Else);
+				beginCFGBlock = ep.getStartNode();
 			} else {
 				e.emitCFG();
 				beginCFGBlock = e.beginCFGBlock;

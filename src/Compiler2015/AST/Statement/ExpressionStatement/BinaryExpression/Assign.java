@@ -164,9 +164,21 @@ public class Assign extends BinaryExpression {
 		}
 		else if (left.tempRegister instanceof ArrayRegister) {
 			builder.addInstruction(new WriteArray((ArrayRegister) left.tempRegister, right.tempRegister));
+			tempRegister = left.tempRegister;
 		}
 		else {
 			builder.addInstruction(new Move(left.tempRegister, right.tempRegister));
+			tempRegister = left.tempRegister;
 		}
 	}
+
+	@Override
+	public void eliminateArrayRegister(ExpressionCFGBuilder builder) {
+		if (tempRegister instanceof ArrayRegister) {
+			VirtualRegister newReg = Environment.getTemporaryRegister();
+			builder.addInstruction(new ReadArray(newReg, (ArrayRegister) tempRegister));
+			tempRegister = newReg;
+		}
+	}
+
 }

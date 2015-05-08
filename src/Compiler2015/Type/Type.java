@@ -1,5 +1,6 @@
 package Compiler2015.Type;
 
+import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Utility;
 
 public abstract class Type {
@@ -32,8 +33,17 @@ public abstract class Type {
 		return Utility.getIndent(depth).append(toString()).append(Utility.NEW_LINE).toString();
 	}
 
-	public abstract int sizeof();
+	@Override
+	public int hashCode() {
+		throw new CompilationError("Internal Error.");
+	}
+
+	@Override
+	public abstract boolean equals(Object obj);
 
 	@Override
 	public abstract String toString();
+
+	public abstract int sizeof();
+
 }

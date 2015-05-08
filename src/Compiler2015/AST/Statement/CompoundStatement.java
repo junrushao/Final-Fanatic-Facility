@@ -84,7 +84,11 @@ public class CompoundStatement extends Statement {
 			Type tp = (Type) e.ref;
 			if (tp instanceof FunctionType) // functions are processed in global scope
 				continue;
+			if (e.info == null)
+				continue;
 			Initializer init = (Initializer) e.info;
+			if (init.entries == null)
+				continue;
 			for (Initializer.InitEntry entry : init.entries) {
 				VirtualRegister rx = new VirtualRegister(x);
 				if (entry.position.length == 0) { // single variable
@@ -103,6 +107,7 @@ public class CompoundStatement extends Statement {
 						pos += entry.position[i] * mul;
 						mul *= t.dimensions.get(i);
 					}
+					entry.value.emitCFG(builder);
 					entry.value.eliminateArrayRegister(builder);
 					builder.addInstruction(new WriteArray(new ArrayRegister(rx, new ImmediateValue(pos)), entry.value.tempRegister));
 				}

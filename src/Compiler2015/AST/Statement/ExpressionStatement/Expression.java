@@ -3,7 +3,9 @@ package Compiler2015.AST.Statement.ExpressionStatement;
 import Compiler2015.AST.Statement.Statement;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.IRRegister;
+import Compiler2015.IR.Instruction.Move;
 import Compiler2015.Type.Type;
 import Compiler2015.Utility.Utility;
 
@@ -23,7 +25,9 @@ public abstract class Expression extends Statement {
 	public abstract void emitCFG(ExpressionCFGBuilder builder);
 
 	public void eliminateArrayRegister(ExpressionCFGBuilder builder) {
-		if (this.isLValue)
+		if (this.tempRegister == null)
+			throw new CompilationError("Internal Error.");
+		if (this.tempRegister instanceof ArrayRegister)
 			throw new CompilationError("Internal Error.");
 	}
 
@@ -32,6 +36,8 @@ public abstract class Expression extends Statement {
 		ExpressionCFGBuilder builder = new ExpressionCFGBuilder();
 		emitCFG(builder);
 		eliminateArrayRegister(builder);
+		if (this instanceof IdentifierExpression)
+			builder.addInstruction(new Move(tempRegister, tempRegister));
 		beginCFGBlock = builder.s;
 		endCFGBlock = builder.t;
 	}

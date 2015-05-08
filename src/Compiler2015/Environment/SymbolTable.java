@@ -8,6 +8,7 @@ import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.*;
+import Compiler2015.Utility.Panel;
 import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
@@ -204,9 +205,11 @@ public class SymbolTable {
 			return uId;
 		} else { // local
 			SymbolTableEntry e = queryName(name);
+/*
 			if (t instanceof ArrayPointerType && ((ArrayPointerType) t).dimensions.get(0) == -1) {
 				throw new CompilationError("Array size should be determined");
 			}
+*/
 			int uId;
 			if (e != null && scopes.peek().contains(e.uId)) {
 				throw new CompilationError("Symbol already defined.");
@@ -315,6 +318,7 @@ public class SymbolTable {
 	}
 
 	/**
+	 *
 	 * @param c the string constant
 	 * @return uId of the string
 	 */
@@ -335,11 +339,12 @@ public class SymbolTable {
 	}
 
 	public void emitCFG() {
-		for (int i = 0, size = table.size(); i < size; ++i) { // prevent scanning the added registers
+		for (int i = 1, size = table.size(); i < size; ++i) { // prevent scanning the added registers
 			SymbolTableEntry entry = table.get(i);
 			if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionType && entry.info != null) {
 				ControlFlowGraph.process((FunctionType) entry.ref, (CompoundStatement) entry.info, entry.uId);
-				System.out.println(ControlFlowGraph.toStr());
+				if (Panel.emitRawCFG)
+					System.out.println(ControlFlowGraph.toStr());
 			}
 		}
 	}

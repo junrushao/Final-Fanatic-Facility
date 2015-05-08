@@ -26,8 +26,8 @@ public class FunctionCall extends Expression {
 		this.type = returnType;
 		this.isLValue = false;
 		this.function = e1;
-		this.argumentExpressionList = argumentExpressionList;
-		this.vaList = VaList;
+		this.argumentExpressionList = argumentExpressionList == null ? new Expression[0] : argumentExpressionList;
+		this.vaList = VaList == null ? new Expression[0] : VaList;
 	}
 
 	public static Expression getExpression(Expression e1, ArrayList<Expression> parameters) {

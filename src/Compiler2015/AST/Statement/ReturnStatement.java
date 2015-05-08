@@ -1,8 +1,13 @@
 package Compiler2015.AST.Statement;
 
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
-import Compiler2015.Environment.Environment;
+import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ControlFlowGraph;
+import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.IRRegister.ArrayRegister;
+import Compiler2015.IR.Instruction.Move;
+import Compiler2015.IR.Instruction.Pop;
+import Compiler2015.IR.Instruction.ReadArray;
 import Compiler2015.Utility.Utility;
 
 /**
@@ -29,11 +34,21 @@ public class ReturnStatement extends Statement {
 	public void emitCFG() {
 		if (e == null) {
 			beginCFGBlock = endCFGBlock = ControlFlowGraph.getNewVertex();
+			endCFGBlock.internal.add(Pop.instance);
 		}
 		else {
-			e.emitCFG();
-			beginCFGBlock = endCFGBlock = e.endCFGBlock;
+			ExpressionCFGBuilder builder = new ExpressionCFGBuilder();
+			e.emitCFG(builder);
+			if (e.tempRegister instanceof ArrayRegister)
+				builder.addInstruction(new ReadArray(ControlFlowGraph.returnValue, (ArrayRegister) e.tempRegister));
+			else
+				builder.addInstruction(new Move(ControlFlowGraph.returnValue, e.tempRegister));
+			beginCFGBlock = builder.s;
+			endCFGBlock = builder.t;
+			if (endCFGBlock.unconditionalNext != null || endCFGBlock.branchIfFalse != null)
+				throw new CompilationError("Internal Error.");
+			endCFGBlock.internal.add(Pop.instance);
 		}
-		endCFGBlock.unconditionalNext = Environment.functionOutVertex;
+		endCFGBlock.unconditionalNext = ControlFlowGraph.outBody;
 	}
 }

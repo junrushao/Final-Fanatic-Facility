@@ -41,14 +41,17 @@ public class LogicalNot extends UnaryExpression implements Logical {
 	}
 
 	@Override
-	public void emitCFG(CFGVertex trueTo, CFGVertex falseTo, ExpressionCFGBuilder builder) {
+	public void emitCFG(CFGVertex trueTo, CFGVertex falseTo) {
 		if (e instanceof Logical) {
-			((Logical) e).emitCFG(falseTo, trueTo, builder);
+			Logical ep = (Logical) e;
+			ep.emitCFG(falseTo, trueTo);
+			beginCFGBlock = ep.getStartNode();
 		}
 		else {
-			e.emitCFG(builder);
+			e.emitCFG();
 			e.endCFGBlock.unconditionalNext = falseTo;
 			e.endCFGBlock.branchIfFalse = trueTo;
+			beginCFGBlock = e.beginCFGBlock;
 		}
 	}
 
@@ -69,8 +72,8 @@ public class LogicalNot extends UnaryExpression implements Logical {
 
 		trueTo.unconditionalNext = out;
 		falseTo.unconditionalNext = out;
-		emitCFG(trueTo, falseTo, builder);
+		emitCFG(trueTo, falseTo);
 
-		builder.addBlock(endCFGBlock);
+		builder.addBlock(beginCFGBlock, endCFGBlock);
 	}
 }

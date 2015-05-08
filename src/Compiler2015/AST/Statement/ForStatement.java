@@ -6,9 +6,10 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.IR.CFG.ControlFlowGraph;
-import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.Type.IntType;
 import Compiler2015.Utility.Utility;
+
+import java.util.ArrayList;
 
 /**
  * for (a; b; c) d
@@ -40,11 +41,10 @@ public class ForStatement extends Statement implements Loop {
 	@Override
 	public String deepToString(int depth) {
 		StringBuilder sb = Utility.getIndent(depth).append("FOR").append(Utility.NEW_LINE);
-		StringBuilder indent = Utility.getIndent(depth + 1);
-		String aa = a == null ? indent.append("null").toString() : a.deepToString(depth + 1);
-		String bb = b == null ? indent.append("null").toString() : b.deepToString(depth + 1);
-		String cc = c == null ? indent.append("null").toString() : c.deepToString(depth + 1);
-		String dd = d == null ? indent.append("null").toString() : d.deepToString(depth + 1);
+		String aa = a == null ? Utility.getIndent(depth + 1).append("null").append(Utility.NEW_LINE).toString() : a.deepToString(depth + 1);
+		String bb = b == null ? Utility.getIndent(depth + 1).append("null").append(Utility.NEW_LINE).toString() : b.deepToString(depth + 1);
+		String cc = c == null ? Utility.getIndent(depth + 1).append("null").append(Utility.NEW_LINE).toString() : c.deepToString(depth + 1);
+		String dd = d == null ? Utility.getIndent(depth + 1).append("null").append(Utility.NEW_LINE).toString() : d.deepToString(depth + 1);
 		return sb.append(aa)
 				.append(bb)
 				.append(cc)
@@ -83,21 +83,24 @@ public class ForStatement extends Statement implements Loop {
 		else {
 			beginCFGBlock = loop;
 		}
+		if (d == null)
+			d = new CompoundStatement(new ArrayList<>(0), new ArrayList<>(0));
 		d.emitCFG();
 		if (c != null) {
 			c.emitCFG();
-			d.endCFGBlock.unconditionalNext = c.beginCFGBlock;
-			c.endCFGBlock = loop;
+			if (d.endCFGBlock.unconditionalNext == null)
+				d.endCFGBlock.unconditionalNext = c.beginCFGBlock;
+			c.endCFGBlock.unconditionalNext = loop;
 		}
 		else {
-			d.endCFGBlock.unconditionalNext = loop;
+			if (d.endCFGBlock.unconditionalNext == null)
+				d.endCFGBlock.unconditionalNext = loop;
 		}
 		if (b != null) {
 			if (b instanceof Logical) {
 				Logical bp = (Logical) b;
-				ExpressionCFGBuilder builder = new ExpressionCFGBuilder();
-				bp.emitCFG(d.beginCFGBlock, out, builder);
-				loop.unconditionalNext = builder.s;
+				bp.emitCFG(d.beginCFGBlock, out);
+				loop.unconditionalNext = bp.getStartNode();
 			}
 			else {
 				b.emitCFG();

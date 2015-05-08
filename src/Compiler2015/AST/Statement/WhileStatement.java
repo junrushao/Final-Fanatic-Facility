@@ -6,9 +6,10 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.IR.CFG.ControlFlowGraph;
-import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.Type.IntType;
 import Compiler2015.Utility.Utility;
+
+import java.util.ArrayList;
 
 /**
  * while (e) a;
@@ -40,6 +41,8 @@ public class WhileStatement extends Statement implements Loop {
 	@Override
 	public void emitCFG() {
 		Integer v = Constant.toInt(e);
+		if (a == null)
+			a = new CompoundStatement(new ArrayList<>(0), new ArrayList<>(0));
 		if (v != null) {
 			if (v == 0) {
 				beginCFGBlock = endCFGBlock = ControlFlowGraph.getNewVertex();
@@ -47,18 +50,19 @@ public class WhileStatement extends Statement implements Loop {
 				CFGVertex loop = beginCFGBlock = ControlFlowGraph.getNewVertex();
 				endCFGBlock = ControlFlowGraph.getNewVertex();
 				a.emitCFG();
-				a.endCFGBlock.unconditionalNext = loop;
+				if (a.endCFGBlock.unconditionalNext == null)
+					a.endCFGBlock.unconditionalNext = loop;
 			}
 			return;
 		}
 		CFGVertex loop = beginCFGBlock = ControlFlowGraph.getNewVertex();
 		CFGVertex out = endCFGBlock = ControlFlowGraph.getNewVertex();
 		a.emitCFG();
-		a.endCFGBlock.unconditionalNext = loop;
+		if (a.endCFGBlock.unconditionalNext == null)
+			a.endCFGBlock.unconditionalNext = loop;
 		if (e instanceof Logical) {
 			Logical ep = (Logical) e;
-			ExpressionCFGBuilder builder = new ExpressionCFGBuilder();
-			ep.emitCFG(a.beginCFGBlock, out, builder);
+			ep.emitCFG(a.beginCFGBlock, out);
 			loop.unconditionalNext = ep.getStartNode();
 		}
 		else {

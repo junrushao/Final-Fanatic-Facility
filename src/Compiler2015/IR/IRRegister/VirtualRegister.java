@@ -1,5 +1,9 @@
 package Compiler2015.IR.IRRegister;
 
+import Compiler2015.Environment.Environment;
+import Compiler2015.Environment.SymbolTableEntry;
+import Compiler2015.Utility.Tokens;
+
 public class VirtualRegister implements IRRegister {
 	public int uId;
 
@@ -14,6 +18,11 @@ public class VirtualRegister implements IRRegister {
 
 	@Override
 	public String toString() {
-		return "#" + Integer.toString(uId);
+		SymbolTableEntry e = Environment.symbolNames.table.get(uId);
+		if (e.type == Tokens.VARIABLE)
+			return "#" + Integer.toString(uId);
+		if (e.type == Tokens.STRING_CONSTANT)
+			return "%" + Integer.toString(uId);
+		return "$" + Integer.toString(uId);
 	}
 }

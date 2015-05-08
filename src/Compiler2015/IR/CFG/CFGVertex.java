@@ -6,11 +6,14 @@ import Compiler2015.Utility.Utility;
 import java.util.ArrayList;
 
 public class CFGVertex {
-	public ArrayList<IRInstruction> internal = null;
+	public ArrayList<IRInstruction> internal = new ArrayList<>();
 	public CFGVertex branchIfFalse = null;
 	public CFGVertex unconditionalNext = null;
 
 	public int id = 0;
+
+	protected CFGVertex() {
+	}
 
 	@Override
 	public String toString() {
