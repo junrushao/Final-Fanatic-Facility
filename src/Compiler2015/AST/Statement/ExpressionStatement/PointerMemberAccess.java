@@ -44,11 +44,12 @@ public class PointerMemberAccess extends Expression {
 
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
-		if (!(su.type instanceof StructOrUnionType))
-			throw new CompilationError("Internal Error.");
+		Type l = Pointer.getPointTo(su.type);
+		if (!(l instanceof StructOrUnionType))
+			throw new CompilationError("Must be a pointer to a certain struct/union");
 		su.emitCFG(builder);
-//		su.eliminateArrayRegister(builder);
-		StructOrUnionType type = (StructOrUnionType) su.type;
+		su.eliminateArrayRegister(builder);
+		StructOrUnionType type = (StructOrUnionType) l;
 		int delta = type.memberDelta.get(memberName);
 		if (delta == 0) {
 			tempRegister = su.tempRegister;

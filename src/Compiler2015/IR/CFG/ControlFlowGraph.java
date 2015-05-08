@@ -43,7 +43,6 @@ public class ControlFlowGraph {
 		CFGVertex ret = new CFGVertex();
 		vertices.add(ret);
 		ret.id = tempVertexCount++;
-//		forDebug.add(ret);
 		return ret;
 	}
 
@@ -82,7 +81,6 @@ public class ControlFlowGraph {
 		tempVertexCount = 0;
 		vertices.clear();
 		returnValue = Environment.getTemporaryRegister();
-//		forDebug = new ArrayList<>();
 
 		root = null;
 		outBody = ControlFlowGraph.getNewVertex();

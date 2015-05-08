@@ -40,7 +40,7 @@ declaration
 	;
 
 functionDefinition
-locals [ FunctionType type, String name, CompoundStatement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1, Stack<Loop> loopStack = null]
+locals [ FunctionType type, String name, CompoundStatement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1, Stack<Loop> loopStack = null, Type returnType = null]
 @init {
 	$parameterTypes = new ArrayList<Type>();
 	$parameterNames = new ArrayList<String>();
@@ -51,8 +51,10 @@ locals [ FunctionType type, String name, CompoundStatement s = null, ArrayList<T
 	TypeAnalyser.exit();
 	Environment.loopStack = $loopStack;
 }
-	:	typeSpecifier { TypeAnalyser.enter($typeSpecifier.ret); }
-		declarator
+	:	typeSpecifier { $returnType = $typeSpecifier.ret; }
+		(STAR { $returnType = new VariablePointerType($returnType); } )*
+		{ TypeAnalyser.enter($returnType); }
+		directDeclarator
 		L1 (parameterTypeList
 			{
 				$parameterTypes = $parameterTypeList.types;
@@ -68,7 +70,7 @@ locals [ FunctionType type, String name, CompoundStatement s = null, ArrayList<T
 		{
 			TypeAnalyser.addParameter($parameterTypes, $parameterNames, $hasVaList);
 			$type = (FunctionType) TypeAnalyser.analyse(true);
-			$name = $declarator.name;
+			$name = $directDeclarator.name;
 
 			if (!Environment.isCompleteType($type))
 				throw new CompilationError("Incomplete type.");

@@ -1,125 +1,46 @@
-// Generated from /home/junrushao/IdeaProjects/compiler2015/src/Compiler2015/Parser/Compiler2015.g4 by ANTLR 4.5
+// Generated from Compiler2015.g4 by ANTLR 4.5
 package Compiler2015.Parser;
-import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenStream;
+
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.atn.*;
+import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.ATNDeserializer;
+import org.antlr.v4.runtime.atn.LexerATNSimulator;
+import org.antlr.v4.runtime.atn.PredictionContextCache;
 import org.antlr.v4.runtime.dfa.DFA;
-import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class Compiler2015Lexer extends Lexer {
-	static { RuntimeMetaData.checkVersion("4.5", RuntimeMetaData.VERSION); }
-
-	protected static final DFA[] _decisionToDFA;
-	protected static final PredictionContextCache _sharedContextCache =
-		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
-		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
-		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
-		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, T__36=37, Typedef=38, 
-		Semi=39, Comma=40, L1=41, R1=42, L2=43, R2=44, L3=45, R3=46, EQ=47, STAR=48, 
-		If=49, Else=50, While=51, For=52, OrOr=53, AndAnd=54, Or=55, Caret=56, 
-		And=57, SizeOf=58, Identifier=59, DecimalConstant=60, OctalConstant=61, 
-		HexadecimalConstant=62, CharacterConstant=63, StringLiteral=64, Preprocessing=65, 
+			T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, T__7 = 8, T__8 = 9,
+			T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, T__14 = 15, T__15 = 16, T__16 = 17,
+			T__17 = 18, T__18 = 19, T__19 = 20, T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24,
+			T__24 = 25, T__25 = 26, T__26 = 27, T__27 = 28, T__28 = 29, T__29 = 30, T__30 = 31,
+			T__31 = 32, T__32 = 33, T__33 = 34, T__34 = 35, T__35 = 36, T__36 = 37, Typedef = 38,
+			Semi = 39, Comma = 40, L1 = 41, R1 = 42, L2 = 43, R2 = 44, L3 = 45, R3 = 46, EQ = 47, STAR = 48,
+			If = 49, Else = 50, While = 51, For = 52, OrOr = 53, AndAnd = 54, Or = 55, Caret = 56,
+			And = 57, SizeOf = 58, Identifier = 59, DecimalConstant = 60, OctalConstant = 61,
+			HexadecimalConstant = 62, CharacterConstant = 63, StringLiteral = 64, Preprocessing = 65,
 		Whitespace=66, Newline=67, BlockComment=68, LineComment=69;
-	public static String[] modeNames = {
-		"DEFAULT_MODE"
-	};
-
 	public static final String[] ruleNames = {
-		"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8", 
-		"T__9", "T__10", "T__11", "T__12", "T__13", "T__14", "T__15", "T__16", 
-		"T__17", "T__18", "T__19", "T__20", "T__21", "T__22", "T__23", "T__24", 
-		"T__25", "T__26", "T__27", "T__28", "T__29", "T__30", "T__31", "T__32", 
-		"T__33", "T__34", "T__35", "T__36", "Typedef", "Semi", "Comma", "L1", 
-		"R1", "L2", "R2", "L3", "R3", "EQ", "STAR", "If", "Else", "While", "For", 
-		"OrOr", "AndAnd", "Or", "Caret", "And", "SizeOf", "Identifier", "IdentifierNondigit", 
-		"Nondigit", "Digit", "HexQuad", "DecimalConstant", "OctalConstant", "HexadecimalConstant", 
-		"HexadecimalPrefix", "NonzeroDigit", "OctalDigit", "HexadecimalDigit", 
-		"Sign", "DigitSequence", "CharacterConstant", "CharSequence", "Char", 
-		"EscapeSequence", "SimpleEscapeSequence", "OctalEscapeSequence", "HexadecimalEscapeSequence", 
-		"StringLiteral", "SCharSequence", "SChar", "CCharSequence", "CChar", "Preprocessing", 
+			"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8",
+			"T__9", "T__10", "T__11", "T__12", "T__13", "T__14", "T__15", "T__16",
+			"T__17", "T__18", "T__19", "T__20", "T__21", "T__22", "T__23", "T__24",
+			"T__25", "T__26", "T__27", "T__28", "T__29", "T__30", "T__31", "T__32",
+			"T__33", "T__34", "T__35", "T__36", "Typedef", "Semi", "Comma", "L1",
+			"R1", "L2", "R2", "L3", "R3", "EQ", "STAR", "If", "Else", "While", "For",
+			"OrOr", "AndAnd", "Or", "Caret", "And", "SizeOf", "Identifier", "IdentifierNondigit",
+			"Nondigit", "Digit", "HexQuad", "DecimalConstant", "OctalConstant", "HexadecimalConstant",
+			"HexadecimalPrefix", "NonzeroDigit", "OctalDigit", "HexadecimalDigit",
+			"Sign", "DigitSequence", "CharacterConstant", "CharSequence", "Char",
+			"EscapeSequence", "SimpleEscapeSequence", "OctalEscapeSequence", "HexadecimalEscapeSequence",
+			"StringLiteral", "SCharSequence", "SChar", "CCharSequence", "CChar", "Preprocessing",
 		"Whitespace", "Newline", "BlockComment", "LineComment"
 	};
-
-	private static final String[] _LITERAL_NAMES = {
-		null, "'void'", "'char'", "'int'", "'struct'", "'union'", "'...'", "'continue'", 
-		"'break'", "'return'", "'*='", "'/='", "'%='", "'+='", "'-='", "'<<='", 
-		"'>>='", "'&='", "'^='", "'|='", "'=='", "'!='", "'<'", "'>'", "'<='", 
-		"'>='", "'<<'", "'>>'", "'+'", "'-'", "'/'", "'%'", "'++'", "'--'", "'~'", 
-		"'!'", "'.'", "'->'", "'typedef'", "';'", "','", "'('", "')'", "'['", 
-		"']'", "'{'", "'}'", "'='", "'*'", "'if'", "'else'", "'while'", "'for'", 
-		"'||'", "'&&'", "'|'", "'^'", "'&'", "'sizeof'"
-	};
-	private static final String[] _SYMBOLIC_NAMES = {
-		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, "Typedef", "Semi", "Comma", "L1", "R1", "L2", "R2", "L3", 
-		"R3", "EQ", "STAR", "If", "Else", "While", "For", "OrOr", "AndAnd", "Or", 
-		"Caret", "And", "SizeOf", "Identifier", "DecimalConstant", "OctalConstant", 
-		"HexadecimalConstant", "CharacterConstant", "StringLiteral", "Preprocessing", 
-		"Whitespace", "Newline", "BlockComment", "LineComment"
-	};
-	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
-
 	/**
 	 * @deprecated Use {@link #VOCABULARY} instead.
 	 */
 	@Deprecated
 	public static final String[] tokenNames;
-	static {
-		tokenNames = new String[_SYMBOLIC_NAMES.length];
-		for (int i = 0; i < tokenNames.length; i++) {
-			tokenNames[i] = VOCABULARY.getLiteralName(i);
-			if (tokenNames[i] == null) {
-				tokenNames[i] = VOCABULARY.getSymbolicName(i);
-			}
-
-			if (tokenNames[i] == null) {
-				tokenNames[i] = "<INVALID>";
-			}
-		}
-	}
-
-	@Override
-	@Deprecated
-	public String[] getTokenNames() {
-		return tokenNames;
-	}
-
-	@Override
-	@NotNull
-	public Vocabulary getVocabulary() {
-		return VOCABULARY;
-	}
-
-
-	public Compiler2015Lexer(CharStream input) {
-		super(input);
-		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
-	}
-
-	@Override
-	public String getGrammarFileName() { return "Compiler2015.g4"; }
-
-	@Override
-	public String[] getRuleNames() { return ruleNames; }
-
-	@Override
-	public String getSerializedATN() { return _serializedATN; }
-
-	@Override
-	public String[] getModeNames() { return modeNames; }
-
-	@Override
-	public ATN getATN() { return _ATN; }
-
 	public static final String _serializedATN =
 		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\2G\u0228\b\1\4\2\t"+
 		"\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
@@ -308,10 +229,97 @@ public class Compiler2015Lexer extends Lexer {
 		"\u0215\u0223\4\2\3\2\b\2\2";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
+	protected static final DFA[] _decisionToDFA;
+	protected static final PredictionContextCache _sharedContextCache =
+			new PredictionContextCache();
+	private static final String[] _LITERAL_NAMES = {
+			null, "'void'", "'char'", "'int'", "'struct'", "'union'", "'...'", "'continue'",
+			"'break'", "'return'", "'*='", "'/='", "'%='", "'+='", "'-='", "'<<='",
+			"'>>='", "'&='", "'^='", "'|='", "'=='", "'!='", "'<'", "'>'", "'<='",
+			"'>='", "'<<'", "'>>'", "'+'", "'-'", "'/'", "'%'", "'++'", "'--'", "'~'",
+			"'!'", "'.'", "'->'", "'typedef'", "';'", "','", "'('", "')'", "'['",
+			"']'", "'{'", "'}'", "'='", "'*'", "'if'", "'else'", "'while'", "'for'",
+			"'||'", "'&&'", "'|'", "'^'", "'&'", "'sizeof'"
+	};
+	private static final String[] _SYMBOLIC_NAMES = {
+			null, null, null, null, null, null, null, null, null, null, null, null,
+			null, null, null, null, null, null, null, null, null, null, null, null,
+			null, null, null, null, null, null, null, null, null, null, null, null,
+			null, null, "Typedef", "Semi", "Comma", "L1", "R1", "L2", "R2", "L3",
+			"R3", "EQ", "STAR", "If", "Else", "While", "For", "OrOr", "AndAnd", "Or",
+			"Caret", "And", "SizeOf", "Identifier", "DecimalConstant", "OctalConstant",
+			"HexadecimalConstant", "CharacterConstant", "StringLiteral", "Preprocessing",
+			"Whitespace", "Newline", "BlockComment", "LineComment"
+	};
+	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
+	public static String[] modeNames = {
+			"DEFAULT_MODE"
+	};
+
+	static {
+		RuntimeMetaData.checkVersion("4.5", RuntimeMetaData.VERSION);
+	}
+
+	static {
+		tokenNames = new String[_SYMBOLIC_NAMES.length];
+		for (int i = 0; i < tokenNames.length; i++) {
+			tokenNames[i] = VOCABULARY.getLiteralName(i);
+			if (tokenNames[i] == null) {
+				tokenNames[i] = VOCABULARY.getSymbolicName(i);
+			}
+
+			if (tokenNames[i] == null) {
+				tokenNames[i] = "<INVALID>";
+			}
+		}
+	}
+
 	static {
 		_decisionToDFA = new DFA[_ATN.getNumberOfDecisions()];
 		for (int i = 0; i < _ATN.getNumberOfDecisions(); i++) {
 			_decisionToDFA[i] = new DFA(_ATN.getDecisionState(i), i);
 		}
+	}
+
+	public Compiler2015Lexer(CharStream input) {
+		super(input);
+		_interp = new LexerATNSimulator(this, _ATN, _decisionToDFA, _sharedContextCache);
+	}
+
+	@Override
+	@Deprecated
+	public String[] getTokenNames() {
+		return tokenNames;
+	}
+
+	@Override
+
+	public Vocabulary getVocabulary() {
+		return VOCABULARY;
+	}
+
+	@Override
+	public String getGrammarFileName() {
+		return "Compiler2015.g4";
+	}
+
+	@Override
+	public String[] getRuleNames() {
+		return ruleNames;
+	}
+
+	@Override
+	public String getSerializedATN() {
+		return _serializedATN;
+	}
+
+	@Override
+	public String[] getModeNames() {
+		return modeNames;
+	}
+
+	@Override
+	public ATN getATN() {
+		return _ATN;
 	}
 }

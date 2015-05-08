@@ -80,7 +80,7 @@ public class LogicalOr extends BinaryExpression implements Logical {
 
 	@Override
 	public CFGVertex getStartNode() {
-		return null;
+		return beginCFGBlock;
 	}
 
 	@Override
