@@ -48,10 +48,7 @@ public class MemberAccess extends Expression {
 //		su.eliminateArrayRegister(builder);
 		StructOrUnionType type = (StructOrUnionType) su.type;
 		int delta = type.memberDelta.get(memberName);
-		if (delta == 0) {
-			tempRegister = su.tempRegister;
-		}
-		else if (su.tempRegister instanceof ArrayRegister) {
+		if (su.tempRegister instanceof ArrayRegister) {
 			VirtualRegister t = Environment.getTemporaryRegister();
 			builder.addInstruction(new AddReg(t, ((ArrayRegister) su.tempRegister).b, new ImmediateValue(delta)));
 			tempRegister = new ArrayRegister(((ArrayRegister) su.tempRegister).a, t);

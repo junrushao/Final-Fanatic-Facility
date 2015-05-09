@@ -38,6 +38,8 @@ public abstract class Expression extends Statement {
 		eliminateArrayRegister(builder);
 		if (this instanceof IdentifierExpression)
 			builder.addInstruction(new Move(tempRegister, tempRegister));
+		if (builder.s.internal.isEmpty())
+			throw new CompilationError("???");
 		beginCFGBlock = builder.s;
 		endCFGBlock = builder.t;
 	}
