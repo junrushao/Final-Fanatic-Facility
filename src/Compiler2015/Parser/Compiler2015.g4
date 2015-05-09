@@ -606,8 +606,17 @@ unaryExpression returns [Expression ret]
 				$ret = LogicalNot.getExpression($a2.ret);
 		}
 		#unaryExpression4
-	| SizeOf u3 = unaryExpression { $ret = new Sizeof($u3.ret); } #unaryExpression5
+	| SizeOf '(' Identifier ')'
+		{
+			if (Environment.isVariable($Identifier.text))
+				$ret = new Sizeof(IdentifierExpression.getExpression($Identifier.text));
+			else if (Environment.isTypedefName($Identifier.text))
+				$ret = new IntConstant(Environment._pretend_being_private_sizeof);
+			else
+				throw new CompilationError("Unknow " + $Identifier.text);
+		} #unaryExpression5
 	| SizeOf '(' typeName ')' { $ret = new IntConstant($typeName.ret.sizeof()); } #unaryExpression6
+	| SizeOf u3 = unaryExpression { $ret = new Sizeof($u3.ret); } #unaryExpression7
 	;
 
 unaryOperator
@@ -642,10 +651,8 @@ locals [ ArrayList<String> s ]
 @init {
 	$s = new ArrayList<String>();
 }
-	: Identifier
+	: { Environment.isVariable(_input.LT(1).getText()) }? Identifier
 		{
-			if (!Environment.isVariable($Identifier.text))
-				throw new CompilationError("Not properly defined.");
 			$ret = IdentifierExpression.getExpression($Identifier.text);
 		} #primaryExpression1
 	| constant

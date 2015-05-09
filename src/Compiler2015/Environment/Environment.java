@@ -23,6 +23,7 @@ public class Environment {
 	public static ArrayList<SymbolTableEntry> classTable;
 	public static int totalTempRegisters;
 	public static HashMap<Integer, Integer> variableDelta;
+	public static int _pretend_being_private_sizeof;
 
 	static {
 		init();
@@ -61,7 +62,20 @@ public class Environment {
 		variableDelta = new HashMap<>();
 
 		symbolNames.defineVariable(
-				".putchar",
+				"exit",
+				new FunctionType(
+						IntType.instance,
+						new ArrayList<Type>() {{
+							add(IntType.instance);
+						}},
+						new ArrayList<String>() {{
+							add("c");
+						}},
+						false
+				)
+		);
+		symbolNames.defineVariable(
+				"putchar",
 				new FunctionType(
 						IntType.instance,
 						new ArrayList<Type>() {{
@@ -137,7 +151,11 @@ public class Environment {
 
 	public static boolean isTypedefName(String name) {
 		SymbolTableEntry e = symbolNames.queryName(name);
-		return e != null && e.type == Tokens.TYPEDEF_NAME;
+		if (e != null && e.type == Tokens.TYPEDEF_NAME) {
+			_pretend_being_private_sizeof = ((Type) e.ref).sizeof();
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean isCompleteType(Type t) {

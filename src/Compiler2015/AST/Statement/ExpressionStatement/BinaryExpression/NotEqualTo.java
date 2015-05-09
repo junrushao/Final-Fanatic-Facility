@@ -4,9 +4,10 @@ import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
 import Compiler2015.Environment.Environment;
+import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.Instruction.Arithmetic.SetNotEqual;
-import Compiler2015.Type.IntType;
+import Compiler2015.Type.*;
 
 /**
  * a != b
@@ -18,8 +19,48 @@ public class NotEqualTo extends BinaryExpression {
 	}
 
 	public static Expression getExpression(Expression a1, Expression a2) {
-		a1 = CastExpression.castToNumeric(a1);
-		a2 = CastExpression.castToNumeric(a2);
+		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
+			throw new CompilationError("Type Error.");
+		if (a1.type instanceof IntType) {
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof CharType) {
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof StructOrUnionType) {
+			if (a2.type instanceof IntType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof CharType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof ArrayPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof VariablePointerType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof FunctionType) {
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof FunctionPointerType) {
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof ArrayPointerType) {
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof VariablePointerType) {
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+		}
 
 		Integer v1 = toInt(a1), v2 = toInt(a2);
 		if (v1 != null && v2 != null)

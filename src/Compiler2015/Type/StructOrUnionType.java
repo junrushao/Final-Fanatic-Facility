@@ -55,31 +55,6 @@ public class StructOrUnionType extends Type {
 		}
 	}
 
-	public void calcMemberDelta() {
-		int n = types.size();
-		int last = 0;
-		memberDelta = new HashMap<>();
-		for (int i = 0; i < n; ++i) {
-			String name = names.get(i);
-			Type type = types.get(i);
-			if (name == null || name.equals("")) {
-				if (!(type instanceof StructOrUnionType))
-					throw new CompilationError("Internal Error.");
-				for (Map.Entry<String, Integer> e : ((StructOrUnionType) type).memberDelta.entrySet()) {
-					String subName = e.getKey();
-					int subDelta = e.getValue();
-					if (memberDelta.containsKey(subName))
-						throw new CompilationError("Internal Error");
-					memberDelta.put(subName, last + subDelta);
-				}
-			} else {
-				memberDelta.put(name, last);
-			}
-			if (!isUnion)
-				last += type.sizeof();
-		}
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof StructOrUnionType && ((StructOrUnionType) obj).uId == uId;

@@ -3,15 +3,12 @@ package Compiler2015.IR.CFG;
 import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.CFG.StaticSingleAssignment.LengauerTarjan;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.Pop;
-import Compiler2015.Type.FunctionType;
 import Compiler2015.Utility.Utility;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Stack;
-import java.util.stream.Stream;
 
 public class ControlFlowGraph {
 
@@ -59,24 +56,26 @@ public class ControlFlowGraph {
 		}
 	}
 
-	public static ArrayList<CFGVertex> getReachable() {
-		HashSet<CFGVertex> visited = new HashSet<>();
-		Stack<CFGVertex> stack = new Stack<>();
-		ArrayList<CFGVertex> ret = new ArrayList<>();
-		for (stack.add(root), visited.add(root); !stack.isEmpty(); ) {
-			CFGVertex x = stack.pop();
-			ret.add(x);
-			Stream.of(x.branchIfFalse, x.unconditionalNext)
-					.filter(y -> y != null && !visited.contains(y))
-					.forEach(y -> {
-						stack.push(y);
-						visited.add(y);
-					});
+	/*
+		public static ArrayList<CFGVertex> getReachable() {
+			HashSet<CFGVertex> visited = new HashSet<>();
+			Stack<CFGVertex> stack = new Stack<>();
+			ArrayList<CFGVertex> ret = new ArrayList<>();
+			for (stack.add(root), visited.add(root); !stack.isEmpty(); ) {
+				CFGVertex x = stack.pop();
+				ret.add(x);
+				Stream.of(x.branchIfFalse, x.unconditionalNext)
+						.filter(y -> y != null && !visited.contains(y))
+						.forEach(y -> {
+							stack.push(y);
+							visited.add(y);
+						});
+			}
+			return ret;
 		}
-		return ret;
-	}
 
-	public static void process(FunctionType function, CompoundStatement body, int uId) {
+	*/
+	public static void process(CompoundStatement body, int uId) {
 		nowUId = uId;
 		tempVertexCount = 0;
 		vertices.clear();
@@ -90,31 +89,23 @@ public class ControlFlowGraph {
 		root = body.beginCFGBlock;
 		if (body.endCFGBlock.unconditionalNext == null)
 			body.endCFGBlock.unconditionalNext = outBody;
-
-//		System.err.println(toStr());
-		// remove unnecessary goto
-		ArrayList<CFGVertex> reachable = getReachable();
-		reachable.stream().forEach(ControlFlowGraph::findGoto);
-		reachable.stream().forEach(x -> x.id = 0);
-		reachable.stream().filter(x -> x.unconditionalNext != null).forEach(x -> ++x.unconditionalNext.id);
-		reachable.stream().filter(x -> x.branchIfFalse != null).forEach(x -> ++x.branchIfFalse.id);
-		reachable.stream().filter(x -> x.id == 0 && x != root && x != outBody).forEach(vertices::remove);
-
-		{
-			final int[] totalVertices = {0}; // to use lambda correctly
-			vertices.stream().forEach(x -> x.id = totalVertices[0]++);
-			if (totalVertices[0] != vertices.size())
-				throw new CompilationError("Internal Error.");
-		}
-
 		checkForDebug();
+
+		// remove unnecessary jumps
+		vertices.stream().forEach(ControlFlowGraph::findGoto);
+		checkForDebug();
+
+		// build dominator tree and eliminate unreachable vertices
+		LengauerTarjan dominatorTreeSolver = new LengauerTarjan(vertices, root);
+		dominatorTreeSolver.process();
+
 	}
 
 	public static String toStr() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("CFG of Function #").append(nowUId).append(Utility.NEW_LINE);
 		sb.append(Utility.getIndent(1)).append("in = ").append(root.id).append(", out = ").append(outBody.id).append(", return register = ").append(returnValue).append(Utility.NEW_LINE);
-		getReachable().stream().forEach(x -> sb.append(x.toString()));
+		DepthFirstSearcher.getReachable(vertices, root).stream().forEach(x -> sb.append(x.toString()));
 		return sb.toString();
 	}
 }

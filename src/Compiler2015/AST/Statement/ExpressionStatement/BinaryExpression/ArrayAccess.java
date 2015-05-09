@@ -10,10 +10,7 @@ import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.Arithmetic.AddReg;
 import Compiler2015.IR.Instruction.Arithmetic.MultiplyReg;
 import Compiler2015.IR.Instruction.ReadArray;
-import Compiler2015.Type.ArrayPointerType;
-import Compiler2015.Type.Pointer;
-import Compiler2015.Type.Type;
-import Compiler2015.Type.VariablePointerType;
+import Compiler2015.Type.*;
 
 /**
  * a[b]
@@ -27,13 +24,109 @@ public class ArrayAccess extends BinaryExpression {
 	}
 
 	public static Expression getExpression(Expression a1, Expression a2) {
+		if (a1.type instanceof VoidType || a2.type instanceof VoidType)
+			throw new CompilationError("Type Error");
+		if (a1.type instanceof IntType) {
+			if (a2.type instanceof IntType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof CharType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionPointerType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof CharType) {
+			if (a2.type instanceof IntType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof CharType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionPointerType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof StructOrUnionType) {
+			if (a2.type instanceof IntType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof CharType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof ArrayPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof VariablePointerType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof FunctionType) {
+			if (a2.type instanceof IntType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof CharType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof ArrayPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof VariablePointerType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof FunctionPointerType) {
+			if (a2.type instanceof IntType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof CharType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof ArrayPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof VariablePointerType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof ArrayPointerType) {
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof ArrayPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof VariablePointerType)
+				throw new CompilationError("Type Error");
+		}
+		if (a1.type instanceof VariablePointerType) {
+			if (a2.type instanceof StructOrUnionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof FunctionPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof ArrayPointerType)
+				throw new CompilationError("Type Error");
+			if (a2.type instanceof VariablePointerType)
+				throw new CompilationError("Type Error");
+		}
 		if (Type.isNumeric(a1.type)) {
 			Expression tmp = a1;
 			a1 = a2;
 			a2 = tmp;
 		}
-		if (!Type.isNumeric(a2.type))
-			throw new CompilationError("Incompatible type.");
 		if (a1.type instanceof VariablePointerType)
 			return new ArrayAccess(a1, a2, ((VariablePointerType) a1.type).pointTo, true);
 		if (a1.type instanceof ArrayPointerType)

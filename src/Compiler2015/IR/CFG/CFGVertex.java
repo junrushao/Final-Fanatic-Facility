@@ -11,6 +11,8 @@ public class CFGVertex {
 	public CFGVertex unconditionalNext = null;
 
 	public int id = 0;
+	public CFGVertex parent = null;
+	public CFGVertex idom = null;
 
 	protected CFGVertex() {
 	}

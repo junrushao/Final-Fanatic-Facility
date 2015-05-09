@@ -5,7 +5,6 @@ import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class FunctionType extends Type {
 	public Type returnType;
@@ -24,8 +23,10 @@ public class FunctionType extends Type {
 			throw new CompilationError("A function should not return a function.");
 		if (!Environment.isCompleteType(returnType))
 			throw new CompilationError("Incomplete type.");
+/*
 		if (parameterNames.size() != 0 && (new HashSet<>(parameterNames).size()) != parameterNames.size())
 			throw new CompilationError("parameter should have different names");
+*/
 
 		for (int i = 0, n = parameterTypes.size(); i < n; ++i) {
 			Type t = parameterTypes.get(i);
