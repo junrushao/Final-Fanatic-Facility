@@ -23,10 +23,12 @@ import java.util.ArrayList;
 public class CompoundStatement extends Statement {
 	public ArrayList<Integer> variables;
 	public ArrayList<Statement> statements;
+	public ArrayList<Integer> givenVariables;
 
-	public CompoundStatement(ArrayList<Integer> variables, ArrayList<Statement> statements) {
+	public CompoundStatement(ArrayList<Integer> variables, ArrayList<Statement> statements, ArrayList<Integer> givenVariables) {
 		this.variables = variables;
 		this.statements = statements;
+		this.givenVariables = givenVariables;
 		Environment.definedVariableInCurrentFrame.addAll(variables);
 	}
 
@@ -38,6 +40,7 @@ public class CompoundStatement extends Statement {
 			if (e.scope < currentScope)
 				break;
 			Environment.definedVariableInCurrentFrame.pop();
+			givenVariables.add(uId);
 			if (e.ref instanceof FunctionType)
 				continue;
 			Environment.variableDelta.put(uId, last);

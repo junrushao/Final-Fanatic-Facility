@@ -149,7 +149,7 @@ public class ArrayAccess extends BinaryExpression {
 		if (type instanceof Pointer) {
 			VirtualRegister r = Environment.getTemporaryRegister();
 			builder.addInstruction(new MultiplyReg(r, right.tempRegister, new ImmediateValue(type.sizeof())));
-			builder.addInstruction(new AddReg(tempRegister, left.tempRegister, r));
+			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, left.tempRegister, r));
 		}
 		else {
 			tempRegister = new ArrayRegister(left.tempRegister, right.tempRegister);

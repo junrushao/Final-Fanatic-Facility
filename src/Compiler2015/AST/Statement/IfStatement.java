@@ -22,7 +22,7 @@ public class IfStatement extends Statement {
 		if (!CastExpression.castable(e.type, IntType.instance))
 			throw new CompilationError("Expression inside if statement could not be converted to int type.");
 		this.e = e;
-		this.ifTrue = ifTrue != null ? ifTrue : new CompoundStatement(new ArrayList<>(0), new ArrayList<>(0));
+		this.ifTrue = ifTrue != null ? ifTrue : new CompoundStatement(new ArrayList<>(0), new ArrayList<>(0), new ArrayList<>(0));
 		this.ifFalse = ifFalse;
 	}
 

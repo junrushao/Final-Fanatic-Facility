@@ -149,6 +149,10 @@ public class Environment {
 		return e != null && e.type == Tokens.VARIABLE;
 	}
 
+	public static boolean isVaraible(int uId) {
+		return symbolNames.table.get(uId).type == Tokens.VARIABLE;
+	}
+
 	public static boolean isTypedefName(String name) {
 		SymbolTableEntry e = symbolNames.queryName(name);
 		if (e != null && e.type == Tokens.TYPEDEF_NAME) {

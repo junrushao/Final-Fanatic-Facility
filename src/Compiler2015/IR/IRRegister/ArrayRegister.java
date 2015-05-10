@@ -6,8 +6,6 @@ public class ArrayRegister implements IRRegister {
 	public IRRegister a, b;
 
 	public ArrayRegister(IRRegister a, IRRegister b) {
-		if (a instanceof ArrayRegister || b instanceof ArrayRegister)
-			throw new CompilationError("Internal Error.");
 		this.a = a;
 		this.b = b;
 	}

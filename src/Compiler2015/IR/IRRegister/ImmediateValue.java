@@ -9,7 +9,7 @@ public class ImmediateValue implements IRRegister {
 
 	@Override
 	public int getValue() {
-		return a;
+		return -1;
 	}
 
 	@Override

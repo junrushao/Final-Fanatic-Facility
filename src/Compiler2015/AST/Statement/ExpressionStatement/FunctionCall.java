@@ -3,6 +3,7 @@ package Compiler2015.AST.Statement.ExpressionStatement;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.Call;
 import Compiler2015.IR.Instruction.PushStack;
 import Compiler2015.Type.ArrayPointerType;
@@ -95,6 +96,6 @@ public class FunctionCall extends Expression {
 			builder.addInstruction(new PushStack(e.tempRegister));
 
 		tempRegister = Environment.getTemporaryRegister();
-		builder.addInstruction(new Call(tempRegister, function.tempRegister));
+		builder.addInstruction(new Call((VirtualRegister) tempRegister, function.tempRegister));
 	}
 }

@@ -3,6 +3,7 @@ package Compiler2015.AST.Statement.ExpressionStatement;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.Move;
 import Compiler2015.Type.IntType;
 import Compiler2015.Type.StructOrUnionType;
@@ -64,7 +65,7 @@ public class CastExpression extends Expression {
 			tempRegister = e.tempRegister;
 		else {
 			tempRegister = Environment.getTemporaryRegister();
-			builder.addInstruction(new Move(tempRegister, e.tempRegister));
+			builder.addInstruction(new Move((VirtualRegister) tempRegister, e.tempRegister));
 		}
 	}
 }

@@ -4,8 +4,11 @@ import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.StaticSingleAssignment.LengauerTarjan;
+import Compiler2015.IR.CFG.StaticSingleAssignment.PhiInserter;
+import Compiler2015.IR.CFG.StaticSingleAssignment.RegisterManager;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.Pop;
+import Compiler2015.Type.FunctionType;
 import Compiler2015.Utility.Utility;
 
 import java.util.HashSet;
@@ -56,26 +59,7 @@ public class ControlFlowGraph {
 		}
 	}
 
-	/*
-		public static ArrayList<CFGVertex> getReachable() {
-			HashSet<CFGVertex> visited = new HashSet<>();
-			Stack<CFGVertex> stack = new Stack<>();
-			ArrayList<CFGVertex> ret = new ArrayList<>();
-			for (stack.add(root), visited.add(root); !stack.isEmpty(); ) {
-				CFGVertex x = stack.pop();
-				ret.add(x);
-				Stream.of(x.branchIfFalse, x.unconditionalNext)
-						.filter(y -> y != null && !visited.contains(y))
-						.forEach(y -> {
-							stack.push(y);
-							visited.add(y);
-						});
-			}
-			return ret;
-		}
-
-	*/
-	public static void process(CompoundStatement body, int uId) {
+	public static void process(FunctionType func, CompoundStatement body, int uId) {
 		nowUId = uId;
 		tempVertexCount = 0;
 		vertices.clear();
@@ -89,16 +73,20 @@ public class ControlFlowGraph {
 		root = body.beginCFGBlock;
 		if (body.endCFGBlock.unconditionalNext == null)
 			body.endCFGBlock.unconditionalNext = outBody;
-		checkForDebug();
+//		checkForDebug();
 
 		// remove unnecessary jumps
 		vertices.stream().forEach(ControlFlowGraph::findGoto);
-		checkForDebug();
+//		checkForDebug();
 
-		// build dominator tree and eliminate unreachable vertices
+		// eliminate unreachable vertices, build dominator tree, calculate dominance frontiers
 		LengauerTarjan dominatorTreeSolver = new LengauerTarjan(vertices, root);
 		dominatorTreeSolver.process();
 
+		// insert phi-functions
+		RegisterManager rm = new RegisterManager(body.givenVariables, root);
+		PhiInserter phiInserter = new PhiInserter(vertices, rm);
+		phiInserter.process();
 	}
 
 	public static String toStr() {

@@ -146,8 +146,8 @@ public class Assign extends BinaryExpression {
 			if (left.tempRegister instanceof ArrayRegister) {
 				t1 = Environment.getTemporaryRegister();
 				IRRegister t3 = Environment.getTemporaryRegister();
-				builder.addInstruction(new MultiplyReg(t3, ((ArrayRegister) left.tempRegister).b, new ImmediateValue(type.sizeof())));
-				builder.addInstruction(new AddReg(t1, ((ArrayRegister) left.tempRegister).a, t3));
+				builder.addInstruction(new MultiplyReg((VirtualRegister) t3, ((ArrayRegister) left.tempRegister).b, new ImmediateValue(type.sizeof())));
+				builder.addInstruction(new AddReg((VirtualRegister) t1, ((ArrayRegister) left.tempRegister).a, t3));
 			}
 			else {
 				t1 = left.tempRegister;
@@ -167,7 +167,7 @@ public class Assign extends BinaryExpression {
 			tempRegister = left.tempRegister;
 		}
 		else {
-			builder.addInstruction(new Move(left.tempRegister, right.tempRegister));
+			builder.addInstruction(new Move((VirtualRegister) left.tempRegister, right.tempRegister));
 			tempRegister = left.tempRegister;
 		}
 	}

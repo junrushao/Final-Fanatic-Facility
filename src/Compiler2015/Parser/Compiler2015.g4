@@ -332,14 +332,14 @@ expressionStatement returns [Statement ret = null]
 	;
 
 compoundStatement[ArrayList<Type> toDefineTypes, ArrayList<String> toDefineNames] returns [CompoundStatement ret]
-locals [ ArrayList<Statement> statements = new ArrayList<Statement>(); ]
+locals [ ArrayList<Statement> statements = new ArrayList<Statement>(), ArrayList<Integer> givenVariables = new ArrayList<>() ]
 	: L3
 			{
 				Environment.enterScope();
 				if ($toDefineTypes != null) {
 					int n = $toDefineTypes.size();
 					for (int i = 0; i < n; ++i)
-						Environment.symbolNames.defineVariable($toDefineNames.get(i), $toDefineTypes.get(i));
+						$givenVariables.add(Environment.symbolNames.defineVariable($toDefineNames.get(i), $toDefineTypes.get(i)));
 				}
 			}
 		(
@@ -351,7 +351,7 @@ locals [ ArrayList<Statement> statements = new ArrayList<Statement>(); ]
 		)*
 	  R3
 			{
-				$ret = new CompoundStatement(Environment.symbolNames.getVariablesInCurrentScope(), $statements);
+				$ret = new CompoundStatement(Environment.symbolNames.getVariablesInCurrentScope(), $statements, $givenVariables);
 				Environment.exitScope();
 			}
 	;

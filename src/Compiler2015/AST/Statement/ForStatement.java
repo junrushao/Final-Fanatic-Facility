@@ -84,7 +84,7 @@ public class ForStatement extends Statement implements Loop {
 			beginCFGBlock = loop;
 		}
 		if (d == null)
-			d = new CompoundStatement(new ArrayList<>(0), new ArrayList<>(0));
+			d = new CompoundStatement(new ArrayList<>(0), new ArrayList<>(0), new ArrayList<>(0));
 		d.emitCFG();
 		if (c != null) {
 			c.emitCFG();

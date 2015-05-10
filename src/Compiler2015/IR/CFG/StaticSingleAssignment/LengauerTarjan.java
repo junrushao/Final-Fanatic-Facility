@@ -49,24 +49,24 @@ public class LengauerTarjan {
 
 		vi = new VertexInfo[n + 1];
 		for (int i = 1; i <= n; ++i) vi[i] = new VertexInfo();
+		// add predecessor edges
 		vertices.stream().filter(v -> v.id != -1)
 				.forEach(v -> {
 					vi[v.id].me = v;
-					if (v.unconditionalNext != null)
+					if (v.unconditionalNext != null) {
 						vi[v.unconditionalNext.id].pred.add(vi[v.id]);
-					if (v.branchIfFalse != null)
+						v.unconditionalNext.predecessor.put(v, null);
+					}
+					if (v.branchIfFalse != null) {
 						vi[v.branchIfFalse.id].pred.add(vi[v.id]);
+						v.branchIfFalse.predecessor.put(v, null);
+					}
 				});
-
-		System.out.println("root = " + root.id);
-		for (int i = 1; i <= n; ++i) {
-			int y = vi[i].me.id;
-			for (VertexInfo v : vi[i].pred) {
-				int x = v.me.id;
-				System.out.println(x + " " + y);
-			}
-		}
-
+		vertices.stream().forEach(v -> {
+			final int[] cnt = {0};
+			v.predecessor.entrySet().stream().forEach(e -> e.setValue(++cnt[0]));
+		});
+		// calculate semi-dominator
 		for (int dfn = n; dfn >= 2; --dfn) {
 			VertexInfo w = vi[dfn];
 			VertexInfo p = vi[w.me.parent.id];
@@ -83,6 +83,8 @@ public class LengauerTarjan {
 			}
 			p.bucket.clear();
 		}
+
+		// calculate dominator
 		for (int dfn = 2; dfn <= n; ++dfn) {
 			VertexInfo w = vi[dfn];
 			if (w.idom != w.semi)
@@ -93,6 +95,18 @@ public class LengauerTarjan {
 			VertexInfo v = vi[dfn];
 			v.me.idom = v.idom.me;
 		}
+		vertices.stream().forEach(v -> {
+			if (v != root) { // not root
+				v.idom.children.add(v);
+			}
+		});
+
+		// calculate dominance frontier
+		for (VertexInfo toAdd : vi)
+			if (toAdd != null && toAdd.pred.size() > 1)
+				for (VertexInfo prev : toAdd.pred)
+					for (VertexInfo here = prev; here != toAdd.idom; here = here.idom)
+						here.me.dominanceFrontier.add(toAdd.me);
 	}
 
 	public class VertexInfo {

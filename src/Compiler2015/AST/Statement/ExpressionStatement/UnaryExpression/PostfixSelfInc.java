@@ -26,12 +26,6 @@ public class PostfixSelfInc extends UnaryExpression {
 			throw new CompilationError("Not LValue.");
 		if (a1.type instanceof VoidType || a1.type instanceof StructOrUnionType || a1.type instanceof ArrayPointerType)
 			throw new CompilationError("Self-increment is not supported in such type.");
-/*
-		if (a1 instanceof IntConstant)
-			return new IntConstant(((IntConstant) a1).c + 1);
-		if (a1 instanceof CharConstant)
-			return new CharConstant((char) (((CharConstant) a1).c + 1));
-*/
 		return new PostfixSelfInc(a1);
 	}
 
@@ -45,9 +39,9 @@ public class PostfixSelfInc extends UnaryExpression {
 		e.emitCFG(builder);
 		e.eliminateArrayRegister(builder);
 		tempRegister = Environment.getTemporaryRegister();
-		builder.addInstruction(new Move(tempRegister, e.tempRegister));
+		builder.addInstruction(new Move((VirtualRegister) tempRegister, e.tempRegister));
 		VirtualRegister tp = Environment.getTemporaryRegister();
 		builder.addInstruction(new AddReg(tp, tempRegister, new ImmediateValue(1)));
-		builder.addInstruction(new Move(e.tempRegister, tp));
+		builder.addInstruction(new Move((VirtualRegister) e.tempRegister, tp));
 	}
 }
