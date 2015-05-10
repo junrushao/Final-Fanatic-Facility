@@ -3,7 +3,6 @@ package Compiler2015.AST.Statement;
 import Compiler2015.AST.Initializer;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
-import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
@@ -50,10 +49,7 @@ public class CompoundStatement extends Statement {
 				continue;
 			Environment.variableDelta.put(uId, last);
 			last += ((Type) e.ref).sizeof();
-			System.err.println(e.uId + " " + e.name);
 		}
-		if (returnUId == -1)
-			throw new CompilationError("Internal Error.");
 	}
 
 	@Override

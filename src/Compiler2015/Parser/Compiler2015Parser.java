@@ -662,9 +662,11 @@ public class Compiler2015Parser extends Parser {
 						((FunctionDefinitionContext)_localctx).parameterNames =  _localctx.type.parameterNames;
 
 				((FunctionDefinitionContext) _localctx).typePassDown = new ArrayList<>(_localctx.parameterTypes);
-				_localctx.typePassDown.add(_localctx.returnType);
 				((FunctionDefinitionContext) _localctx).namePassDown = new ArrayList<>(_localctx.parameterNames);
-				_localctx.namePassDown.add(".return");
+				if (!(_localctx.returnType instanceof VoidType)) {
+					_localctx.typePassDown.add(_localctx.returnType);
+					_localctx.namePassDown.add(".return");
+				}
 
 			setState(154);
 				((FunctionDefinitionContext) _localctx).compoundStatement = compoundStatement(_localctx.typePassDown, _localctx.namePassDown);

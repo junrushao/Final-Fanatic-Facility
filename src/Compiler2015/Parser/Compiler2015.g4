@@ -89,9 +89,11 @@ locals [ FunctionType type, String name, CompoundStatement s = null,
 			$parameterNames = $type.parameterNames;
 
 			$typePassDown = new ArrayList<>($parameterTypes);
-			$typePassDown.add($returnType);
 			$namePassDown = new ArrayList<>($parameterNames);
-			$namePassDown.add(".return");
+			if (!($returnType instanceof VoidType)) {
+				$typePassDown.add($returnType);
+				$namePassDown.add(".return");
+			}
 		}
 		compoundStatement[$typePassDown, $namePassDown]
 		{
