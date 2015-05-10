@@ -40,7 +40,11 @@ declaration
 	;
 
 functionDefinition
-locals [ FunctionType type, String name, CompoundStatement s = null, ArrayList<Type> parameterTypes, ArrayList<String> parameterNames, boolean hasVaList = false, int uId = -1, Stack<Loop> loopStack = null, Type returnType = null]
+locals [ FunctionType type, String name, CompoundStatement s = null,
+			ArrayList<Type> parameterTypes, ArrayList<String> parameterNames,
+			boolean hasVaList = false, int uId = -1,
+			Stack<Loop> loopStack = null, Type returnType = null,
+			ArrayList<Type> typePassDown, ArrayList<String> namePassDown]
 @init {
 	$parameterTypes = new ArrayList<Type>();
 	$parameterNames = new ArrayList<String>();
@@ -83,8 +87,13 @@ locals [ FunctionType type, String name, CompoundStatement s = null, ArrayList<T
 
 			$parameterTypes = $type.parameterTypes;
 			$parameterNames = $type.parameterNames;
+
+			$typePassDown = new ArrayList<>($parameterTypes);
+			$typePassDown.add($returnType);
+			$namePassDown = new ArrayList<>($parameterNames);
+			$namePassDown.add(".return");
 		}
-		compoundStatement[$parameterTypes, $parameterNames]
+		compoundStatement[$typePassDown, $namePassDown]
 		{
 			$s = $compoundStatement.ret;
 			$s.youAreAFrame(Environment.symbolNames.currentScope + 1);

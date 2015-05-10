@@ -18,23 +18,17 @@ public class PrefixSelfDec extends UnaryExpression {
 		this.type = e.type;
 	}
 
-	@Override
-	public String getOperator() {
-		return "Prefix --";
-	}
-
 	public static Expression getExpression(Expression a1) {
 		if (!a1.isLValue)
 			throw new CompilationError("Not LValue.");
 		if (a1.type instanceof VoidType || a1.type instanceof StructOrUnionType || a1.type instanceof ArrayPointerType)
 			throw new CompilationError("Such type supports no self-decrement.");
-/*
-		if (a1 instanceof IntConstant)
-			return new IntConstant(((IntConstant) a1).c + 1);
-		if (a1 instanceof CharConstant)
-			return new CharConstant((char) (((CharConstant) a1).c + 1));
-*/
 		return Assign.getExpression(a1, new IntConstant(1), "-=");
+	}
+
+	@Override
+	public String getOperator() {
+		return "Prefix --";
 	}
 
 	@Override

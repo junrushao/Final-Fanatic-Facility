@@ -13,8 +13,8 @@ public class WriteArray extends IRInstruction implements TripleSource {
 	public int memoryVersion = 0;
 
 	public WriteArray(ArrayRegister rd, IRRegister rs) {
-		this.rd = rd;
-		this.rs = rs;
+		this.rd = rd.clone();
+		this.rs = rs.clone();
 	}
 
 	@Override

@@ -66,7 +66,7 @@ public class PointerMemberAccess extends Expression {
 		if (tempRegister instanceof ArrayRegister) {
 			VirtualRegister newReg = Environment.getTemporaryRegister();
 			builder.addInstruction(new ReadArray(newReg, (ArrayRegister) tempRegister));
-			tempRegister = newReg;
+			tempRegister = newReg.clone();
 		}
 	}
 }

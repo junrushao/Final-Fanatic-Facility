@@ -50,6 +50,7 @@ public class WhileStatement extends Statement implements Loop {
 				CFGVertex loop = beginCFGBlock = ControlFlowGraph.getNewVertex();
 				endCFGBlock = ControlFlowGraph.getNewVertex();
 				a.emitCFG();
+				beginCFGBlock.unconditionalNext = a.beginCFGBlock;
 				if (a.endCFGBlock.unconditionalNext == null)
 					a.endCFGBlock.unconditionalNext = loop;
 			}

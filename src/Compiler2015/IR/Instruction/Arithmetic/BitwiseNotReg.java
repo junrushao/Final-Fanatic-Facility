@@ -11,8 +11,8 @@ public class BitwiseNotReg extends Arithmetic implements SingleSource {
 	public IRRegister rs;
 
 	public BitwiseNotReg(VirtualRegister rd, IRRegister rs) {
-		this.rd = rd;
-		this.rs = rs;
+		this.rd = rd.clone();
+		this.rs = rs.clone();
 	}
 
 	@Override

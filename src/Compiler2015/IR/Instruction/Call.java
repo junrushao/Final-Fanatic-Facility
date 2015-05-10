@@ -11,8 +11,8 @@ public class Call extends IRInstruction implements SingleSource {
 	public IRRegister func;
 
 	public Call(VirtualRegister rd, IRRegister func) {
-		this.rd = rd;
-		this.func = func;
+		this.rd = rd.clone();
+		this.func = func.clone();
 	}
 
 	@Override

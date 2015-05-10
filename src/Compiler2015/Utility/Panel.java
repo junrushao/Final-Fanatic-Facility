@@ -10,7 +10,7 @@ public final class Panel {
 	public final static boolean DEBUG = true;
 	public static boolean checkMain = true;
 	public static boolean emitAST = false;
-	public static boolean emitRawCFG = false;
+	public static boolean emitCFG = true;
 	public static String prettyPrinterType = null;
 	public static String architecture = MIPS;
 }

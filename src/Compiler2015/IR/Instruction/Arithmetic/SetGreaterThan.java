@@ -11,9 +11,9 @@ public class SetGreaterThan extends Arithmetic implements DoubleSource {
 	public IRRegister rs, rt;
 
 	public SetGreaterThan(VirtualRegister rd, IRRegister rs, IRRegister rt) {
-		this.rd = rd;
-		this.rs = rs;
-		this.rt = rt;
+		this.rd = rd.clone();
+		this.rs = rs.clone();
+		this.rt = rt.clone();
 	}
 
 	@Override

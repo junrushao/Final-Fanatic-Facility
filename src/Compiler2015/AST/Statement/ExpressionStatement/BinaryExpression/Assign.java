@@ -138,11 +138,10 @@ public class Assign extends BinaryExpression {
 		left.emitCFG(builder);
 		right.emitCFG(builder);
 		right.eliminateArrayRegister(builder);
-//		tempRegister = Environment.getTemporaryRegister();
 		if (left.type instanceof StructOrUnionType) {
 			// right-hand side must be a instance of StructOrUnionType as well, which will not do any lvalue self-elimination
 			// a = b = c should be taken into consideration
-			IRRegister t1, t2 = right.tempRegister;
+			IRRegister t1, t2 = right.tempRegister.clone();
 			if (left.tempRegister instanceof ArrayRegister) {
 				t1 = Environment.getTemporaryRegister();
 				IRRegister t3 = Environment.getTemporaryRegister();
@@ -150,7 +149,7 @@ public class Assign extends BinaryExpression {
 				builder.addInstruction(new AddReg((VirtualRegister) t1, ((ArrayRegister) left.tempRegister).a, t3));
 			}
 			else {
-				t1 = left.tempRegister;
+				t1 = left.tempRegister.clone();
 			}
 
 			StructOrUnionType type = (StructOrUnionType) left.type;
@@ -160,15 +159,15 @@ public class Assign extends BinaryExpression {
 				builder.addInstruction(new ReadArray(t, new ArrayRegister(t2, new ImmediateValue(i))));
 				builder.addInstruction(new WriteArray(new ArrayRegister(t1, new ImmediateValue(i)), t));
 			}
-			tempRegister = t1;
+			tempRegister = t1.clone();
 		}
 		else if (left.tempRegister instanceof ArrayRegister) {
 			builder.addInstruction(new WriteArray((ArrayRegister) left.tempRegister, right.tempRegister));
-			tempRegister = left.tempRegister;
+			tempRegister = left.tempRegister.clone();
 		}
 		else {
 			builder.addInstruction(new Move((VirtualRegister) left.tempRegister, right.tempRegister));
-			tempRegister = left.tempRegister;
+			tempRegister = left.tempRegister.clone();
 		}
 	}
 
@@ -177,7 +176,7 @@ public class Assign extends BinaryExpression {
 		if (tempRegister instanceof ArrayRegister) {
 			VirtualRegister newReg = Environment.getTemporaryRegister();
 			builder.addInstruction(new ReadArray(newReg, (ArrayRegister) tempRegister));
-			tempRegister = newReg;
+			tempRegister = newReg.clone();
 		}
 	}
 

@@ -33,6 +33,6 @@ public class CommaExpression extends Expression {
 		e1.emitCFG(builder);
 		e2.emitCFG(builder);
 		e2.eliminateArrayRegister(builder);
-		tempRegister = e2.tempRegister;
+		tempRegister = e2.tempRegister.clone();
 	}
 }

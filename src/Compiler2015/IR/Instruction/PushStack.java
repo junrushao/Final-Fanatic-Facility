@@ -8,7 +8,7 @@ public class PushStack extends IRInstruction implements SingleSource {
 
 	public PushStack(IRRegister push) {
 		this.rd = null;
-		this.push = push;
+		this.push = push.clone();
 	}
 
 	@Override

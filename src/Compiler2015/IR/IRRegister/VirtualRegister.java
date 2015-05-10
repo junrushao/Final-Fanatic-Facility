@@ -2,6 +2,7 @@ package Compiler2015.IR.IRRegister;
 
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
+import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Tokens;
 
 public class VirtualRegister implements IRRegister {
@@ -28,7 +29,9 @@ public class VirtualRegister implements IRRegister {
 	public String toString() {
 		String res;
 		SymbolTableEntry e = Environment.symbolNames.table.get(uId);
-		if (e.type == Tokens.VARIABLE)
+		if (e == null)
+			res = "M";
+		else if (e.type == Tokens.VARIABLE)
 			res = "#" + Integer.toString(uId);
 		else if (e.type == Tokens.STRING_CONSTANT)
 			res = "%" + Integer.toString(uId);
@@ -37,5 +40,15 @@ public class VirtualRegister implements IRRegister {
 		if (version != -1)
 			res = res + "_" + Integer.toString(version);
 		return res;
+	}
+
+	@Override
+	public VirtualRegister clone() {
+		try {
+			return (VirtualRegister) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			throw new CompilationError("Internal Error.");
+		}
 	}
 }

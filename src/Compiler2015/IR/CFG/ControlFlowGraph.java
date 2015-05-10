@@ -1,14 +1,11 @@
 package Compiler2015.IR.CFG;
 
 import Compiler2015.AST.Statement.CompoundStatement;
-import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.StaticSingleAssignment.LengauerTarjan;
 import Compiler2015.IR.CFG.StaticSingleAssignment.PhiInserter;
 import Compiler2015.IR.CFG.StaticSingleAssignment.RegisterManager;
-import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.Pop;
-import Compiler2015.Type.FunctionType;
 import Compiler2015.Utility.Utility;
 
 import java.util.HashSet;
@@ -19,8 +16,8 @@ public class ControlFlowGraph {
 
 	public static CFGVertex root, outBody;
 	public static int nowUId;
-	public static VirtualRegister returnValue;
 	public static int tempVertexCount;
+	public static CompoundStatement scope;
 
 	static {
 		vertices = new HashSet<>();
@@ -59,11 +56,11 @@ public class ControlFlowGraph {
 		}
 	}
 
-	public static void process(FunctionType func, CompoundStatement body, int uId) {
+	public static void process(CompoundStatement _scope, CompoundStatement body, int uId) {
 		nowUId = uId;
 		tempVertexCount = 0;
 		vertices.clear();
-		returnValue = Environment.getTemporaryRegister();
+		scope = _scope;
 
 		root = null;
 		outBody = ControlFlowGraph.getNewVertex();
@@ -92,7 +89,10 @@ public class ControlFlowGraph {
 	public static String toStr() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("CFG of Function #").append(nowUId).append(Utility.NEW_LINE);
-		sb.append(Utility.getIndent(1)).append("in = ").append(root.id).append(", out = ").append(outBody.id).append(", return register = ").append(returnValue).append(Utility.NEW_LINE);
+		sb.append(Utility.getIndent(1)).
+				append("in = ").append(root.id).
+				append(", out = ").append(outBody.id).
+				append(Utility.NEW_LINE);
 		DepthFirstSearcher.getReachable(vertices, root).stream().forEach(x -> sb.append(x.toString()));
 		return sb.toString();
 	}

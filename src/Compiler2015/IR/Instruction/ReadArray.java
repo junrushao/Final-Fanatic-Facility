@@ -12,8 +12,8 @@ public class ReadArray extends Arithmetic implements TripleSource {
 	public int memoryVersion = 0;
 
 	public ReadArray(VirtualRegister rd, ArrayRegister rs) {
-		this.rd = rd;
-		this.rs = rs;
+		this.rd = rd.clone();
+		this.rs = rs.clone();
 	}
 
 	@Override

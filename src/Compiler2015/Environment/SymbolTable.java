@@ -342,8 +342,8 @@ public class SymbolTable {
 		for (int i = 1, size = table.size(); i < size; ++i) { // prevent scanning the added registers
 			SymbolTableEntry entry = table.get(i);
 			if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionType && entry.info != null) {
-				ControlFlowGraph.process((FunctionType) entry.ref, (CompoundStatement) entry.info, entry.uId);
-				if (Panel.emitRawCFG)
+				ControlFlowGraph.process((CompoundStatement) entry.info, (CompoundStatement) entry.info, entry.uId);
+				if (Panel.emitCFG)
 					System.out.println(ControlFlowGraph.toStr());
 			}
 		}

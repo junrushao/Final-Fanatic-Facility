@@ -3,6 +3,7 @@ package Compiler2015.AST.Statement;
 import Compiler2015.AST.Initializer;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
+import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
@@ -24,11 +25,13 @@ public class CompoundStatement extends Statement {
 	public ArrayList<Integer> variables;
 	public ArrayList<Statement> statements;
 	public ArrayList<Integer> givenVariables;
+	public int returnUId;
 
 	public CompoundStatement(ArrayList<Integer> variables, ArrayList<Statement> statements, ArrayList<Integer> givenVariables) {
 		this.variables = variables;
 		this.statements = statements;
 		this.givenVariables = givenVariables;
+		this.returnUId = -1;
 		Environment.definedVariableInCurrentFrame.addAll(variables);
 	}
 
@@ -37,6 +40,8 @@ public class CompoundStatement extends Statement {
 		while (!Environment.definedVariableInCurrentFrame.isEmpty()) {
 			int uId = Environment.definedVariableInCurrentFrame.peek();
 			SymbolTableEntry e = Environment.symbolNames.table.get(uId);
+			if (e.name.equals(".return"))
+				returnUId = uId;
 			if (e.scope < currentScope)
 				break;
 			Environment.definedVariableInCurrentFrame.pop();
@@ -45,7 +50,10 @@ public class CompoundStatement extends Statement {
 				continue;
 			Environment.variableDelta.put(uId, last);
 			last += ((Type) e.ref).sizeof();
+			System.err.println(e.uId + " " + e.name);
 		}
+		if (returnUId == -1)
+			throw new CompilationError("Internal Error.");
 	}
 
 	@Override

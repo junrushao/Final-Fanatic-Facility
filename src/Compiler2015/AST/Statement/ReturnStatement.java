@@ -1,13 +1,12 @@
 package Compiler2015.AST.Statement;
 
+import Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression.Assign;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
+import Compiler2015.AST.Statement.ExpressionStatement.IdentifierExpression;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
-import Compiler2015.IR.IRRegister.ArrayRegister;
-import Compiler2015.IR.Instruction.Move;
 import Compiler2015.IR.Instruction.Pop;
-import Compiler2015.IR.Instruction.ReadArray;
 import Compiler2015.Utility.Utility;
 
 /**
@@ -38,11 +37,8 @@ public class ReturnStatement extends Statement {
 		}
 		else {
 			ExpressionCFGBuilder builder = new ExpressionCFGBuilder();
-			e.emitCFG(builder);
-			if (e.tempRegister instanceof ArrayRegister)
-				builder.addInstruction(new ReadArray(ControlFlowGraph.returnValue, (ArrayRegister) e.tempRegister));
-			else
-				builder.addInstruction(new Move(ControlFlowGraph.returnValue, e.tempRegister));
+			Expression ee = new Assign(IdentifierExpression.getExpression(ControlFlowGraph.scope.returnUId), e);
+			ee.emitCFG(builder);
 			beginCFGBlock = builder.s;
 			endCFGBlock = builder.t;
 			if (endCFGBlock.unconditionalNext != null || endCFGBlock.branchIfFalse != null)

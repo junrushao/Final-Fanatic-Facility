@@ -19,4 +19,18 @@ public class ArrayRegister implements IRRegister {
 	public String toString() {
 		return String.format("%s[%s]", a, b);
 	}
+
+	@Override
+	public ArrayRegister clone() {
+		ArrayRegister ret;
+		try {
+			ret = (ArrayRegister) super.clone();
+			ret.a = a.clone();
+			ret.b = b.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			throw new CompilationError("Internal Error.");
+		}
+		return ret;
+	}
 }

@@ -10,8 +10,8 @@ public class Move extends IRInstruction implements SingleSource {
 	public IRRegister rs;
 
 	public Move(VirtualRegister rd, IRRegister rs) {
-		this.rd = rd;
-		this.rs = rs;
+		this.rd = rd.clone();
+		this.rs = rs.clone();
 	}
 
 	@Override
