@@ -1,6 +1,7 @@
 package Compiler2015.Type;
 
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.Utility.Panel;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class StructOrUnionType extends Type {
 	public boolean isUnion = false;
 	public ArrayList<Type> types;
 	public ArrayList<String> names;
-	public HashMap<String, Type> directlyAccessableMembers;
+	public HashMap<String, Type> directlyAccessibleMembers;
 	public HashMap<String, Integer> memberDelta;
 
 	public StructOrUnionType(int uId, boolean isUnion) {
@@ -20,14 +21,14 @@ public class StructOrUnionType extends Type {
 		this.isUnion = isUnion;
 		this.types = new ArrayList<>();
 		this.names = new ArrayList<>();
-		this.directlyAccessableMembers = new HashMap<>();
+		this.directlyAccessibleMembers = new HashMap<>();
 		this.memberDelta = null;
 	}
 
 	public StructOrUnionType() {
 		this.types = new ArrayList<>();
 		this.names = new ArrayList<>();
-		this.directlyAccessableMembers = new HashMap<>();
+		this.directlyAccessibleMembers = new HashMap<>();
 	}
 
 	public void calcMemberDelta() {
@@ -69,7 +70,7 @@ public class StructOrUnionType extends Type {
 		else
 			for (Type t : types)
 				ans += t.sizeof();
-		return (ans + 3) / 4;
+		return (ans + Panel.getRegisterSize() - 1) / Panel.getRegisterSize();
 	}
 
 	@Override

@@ -29,7 +29,7 @@ public class MemberAccess extends Expression {
 		if (!(a1.type instanceof StructOrUnionType))
 			throw new CompilationError("Basic type cannot have members.");
 		StructOrUnionType leftType = (StructOrUnionType) a1.type;
-		Type memberType = leftType.directlyAccessableMembers.get(a2);
+		Type memberType = leftType.directlyAccessibleMembers.get(a2);
 		if (memberType == null)
 			throw new CompilationError("No such member.");
 		return new MemberAccess(a1, a2, memberType);
@@ -51,10 +51,10 @@ public class MemberAccess extends Expression {
 		if (su.tempRegister instanceof ArrayRegister) {
 			VirtualRegister t = Environment.getTemporaryRegister();
 			builder.addInstruction(new AddReg(t, ((ArrayRegister) su.tempRegister).b, new ImmediateValue(delta)));
-			tempRegister = new ArrayRegister(((ArrayRegister) su.tempRegister).a, t);
+			tempRegister = new ArrayRegister(((ArrayRegister) su.tempRegister).a, t, type.directlyAccessibleMembers.get(memberName).sizeof());
 		}
 		else {
-			tempRegister = new ArrayRegister(su.tempRegister, new ImmediateValue(delta));
+			tempRegister = new ArrayRegister(su.tempRegister, new ImmediateValue(delta), type.directlyAccessibleMembers.get(memberName).sizeof());
 		}
 	}
 

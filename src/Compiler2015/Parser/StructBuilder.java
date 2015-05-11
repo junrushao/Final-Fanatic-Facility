@@ -61,20 +61,20 @@ public final class StructBuilder {
 			String name = names.get(i);
 			Type type = types.get(i);
 			StructOrUnionType top = stack.peek();
-			int size1 = top.directlyAccessableMembers.size();
+			int size1 = top.directlyAccessibleMembers.size();
 			top.names.add(name);
 			top.types.add(type);
 			if (name == null || name.equals("")) {
 				if (!(type instanceof StructOrUnionType))
 					throw new CompilationError("Name should exist for this type.");
 				StructOrUnionType me = (StructOrUnionType) type;
-				int size2 = me.directlyAccessableMembers.size();
-				top.directlyAccessableMembers.putAll(me.directlyAccessableMembers);
-				if (top.directlyAccessableMembers.size() != size1 + size2)
+				int size2 = me.directlyAccessibleMembers.size();
+				top.directlyAccessibleMembers.putAll(me.directlyAccessibleMembers);
+				if (top.directlyAccessibleMembers.size() != size1 + size2)
 					throw new CompilationError("Duplicate member.");
 			} else {
-				top.directlyAccessableMembers.put(name, type);
-				if (top.directlyAccessableMembers.size() != size1 + 1)
+				top.directlyAccessibleMembers.put(name, type);
+				if (top.directlyAccessibleMembers.size() != size1 + 1)
 					throw new CompilationError("Duplicate member.");
 			}
 		}

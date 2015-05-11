@@ -31,7 +31,7 @@ public class PointerMemberAccess extends Expression {
 		if (!(l instanceof StructOrUnionType))
 			throw new CompilationError("Must be a pointer to a certain struct/union");
 		StructOrUnionType leftType = (StructOrUnionType) l;
-		Type memberType = leftType.directlyAccessableMembers.get(a2);
+		Type memberType = leftType.directlyAccessibleMembers.get(a2);
 		if (memberType == null)
 			throw new CompilationError("No such member.");
 		return new PointerMemberAccess(a1, a2, memberType);
@@ -48,16 +48,16 @@ public class PointerMemberAccess extends Expression {
 		if (!(l instanceof StructOrUnionType))
 			throw new CompilationError("Must be a pointer to a certain struct/union");
 		su.emitCFG(builder);
-		su.eliminateArrayRegister(builder);
+//		su.eliminateArrayRegister(builder);
 		StructOrUnionType type = (StructOrUnionType) l;
 		int delta = type.memberDelta.get(memberName);
 		if (su.tempRegister instanceof ArrayRegister) {
 			VirtualRegister t = Environment.getTemporaryRegister();
 			builder.addInstruction(new AddReg(t, ((ArrayRegister) su.tempRegister).b, new ImmediateValue(delta)));
-			tempRegister = new ArrayRegister(((ArrayRegister) su.tempRegister).a, t);
+			tempRegister = new ArrayRegister(((ArrayRegister) su.tempRegister).a, t, type.directlyAccessibleMembers.get(memberName).sizeof());
 		}
 		else {
-			tempRegister = new ArrayRegister(su.tempRegister, new ImmediateValue(delta));
+			tempRegister = new ArrayRegister(su.tempRegister, new ImmediateValue(delta), type.directlyAccessibleMembers.get(memberName).sizeof());
 		}
 	}
 

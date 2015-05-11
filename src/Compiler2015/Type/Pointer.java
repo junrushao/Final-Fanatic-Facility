@@ -13,6 +13,6 @@ public abstract class Pointer extends Type {
 
 	@Override
 	public int sizeof() {
-		return Panel.architecture.equals(Panel.MIPS) ? 4 : 8;
+		return Panel.getPointerSize();
 	}
 }

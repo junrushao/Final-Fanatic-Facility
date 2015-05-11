@@ -4,10 +4,12 @@ import Compiler2015.Exception.CompilationError;
 
 public class ArrayRegister implements IRRegister {
 	public IRRegister a, b;
+	public int bitLen;
 
-	public ArrayRegister(IRRegister a, IRRegister b) {
+	public ArrayRegister(IRRegister a, IRRegister b, int bitLen) {
 		this.a = a;
 		this.b = b;
+		this.bitLen = bitLen;
 	}
 
 	@Override
@@ -17,7 +19,7 @@ public class ArrayRegister implements IRRegister {
 
 	@Override
 	public String toString() {
-		return String.format("%s[%s]", a, b);
+		return String.format("%s[%s](len = %d)", a, b, bitLen);
 	}
 
 	@Override

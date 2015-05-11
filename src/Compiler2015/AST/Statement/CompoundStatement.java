@@ -116,7 +116,7 @@ public class CompoundStatement extends Statement {
 					}
 					entry.value.emitCFG(builder);
 					entry.value.eliminateArrayRegister(builder);
-					builder.addInstruction(new WriteArray(new ArrayRegister(rx, new ImmediateValue(pos)), entry.value.tempRegister));
+					builder.addInstruction(new WriteArray(new ArrayRegister(rx, new ImmediateValue(pos), t.pointTo.sizeof()), entry.value.tempRegister));
 				}
 			}
 		}

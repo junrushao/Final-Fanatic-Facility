@@ -15,6 +15,7 @@ import Compiler2015.IR.Instruction.Move;
 import Compiler2015.IR.Instruction.ReadArray;
 import Compiler2015.IR.Instruction.WriteArray;
 import Compiler2015.Type.*;
+import Compiler2015.Utility.Panel;
 
 /**
  * a = b
@@ -153,11 +154,11 @@ public class Assign extends BinaryExpression {
 			}
 
 			StructOrUnionType type = (StructOrUnionType) left.type;
-			int size = type.sizeof();
-			for (int i = 0; i < size; i += 4) {
+			int size = type.sizeof(), registerSize = Panel.getRegisterSize();
+			for (int i = 0; i < size; i += registerSize) {
 				VirtualRegister t = Environment.getTemporaryRegister();
-				builder.addInstruction(new ReadArray(t, new ArrayRegister(t2, new ImmediateValue(i))));
-				builder.addInstruction(new WriteArray(new ArrayRegister(t1, new ImmediateValue(i)), t));
+				builder.addInstruction(new ReadArray(t, new ArrayRegister(t2, new ImmediateValue(i), registerSize)));
+				builder.addInstruction(new WriteArray(new ArrayRegister(t1, new ImmediateValue(i), registerSize), t));
 			}
 			tempRegister = t1.clone();
 		}

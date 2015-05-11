@@ -152,7 +152,7 @@ public class ArrayAccess extends BinaryExpression {
 			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, left.tempRegister, r));
 		}
 		else {
-			tempRegister = new ArrayRegister(left.tempRegister, right.tempRegister);
+			tempRegister = new ArrayRegister(left.tempRegister, right.tempRegister, type.sizeof());
 		}
 	}
 
