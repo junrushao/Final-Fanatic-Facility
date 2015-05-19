@@ -14,14 +14,12 @@ public class VirtualRegister implements IRRegister {
 	}
 
 	public void setVersion(int x) {
-		version = x;
+		if (Environment.symbolNames.table.get(uId).scope != 1)
+			version = x;
 	}
 
 	@Override
 	public int getValue() {
-//		if (Environment.isVaraible(uId))
-//			return uId;
-//		return -1;
 		return uId;
 	}
 

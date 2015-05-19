@@ -6,10 +6,12 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.IR.CFG.ControlFlowGraph;
+import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.IntType;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * for (a; b; c) d
@@ -30,7 +32,7 @@ public class ForStatement extends Statement implements Loop {
 
 	@Override
 	public CFGVertex getLoop() {
-		return loop;
+		return c != null ? c.beginCFGBlock : loop;
 	}
 
 	@Override
@@ -112,5 +114,17 @@ public class ForStatement extends Statement implements Loop {
 		else {
 			loop.unconditionalNext = d.beginCFGBlock;
 		}
+	}
+
+	@Override
+	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
+		if (a != null)
+			a.collectGlobalNonArrayVariablesUsed(dumpTo);
+		if (b != null)
+			b.collectGlobalNonArrayVariablesUsed(dumpTo);
+		if (c != null)
+			c.collectGlobalNonArrayVariablesUsed(dumpTo);
+		if (d != null)
+			d.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
 }

@@ -1,21 +1,22 @@
 package Compiler2015.AST.Statement;
 
 import Compiler2015.AST.Initializer;
+import Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression.ArrayAccess;
+import Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression.Assign;
+import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
+import Compiler2015.AST.Statement.ExpressionStatement.Expression;
+import Compiler2015.AST.Statement.ExpressionStatement.IdentifierExpression;
+import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
-import Compiler2015.IR.IRRegister.ArrayRegister;
-import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
-import Compiler2015.IR.Instruction.Move;
-import Compiler2015.IR.Instruction.ReadArray;
-import Compiler2015.IR.Instruction.WriteArray;
-import Compiler2015.Type.ArrayPointerType;
-import Compiler2015.Type.FunctionType;
-import Compiler2015.Type.Type;
+import Compiler2015.Type.*;
+import Compiler2015.Utility.Panel;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * { ... }
@@ -31,6 +32,7 @@ public class CompoundStatement extends Statement {
 		this.statements = statements;
 		this.givenVariables = givenVariables;
 		this.returnUId = -1;
+		addInitializers();
 		Environment.definedVariableInCurrentFrame.addAll(variables);
 	}
 
@@ -48,8 +50,46 @@ public class CompoundStatement extends Statement {
 			if (e.ref instanceof FunctionType)
 				continue;
 			Environment.variableDelta.put(uId, last);
-			last += ((Type) e.ref).sizeof();
+			if (e.ref instanceof StructOrUnionType)
+				last += Panel.getPointerSize();
+			else
+				last += ((Type) e.ref).sizeof();
 		}
+	}
+
+	public void addInitializers() {
+		ArrayList<Statement> newStatements = new ArrayList<>();
+		for (int x : variables) {
+			SymbolTableEntry e = Environment.symbolNames.table.get(x);
+			Type tp = (Type) e.ref;
+			if (tp instanceof FunctionType) // functions are processed in global scope
+				continue;
+			if (e.info == null)
+				continue;
+			Initializer init = (Initializer) e.info;
+			if (init.entries == null)
+				continue;
+			for (Initializer.InitEntry entry : init.entries) {
+				if (entry.position.length == 0) { // single variable
+					newStatements.add(Assign.getExpression(IdentifierExpression.getExpression(x), entry.value, "="));
+				} else {
+					ArrayPointerType t = (ArrayPointerType) tp;
+					int pos = 0, mul = 1;
+					for (int i = entry.position.length - 1; i >= 0; --i) {
+						pos += entry.position[i] * mul;
+						mul *= t.dimensions.get(i);
+					}
+					// ( (Type *) x)[pos] = value;
+					Type toType = new VariablePointerType(t.pointTo);
+					Expression xx = CastExpression.getExpression(toType, IdentifierExpression.getExpression(x));
+					Expression ll = ArrayAccess.getExpression(xx, new IntConstant(pos));
+					Expression ww = Assign.getExpression(ll, entry.value, "=");
+					newStatements.add(ww);
+				}
+			}
+		}
+		newStatements.addAll(statements);
+		statements = newStatements;
 	}
 
 	@Override
@@ -60,7 +100,7 @@ public class CompoundStatement extends Statement {
 			SymbolTableEntry e = Environment.symbolNames.table.get(x);
 			Type t = (Type) e.ref;
 			String name = e.name;
-			sb.append(indent).append(String.format("Variable(#%d, %s, %s)", x, t.toString(), name));
+			sb.append(indent).append(String.format("Variable(#%d, %s, %s) delta = %d", x, t.toString(), name, Environment.variableDelta.get(x)));
 
 			if (e.info != null) {
 				if (e.ref instanceof FunctionType)
@@ -85,47 +125,17 @@ public class CompoundStatement extends Statement {
 	@Override
 	public void emitCFG() {
 		ExpressionCFGBuilder builder = new ExpressionCFGBuilder();
-		// initialize
-		for (int x : variables) {
-			SymbolTableEntry e = Environment.symbolNames.table.get(x);
-			Type tp = (Type) e.ref;
-			if (tp instanceof FunctionType) // functions are processed in global scope
-				continue;
-			if (e.info == null)
-				continue;
-			Initializer init = (Initializer) e.info;
-			if (init.entries == null)
-				continue;
-			for (Initializer.InitEntry entry : init.entries) {
-				VirtualRegister rx = new VirtualRegister(x);
-				if (entry.position.length == 0) { // single variable
-					entry.value.emitCFG(builder);
-					entry.value.eliminateArrayRegister(builder);
-					if (entry.value.tempRegister instanceof ArrayRegister) {
-						builder.addInstruction(new ReadArray(rx, (ArrayRegister) entry.value.tempRegister));
-					} else {
-						builder.addInstruction(new Move(rx, entry.value.tempRegister));
-					}
-				}
-				else {
-					ArrayPointerType t = (ArrayPointerType) tp;
-					int pos = 0, mul = 1;
-					for (int i = entry.position.length - 1; i >= 0; --i) {
-						pos += entry.position[i] * mul;
-						mul *= t.dimensions.get(i);
-					}
-					entry.value.emitCFG(builder);
-					entry.value.eliminateArrayRegister(builder);
-					builder.addInstruction(new WriteArray(new ArrayRegister(rx, new ImmediateValue(pos), t.pointTo.sizeof()), entry.value.tempRegister));
-				}
-			}
-		}
-		// statement
 		for (Statement statement : statements) {
 			statement.emitCFG();
 			builder.addBlock(statement.beginCFGBlock, statement.endCFGBlock);
 		}
 		beginCFGBlock = builder.s;
 		endCFGBlock = builder.t;
+	}
+
+	@Override
+	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
+		for (Statement s : statements)
+			s.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
 }

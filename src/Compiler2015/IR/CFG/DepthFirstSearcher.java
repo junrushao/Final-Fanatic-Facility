@@ -18,16 +18,16 @@ public class DepthFirstSearcher {
 				});
 	}
 
-	public static int process(HashSet<CFGVertex> _vertices, CFGVertex root) {
-		vertices = _vertices;
+	public static int process(HashSet<CFGVertex> vertices, CFGVertex root) {
+		DepthFirstSearcher.vertices = vertices;
 		timeStamp = 0;
 		vertices.stream().forEach(x -> x.id = -1);
 		depthFirstSearch(root);
 		return timeStamp;
 	}
 
-	public static List<CFGVertex> getReachable(HashSet<CFGVertex> _vertices, CFGVertex root) {
-		process(_vertices, root);
+	public static List<CFGVertex> getReachable(HashSet<CFGVertex> vertices, CFGVertex root) {
+		process(vertices, root);
 		return vertices.stream().filter(x -> x.id != -1).collect(Collectors.toList());
 	}
 

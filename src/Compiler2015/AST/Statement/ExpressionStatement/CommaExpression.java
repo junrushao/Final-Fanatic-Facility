@@ -1,6 +1,9 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.IRRegister.VirtualRegister;
+
+import java.util.HashMap;
 
 /**
  * a, b, c
@@ -26,6 +29,12 @@ public class CommaExpression extends Expression {
 	@Override
 	public String toString() {
 		return String.format("(, %s %s)", e1, e2);
+	}
+
+	@Override
+	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
+		e1.collectGlobalNonArrayVariablesUsed(dumpTo);
+		e2.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
 
 	@Override

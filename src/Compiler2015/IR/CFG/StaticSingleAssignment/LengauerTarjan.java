@@ -1,13 +1,9 @@
 package Compiler2015.IR.CFG.StaticSingleAssignment;
 
-import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
-import Compiler2015.IR.CFG.DepthFirstSearcher;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class LengauerTarjan {
 
@@ -38,15 +34,7 @@ public class LengauerTarjan {
 		return v.best;
 	}
 
-	public void process() {
-		n = DepthFirstSearcher.process(vertices, root);
-		// eliminate unreachable vertices
-		List<CFGVertex> unreachable = vertices.stream().filter(x -> x.id == -1).collect(Collectors.toList());
-		unreachable.stream().forEach(vertices::remove);
-
-		if (vertices.size() != n)
-			throw new CompilationError("Internal Error.");
-
+	public void process(int n) {
 		vi = new VertexInfo[n + 1];
 		for (int i = 1; i <= n; ++i) vi[i] = new VertexInfo();
 		// add predecessor edges
@@ -95,12 +83,15 @@ public class LengauerTarjan {
 			VertexInfo v = vi[dfn];
 			v.me.idom = v.idom.me;
 		}
-		vertices.stream().forEach(v -> {
+		vertices.forEach(v -> {
 			if (v != root) { // not root
 				v.idom.children.add(v);
 			}
 		});
 
+		vertices.forEach(v -> {
+			System.out.printf("v = %d, fa = %d\n", v.id, v.idom.id);
+		});
 		// calculate dominance frontier
 		for (VertexInfo toAdd : vi)
 			if (toAdd != null && toAdd.pred.size() > 1)

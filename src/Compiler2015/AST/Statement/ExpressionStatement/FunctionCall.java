@@ -1,19 +1,23 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
 import Compiler2015.Environment.Environment;
+import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.IRRegister.ArrayRegister;
+import Compiler2015.IR.IRRegister.IRRegister;
+import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
-import Compiler2015.IR.Instruction.Call;
-import Compiler2015.IR.Instruction.PushStack;
-import Compiler2015.Type.ArrayPointerType;
-import Compiler2015.Type.FunctionPointerType;
-import Compiler2015.Type.FunctionType;
-import Compiler2015.Type.Type;
+import Compiler2015.IR.Instruction.*;
+import Compiler2015.Type.*;
+import Compiler2015.Utility.Panel;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * f(...)
@@ -75,10 +79,36 @@ public class FunctionCall extends Expression {
 	public String toString() {
 		return String.format("(Call %s %s %s)",
 				function.toString(),
-				argumentExpressionList == null ? "null" : Utility.toString(Arrays.asList(argumentExpressionList)),
-				vaList == null ? "null" : Utility.toString(Arrays.asList(vaList)));
+				argumentExpressionList == null ? "" : Utility.toString(Arrays.asList(argumentExpressionList)),
+				vaList == null ? "" : Utility.toString(Arrays.asList(vaList)));
 	}
 
+	@Override
+	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
+		function.collectGlobalNonArrayVariablesUsed(dumpTo);
+		for (Expression e : argumentExpressionList)
+			e.collectGlobalNonArrayVariablesUsed(dumpTo);
+		for (Expression e : vaList)
+			e.collectGlobalNonArrayVariablesUsed(dumpTo);
+	}
+
+	public void pushStack(ExpressionCFGBuilder builder, Expression e) {
+		if (e.type instanceof StructOrUnionType) {
+			// copy into heap, copy from t2 to t1
+			IRRegister t1 = Environment.getTemporaryRegister(), t2 = e.tempRegister.clone();
+			int size = e.type.sizeof(), registerSize = Panel.getRegisterSize();
+			builder.addInstruction(new AllocateHeap((VirtualRegister) t1, size)); // allocate memory
+			for (int i = 0; i < size; i += registerSize) {
+				VirtualRegister t = Environment.getTemporaryRegister();
+				builder.addInstruction(new ReadArray(t, new ArrayRegister(t2, new ImmediateValue(i), registerSize)));
+				builder.addInstruction(new WriteArray(new ArrayRegister(t1, new ImmediateValue(i), registerSize), t));
+			}
+		} else {
+			builder.addInstruction(new PushStack(e.tempRegister));
+		}
+	}
+
+	// TODO: call malloc
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		function.emitCFG(builder);
@@ -90,12 +120,22 @@ public class FunctionCall extends Expression {
 			e.emitCFG(builder);
 			e.eliminateArrayRegister(builder);
 		}
+		for (Map.Entry<Integer, VirtualRegister> element : ControlFlowGraph.globalNonArrayVariables.entrySet()) {
+			SymbolTableEntry entry = Environment.symbolNames.table.get(element.getKey());
+			int uId = entry.uId;
+			builder.addInstruction(new WriteArray(new ArrayRegister(new VirtualRegister(uId), new ImmediateValue(0), ((Type) entry.ref).sizeof()), element.getValue()));
+		}
 		for (Expression e : argumentExpressionList)
-			builder.addInstruction(new PushStack(e.tempRegister));
+			pushStack(builder, e);
 		for (Expression e : vaList)
-			builder.addInstruction(new PushStack(e.tempRegister));
-
+			pushStack(builder, e);
 		tempRegister = Environment.getTemporaryRegister();
-		builder.addInstruction(new Call((VirtualRegister) tempRegister, function.tempRegister));
+		builder.addInstruction(new Call(function.tempRegister));
+		builder.addInstruction(new FetchReturn((VirtualRegister) tempRegister, function.type));
+		for (Map.Entry<Integer, VirtualRegister> element : ControlFlowGraph.globalNonArrayVariables.entrySet()) {
+			SymbolTableEntry entry = Environment.symbolNames.table.get(element.getKey());
+			int uId = entry.uId;
+			builder.addInstruction(new ReadArray(element.getValue(), new ArrayRegister(new VirtualRegister(uId), new ImmediateValue(0), ((Type) entry.ref).sizeof())));
+		}
 	}
 }

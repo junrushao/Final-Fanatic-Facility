@@ -10,6 +10,8 @@ import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
 import Compiler2015.Type.VoidType;
 
+import java.util.HashMap;
+
 /**
  * (castTo)e
  */
@@ -68,4 +70,10 @@ public class CastExpression extends Expression {
 			builder.addInstruction(new Move((VirtualRegister) tempRegister, e.tempRegister));
 		}
 	}
+
+	@Override
+	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
+		e.collectGlobalNonArrayVariablesUsed(dumpTo);
+	}
+
 }

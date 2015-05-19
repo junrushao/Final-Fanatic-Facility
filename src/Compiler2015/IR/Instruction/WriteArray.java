@@ -19,7 +19,7 @@ public class WriteArray extends IRInstruction implements TripleSource {
 
 	@Override
 	public String toString() {
-		return "WriteArray " + rd +  " = " + rs;
+		return "WriteArray " + rd + " = " + rs + " -> M = " + memoryVersion;
 	}
 
 	@Override

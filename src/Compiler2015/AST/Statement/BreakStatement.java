@@ -1,7 +1,10 @@
 package Compiler2015.AST.Statement;
 
 import Compiler2015.IR.CFG.ControlFlowGraph;
+import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Utility.Utility;
+
+import java.util.HashMap;
 
 /**
  * break;
@@ -27,5 +30,10 @@ public class BreakStatement extends Statement {
 	public void emitCFG() {
 		beginCFGBlock = endCFGBlock = ControlFlowGraph.getNewVertex();
 		endCFGBlock.unconditionalNext = breakTo.getOut();
+	}
+
+	@Override
+	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
+
 	}
 }

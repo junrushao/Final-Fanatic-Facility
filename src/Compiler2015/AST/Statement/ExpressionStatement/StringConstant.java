@@ -8,6 +8,7 @@ import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.CharType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class StringConstant extends Expression {
 	/**
@@ -18,13 +19,13 @@ public class StringConstant extends Expression {
 	 * <p>
 	 * Also, in format strings, we should pay attention to '%', which is also ignored here.
 	 */
-	public static boolean isToAppendBack = true;
+//	public static boolean isToAppendBack = true;
 	public String c;
 	public int uId;
 
 	public StringConstant(final String c) {
-		if (!c.endsWith("\0"))
-			throw new CompilationError("Internal Error.");
+//		if (!c.endsWith("\0"))
+//			throw new CompilationError("Internal Error.");
 		this.c = c;
 		this.uId = Environment.symbolNames.defineStringConstant(c);
 		this.isLValue = false;
@@ -41,7 +42,7 @@ public class StringConstant extends Expression {
 		original = original.substring(1, n - 1);
 		n -= 2;
 		if (n == 0)
-			return "\0";
+			return "";
 
 		StringBuilder sb = new StringBuilder(original.length());
 		if (sb.length() != 0)
@@ -140,19 +141,19 @@ public class StringConstant extends Expression {
 				}
 			}
 		}
-		if (isToAppendBack)
-			sb.append('\0');
+//		if (isToAppendBack)
+//			sb.append('\0');
 		return sb.toString();
 	}
 
 	public static Expression getExpression(ArrayList<String> s) {
 		StringBuilder sb = new StringBuilder();
-		isToAppendBack = false;
+//		isToAppendBack = false;
 		for (String str : s) {
 			sb.append(convert(str));
 		}
-		isToAppendBack = true;
-		return new StringConstant(sb.append("\0").toString());
+//		isToAppendBack = true;
+		return new StringConstant(sb.toString());
 	}
 
 	public static String toPrintableString(String s) {
@@ -160,15 +161,24 @@ public class StringConstant extends Expression {
 		for (char c : s.toCharArray()) {
 			if (c < 32 || c >= 127)
 				sb.append("\\").append(Integer.toOctalString(c));
+			else if (c == '\'')
+				sb.append("\\\'");
+			else if (c == '\"')
+				sb.append("\\\"");
 			else
 				sb.append(c);
 		}
-		return sb.toString();
+		return sb.append("\\000").toString();
 	}
 
 	@Override
 	public String toString() {
 		return "\"" + toPrintableString(c) + "\"";
+	}
+
+	@Override
+	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
+
 	}
 
 	@Override

@@ -7,8 +7,8 @@ public class ArrayRegister implements IRRegister {
 	public int bitLen;
 
 	public ArrayRegister(IRRegister a, IRRegister b, int bitLen) {
-		this.a = a;
-		this.b = b;
+		this.a = a.clone();
+		this.b = b.clone();
 		this.bitLen = bitLen;
 	}
 

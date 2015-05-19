@@ -11,6 +11,7 @@ import Compiler2015.IR.Instruction.Arithmetic.AddReg;
 import Compiler2015.IR.Instruction.Arithmetic.MultiplyReg;
 import Compiler2015.IR.Instruction.ReadArray;
 import Compiler2015.Type.*;
+import Compiler2015.Utility.Panel;
 
 /**
  * a[b]
@@ -152,7 +153,8 @@ public class ArrayAccess extends BinaryExpression {
 			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, left.tempRegister, r));
 		}
 		else {
-			tempRegister = new ArrayRegister(left.tempRegister, right.tempRegister, type.sizeof());
+			tempRegister = new ArrayRegister(left.tempRegister, right.tempRegister,
+					type instanceof StructOrUnionType ? Panel.getPointerSize() : type.sizeof());
 		}
 	}
 

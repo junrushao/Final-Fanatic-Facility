@@ -10,14 +10,19 @@ import Compiler2015.IR.IRRegister.VirtualRegister;
 public class Call extends IRInstruction implements SingleSource {
 	public IRRegister func;
 
-	public Call(VirtualRegister rd, IRRegister func) {
-		this.rd = rd.clone();
+	public Call(IRRegister func) {
+		this.rd = null;
 		this.func = func.clone();
 	}
 
 	@Override
 	public String toString() {
 		return "Call " + rd +  " = " + func;
+	}
+
+	@Override
+	public int getRd() {
+		return -1;
 	}
 
 	@Override

@@ -1,7 +1,5 @@
-*.swp
-
 out/
-test/
 bin/
 
 input.c
+test.s

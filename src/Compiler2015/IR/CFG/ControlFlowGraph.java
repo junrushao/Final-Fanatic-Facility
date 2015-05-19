@@ -1,14 +1,24 @@
 package Compiler2015.IR.CFG;
 
 import Compiler2015.AST.Statement.CompoundStatement;
+import Compiler2015.Environment.Environment;
+import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.StaticSingleAssignment.LengauerTarjan;
 import Compiler2015.IR.CFG.StaticSingleAssignment.PhiInserter;
 import Compiler2015.IR.CFG.StaticSingleAssignment.RegisterManager;
+import Compiler2015.IR.IRRegister.ArrayRegister;
+import Compiler2015.IR.IRRegister.ImmediateValue;
+import Compiler2015.IR.IRRegister.VirtualRegister;
+import Compiler2015.IR.Instruction.IRInstruction;
 import Compiler2015.IR.Instruction.Pop;
+import Compiler2015.IR.Instruction.ReadArray;
+import Compiler2015.IR.Instruction.WriteArray;
+import Compiler2015.Type.Type;
 import Compiler2015.Utility.Utility;
 
-import java.util.HashSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ControlFlowGraph {
 
@@ -18,22 +28,12 @@ public class ControlFlowGraph {
 	public static int nowUId;
 	public static int tempVertexCount;
 	public static CompoundStatement scope;
+	public static HashMap<Integer, VirtualRegister> globalNonArrayVariables;
 
 	static {
 		vertices = new HashSet<>();
 		root = outBody = null;
 		nowUId = 0;
-	}
-
-	public static void checkForDebug() {
-		for (CFGVertex x : vertices) {
-			if (x.internal.isEmpty() && x.branchIfFalse != null)
-				throw new CompilationError("Internal Error.");
-			if (x.unconditionalNext == null && x.branchIfFalse != null)
-				throw new CompilationError("Internal Error.");
-			if (x != outBody && x.unconditionalNext == null)
-				throw new CompilationError("Internal Error.");
-		}
 	}
 
 	public static CFGVertex getNewVertex() {
@@ -56,29 +56,80 @@ public class ControlFlowGraph {
 		}
 	}
 
-	public static void process(CompoundStatement _scope, CompoundStatement body, int uId) {
+	public static void process(CompoundStatement scope, CompoundStatement body, int uId) {
 		nowUId = uId;
 		tempVertexCount = 0;
 		vertices.clear();
-		scope = _scope;
+		ControlFlowGraph.scope = scope;
 
 		root = null;
 		outBody = ControlFlowGraph.getNewVertex();
-		outBody.internal.add(Pop.instance);
 
+		// collect useful information: global variables used in the function
+		globalNonArrayVariables = new HashMap<>();
+		body.collectGlobalNonArrayVariablesUsed(globalNonArrayVariables);
+
+		// emit control flow graph
 		body.emitCFG();
 		root = body.beginCFGBlock;
 		if (body.endCFGBlock.unconditionalNext == null)
 			body.endCFGBlock.unconditionalNext = outBody;
-//		checkForDebug();
+
+/*		a test
+		{
+			vertices.clear();
+			CFGVertex v = getNewVertex();
+			root = getNewVertex();
+			outBody = getNewVertex();
+			root.unconditionalNext = v;
+			v.unconditionalNext = outBody;
+			v.branchIfFalse = v;
+
+			root.internal.add(new Move(new VirtualRegister(9), new ImmediateValue(1)));
+			root.internal.add(new Move(new VirtualRegister(10), new ImmediateValue(1)));
+
+			v.internal.add(new Move(new VirtualRegister(11), new VirtualRegister(10)));
+			v.internal.add(new Move(new VirtualRegister(10), new VirtualRegister(9)));
+			v.internal.add(new Move(new VirtualRegister(9), new VirtualRegister(11)));
+			vertices.add(root);
+			vertices.add(outBody);
+			vertices.add(v);
+		}
+*/
+		// load global instructions before entering the function
+		{
+			ArrayList<IRInstruction> ins = new ArrayList<>();
+			for (Map.Entry<Integer, VirtualRegister> element : ControlFlowGraph.globalNonArrayVariables.entrySet()) {
+				SymbolTableEntry entry = Environment.symbolNames.table.get(element.getKey());
+				ins.add(new ReadArray(element.getValue(), new ArrayRegister(new VirtualRegister(entry.uId), new ImmediateValue(0), ((Type) entry.ref).sizeof())));
+			}
+			ins.addAll(root.internal);
+			root.internal = ins;
+		}
+
+		// store back global variables after function completes
+		{
+			for (Map.Entry<Integer, VirtualRegister> element : ControlFlowGraph.globalNonArrayVariables.entrySet()) {
+				SymbolTableEntry entry = Environment.symbolNames.table.get(element.getKey());
+				outBody.internal.add(new WriteArray(new ArrayRegister(new VirtualRegister(entry.uId), new ImmediateValue(0), ((Type) entry.ref).sizeof()), element.getValue()));
+			}
+			outBody.internal.add(Pop.instance);
+		}
 
 		// remove unnecessary jumps
 		vertices.stream().forEach(ControlFlowGraph::findGoto);
-//		checkForDebug();
 
-		// eliminate unreachable vertices, build dominator tree, calculate dominance frontiers
+		// eliminate unreachable vertices
+		// warning: if out is unreachable, it will be labelled -1
+		int n = DepthFirstSearcher.process(vertices, root);
+		List<CFGVertex> unreachable = vertices.stream().filter(x -> x.id == -1).collect(Collectors.toList());
+		unreachable.stream().forEach(vertices::remove);
+		if (vertices.size() != n)
+			throw new CompilationError("Internal Error.");
+
+		// build dominator tree, calculate dominance frontiers
 		LengauerTarjan dominatorTreeSolver = new LengauerTarjan(vertices, root);
-		dominatorTreeSolver.process();
+		dominatorTreeSolver.process(n);
 
 		// insert phi-functions
 		RegisterManager rm = new RegisterManager(body.givenVariables, root);

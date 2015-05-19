@@ -5,8 +5,6 @@ import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.IRRegister;
-import Compiler2015.IR.IRRegister.VirtualRegister;
-import Compiler2015.IR.Instruction.Move;
 import Compiler2015.Type.Type;
 import Compiler2015.Utility.Utility;
 
@@ -37,12 +35,16 @@ public abstract class Expression extends Statement {
 		ExpressionCFGBuilder builder = new ExpressionCFGBuilder();
 		emitCFG(builder);
 		eliminateArrayRegister(builder);
+/*
 		if (this instanceof IdentifierExpression)
 			builder.addInstruction(new Move((VirtualRegister) tempRegister, tempRegister));
-		if (builder.s.internal.isEmpty())
+		if (!(this.tempRegister instanceof ImmediateValue) && builder.s.internal.isEmpty())
 			throw new CompilationError("???");
+*/
 		beginCFGBlock = builder.s;
 		endCFGBlock = builder.t;
+		if (endCFGBlock.branchIfFalse != null)
+			endCFGBlock.branchRegister = this.tempRegister;
 	}
 
 	@Override

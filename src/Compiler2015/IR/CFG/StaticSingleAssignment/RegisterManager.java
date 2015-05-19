@@ -19,7 +19,6 @@ public class RegisterManager {
 			manager.put(x, new RegisterManagerEntry() {{
 				defsite.add(root);
 			}});
-//		System.out.println(predefined);
 		Environment.symbolNames.table.stream()
 				.filter(e -> e != null && e.scope == 1 && (e.type == Tokens.VARIABLE || e.type == Tokens.STRING_CONSTANT))
 				.forEach(e -> manager.put(e.uId, new RegisterManagerEntry() {{
@@ -30,6 +29,7 @@ public class RegisterManager {
 	public void addVariable(int uId, CFGVertex site) {
 		if (uId == -1)
 			return;
+//		System.out.printf("uId = %d, site = %s\n", uId, site == null ? "null" : site.id);
 		if (!manager.containsKey(uId)) {
 			manager.put(uId, new RegisterManagerEntry());
 		}
@@ -49,8 +49,9 @@ public class RegisterManager {
 	public void insertPhi() {
 		for (Map.Entry<Integer, RegisterManagerEntry> entry : manager.entrySet()) {
 			int a = entry.getKey();
-			if (entry.getValue().defsite.size() == 1 || entry.getValue().useCnt <= 1)
-				continue;
+//			if (entry.getValue().defsite.size() == 1 && entry.getValue().useCnt <= 1)
+//				continue;
+//			System.out.printf("a = %d, defsite = %s\n", a, entry.getValue().defsite.toString());
 			Stack<CFGVertex> w = new Stack<>();
 			w.addAll(entry.getValue().defsite);
 			while (!w.isEmpty()) {
@@ -72,10 +73,8 @@ public class RegisterManager {
 		public HashSet<CFGVertex> defsite = new HashSet<>();
 		public int count = 0;
 		public int useCnt = 0;
-		public Stack<Integer> stack = new Stack<>();
-
-		public RegisterManagerEntry() {
-			stack.add(0);
-		}
+		public Stack<Integer> stack = new Stack<Integer>() {{
+			add(0);
+		}};
 	}
 }

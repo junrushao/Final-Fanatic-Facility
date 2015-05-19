@@ -18,7 +18,7 @@ public class ReadArray extends Arithmetic implements TripleSource {
 
 	@Override
 	public String toString() {
-		return "ReadArray " + rd +  " = " + rs;
+		return "ReadArray " + rd + " = " + rs + " -> M = " + memoryVersion;
 	}
 
 	@Override

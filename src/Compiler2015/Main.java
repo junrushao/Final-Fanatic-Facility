@@ -6,6 +6,7 @@ import Compiler2015.Parser.Compiler2015Lexer;
 import Compiler2015.Parser.Compiler2015Parser;
 import Compiler2015.Parser.ParseErrorListener;
 import Compiler2015.Parser.PrettyPrinterListener;
+import Compiler2015.Translate.Naive.MIPS.Translator;
 import Compiler2015.Utility.Panel;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -105,5 +106,14 @@ public class Main {
 
 		// make control flow graph
 		Environment.symbolNames.emitCFG();
+
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("test.s")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Translator.generateGlobalVariables(out);
+		out.close();
 	}
 }

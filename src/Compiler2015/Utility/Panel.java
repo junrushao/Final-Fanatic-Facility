@@ -10,9 +10,10 @@ public final class Panel {
 	public final static String X86 = "-x86";
 	public final static String JVM = "-jvm";
 	public final static boolean DEBUG = true;
+	public final static boolean emitCFG = true;
+	public final static String outputAssemblyFile = "out.s";
 	public static boolean checkMain = true;
 	public static boolean emitAST = false;
-	public static boolean emitCFG = true;
 	public static String prettyPrinterType = null;
 	public static String architecture = MIPS;
 

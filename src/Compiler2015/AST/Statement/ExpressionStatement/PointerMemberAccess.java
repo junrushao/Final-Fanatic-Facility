@@ -11,6 +11,9 @@ import Compiler2015.IR.Instruction.ReadArray;
 import Compiler2015.Type.Pointer;
 import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
+import Compiler2015.Utility.Panel;
+
+import java.util.HashMap;
 
 /**
  * a->b
@@ -43,6 +46,11 @@ public class PointerMemberAccess extends Expression {
 	}
 
 	@Override
+	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
+		su.collectGlobalNonArrayVariablesUsed(dumpTo);
+	}
+
+	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		Type l = Pointer.getPointTo(su.type);
 		if (!(l instanceof StructOrUnionType))
@@ -54,10 +62,12 @@ public class PointerMemberAccess extends Expression {
 		if (su.tempRegister instanceof ArrayRegister) {
 			VirtualRegister t = Environment.getTemporaryRegister();
 			builder.addInstruction(new AddReg(t, ((ArrayRegister) su.tempRegister).b, new ImmediateValue(delta)));
-			tempRegister = new ArrayRegister(((ArrayRegister) su.tempRegister).a, t, type.directlyAccessibleMembers.get(memberName).sizeof());
+			tempRegister = new ArrayRegister(((ArrayRegister) su.tempRegister).a, t,
+					this.type instanceof StructOrUnionType ? Panel.getPointerSize() : type.directlyAccessibleMembers.get(memberName).sizeof());
 		}
 		else {
-			tempRegister = new ArrayRegister(su.tempRegister, new ImmediateValue(delta), type.directlyAccessibleMembers.get(memberName).sizeof());
+			tempRegister = new ArrayRegister(su.tempRegister, new ImmediateValue(delta),
+					this.type instanceof StructOrUnionType ? Panel.getPointerSize() : type.directlyAccessibleMembers.get(memberName).sizeof());
 		}
 	}
 

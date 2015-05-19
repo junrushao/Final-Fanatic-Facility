@@ -1,6 +1,7 @@
 package Compiler2015.IR.CFG;
 
 import Compiler2015.IR.CFG.StaticSingleAssignment.PhiFunction;
+import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.IRInstruction;
 import Compiler2015.Utility.Utility;
@@ -13,6 +14,7 @@ public class CFGVertex {
 	public ArrayList<IRInstruction> internal = new ArrayList<>();
 	public CFGVertex branchIfFalse = null;
 	public CFGVertex unconditionalNext = null;
+	public IRRegister branchRegister = null;
 
 	public int id = 0;
 	public CFGVertex parent = null;
