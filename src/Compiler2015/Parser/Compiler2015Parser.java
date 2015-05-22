@@ -1,4 +1,4 @@
-// Generated from Compiler2015.g4 by ANTLR 4.5
+// Generated from /home/junrushao/IdeaProjects/compiler2015/src/Compiler2015/Parser/Compiler2015.g4 by ANTLR 4.5
 package Compiler2015.Parser;
 
 import Compiler2015.AST.SimpleInitializerList;
@@ -15,6 +15,7 @@ import org.antlr.v4.runtime.atn.ATNDeserializer;
 import org.antlr.v4.runtime.atn.ParserATNSimulator;
 import org.antlr.v4.runtime.atn.PredictionContextCache;
 import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -445,7 +446,7 @@ public class Compiler2015Parser extends Parser {
 	}
 
 	@Override
-
+	@NotNull
 	public Vocabulary getVocabulary() {
 		return VOCABULARY;
 	}
@@ -662,10 +663,10 @@ public class Compiler2015Parser extends Parser {
 
 				((FunctionDefinitionContext) _localctx).typePassDown = new ArrayList<>(_localctx.parameterTypes);
 				((FunctionDefinitionContext) _localctx).namePassDown = new ArrayList<>(_localctx.parameterNames);
-				if (!(_localctx.returnType instanceof VoidType)) {
-					_localctx.typePassDown.add(_localctx.returnType);
-					_localctx.namePassDown.add(".return");
-				}
+				//			if (!(_localctx.returnType instanceof VoidType)) {
+				//				_localctx.typePassDown.add(_localctx.returnType);
+				//				_localctx.namePassDown.add(".return");
+				//			}
 
 			setState(154);
 				((FunctionDefinitionContext) _localctx).compoundStatement = compoundStatement(_localctx.typePassDown, _localctx.namePassDown);
@@ -1836,8 +1837,11 @@ public class Compiler2015Parser extends Parser {
 							Environment.enterScope();
 							if (_localctx.toDefineTypes != null) {
 								int n = _localctx.toDefineTypes.size();
-								for (int i = 0; i < n; ++i)
-									_localctx.givenVariables.add(Environment.symbolNames.defineVariable(_localctx.toDefineNames.get(i), _localctx.toDefineTypes.get(i)));
+								for (int i = 0; i < n; ++i) {
+									int uId = Environment.symbolNames.defineVariable(_localctx.toDefineNames.get(i), _localctx.toDefineTypes.get(i));
+									_localctx.givenVariables.add(uId);
+									_localctx.parameters.add(uId);
+								}
 							}
 
 			setState(450);
@@ -1879,7 +1883,7 @@ public class Compiler2015Parser extends Parser {
 			setState(453);
 			match(R3);
 
-				((CompoundStatementContext) _localctx).ret = new CompoundStatement(Environment.symbolNames.getVariablesInCurrentScope(), _localctx.statements, _localctx.givenVariables);
+				((CompoundStatementContext) _localctx).ret = new CompoundStatement(Environment.symbolNames.getVariablesInCurrentScope(), _localctx.statements, _localctx.givenVariables, _localctx.parameters);
 							Environment.exitScope();
 
 			}
@@ -2210,9 +2214,8 @@ public class Compiler2015Parser extends Parser {
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__9) | (1L << T__10) | (1L << T__11) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << T__17) | (1L << T__18) | (1L << EQ))) != 0)) ) {
 			_errHandler.recoverInline(this);
-			} else {
-				consume();
 			}
+				consume();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2508,9 +2511,8 @@ public class Compiler2015Parser extends Parser {
 			_la = _input.LA(1);
 			if ( !(_la==T__19 || _la==T__20) ) {
 			_errHandler.recoverInline(this);
-			} else {
-				consume();
 			}
+				consume();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2584,9 +2586,8 @@ public class Compiler2015Parser extends Parser {
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__21) | (1L << T__22) | (1L << T__23) | (1L << T__24))) != 0)) ) {
 			_errHandler.recoverInline(this);
-			} else {
-				consume();
 			}
+				consume();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2656,9 +2657,8 @@ public class Compiler2015Parser extends Parser {
 			_la = _input.LA(1);
 			if ( !(_la==T__25 || _la==T__26) ) {
 			_errHandler.recoverInline(this);
-			} else {
-				consume();
 			}
+				consume();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2728,9 +2728,8 @@ public class Compiler2015Parser extends Parser {
 			_la = _input.LA(1);
 			if ( !(_la==T__27 || _la==T__28) ) {
 			_errHandler.recoverInline(this);
-			} else {
-				consume();
 			}
+				consume();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2802,9 +2801,8 @@ public class Compiler2015Parser extends Parser {
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__29) | (1L << T__30) | (1L << STAR))) != 0)) ) {
 			_errHandler.recoverInline(this);
-			} else {
-				consume();
 			}
+				consume();
 			}
 		}
 		catch (RecognitionException re) {
@@ -3044,9 +3042,8 @@ public class Compiler2015Parser extends Parser {
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__27) | (1L << T__28) | (1L << T__33) | (1L << T__34) | (1L << STAR) | (1L << And))) != 0)) ) {
 			_errHandler.recoverInline(this);
-			} else {
-				consume();
 			}
+				consume();
 			}
 		}
 		catch (RecognitionException re) {
@@ -4434,6 +4431,7 @@ public class Compiler2015Parser extends Parser {
 		public CompoundStatement ret;
 		public ArrayList<Statement> statements = new ArrayList<Statement>();
 		public ArrayList<Integer> givenVariables = new ArrayList<>();
+		public ArrayList<Integer> parameters = new ArrayList<>();
 		public StatementContext statement;
 		public CompoundStatementContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
 		public CompoundStatementContext(ParserRuleContext parent, int invokingState, ArrayList<Type> toDefineTypes, ArrayList<String> toDefineNames) {

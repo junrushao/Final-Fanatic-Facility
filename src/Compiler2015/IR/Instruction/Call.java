@@ -17,7 +17,7 @@ public class Call extends IRInstruction implements SingleSource {
 
 	@Override
 	public String toString() {
-		return "Call " + rd +  " = " + func;
+		return "Call " + func;
 	}
 
 	@Override

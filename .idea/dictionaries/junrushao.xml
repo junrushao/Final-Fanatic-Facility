@@ -1,6 +1,7 @@
 <component name="ProjectDictionaryState">
   <dictionary name="junrushao">
     <words>
+      <w>addiu</w>
       <w>antlr</w>
       <w>defsite</w>
       <w>dominator</w>
@@ -10,6 +11,7 @@
       <w>junrushao</w>
       <w>lengauer</w>
       <w>structs</w>
+      <w>syscall</w>
       <w>tarjan</w>
     </words>
   </dictionary>

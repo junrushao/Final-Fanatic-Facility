@@ -1,13 +1,18 @@
 package Compiler2015;
 
+import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.Environment.Environment;
+import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.Parser.Compiler2015Lexer;
 import Compiler2015.Parser.Compiler2015Parser;
 import Compiler2015.Parser.ParseErrorListener;
 import Compiler2015.Parser.PrettyPrinterListener;
 import Compiler2015.Translate.Naive.MIPS.Translator;
+import Compiler2015.Type.FunctionType;
 import Compiler2015.Utility.Panel;
+import Compiler2015.Utility.Tokens;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RuleContext;
@@ -104,8 +109,7 @@ public class Main {
 			System.out.println(printer.toString());
 		}
 
-		// make control flow graph
-		Environment.symbolNames.emitCFG();
+		// make control flow graph & dump raw MIPS assembly code
 
 		PrintWriter out = null;
 		try {
@@ -113,7 +117,24 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Translator.generateGlobalVariables(out);
-		out.close();
+		if (out == null)
+			throw new CompilationError("Internal Error.");
+
+		try {
+			Translator.generateGlobalVariables(out);
+			out.println(".text");
+			for (int i = 1, size = Environment.symbolNames.table.size(); i < size; ++i) { // prevent scanning the added registers
+				SymbolTableEntry entry = Environment.symbolNames.table.get(i);
+				if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionType && entry.info != null) {
+					ControlFlowGraph.process((CompoundStatement) entry.info, (CompoundStatement) entry.info, entry.uId);
+					if (Panel.emitCFG)
+						System.out.println(ControlFlowGraph.toStr());
+					Translator.generateFunction(out);
+				}
+			}
+		} finally {
+			out.close();
+		}
+
 	}
 }

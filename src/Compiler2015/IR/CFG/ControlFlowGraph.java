@@ -4,17 +4,14 @@ import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.CFG.StaticSingleAssignment.LengauerTarjan;
-import Compiler2015.IR.CFG.StaticSingleAssignment.PhiInserter;
-import Compiler2015.IR.CFG.StaticSingleAssignment.RegisterManager;
 import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
-import Compiler2015.IR.Instruction.IRInstruction;
-import Compiler2015.IR.Instruction.Pop;
-import Compiler2015.IR.Instruction.ReadArray;
-import Compiler2015.IR.Instruction.WriteArray;
+import Compiler2015.IR.Instruction.*;
+import Compiler2015.Type.ArrayPointerType;
+import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
+import Compiler2015.Utility.Panel;
 import Compiler2015.Utility.Utility;
 
 import java.util.*;
@@ -30,10 +27,58 @@ public class ControlFlowGraph {
 	public static CompoundStatement scope;
 	public static HashMap<Integer, VirtualRegister> globalNonArrayVariables;
 
+	public static HashMap<Integer, Integer> tempDelta;
+	public static HashMap<Integer, Integer> parameterDelta;
+	public static int frameSize;
+
 	static {
 		vertices = new HashSet<>();
 		root = outBody = null;
 		nowUId = 0;
+	}
+
+	public static void classifyVirtualRegister(int uId) {
+		if (uId == -1 || uId == 0)
+			return;
+		SymbolTableEntry e = Environment.symbolNames.table.get(uId);
+		if (e.scope <= 1)
+			return;
+		if (!scope.parametersUId.contains(uId))
+			tempDelta.put(uId, -1);
+	}
+
+	public static void scanVirtualRegister() {
+		tempDelta = new HashMap<>();
+		parameterDelta = new HashMap<>();
+		for (CFGVertex vertex : vertices) {
+			for (IRInstruction ins : vertex.internal) {
+				classifyVirtualRegister(ins.getRd());
+				if (ins instanceof NonSource) {
+					continue;
+				}
+				if (ins instanceof SingleSource) {
+					classifyVirtualRegister(((SingleSource) ins).getRs());
+				} else if (ins instanceof DoubleSource) {
+					classifyVirtualRegister(((DoubleSource) ins).getRs());
+					classifyVirtualRegister(((DoubleSource) ins).getRt());
+				} else if (ins instanceof TripleSource) {
+					classifyVirtualRegister(((TripleSource) ins).getA());
+					classifyVirtualRegister(((TripleSource) ins).getB());
+					classifyVirtualRegister(((TripleSource) ins).getC());
+				} else
+					throw new CompilationError("Internal Error.");
+			}
+		}
+		frameSize = 8; // [0, 3] for $fp, [4, 7] for $ra
+		for (Map.Entry<Integer, Integer> entry : tempDelta.entrySet()) {
+			entry.setValue(frameSize);
+			frameSize += 4;
+		}
+		frameSize += 4; // for return value
+		for (int uId : scope.parametersUId) {
+			parameterDelta.put(uId, frameSize);
+			frameSize += 4;
+		}
 	}
 
 	public static CFGVertex getNewVertex() {
@@ -101,7 +146,8 @@ public class ControlFlowGraph {
 			ArrayList<IRInstruction> ins = new ArrayList<>();
 			for (Map.Entry<Integer, VirtualRegister> element : ControlFlowGraph.globalNonArrayVariables.entrySet()) {
 				SymbolTableEntry entry = Environment.symbolNames.table.get(element.getKey());
-				ins.add(new ReadArray(element.getValue(), new ArrayRegister(new VirtualRegister(entry.uId), new ImmediateValue(0), ((Type) entry.ref).sizeof())));
+				int size = entry.ref instanceof StructOrUnionType || entry.ref instanceof ArrayPointerType ? Panel.getPointerSize() : ((Type) entry.ref).sizeof();
+				ins.add(new ReadArray(element.getValue(), new ArrayRegister(new VirtualRegister(entry.uId), new ImmediateValue(0), size)));
 			}
 			ins.addAll(root.internal);
 			root.internal = ins;
@@ -111,7 +157,8 @@ public class ControlFlowGraph {
 		{
 			for (Map.Entry<Integer, VirtualRegister> element : ControlFlowGraph.globalNonArrayVariables.entrySet()) {
 				SymbolTableEntry entry = Environment.symbolNames.table.get(element.getKey());
-				outBody.internal.add(new WriteArray(new ArrayRegister(new VirtualRegister(entry.uId), new ImmediateValue(0), ((Type) entry.ref).sizeof()), element.getValue()));
+				int size = entry.ref instanceof StructOrUnionType || entry.ref instanceof ArrayPointerType ? Panel.getPointerSize() : ((Type) entry.ref).sizeof();
+				outBody.internal.add(new WriteArray(new ArrayRegister(new VirtualRegister(entry.uId), new ImmediateValue(0), size), element.getValue()));
 			}
 			outBody.internal.add(Pop.instance);
 		}
@@ -127,6 +174,7 @@ public class ControlFlowGraph {
 		if (vertices.size() != n)
 			throw new CompilationError("Internal Error.");
 
+/*
 		// build dominator tree, calculate dominance frontiers
 		LengauerTarjan dominatorTreeSolver = new LengauerTarjan(vertices, root);
 		dominatorTreeSolver.process(n);
@@ -135,6 +183,7 @@ public class ControlFlowGraph {
 		RegisterManager rm = new RegisterManager(body.givenVariables, root);
 		PhiInserter phiInserter = new PhiInserter(vertices, rm);
 		phiInserter.process();
+*/
 	}
 
 	public static String toStr() {

@@ -11,8 +11,10 @@ import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.IRRegister.VirtualRegister;
-import Compiler2015.Type.*;
-import Compiler2015.Utility.Panel;
+import Compiler2015.Type.ArrayPointerType;
+import Compiler2015.Type.FunctionType;
+import Compiler2015.Type.Type;
+import Compiler2015.Type.VariablePointerType;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
@@ -25,35 +27,26 @@ public class CompoundStatement extends Statement {
 	public ArrayList<Integer> variables;
 	public ArrayList<Statement> statements;
 	public ArrayList<Integer> givenVariables;
-	public int returnUId;
 
-	public CompoundStatement(ArrayList<Integer> variables, ArrayList<Statement> statements, ArrayList<Integer> givenVariables) {
+	public ArrayList<Integer> parametersUId;
+
+	public CompoundStatement(ArrayList<Integer> variables, ArrayList<Statement> statements, ArrayList<Integer> givenVariables, ArrayList<Integer> parametersUId) {
 		this.variables = variables;
 		this.statements = statements;
 		this.givenVariables = givenVariables;
-		this.returnUId = -1;
+		this.parametersUId = parametersUId;
 		addInitializers();
 		Environment.definedVariableInCurrentFrame.addAll(variables);
 	}
 
 	public void youAreAFrame(int currentScope) {
-		int last = 0;
 		while (!Environment.definedVariableInCurrentFrame.isEmpty()) {
 			int uId = Environment.definedVariableInCurrentFrame.peek();
 			SymbolTableEntry e = Environment.symbolNames.table.get(uId);
-			if (e.name.equals(".return"))
-				returnUId = uId;
 			if (e.scope < currentScope)
 				break;
 			Environment.definedVariableInCurrentFrame.pop();
 			givenVariables.add(uId);
-			if (e.ref instanceof FunctionType)
-				continue;
-			Environment.variableDelta.put(uId, last);
-			if (e.ref instanceof StructOrUnionType)
-				last += Panel.getPointerSize();
-			else
-				last += ((Type) e.ref).sizeof();
 		}
 	}
 
@@ -100,7 +93,7 @@ public class CompoundStatement extends Statement {
 			SymbolTableEntry e = Environment.symbolNames.table.get(x);
 			Type t = (Type) e.ref;
 			String name = e.name;
-			sb.append(indent).append(String.format("Variable(#%d, %s, %s) delta = %d", x, t.toString(), name, Environment.variableDelta.get(x)));
+			sb.append(indent).append(String.format("Variable(#%d, %s, %s)", x, t.toString(), name));
 
 			if (e.info != null) {
 				if (e.ref instanceof FunctionType)

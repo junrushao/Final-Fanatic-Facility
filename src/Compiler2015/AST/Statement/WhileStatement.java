@@ -44,7 +44,7 @@ public class WhileStatement extends Statement implements Loop {
 	public void emitCFG() {
 		Integer v = Constant.toInt(e);
 		if (a == null)
-			a = new CompoundStatement(new ArrayList<>(0), new ArrayList<>(0), new ArrayList<>(0));
+			a = new CompoundStatement(new ArrayList<>(0), new ArrayList<>(0), new ArrayList<>(0), new ArrayList<>(0));
 		if (v != null) {
 			if (v == 0) {
 				beginCFGBlock = endCFGBlock = ControlFlowGraph.getNewVertex();

@@ -10,7 +10,7 @@ public class VariablePointerType extends Pointer {
 
 	@Override
 	public int sizeof() {
-		return 8;
+		return 4;
 	}
 
 	@Override

@@ -92,7 +92,7 @@ public class FunctionCall extends Expression {
 			e.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
 
-	public void pushStack(ExpressionCFGBuilder builder, Expression e) {
+	public void pushStack(ExpressionCFGBuilder builder, Expression e, boolean isExtra) {
 		if (e.type instanceof StructOrUnionType) {
 			// copy into heap, copy from t2 to t1
 			IRRegister t1 = Environment.getTemporaryRegister(), t2 = e.tempRegister.clone();
@@ -100,15 +100,15 @@ public class FunctionCall extends Expression {
 			builder.addInstruction(new AllocateHeap((VirtualRegister) t1, size)); // allocate memory
 			for (int i = 0; i < size; i += registerSize) {
 				VirtualRegister t = Environment.getTemporaryRegister();
-				builder.addInstruction(new ReadArray(t, new ArrayRegister(t2, new ImmediateValue(i), registerSize)));
-				builder.addInstruction(new WriteArray(new ArrayRegister(t1, new ImmediateValue(i), registerSize), t));
+				builder.addInstruction(new ReadArray(t, new ArrayRegister((VirtualRegister) t2, new ImmediateValue(i), registerSize)));
+				builder.addInstruction(new WriteArray(new ArrayRegister((VirtualRegister) t1, new ImmediateValue(i), registerSize), t));
 			}
+			builder.addInstruction(new PushStack(t1, isExtra));
 		} else {
-			builder.addInstruction(new PushStack(e.tempRegister));
+			builder.addInstruction(new PushStack(e.tempRegister, isExtra));
 		}
 	}
 
-	// TODO: call malloc
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		function.emitCFG(builder);
@@ -123,19 +123,24 @@ public class FunctionCall extends Expression {
 		for (Map.Entry<Integer, VirtualRegister> element : ControlFlowGraph.globalNonArrayVariables.entrySet()) {
 			SymbolTableEntry entry = Environment.symbolNames.table.get(element.getKey());
 			int uId = entry.uId;
-			builder.addInstruction(new WriteArray(new ArrayRegister(new VirtualRegister(uId), new ImmediateValue(0), ((Type) entry.ref).sizeof()), element.getValue()));
+			int size = entry.ref instanceof StructOrUnionType || entry.ref instanceof ArrayPointerType ? Panel.getPointerSize() : ((Type) entry.ref).sizeof();
+			builder.addInstruction(new WriteArray(new ArrayRegister(new VirtualRegister(uId), new ImmediateValue(0), size), element.getValue()));
 		}
-		for (Expression e : argumentExpressionList)
-			pushStack(builder, e);
-		for (Expression e : vaList)
-			pushStack(builder, e);
+
+		// push in reverse order
+		for (int i = vaList.length - 1; i >= 0; --i)
+			pushStack(builder, vaList[i], true);
+		for (int i = argumentExpressionList.length - 1; i >= 0; --i)
+			pushStack(builder, argumentExpressionList[i], false);
+
 		tempRegister = Environment.getTemporaryRegister();
 		builder.addInstruction(new Call(function.tempRegister));
 		builder.addInstruction(new FetchReturn((VirtualRegister) tempRegister, function.type));
 		for (Map.Entry<Integer, VirtualRegister> element : ControlFlowGraph.globalNonArrayVariables.entrySet()) {
 			SymbolTableEntry entry = Environment.symbolNames.table.get(element.getKey());
 			int uId = entry.uId;
-			builder.addInstruction(new ReadArray(element.getValue(), new ArrayRegister(new VirtualRegister(uId), new ImmediateValue(0), ((Type) entry.ref).sizeof())));
+			int size = entry.ref instanceof StructOrUnionType || entry.ref instanceof ArrayPointerType ? Panel.getPointerSize() : ((Type) entry.ref).sizeof();
+			builder.addInstruction(new ReadArray(element.getValue(), new ArrayRegister(new VirtualRegister(uId), new ImmediateValue(0), size)));
 		}
 	}
 }

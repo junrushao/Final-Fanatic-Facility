@@ -147,14 +147,33 @@ public class ArrayAccess extends BinaryExpression {
 		right.emitCFG(builder);
 		right.eliminateArrayRegister(builder);
 		tempRegister = Environment.getTemporaryRegister();
+		VirtualRegister leftRegister;
+
+		// for a pointer which is not array pointer, we should load it in to know what it refers to
+		if (left.type instanceof ArrayPointerType) {
+			leftRegister = (VirtualRegister) left.tempRegister;
+		} else {
+			leftRegister = Environment.getTemporaryRegister();
+			builder.addInstruction(new ReadArray(leftRegister, new ArrayRegister((VirtualRegister) left.tempRegister, new ImmediateValue(0), Panel.getPointerSize())));
+		}
+
+		int size = type instanceof StructOrUnionType || type instanceof ArrayPointerType ? Panel.getPointerSize() : type.sizeof();
 		if (type instanceof Pointer) {
 			VirtualRegister r = Environment.getTemporaryRegister();
-			builder.addInstruction(new MultiplyReg(r, right.tempRegister, new ImmediateValue(type.sizeof())));
-			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, left.tempRegister, r));
+			builder.addInstruction(new MultiplyReg(r, right.tempRegister, new ImmediateValue(size)));
+			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, leftRegister, r));
 		}
 		else {
-			tempRegister = new ArrayRegister(left.tempRegister, right.tempRegister,
-					type instanceof StructOrUnionType ? Panel.getPointerSize() : type.sizeof());
+			if (right.tempRegister instanceof VirtualRegister) {
+				VirtualRegister r = Environment.getTemporaryRegister();
+				builder.addInstruction(new MultiplyReg(r, right.tempRegister, new ImmediateValue(size)));
+				builder.addInstruction(new AddReg((VirtualRegister) tempRegister, leftRegister, r));
+				tempRegister = new ArrayRegister((VirtualRegister) tempRegister, new ImmediateValue(0), size);
+			} else if (right.tempRegister instanceof ImmediateValue) {
+				int v = ((ImmediateValue) right.tempRegister).a;
+				tempRegister = new ArrayRegister(leftRegister, new ImmediateValue(v * type.sizeof()), size);
+			} else
+				throw new CompilationError("Internal Error.");
 		}
 	}
 

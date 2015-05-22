@@ -3,10 +3,13 @@ package Compiler2015.IR.IRRegister;
 import Compiler2015.Exception.CompilationError;
 
 public class ArrayRegister implements IRRegister {
-	public IRRegister a, b;
+	public VirtualRegister a;
+	public ImmediateValue b;
 	public int bitLen;
 
-	public ArrayRegister(IRRegister a, IRRegister b, int bitLen) {
+	public ArrayRegister(VirtualRegister a, ImmediateValue b, int bitLen) {
+		if (bitLen != 1 && bitLen != 4)
+			throw new CompilationError("Internal Error.");
 		this.a = a.clone();
 		this.b = b.clone();
 		this.bitLen = bitLen;

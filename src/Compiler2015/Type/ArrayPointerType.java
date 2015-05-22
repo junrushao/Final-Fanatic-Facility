@@ -20,24 +20,6 @@ public class ArrayPointerType extends Pointer {
 		this.dimensions = null;
 	}
 
-	public Type lower() {
-		int n = dimensions.size();
-		if (n == 1)
-			return pointTo;
-		ArrayPointerType ret = new ArrayPointerType();
-		ret.pointTo = pointTo;
-		ret.dimensions = new ArrayList<>(n - 1);
-		for (int i = 1; i < n; ++i)
-			ret.dimensions.add(dimensions.get(i));
-		return ret;
-	}
-
-	public VariablePointerType toVariablePointerType() {
-		Type t = lower();
-		return new VariablePointerType(t);
-	}
-
-
 	public static Type pushFromUndimensioned(Type t) {
 		ArrayPointerType ret = new ArrayPointerType();
 		if (t instanceof ArrayPointerType) {
@@ -79,6 +61,23 @@ public class ArrayPointerType extends Pointer {
 			}};
 		}
 		return ret;
+	}
+
+	public Type lower() {
+		int n = dimensions.size();
+		if (n == 1)
+			return pointTo;
+		ArrayPointerType ret = new ArrayPointerType();
+		ret.pointTo = pointTo;
+		ret.dimensions = new ArrayList<>(n - 1);
+		for (int i = 1; i < n; ++i)
+			ret.dimensions.add(dimensions.get(i));
+		return ret;
+	}
+
+	public VariablePointerType toVariablePointerType() {
+		Type t = lower();
+		return new VariablePointerType(t);
 	}
 
 	@Override

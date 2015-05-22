@@ -5,10 +5,8 @@ import Compiler2015.AST.SimpleInitializerList;
 import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.AST.Statement.ExpressionStatement.StringConstant;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.*;
-import Compiler2015.Utility.Panel;
 import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
@@ -241,7 +239,7 @@ public class SymbolTable {
 			throw new CompilationError("Symbol already defined.");
 		} else {
 			uId = ++lastUId;
-			table.add(new SymbolTableEntry(uId, name, currentScope, Tokens.VARIABLE, t, null));
+			table.add(new SymbolTableEntry(uId, name, 1, Tokens.VARIABLE, t, null));
 			scopes.peek().add(uId);
 			if (name != null && !name.equals(""))
 				getUId(name).push(uId);
@@ -334,19 +332,9 @@ public class SymbolTable {
 	 */
 	public VirtualRegister defineTemporaryRegister() {
 		int uId = ++lastUId;
-		table.add(new SymbolTableEntry(uId, "#", -1, Tokens.TEMPORARY_REGISTER, null, null));
+		Class a = this.getClass();
+		table.add(new SymbolTableEntry(uId, "#", Integer.MAX_VALUE, Tokens.TEMPORARY_REGISTER, null, null));
 		return new VirtualRegister(uId);
-	}
-
-	public void emitCFG() {
-		for (int i = 1, size = table.size(); i < size; ++i) { // prevent scanning the added registers
-			SymbolTableEntry entry = table.get(i);
-			if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionType && entry.info != null) {
-				ControlFlowGraph.process((CompoundStatement) entry.info, (CompoundStatement) entry.info, entry.uId);
-				if (Panel.emitCFG)
-					System.out.println(ControlFlowGraph.toStr());
-			}
-		}
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package Compiler2015.IR.Instruction;
 
+import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
@@ -13,6 +14,8 @@ public class WriteArray extends IRInstruction implements TripleSource {
 	public int memoryVersion = 0;
 
 	public WriteArray(ArrayRegister rd, IRRegister rs) {
+		if (rs instanceof ArrayRegister)
+			throw new CompilationError("Internal Error.");
 		this.rd = rd.clone();
 		this.rs = rs.clone();
 	}
@@ -49,14 +52,11 @@ public class WriteArray extends IRInstruction implements TripleSource {
 
 	@Override
 	public void setAVersion(int x) {
-		if (rd.a instanceof VirtualRegister)
-			((VirtualRegister) rd.a).setVersion(x);
+		rd.a.setVersion(x);
 	}
 
 	@Override
 	public void setBVersion(int x) {
-		if (rd.b instanceof VirtualRegister)
-			((VirtualRegister) rd.b).setVersion(x);
 	}
 
 	@Override

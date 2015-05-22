@@ -38,14 +38,11 @@ public class ReadArray extends Arithmetic implements TripleSource {
 
 	@Override
 	public void setAVersion(int x) {
-		if (rs.a instanceof VirtualRegister)
-			((VirtualRegister) rs.a).setVersion(x);
+		rs.a.setVersion(x);
 	}
 
 	@Override
 	public void setBVersion(int x) {
-		if (rs.b instanceof VirtualRegister)
-			((VirtualRegister) rs.b).setVersion(x);
 	}
 
 	@Override

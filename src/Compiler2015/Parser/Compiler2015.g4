@@ -90,10 +90,10 @@ locals [ FunctionType type, String name, CompoundStatement s = null,
 
 			$typePassDown = new ArrayList<>($parameterTypes);
 			$namePassDown = new ArrayList<>($parameterNames);
-			if (!($returnType instanceof VoidType)) {
-				$typePassDown.add($returnType);
-				$namePassDown.add(".return");
-			}
+//			if (!($returnType instanceof VoidType)) {
+//				$typePassDown.add($returnType);
+//				$namePassDown.add(".return");
+//			}
 		}
 		compoundStatement[$typePassDown, $namePassDown]
 		{
@@ -343,14 +343,17 @@ expressionStatement returns [Statement ret = null]
 	;
 
 compoundStatement[ArrayList<Type> toDefineTypes, ArrayList<String> toDefineNames] returns [CompoundStatement ret]
-locals [ ArrayList<Statement> statements = new ArrayList<Statement>(), ArrayList<Integer> givenVariables = new ArrayList<>() ]
+locals [ ArrayList<Statement> statements = new ArrayList<Statement>(), ArrayList<Integer> givenVariables = new ArrayList<>(), ArrayList<Integer> parameters = new ArrayList<>() ]
 	: L3
 			{
 				Environment.enterScope();
 				if ($toDefineTypes != null) {
 					int n = $toDefineTypes.size();
-					for (int i = 0; i < n; ++i)
-						$givenVariables.add(Environment.symbolNames.defineVariable($toDefineNames.get(i), $toDefineTypes.get(i)));
+					for (int i = 0; i < n; ++i) {
+						int uId = Environment.symbolNames.defineVariable($toDefineNames.get(i), $toDefineTypes.get(i));
+						$givenVariables.add(uId);
+						$parameters.add(uId);
+					}
 				}
 			}
 		(
@@ -362,7 +365,7 @@ locals [ ArrayList<Statement> statements = new ArrayList<Statement>(), ArrayList
 		)*
 	  R3
 			{
-				$ret = new CompoundStatement(Environment.symbolNames.getVariablesInCurrentScope(), $statements, $givenVariables);
+				$ret = new CompoundStatement(Environment.symbolNames.getVariablesInCurrentScope(), $statements, $givenVariables, $parameters);
 				Environment.exitScope();
 			}
 	;

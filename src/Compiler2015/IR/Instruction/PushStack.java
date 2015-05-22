@@ -5,10 +5,12 @@ import Compiler2015.IR.IRRegister.VirtualRegister;
 
 public class PushStack extends IRInstruction implements SingleSource {
 	public IRRegister push;
+	public boolean isExtra;
 
-	public PushStack(IRRegister push) {
+	public PushStack(IRRegister push, boolean isExtra) {
 		this.rd = null;
 		this.push = push.clone();
+		this.isExtra = isExtra;
 	}
 
 	@Override

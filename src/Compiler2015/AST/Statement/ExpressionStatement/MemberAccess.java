@@ -6,8 +6,8 @@ import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
-import Compiler2015.IR.Instruction.Arithmetic.AddReg;
 import Compiler2015.IR.Instruction.ReadArray;
+import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
 import Compiler2015.Utility.Panel;
@@ -56,15 +56,13 @@ public class MemberAccess extends Expression {
 //		su.eliminateArrayRegister(builder);
 		StructOrUnionType type = (StructOrUnionType) su.type;
 		int delta = type.memberDelta.get(memberName);
+		int size = this.type instanceof StructOrUnionType || this.type instanceof ArrayPointerType ? Panel.getPointerSize() : this.type.sizeof();
 		if (su.tempRegister instanceof ArrayRegister) {
-			VirtualRegister t = Environment.getTemporaryRegister();
-			builder.addInstruction(new AddReg(t, ((ArrayRegister) su.tempRegister).b, new ImmediateValue(delta)));
-			tempRegister = new ArrayRegister(((ArrayRegister) su.tempRegister).a, t,
-					this.type instanceof StructOrUnionType ? Panel.getPointerSize() : type.directlyAccessibleMembers.get(memberName).sizeof());
+			ImmediateValue t = new ImmediateValue(((ArrayRegister) su.tempRegister).b.a + delta);
+			tempRegister = new ArrayRegister(((ArrayRegister) su.tempRegister).a, t, size);
 		}
 		else {
-			tempRegister = new ArrayRegister(su.tempRegister, new ImmediateValue(delta),
-					this.type instanceof StructOrUnionType ? Panel.getPointerSize() : type.directlyAccessibleMembers.get(memberName).sizeof());
+			tempRegister = new ArrayRegister((VirtualRegister) su.tempRegister, new ImmediateValue(delta), size);
 		}
 	}
 
