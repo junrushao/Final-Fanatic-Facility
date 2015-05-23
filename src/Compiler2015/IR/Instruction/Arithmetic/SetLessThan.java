@@ -23,12 +23,12 @@ public class SetLessThan extends Arithmetic implements DoubleSource {
 
 	@Override
 	public int getRs() {
-		return rs.getValue();
+		return rs.getUId();
 	}
 
 	@Override
 	public int getRt() {
-		return rt.getValue();
+		return rt.getUId();
 	}
 
 	@Override

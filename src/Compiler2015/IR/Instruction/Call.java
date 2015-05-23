@@ -27,7 +27,7 @@ public class Call extends IRInstruction implements SingleSource {
 
 	@Override
 	public int getRs() {
-		return func.getValue();
+		return func.getUId();
 	}
 
 	@Override

@@ -117,9 +117,10 @@ public class Add extends BinaryExpression {
 		if (a2.type instanceof ArrayPointerType)
 			a2 = CastExpression.getExpression(((ArrayPointerType) a2.type).toVariablePointerType(), a2);
 		if (a2.type instanceof VariablePointerType) {
+			Type t = ((VariablePointerType) a2.type).pointTo;
 			return CastExpression.getExpression(a2.type,
 					new Add(a2,
-							Multiply.getExpression(a1, new IntConstant(a2.type.sizeof()))
+							Multiply.getExpression(a1, new IntConstant(t.sizeof()))
 					)
 			);
 		}
@@ -142,7 +143,7 @@ public class Add extends BinaryExpression {
 		left.eliminateArrayRegister(builder);
 		right.emitCFG(builder);
 		right.eliminateArrayRegister(builder);
-		tempRegister = Environment.getTemporaryRegister();
+		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new AddReg((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
 }

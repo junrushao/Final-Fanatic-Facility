@@ -46,6 +46,11 @@ public class FunctionType extends Type {
 	}
 
 	@Override
+	public int classifiedSizeof() {
+		return 1;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof FunctionType))
 			return false;

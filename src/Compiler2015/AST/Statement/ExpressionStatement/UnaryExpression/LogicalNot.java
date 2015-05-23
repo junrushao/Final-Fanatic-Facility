@@ -67,7 +67,7 @@ public class LogicalNot extends UnaryExpression implements Logical {
 		CFGVertex trueTo = ControlFlowGraph.getNewVertex();
 		CFGVertex falseTo = ControlFlowGraph.getNewVertex();
 
-		tempRegister = Environment.getTemporaryRegister();
+		tempRegister = Environment.getVirtualRegister();
 		trueTo.internal.add(new Move((VirtualRegister) tempRegister, new ImmediateValue(1)));
 		falseTo.internal.add(new Move((VirtualRegister) tempRegister, new ImmediateValue(0)));
 

@@ -19,7 +19,7 @@ public class VirtualRegister implements IRRegister {
 	}
 
 	@Override
-	public int getValue() {
+	public int getUId() {
 		return uId;
 	}
 

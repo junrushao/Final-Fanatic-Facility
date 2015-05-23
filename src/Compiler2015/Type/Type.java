@@ -46,4 +46,5 @@ public abstract class Type {
 
 	public abstract int sizeof();
 
+	public abstract int classifiedSizeof();
 }

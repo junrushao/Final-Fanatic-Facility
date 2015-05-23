@@ -32,17 +32,17 @@ public class WriteArray extends IRInstruction implements TripleSource {
 
 	@Override
 	public int getA() {
-		return rd.a.getValue();
+		return rd.a.getUId();
 	}
 
 	@Override
 	public int getB() {
-		return rd.b.getValue();
+		return rd.b.getUId();
 	}
 
 	@Override
 	public int getC() {
-		return rs.getValue();
+		return rs.getUId();
 	}
 
 	@Override

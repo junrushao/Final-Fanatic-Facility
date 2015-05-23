@@ -412,6 +412,21 @@ public interface Compiler2015Listener extends ParseTreeListener {
 	 */
 	void exitAssignmentExpression2(@NotNull Compiler2015Parser.AssignmentExpression2Context ctx);
 	/**
+	 * Enter a parse tree produced by the {@code assignmentExpression3}
+	 * labeled alternative in {@link Compiler2015Parser#assignmentExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignmentExpression3(@NotNull Compiler2015Parser.AssignmentExpression3Context ctx);
+
+	/**
+	 * Exit a parse tree produced by the {@code assignmentExpression3}
+	 * labeled alternative in {@link Compiler2015Parser#assignmentExpression}.
+	 *
+	 * @param ctx the parse tree
+	 */
+	void exitAssignmentExpression3(@NotNull Compiler2015Parser.AssignmentExpression3Context ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link Compiler2015Parser#assignmentOperator}.
 	 * @param ctx the parse tree
 	 */
@@ -713,6 +728,22 @@ public interface Compiler2015Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitUnaryExpression7(@NotNull Compiler2015Parser.UnaryExpression7Context ctx);
+
+	/**
+	 * Enter a parse tree produced by the {@code unaryExpression8}
+	 * labeled alternative in {@link Compiler2015Parser#unaryExpression}.
+	 *
+	 * @param ctx the parse tree
+	 */
+	void enterUnaryExpression8(@NotNull Compiler2015Parser.UnaryExpression8Context ctx);
+
+	/**
+	 * Exit a parse tree produced by the {@code unaryExpression8}
+	 * labeled alternative in {@link Compiler2015Parser#unaryExpression}.
+	 *
+	 * @param ctx the parse tree
+	 */
+	void exitUnaryExpression8(@NotNull Compiler2015Parser.UnaryExpression8Context ctx);
 	/**
 	 * Enter a parse tree produced by {@link Compiler2015Parser#unaryOperator}.
 	 * @param ctx the parse tree

@@ -1,7 +1,7 @@
 package Compiler2015.IR.IRRegister;
 
 public interface IRRegister extends Cloneable {
-	int getValue();
+	int getUId();
 	@Override
 	String toString();
 

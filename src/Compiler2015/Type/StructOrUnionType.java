@@ -74,6 +74,11 @@ public class StructOrUnionType extends Type {
 	}
 
 	@Override
+	public int classifiedSizeof() {
+		return Panel.getPointerSize();
+	}
+
+	@Override
 	public String toString() {
 		if (isUnion) {
 			return String.format("[Union #%d]", uId);

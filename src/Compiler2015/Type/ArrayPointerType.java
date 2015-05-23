@@ -3,6 +3,7 @@ package Compiler2015.Type;
 import Compiler2015.AST.Statement.ExpressionStatement.Constant;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.Utility.Panel;
 
 import java.util.ArrayList;
 
@@ -91,6 +92,11 @@ public class ArrayPointerType extends Pointer {
 			else
 				ret *= d;
 		return ret;
+	}
+
+	@Override
+	public int classifiedSizeof() {
+		return Panel.getPointerSize();
 	}
 
 	@Override

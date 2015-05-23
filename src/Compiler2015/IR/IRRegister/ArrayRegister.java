@@ -16,7 +16,7 @@ public class ArrayRegister implements IRRegister {
 	}
 
 	@Override
-	public int getValue() {
+	public int getUId() {
 		throw new CompilationError("Internal Error.");
 	}
 

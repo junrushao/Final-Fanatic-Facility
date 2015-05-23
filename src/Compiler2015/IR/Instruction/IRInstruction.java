@@ -7,7 +7,7 @@ public abstract class IRInstruction {
 	public VirtualRegister rd;
 
 	public int getRd() {
-		return rd.getValue();
+		return rd.getUId();
 	}
 
 	public void setRdVersion(int x) {

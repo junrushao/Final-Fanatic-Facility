@@ -8,6 +8,9 @@ import java.util.ArrayList;
 public final class Sequentializer {
 	public static ArrayList<CFGVertex> process() {
 		ArrayList<CFGVertex> ret = new ArrayList<>(ControlFlowGraph.vertices);
+		ControlFlowGraph.outBody.id = Integer.MAX_VALUE;
+		ret.sort((o1, o2) -> o1.id - o2.id);
+/*
 		int pos, index;
 		CFGVertex tmp;
 
@@ -22,6 +25,7 @@ public final class Sequentializer {
 		tmp = ret.get(pos);
 		ret.set(index, tmp);
 		ret.set(pos, ControlFlowGraph.outBody);
+*/
 
 		return ret;
 	}

@@ -39,7 +39,7 @@ public class AddressFetch extends UnaryExpression {
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e.emitCFG(builder);
 		e.eliminateArrayRegister(builder);
-		tempRegister = Environment.getTemporaryRegister();
+		tempRegister = Environment.getVirtualRegister();
 		if (e instanceof IdentifierExpression) {
 			int uId = ((IdentifierExpression) e).uId;
 			SymbolTableEntry e = Environment.symbolNames.table.get(uId);

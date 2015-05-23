@@ -42,6 +42,7 @@ public class Main {
 			}
 			Panel.prettyPrinterType = null;
 			Panel.emitAST = true;
+			Panel.emitCFG = true;
 			Panel.checkMain = false;
 			return;
 		}
@@ -75,6 +76,7 @@ public class Main {
 		// analyze the arguments
 		argumentsInspect(args);
 
+		loadLibraries();
 		// open input file
 		ANTLRInputStream input = null;
 		try {
@@ -110,7 +112,6 @@ public class Main {
 		}
 
 		// make control flow graph & dump raw MIPS assembly code
-
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("test.s")));
@@ -122,7 +123,20 @@ public class Main {
 
 		try {
 			Translator.generateGlobalVariables(out);
+//			out.println("printf_buf: .space 2");
 			out.println(".text");
+/*
+
+			try { // load libraries
+				BufferedReader reader = new BufferedReader(new FileReader("./src/Compiler2015/StdLib/lib.s"));
+				reader.lines().forEach(out::println);
+				reader.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new CompilationError("Internal Error.");
+			}
+
+*/
 			for (int i = 1, size = Environment.symbolNames.table.size(); i < size; ++i) { // prevent scanning the added registers
 				SymbolTableEntry entry = Environment.symbolNames.table.get(i);
 				if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionType && entry.info != null) {
@@ -136,5 +150,25 @@ public class Main {
 			out.close();
 		}
 
+	}
+
+	public void loadLibraries() {
+		// open input file
+		ANTLRInputStream input;
+		try {
+			input = new ANTLRInputStream(new BufferedInputStream(new FileInputStream("./StdLib.c")));
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new CompilationError("Cannot find StdLib.c");
+		}
+//		System.err.println(input.getSourceName());
+		// parse & AST construction
+		Compiler2015Lexer lexer = new Compiler2015Lexer(input);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		tokens.fill();
+		Compiler2015Parser parser = new Compiler2015Parser(tokens);
+		parser.removeErrorListeners();
+		parser.addErrorListener(new ParseErrorListener());
+		parser.compilationUnit();
 	}
 }

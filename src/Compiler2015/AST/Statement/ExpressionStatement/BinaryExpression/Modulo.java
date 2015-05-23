@@ -149,7 +149,7 @@ public class Modulo extends BinaryExpression {
 		left.eliminateArrayRegister(builder);
 		right.emitCFG(builder);
 		right.eliminateArrayRegister(builder);
-		tempRegister = Environment.getTemporaryRegister();
+		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new ModuloReg((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
 }

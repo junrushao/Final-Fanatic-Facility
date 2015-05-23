@@ -7,6 +7,7 @@ import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.ArrayPointerType;
+import Compiler2015.Type.FunctionType;
 import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
 import Compiler2015.Utility.Tokens;
@@ -44,8 +45,8 @@ public class IdentifierExpression extends Expression {
 	@Override
 	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
 		SymbolTableEntry e = Environment.symbolNames.table.get(uId);
-		if (e.scope == 1 && !(e.ref instanceof ArrayPointerType || e.ref instanceof StructOrUnionType) && !dumpTo.containsKey(uId))
-			dumpTo.put(uId, Environment.getTemporaryRegister());
+		if (e.scope == 1 && !(e.ref instanceof ArrayPointerType || e.ref instanceof StructOrUnionType || e.ref instanceof FunctionType) && !dumpTo.containsKey(uId))
+			dumpTo.put(uId, Environment.getVirtualRegister());
 	}
 
 	@Override

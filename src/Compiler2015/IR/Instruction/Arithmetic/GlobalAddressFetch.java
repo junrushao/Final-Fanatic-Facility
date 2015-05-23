@@ -16,7 +16,7 @@ public class GlobalAddressFetch extends Arithmetic implements SingleSource {
 
 	@Override
 	public String toString() {
-		return String.format("%s = &$%d", rd, uId);
+		return String.format("%s = & #%d", rd, uId);
 	}
 
 	@Override

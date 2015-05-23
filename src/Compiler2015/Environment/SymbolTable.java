@@ -330,9 +330,8 @@ public class SymbolTable {
 	/**
 	 * @return uId of the register
 	 */
-	public VirtualRegister defineTemporaryRegister() {
+	public VirtualRegister defineVirtualRegister() {
 		int uId = ++lastUId;
-		Class a = this.getClass();
 		table.add(new SymbolTableEntry(uId, "#", Integer.MAX_VALUE, Tokens.TEMPORARY_REGISTER, null, null));
 		return new VirtualRegister(uId);
 	}

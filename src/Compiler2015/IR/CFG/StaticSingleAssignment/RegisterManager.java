@@ -49,9 +49,9 @@ public class RegisterManager {
 	public void insertPhi() {
 		for (Map.Entry<Integer, RegisterManagerEntry> entry : manager.entrySet()) {
 			int a = entry.getKey();
-//			if (entry.getValue().defsite.size() == 1 && entry.getValue().useCnt <= 1)
+//			if (entry.getUId().defsite.size() == 1 && entry.getUId().useCnt <= 1)
 //				continue;
-//			System.out.printf("a = %d, defsite = %s\n", a, entry.getValue().defsite.toString());
+//			System.out.printf("a = %d, defsite = %s\n", a, entry.getUId().defsite.toString());
 			Stack<CFGVertex> w = new Stack<>();
 			w.addAll(entry.getValue().defsite);
 			while (!w.isEmpty()) {

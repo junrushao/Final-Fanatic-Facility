@@ -23,12 +23,12 @@ public class ReadArray extends Arithmetic implements TripleSource {
 
 	@Override
 	public int getA() {
-		return rs.a.getValue();
+		return rs.a.getUId();
 	}
 
 	@Override
 	public int getB() {
-		return rs.b.getValue();
+		return rs.b.getUId();
 	}
 
 	@Override

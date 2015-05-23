@@ -21,7 +21,7 @@ public class Move extends IRInstruction implements SingleSource {
 
 	@Override
 	public int getRs() {
-		return rs.getValue();
+		return rs.getUId();
 	}
 
 	@Override

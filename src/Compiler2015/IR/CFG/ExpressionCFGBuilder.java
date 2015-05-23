@@ -38,9 +38,8 @@ public class ExpressionCFGBuilder {
 			t = tp;
 		}
 		else {
-			if (t.unconditionalNext != null)
-				throw new CompilationError("Internal Error.");
-			t.unconditionalNext = sp;
+			if (t.unconditionalNext == null)
+				t.unconditionalNext = sp;
 			t = tp;
 		}
 	}

@@ -9,6 +9,7 @@ import Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression.*;
 import Compiler2015.Type.*;
 import Compiler2015.Environment.*;
 import Compiler2015.Exception.*;
+import Compiler2015.Utility.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -128,6 +129,7 @@ typeSpecifier returns [Type ret]
 	:	'void' { $ret = VoidType.instance; }
 	|	'char' { $ret = CharType.instance; }
 	|	'int' { $ret = IntType.instance;  }
+	|	'va_list' { $ret = new VariablePointerType(CharType.instance); }
 	|	typedefName { $ret = $typedefName.ret; }
 	|	structOrUnionSpecifier { $ret = $structOrUnionSpecifier.ret; }
 	;
@@ -440,6 +442,27 @@ assignmentExpression returns [Expression ret]
 	: logicalOrExpression { $ret = $logicalOrExpression.ret; } #assignmentExpression1
 	| a = unaryExpression assignmentOperator b = assignmentExpression
 				{ $ret = Assign.getExpression($a.ret, $b.ret, $assignmentOperator.text); } #assignmentExpression2
+	| 'va_start' '(' ap = Identifier ',' prev = Identifier ')'
+		{
+			if (!Environment.isVariable($ap.text))
+				throw new CompilationError($ap.text + " is not defined.");
+			if (!Environment.isVariable($prev.text))
+				throw new CompilationError($prev.text + " is not defined.");
+			$ret = Assign.getExpression(
+				IdentifierExpression.getExpression($ap.text),
+				Add.getExpression(
+					CastExpression.getExpression(
+						IntType.instance,
+						AddressFetch.getExpression(
+							IdentifierExpression.getExpression($prev.text)
+						)
+					),
+					new IntConstant(Panel.getPointerSize())
+				),
+				"="
+			);
+		}
+	#assignmentExpression3
 	;
 
 assignmentOperator
@@ -631,6 +654,25 @@ unaryExpression returns [Expression ret]
 		} #unaryExpression5
 	| SizeOf '(' typeName ')' { $ret = new IntConstant($typeName.ret.sizeof()); } #unaryExpression6
 	| SizeOf u3 = unaryExpression { $ret = new Sizeof($u3.ret); } #unaryExpression7
+	| 'va_arg' '(' ap = Identifier ',' typeName ')'
+		{
+			if (!Environment.isVariable($ap.text))
+				throw new CompilationError($ap.text + " is not defined.");
+			$ret = ArrayAccess.getExpression(
+				CastExpression.getExpression(
+					new VariablePointerType($typeName.ret),
+					Subtract.getExpression(
+						Assign.getExpression(
+							IdentifierExpression.getExpression($ap.text),
+							new IntConstant(Panel.getPointerSize()),
+							"+="
+						),
+						new IntConstant(Panel.getPointerSize())
+					)
+				),
+				new IntConstant(0)
+			);
+		} #unaryExpression8
 	;
 
 unaryOperator

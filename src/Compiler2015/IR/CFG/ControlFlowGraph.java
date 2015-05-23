@@ -9,6 +9,7 @@ import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.*;
 import Compiler2015.Type.ArrayPointerType;
+import Compiler2015.Type.FunctionType;
 import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
 import Compiler2015.Utility.Panel;
@@ -25,6 +26,8 @@ public class ControlFlowGraph {
 	public static int nowUId;
 	public static int tempVertexCount;
 	public static CompoundStatement scope;
+	public static Type returnType;
+
 	public static HashMap<Integer, VirtualRegister> globalNonArrayVariables;
 
 	public static HashMap<Integer, Integer> tempDelta;
@@ -69,15 +72,17 @@ public class ControlFlowGraph {
 					throw new CompilationError("Internal Error.");
 			}
 		}
-		frameSize = 8; // [0, 3] for $fp, [4, 7] for $ra
+		frameSize = Panel.getRegisterSize() * 2; // [0, 3] for $fp, [4, 7] for $ra
 		for (Map.Entry<Integer, Integer> entry : tempDelta.entrySet()) {
 			entry.setValue(frameSize);
-			frameSize += 4;
+//			System.err.printf("delta[%d] = %d\n", entry.getKey(), entry.getValue());
+			frameSize += Panel.getRegisterSize();
 		}
-		frameSize += 4; // for return value
+		frameSize += Math.max(4, returnType.sizeof()); // for return value
 		for (int uId : scope.parametersUId) {
 			parameterDelta.put(uId, frameSize);
-			frameSize += 4;
+//			System.err.printf("delta[%d] = %d\n", uId, frameSize);
+			frameSize += Math.max(4, ((Type) Environment.symbolNames.table.get(uId).ref).sizeof());
 		}
 	}
 
@@ -106,6 +111,7 @@ public class ControlFlowGraph {
 		tempVertexCount = 0;
 		vertices.clear();
 		ControlFlowGraph.scope = scope;
+		returnType = ((FunctionType) Environment.symbolNames.table.get(uId).ref).returnType;
 
 		root = null;
 		outBody = ControlFlowGraph.getNewVertex();
@@ -120,34 +126,13 @@ public class ControlFlowGraph {
 		if (body.endCFGBlock.unconditionalNext == null)
 			body.endCFGBlock.unconditionalNext = outBody;
 
-/*		a test
-		{
-			vertices.clear();
-			CFGVertex v = getNewVertex();
-			root = getNewVertex();
-			outBody = getNewVertex();
-			root.unconditionalNext = v;
-			v.unconditionalNext = outBody;
-			v.branchIfFalse = v;
-
-			root.internal.add(new Move(new VirtualRegister(9), new ImmediateValue(1)));
-			root.internal.add(new Move(new VirtualRegister(10), new ImmediateValue(1)));
-
-			v.internal.add(new Move(new VirtualRegister(11), new VirtualRegister(10)));
-			v.internal.add(new Move(new VirtualRegister(10), new VirtualRegister(9)));
-			v.internal.add(new Move(new VirtualRegister(9), new VirtualRegister(11)));
-			vertices.add(root);
-			vertices.add(outBody);
-			vertices.add(v);
-		}
-*/
-		// load global instructions before entering the function
+		// load global variables before entering the function
 		{
 			ArrayList<IRInstruction> ins = new ArrayList<>();
 			for (Map.Entry<Integer, VirtualRegister> element : ControlFlowGraph.globalNonArrayVariables.entrySet()) {
 				SymbolTableEntry entry = Environment.symbolNames.table.get(element.getKey());
 				int size = entry.ref instanceof StructOrUnionType || entry.ref instanceof ArrayPointerType ? Panel.getPointerSize() : ((Type) entry.ref).sizeof();
-				ins.add(new ReadArray(element.getValue(), new ArrayRegister(new VirtualRegister(entry.uId), new ImmediateValue(0), size)));
+				ins.add(new ReadArray(element.getValue(), new ArrayRegister(new VirtualRegister(entry.uId), ImmediateValue.zero, size)));
 			}
 			ins.addAll(root.internal);
 			root.internal = ins;
@@ -158,13 +143,20 @@ public class ControlFlowGraph {
 			for (Map.Entry<Integer, VirtualRegister> element : ControlFlowGraph.globalNonArrayVariables.entrySet()) {
 				SymbolTableEntry entry = Environment.symbolNames.table.get(element.getKey());
 				int size = entry.ref instanceof StructOrUnionType || entry.ref instanceof ArrayPointerType ? Panel.getPointerSize() : ((Type) entry.ref).sizeof();
-				outBody.internal.add(new WriteArray(new ArrayRegister(new VirtualRegister(entry.uId), new ImmediateValue(0), size), element.getValue()));
+				outBody.internal.add(new WriteArray(new ArrayRegister(new VirtualRegister(entry.uId), ImmediateValue.zero, size), element.getValue()));
 			}
 			outBody.internal.add(Pop.instance);
 		}
 
 		// remove unnecessary jumps
 		vertices.stream().forEach(ControlFlowGraph::findGoto);
+		vertices.stream().forEach(x -> {
+			if (x.branchIfFalse != null && x.branchRegister == null) {
+				if (x.internal.isEmpty())
+					System.err.println("fuck id = " + x.id);
+				x.branchRegister = x.internal.get(x.internal.size() - 1).rd;
+			}
+		});
 
 		// eliminate unreachable vertices
 		// warning: if out is unreachable, it will be labelled -1

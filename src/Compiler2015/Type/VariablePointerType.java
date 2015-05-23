@@ -1,7 +1,7 @@
 package Compiler2015.Type;
 
-/**
- */
+import Compiler2015.Utility.Panel;
+
 public class VariablePointerType extends Pointer {
 	public Type pointTo;
 	public VariablePointerType(Type pointTo) {
@@ -10,7 +10,12 @@ public class VariablePointerType extends Pointer {
 
 	@Override
 	public int sizeof() {
-		return 4;
+		return Panel.getPointerSize();
+	}
+
+	@Override
+	public int classifiedSizeof() {
+		return Panel.getPointerSize();
 	}
 
 	@Override

@@ -144,8 +144,8 @@ public class Assign extends BinaryExpression {
 			// a = b = c should be taken into consideration
 			IRRegister t1, t2 = right.tempRegister.clone();
 			if (left.tempRegister instanceof ArrayRegister) {
-				t1 = Environment.getTemporaryRegister();
-				IRRegister t3 = Environment.getTemporaryRegister();
+				t1 = Environment.getVirtualRegister();
+				IRRegister t3 = Environment.getVirtualRegister();
 				builder.addInstruction(new MultiplyReg((VirtualRegister) t3, ((ArrayRegister) left.tempRegister).b, new ImmediateValue(type.sizeof())));
 				builder.addInstruction(new AddReg((VirtualRegister) t1, ((ArrayRegister) left.tempRegister).a, t3));
 			}
@@ -156,7 +156,7 @@ public class Assign extends BinaryExpression {
 			StructOrUnionType type = (StructOrUnionType) left.type;
 			int size = type.sizeof(), registerSize = Panel.getRegisterSize();
 			for (int i = 0; i < size; i += registerSize) {
-				VirtualRegister t = Environment.getTemporaryRegister();
+				VirtualRegister t = Environment.getVirtualRegister();
 				builder.addInstruction(new ReadArray(t, new ArrayRegister((VirtualRegister) t2, new ImmediateValue(i), registerSize)));
 				builder.addInstruction(new WriteArray(new ArrayRegister((VirtualRegister) t1, new ImmediateValue(i), registerSize), t));
 			}
@@ -175,7 +175,7 @@ public class Assign extends BinaryExpression {
 	@Override
 	public void eliminateArrayRegister(ExpressionCFGBuilder builder) {
 		if (tempRegister instanceof ArrayRegister) {
-			VirtualRegister newReg = Environment.getTemporaryRegister();
+			VirtualRegister newReg = Environment.getVirtualRegister();
 			builder.addInstruction(new ReadArray(newReg, (ArrayRegister) tempRegister));
 			tempRegister = newReg.clone();
 		}

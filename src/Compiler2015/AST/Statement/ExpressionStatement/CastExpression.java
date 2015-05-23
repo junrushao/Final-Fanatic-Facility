@@ -66,7 +66,7 @@ public class CastExpression extends Expression {
 		if (e.type.sizeof() == castTo.sizeof())
 			tempRegister = e.tempRegister.clone();
 		else {
-			tempRegister = Environment.getTemporaryRegister();
+			tempRegister = Environment.getVirtualRegister();
 			builder.addInstruction(new Move((VirtualRegister) tempRegister, e.tempRegister));
 		}
 	}

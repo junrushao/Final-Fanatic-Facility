@@ -12,6 +12,11 @@ public class VoidType extends Type {
 	}
 
 	@Override
+	public int classifiedSizeof() {
+		return 1;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof VoidType;
 	}

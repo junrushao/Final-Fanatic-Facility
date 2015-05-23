@@ -22,7 +22,7 @@ public class NegateReg extends Arithmetic implements SingleSource {
 
 	@Override
 	public int getRs() {
-		return rs.getValue();
+		return rs.getUId();
 	}
 
 	@Override

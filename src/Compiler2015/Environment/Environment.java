@@ -24,13 +24,18 @@ public class Environment {
 	public static int totalTempRegisters;
 	public static HashMap<Integer, Integer> variableDelta;
 	public static int _pretend_being_private_sizeof;
+	public static int uIdOfPutChar;
+	public static int uIdOfGetChar;
+	public static int uIdOfMalloc;
+	public static int uIdOfPutString;
+	public static int uIdOfPutInt;
 
 	static {
 		init();
 	}
 
-	public static VirtualRegister getTemporaryRegister() {
-		return symbolNames.defineTemporaryRegister();
+	public static VirtualRegister getVirtualRegister() {
+		return symbolNames.defineVirtualRegister();
 	}
 
 	public static Loop getTopLoop() {
@@ -51,6 +56,10 @@ public class Environment {
 			throw new CompilationError("Return type not match.");
 	}
 
+	public static boolean isLibraryFunctions(int uId) {
+		return uId == uIdOfPutChar || uId == uIdOfGetChar || uId == uIdOfMalloc || uId == uIdOfPutString || uId == uIdOfPutInt;
+	}
+
 	public static void init() {
 		classNames = new SymbolTable();
 		symbolNames = new SymbolTable();
@@ -61,20 +70,7 @@ public class Environment {
 		totalTempRegisters = 0;
 		variableDelta = new HashMap<>();
 
-		symbolNames.defineVariable(
-				"exit",
-				new FunctionType(
-						IntType.instance,
-						new ArrayList<Type>() {{
-							add(IntType.instance);
-						}},
-						new ArrayList<String>() {{
-							add("c");
-						}},
-						false
-				)
-		);
-		symbolNames.defineVariable(
+		uIdOfPutChar = symbolNames.defineVariable(
 				"putchar",
 				new FunctionType(
 						IntType.instance,
@@ -87,7 +83,7 @@ public class Environment {
 						false
 				)
 		);
-		symbolNames.defineVariable(
+		uIdOfGetChar = symbolNames.defineVariable(
 				"getchar",
 				new FunctionType(
 						IntType.instance,
@@ -96,7 +92,7 @@ public class Environment {
 						false
 				)
 		);
-		symbolNames.defineVariable(
+		uIdOfMalloc = symbolNames.defineVariable(
 				"malloc",
 				new FunctionType(
 						IntType.instance,
@@ -108,29 +104,29 @@ public class Environment {
 						}},
 						false)
 		);
-		symbolNames.defineVariable(
-				"printf",
+		uIdOfPutString = symbolNames.defineVariable(
+				"___yzgysjr_lib_putstring",
 				new FunctionType(
-						IntType.instance,
+						VoidType.instance,
 						new ArrayList<Type>() {{
 							add(new VariablePointerType(CharType.instance));
 						}},
 						new ArrayList<String>() {{
-							add("format");
+							add("c");
 						}},
-						true)
+						false)
 		);
-		symbolNames.defineVariable(
-				"scanf",
+		uIdOfPutInt = symbolNames.defineVariable(
+				"___yzgysjr_lib_putint",
 				new FunctionType(
-						IntType.instance,
+						VoidType.instance,
 						new ArrayList<Type>() {{
 							add(new VariablePointerType(CharType.instance));
 						}},
 						new ArrayList<String>() {{
-							add("format");
+							add("c");
 						}},
-						true)
+						false)
 		);
 	}
 

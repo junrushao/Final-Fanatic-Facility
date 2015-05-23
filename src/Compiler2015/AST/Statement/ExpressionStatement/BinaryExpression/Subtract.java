@@ -89,7 +89,7 @@ public class Subtract extends BinaryExpression {
 			if (a2.type instanceof IntType)
 				return CastExpression.getExpression(a1.type,
 						new Subtract(a1,
-								Multiply.getExpression(a2, new IntConstant(a1.type.sizeof())))
+								Multiply.getExpression(a2, new IntConstant(((VariablePointerType) a1.type).pointTo.sizeof())))
 				);
 			if (a2.type instanceof ArrayPointerType)
 				a2 = CastExpression.getExpression(((ArrayPointerType) a2.type).toVariablePointerType(), a2);
@@ -110,7 +110,7 @@ public class Subtract extends BinaryExpression {
 		left.eliminateArrayRegister(builder);
 		right.emitCFG(builder);
 		right.eliminateArrayRegister(builder);
-		tempRegister = Environment.getTemporaryRegister();
+		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new SubtractReg((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
 }

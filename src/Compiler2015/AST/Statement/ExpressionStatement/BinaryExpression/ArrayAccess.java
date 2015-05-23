@@ -11,7 +11,6 @@ import Compiler2015.IR.Instruction.Arithmetic.AddReg;
 import Compiler2015.IR.Instruction.Arithmetic.MultiplyReg;
 import Compiler2015.IR.Instruction.ReadArray;
 import Compiler2015.Type.*;
-import Compiler2015.Utility.Panel;
 
 /**
  * a[b]
@@ -146,41 +145,51 @@ public class ArrayAccess extends BinaryExpression {
 		left.eliminateArrayRegister(builder);
 		right.emitCFG(builder);
 		right.eliminateArrayRegister(builder);
-		tempRegister = Environment.getTemporaryRegister();
-		VirtualRegister leftRegister;
 
+		VirtualRegister leftRegister;
 		// for a pointer which is not array pointer, we should load it in to know what it refers to
 		if (left.type instanceof ArrayPointerType) {
 			leftRegister = (VirtualRegister) left.tempRegister;
-		} else {
-			leftRegister = Environment.getTemporaryRegister();
-			builder.addInstruction(new ReadArray(leftRegister, new ArrayRegister((VirtualRegister) left.tempRegister, new ImmediateValue(0), Panel.getPointerSize())));
+		} else { // other pointer types
+/*
+			if (!(left.type instanceof Pointer))
+				throw new CompilationError("Internal Error.");
+			leftRegister = Environment.getVirtualRegister();
+			builder.addInstruction(new ReadArray(leftRegister, new ArrayRegister((VirtualRegister) left.tempRegister, ImmediateValue.zero, Panel.getPointerSize())));
+*/
+			leftRegister = (VirtualRegister) left.tempRegister;
 		}
 
-		int size = type instanceof StructOrUnionType || type instanceof ArrayPointerType ? Panel.getPointerSize() : type.sizeof();
-		if (type instanceof Pointer) {
-			VirtualRegister r = Environment.getTemporaryRegister();
-			builder.addInstruction(new MultiplyReg(r, right.tempRegister, new ImmediateValue(size)));
+		// for a pointer to a struct, we should do nothing
+		if (type instanceof StructOrUnionType) {
+			// left[right] <=> *(leftRegister + right.tempRegister * struct.sizeof)
+			tempRegister = Environment.getVirtualRegister();
+			VirtualRegister r = Environment.getVirtualRegister();
+			builder.addInstruction(new MultiplyReg(r, right.tempRegister, new ImmediateValue(type.sizeof())));
 			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, leftRegister, r));
 		}
-		else {
-			if (right.tempRegister instanceof VirtualRegister) {
-				VirtualRegister r = Environment.getTemporaryRegister();
-				builder.addInstruction(new MultiplyReg(r, right.tempRegister, new ImmediateValue(size)));
-				builder.addInstruction(new AddReg((VirtualRegister) tempRegister, leftRegister, r));
-				tempRegister = new ArrayRegister((VirtualRegister) tempRegister, new ImmediateValue(0), size);
-			} else if (right.tempRegister instanceof ImmediateValue) {
-				int v = ((ImmediateValue) right.tempRegister).a;
-				tempRegister = new ArrayRegister(leftRegister, new ImmediateValue(v * type.sizeof()), size);
-			} else
-				throw new CompilationError("Internal Error.");
-		}
+
+		if (right.tempRegister instanceof VirtualRegister) {
+			// in fact it is not ArrayAccess but (left + right * size)[0]
+			// r1 = right * type.size
+			VirtualRegister r1 = Environment.getVirtualRegister();
+			builder.addInstruction(new MultiplyReg(r1, right.tempRegister, new ImmediateValue(type.sizeof())));
+			// r2 = left + r1
+			VirtualRegister r2 = Environment.getVirtualRegister();
+			builder.addInstruction(new AddReg(r2, leftRegister, r1));
+			// tempRegister = r2[0]
+			tempRegister = new ArrayRegister(r2, ImmediateValue.zero, type.classifiedSizeof());
+		} else if (right.tempRegister instanceof ImmediateValue) {
+			int delta = ((ImmediateValue) right.tempRegister).a * type.sizeof();
+			tempRegister = new ArrayRegister(leftRegister, new ImmediateValue(delta), type.classifiedSizeof());
+		} else
+			throw new CompilationError("Internal Error.");
 	}
 
 	@Override
 	public void eliminateArrayRegister(ExpressionCFGBuilder builder) {
 		if (tempRegister instanceof ArrayRegister) {
-			VirtualRegister newReg = Environment.getTemporaryRegister();
+			VirtualRegister newReg = Environment.getVirtualRegister();
 			builder.addInstruction(new ReadArray(newReg, (ArrayRegister) tempRegister));
 			tempRegister = newReg;
 		}

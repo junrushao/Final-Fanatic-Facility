@@ -83,7 +83,7 @@ public class LessThan extends BinaryExpression {
 		left.eliminateArrayRegister(builder);
 		right.emitCFG(builder);
 		right.eliminateArrayRegister(builder);
-		tempRegister = Environment.getTemporaryRegister();
+		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new SetLessThan((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
 }

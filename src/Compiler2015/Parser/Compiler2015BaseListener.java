@@ -610,6 +610,22 @@ public class Compiler2015BaseListener implements Compiler2015Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override
+	public void enterAssignmentExpression3(@NotNull Compiler2015Parser.AssignmentExpression3Context ctx) {
+	}
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override
+	public void exitAssignmentExpression3(@NotNull Compiler2015Parser.AssignmentExpression3Context ctx) {
+	}
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override
 	public void enterAssignmentOperator(@NotNull Compiler2015Parser.AssignmentOperatorContext ctx) {
 	}
 	/**
@@ -1058,6 +1074,22 @@ public class Compiler2015BaseListener implements Compiler2015Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override
+	public void enterUnaryExpression8(@NotNull Compiler2015Parser.UnaryExpression8Context ctx) {
+	}
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override
+	public void exitUnaryExpression8(@NotNull Compiler2015Parser.UnaryExpression8Context ctx) {
+	}
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override
 	public void enterUnaryOperator(@NotNull Compiler2015Parser.UnaryOperatorContext ctx) {
 	}
 	/**
@@ -1180,33 +1212,37 @@ public class Compiler2015BaseListener implements Compiler2015Listener {
 	@Override
 	public void exitPrimaryExpression5(@NotNull Compiler2015Parser.PrimaryExpression5Context ctx) {
 	}
+
 	/**
 	 * {@inheritDoc}
-	 *
+	 * <p>
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override
 	public void enterLambdaExpression(@NotNull Compiler2015Parser.LambdaExpressionContext ctx) {
 	}
+
 	/**
 	 * {@inheritDoc}
-	 *
+	 * <p>
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override
 	public void exitLambdaExpression(@NotNull Compiler2015Parser.LambdaExpressionContext ctx) {
 	}
+
 	/**
 	 * {@inheritDoc}
-	 *
+	 * <p>
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override
 	public void enterConstant(@NotNull Compiler2015Parser.ConstantContext ctx) {
 	}
+
 	/**
 	 * {@inheritDoc}
-	 *
+	 * <p>
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override
@@ -1218,31 +1254,23 @@ public class Compiler2015BaseListener implements Compiler2015Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override
-	public void enterEveryRule(@NotNull ParserRuleContext ctx) {
-	}
+	@Override public void enterEveryRule(@NotNull ParserRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override
-	public void exitEveryRule(@NotNull ParserRuleContext ctx) {
-	}
+	@Override public void exitEveryRule(@NotNull ParserRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override
-	public void visitTerminal(@NotNull TerminalNode node) {
-	}
+	@Override public void visitTerminal(@NotNull TerminalNode node) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override
-	public void visitErrorNode(@NotNull ErrorNode node) {
-	}
+	@Override public void visitErrorNode(@NotNull ErrorNode node) { }
 }

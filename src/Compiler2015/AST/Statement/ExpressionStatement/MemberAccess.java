@@ -69,7 +69,7 @@ public class MemberAccess extends Expression {
 	@Override
 	public void eliminateArrayRegister(ExpressionCFGBuilder builder) {
 		if (tempRegister instanceof ArrayRegister) {
-			VirtualRegister newReg = Environment.getTemporaryRegister();
+			VirtualRegister newReg = Environment.getVirtualRegister();
 			builder.addInstruction(new ReadArray(newReg, (ArrayRegister) tempRegister));
 			tempRegister = newReg.clone();
 		}

@@ -37,7 +37,7 @@ public class Negative extends UnaryExpression {
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e.emitCFG(builder);
 		e.eliminateArrayRegister(builder);
-		tempRegister = Environment.getTemporaryRegister();
+		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new NegateReg((VirtualRegister) tempRegister, e.tempRegister));
 	}
 }

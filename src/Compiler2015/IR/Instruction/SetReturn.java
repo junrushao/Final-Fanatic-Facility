@@ -23,7 +23,7 @@ public class SetReturn extends IRInstruction implements SingleSource {
 
 	@Override
 	public int getRs() {
-		return v0.getValue();
+		return v0.getUId();
 	}
 
 	@Override

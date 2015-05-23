@@ -13,9 +13,10 @@ import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
-import Compiler2015.IR.Instruction.*;
 import Compiler2015.IR.Instruction.Arithmetic.*;
+import Compiler2015.IR.Instruction.*;
 import Compiler2015.Type.*;
+import Compiler2015.Utility.Panel;
 import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
@@ -52,8 +53,14 @@ public final class Translator {
 
 	public static String getVertexLabel(int id) {
 		if (id < 0)
-			return String.format("___function___uId_%d___vertex_neg_%d: ", ControlFlowGraph.nowUId, -id);
-		return String.format("___function___uId_%d___vertex_%d: ", ControlFlowGraph.nowUId, id);
+			return String.format("___function___uId_%d___vertex_neg_%d:", ControlFlowGraph.nowUId, -id);
+		return String.format("___function___uId_%d___vertex_%d:", ControlFlowGraph.nowUId, id);
+	}
+
+	public static String getVertexLabelName(int id) {
+		if (id < 0)
+			return String.format("___function___uId_%d___vertex_neg_%d", ControlFlowGraph.nowUId, -id);
+		return String.format("___function___uId_%d___vertex_%d", ControlFlowGraph.nowUId, id);
 	}
 
 	public static void generateGlobalVariables(PrintWriter out) {
@@ -157,6 +164,8 @@ public final class Translator {
 			} else
 				throw new CompilationError("Internal Error.");
 		}
+		out.println("new_line:\n" +
+				"\t.asciiz \"\\n\"\n");
 	}
 
 	public static int getDelta(int uId) {
@@ -187,23 +196,28 @@ public final class Translator {
 		if (from instanceof ImmediateValue) {
 			out.printf("\tli $t%d, %d%s", reg, ((ImmediateValue) from).a, Utility.NEW_LINE);
 		} else if (from instanceof VirtualRegister) {
-			int uId = from.getValue();
+			int uId = from.getUId();
 			if (uId <= 0)
 				throw new CompilationError("Internal Error.");
 			SymbolTableEntry e = Environment.symbolNames.table.get(uId);
 			if (e.scope < 1)
 				throw new CompilationError("Internal Error.");
-			if (e.scope == 1) { // global variables
+			if (e.scope == 1) { // global variables: all global variables are arrays
 				if (e.type == Tokens.STRING_CONSTANT)
 					out.printf("\tla $t%d, %s%s", reg, getStringConstantLabelName(uId), Utility.NEW_LINE);
 				else if (e.type == Tokens.VARIABLE) {
 					out.printf("\tla $t%d, %s%s", reg, getGlobalVariableLabelName(uId), Utility.NEW_LINE);
+/*
 					if (!(e.ref instanceof FunctionType || e.ref instanceof ArrayPointerType || e.ref instanceof StructOrUnionType))
 						out.printf("\tlw $t%d, 0($t%d)%s", reg, reg, Utility.NEW_LINE);
+*/
 				} else
 					throw new CompilationError("Internal Error.");
 			} else { // local variables
-				out.printf("\tlw $t%d, %d($sp)%s", reg, getDelta(uId), Utility.NEW_LINE);
+				if (e.ref instanceof ArrayPointerType || e.ref instanceof StructOrUnionType)
+					out.printf("\taddiu $t%d, $sp, %d%s", reg, getDelta(uId), Utility.NEW_LINE);
+				else
+					out.printf("\tlw $t%d, %d($sp)%s", reg, getDelta(uId), Utility.NEW_LINE);
 			}
 		} else if (from instanceof ArrayRegister) {
 			loadFromIRRegisterToTRegister(((ArrayRegister) from).a, reg, out);
@@ -235,40 +249,37 @@ public final class Translator {
 
 		out.println(getFunctionLabel());
 		out.println("\taddiu $sp, $sp, -" + ControlFlowGraph.frameSize);
-		out.println("\tsw $sp, 0($sp)");
+//		out.println("\tsw $sp, 0($sp)");
 		out.println("\tsw $ra, 4($sp)");
 
 		ArrayList<CFGVertex> sequence = Sequentializer.process();
-		int numberOfArguments = 0;
-		int numberOfExtraArguments = 0;
+		int sizeOfAllArguments = 0;
+		int sizeOfExtraArguments = 0;
 		for (CFGVertex vertex : sequence) {
 			out.println(getVertexLabel(vertex.id));
 			for (IRInstruction ins : vertex.internal) {
 				out.println(Utility.NEW_LINE + "#\t" + ins);
-				if (!(ins instanceof PushStack || ins instanceof Call || ins instanceof FetchReturn))
-					numberOfArguments = numberOfExtraArguments = 0;
-
-				if (ins instanceof AllocateHeap) {
-					out.println("\tli $a0, " + ((AllocateHeap) ins).bitLen);
-					out.println("\tli $v0, 9");
-					out.println("\tsyscall");
-					storeFromPhysicalRegisterToIRRegister("$v0", ins.getRd(), out);
-				} else if (ins instanceof Call) {
+				if (ins instanceof Call) {
 					if (!(((Call) ins).func instanceof VirtualRegister))
 						throw new CompilationError("Internal Error.");
-					if (numberOfExtraArguments != 0)
-						out.printf("\taddiu $sp, $sp, -%d%s", numberOfArguments * 4, Utility.NEW_LINE);
 					VirtualRegister func = (VirtualRegister) ((Call) ins).func;
-					if (Environment.symbolNames.table.get(func.uId).type == Tokens.VARIABLE) {
-						out.printf("\tjal %s%s", getFunctionLabelName(func.uId), Utility.NEW_LINE);
-					} else {
-						loadFromIRRegisterToTRegister(func, 0, out);
-						out.printf("\tjal $t0%s", Utility.NEW_LINE);
+					if (Environment.isLibraryFunctions(func.uId))
+						generateLibraryFunction(func.uId, out);
+					else {
+						if (sizeOfExtraArguments != 0)
+							out.printf("\taddiu $sp, $sp, -%d%s", sizeOfExtraArguments, Utility.NEW_LINE);
+						if (Environment.symbolNames.table.get(func.uId).type == Tokens.VARIABLE) {
+							out.printf("\tjal %s%s", getFunctionLabelName(func.uId), Utility.NEW_LINE);
+						} else {
+							loadFromIRRegisterToTRegister(func, 0, out);
+							out.printf("\tjal $t0%s", Utility.NEW_LINE);
+						}
+						if (sizeOfExtraArguments != 0)
+							out.printf("\taddiu $sp, $sp, %d%s", sizeOfExtraArguments, Utility.NEW_LINE);
 					}
-					if (numberOfExtraArguments != 0)
-						out.printf("\taddiu $sp, $sp, %d%s", numberOfArguments * 4, Utility.NEW_LINE);
 				} else if (ins instanceof FetchReturn) {
 					storeFromPhysicalRegisterToIRRegister("$v0", ins.getRd(), out);
+					sizeOfAllArguments = sizeOfExtraArguments = 0;
 				} else if (ins instanceof Move) {
 					loadFromIRRegisterToTRegister(((Move) ins).rs, 0, out);
 					storeFromTRegisterToIRRegister(0, ins.getRd(), out);
@@ -276,17 +287,35 @@ public final class Translator {
 					// do nothing
 					out.print("");
 				} else if (ins instanceof PushStack) {
-					++numberOfArguments;
-					if (((PushStack) ins).isExtra)
-						++numberOfExtraArguments;
-					if (((PushStack) ins).push instanceof VirtualRegister) {
-						loadFromIRRegisterToTRegister(((PushStack) ins).push, 0, out);
-						out.printf("\tsw $t0, -%d($sp)%s", numberOfArguments * 4, Utility.NEW_LINE);
-					} else if (((PushStack) ins).push instanceof ImmediateValue) {
-						out.printf("\tli $t0, %d%s", ((ImmediateValue) ((PushStack) ins).push).a, Utility.NEW_LINE);
-						out.printf("\tsw $t0, -%d($sp)%s", numberOfArguments * 4, Utility.NEW_LINE);
-					} else
-						throw new CompilationError("Internal Error.");
+					PushStack pushIns = (PushStack) ins;
+					int size = pushIns.pushType.sizeof();
+					sizeOfAllArguments += Math.max(4, size);
+					if (pushIns.isExtra)
+						sizeOfExtraArguments += Math.max(4, size);
+					if (pushIns.pushType instanceof StructOrUnionType) {
+						int registerSize = Panel.getRegisterSize();
+						loadFromIRRegisterToTRegister(pushIns.push, 0, out);
+						for (int i = 0; i < size; i += registerSize) {
+							out.printf("\tlw $t1, %d($t0)%s", i, Utility.NEW_LINE);
+							out.printf("\tsw $t1, -%d($sp)%s", sizeOfAllArguments - i, Utility.NEW_LINE);
+						}
+					} else {
+						String insName;
+						if (size == 1)
+							insName = "sb";
+						else if (size == 4)
+							insName = "sw";
+						else
+							throw new CompilationError("Internal Error.");
+						if (pushIns.push instanceof VirtualRegister) {
+							loadFromIRRegisterToTRegister(((PushStack) ins).push, 0, out);
+							out.printf("\t%s $t0, -%d($sp)%s", insName, sizeOfAllArguments, Utility.NEW_LINE);
+						} else if (pushIns.push instanceof ImmediateValue) {
+							out.printf("\tli $t0, %d%s", ((ImmediateValue) pushIns.push).a, Utility.NEW_LINE);
+							out.printf("\t%s $t0, -%d($sp)%s", insName, sizeOfAllArguments, Utility.NEW_LINE);
+						} else
+							throw new CompilationError("Internal Error.");
+					}
 				} else if (ins instanceof ReadArray) {
 					loadFromIRRegisterToTRegister(((ReadArray) ins).rs, 0, out);
 					storeFromTRegisterToIRRegister(0, ins.getRd(), out);
@@ -335,10 +364,10 @@ public final class Translator {
 					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
 				} else if (ins instanceof GlobalAddressFetch) {
 					loadAddressOfVariable(((GlobalAddressFetch) ins).uId, 0, out);
-					storeFromTRegisterToIRRegister(0, ((GlobalAddressFetch) ins).uId, out);
+					storeFromTRegisterToIRRegister(0, ins.getRd(), out);
 				} else if (ins instanceof LocalAddressFetch) {
 					loadAddressOfVariable(((LocalAddressFetch) ins).uId, 0, out);
-					storeFromTRegisterToIRRegister(0, ((LocalAddressFetch) ins).uId, out);
+					storeFromTRegisterToIRRegister(0, ins.getRd(), out);
 				} else if (ins instanceof ModuloReg) {
 					loadFromIRRegisterToTRegister(((ModuloReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((ModuloReg) ins).rt, 1, out);
@@ -401,10 +430,45 @@ public final class Translator {
 				} else
 					throw new CompilationError("Internal Error.");
 			}
+			if (vertex.branchIfFalse != null) {
+				IRRegister r = vertex.branchRegister;
+				if (r == null)
+					throw new CompilationError("Internal Error.");
+				loadFromIRRegisterToTRegister(r, 0, out);
+//				out.printf("\tla $t1, %s%s", getVertexLabelName(vertex.branchIfFalse.id), Utility.NEW_LINE);
+				out.printf("\tbeq $t0, $0, %s%s", getVertexLabelName(vertex.branchIfFalse.id), Utility.NEW_LINE);
+			}
+			if (vertex.unconditionalNext != null) {
+				out.printf("\tj %s%s", getVertexLabelName(vertex.unconditionalNext.id), Utility.NEW_LINE);
+//				out.println("\tb ");
+			}
 		}
 
 		out.println("\tlw $ra, 4($sp)");
-		out.println("\tlw $sp, 0($sp)");
+		out.println("\taddiu $sp, $sp, " + ControlFlowGraph.frameSize);
 		out.println("\tjr $ra");
+	}
+
+	public static void generateLibraryFunction(int uId, PrintWriter out) {
+		if (uId == Environment.uIdOfPutInt) {
+			out.println("\tlw $a0, -4($sp)");
+			out.println("\tli $v0, 1");
+			out.println("\tsyscall");
+		} else if (uId == Environment.uIdOfPutString) {
+			out.println("\tlw $a0, -4($sp)");
+			out.println("\tli $v0, 4");
+			out.println("\tsyscall");
+		} else if (uId == Environment.uIdOfMalloc) {
+			out.println("\tlw $a0, -4($sp)");
+			out.println("\tli $v0, 9");
+			out.println("\tsyscall");
+		} else if (uId == Environment.uIdOfGetChar) {
+			out.println("\tli $v0, 12");
+			out.println("\tsyscall");
+		} else if (uId == Environment.uIdOfPutChar) {
+			out.println("\tlw $a0, -4($sp)");
+			out.println("\tli $v0, 11");
+			out.println("\tsyscall");
+		}
 	}
 }

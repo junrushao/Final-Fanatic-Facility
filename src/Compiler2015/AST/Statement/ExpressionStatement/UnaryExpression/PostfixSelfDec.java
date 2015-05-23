@@ -38,9 +38,9 @@ public class PostfixSelfDec extends UnaryExpression {
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e.emitCFG(builder);
 		e.eliminateArrayRegister(builder);
-		tempRegister = Environment.getTemporaryRegister();
+		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new Move((VirtualRegister) tempRegister, e.tempRegister));
-		VirtualRegister tp = Environment.getTemporaryRegister();
+		VirtualRegister tp = Environment.getVirtualRegister();
 		builder.addInstruction(new SubtractReg(tp, tempRegister, new ImmediateValue(1)));
 		builder.addInstruction(new Move((VirtualRegister) e.tempRegister, tp));
 	}
