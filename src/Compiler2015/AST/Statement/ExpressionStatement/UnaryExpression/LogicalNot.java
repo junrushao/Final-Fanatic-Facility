@@ -77,4 +77,9 @@ public class LogicalNot extends UnaryExpression implements Logical {
 
 		builder.addBlock(beginCFGBlock, endCFGBlock);
 	}
+
+	@Override
+	public LogicalNot clone() {
+		return (LogicalNot) super.clone();
+	}
 }

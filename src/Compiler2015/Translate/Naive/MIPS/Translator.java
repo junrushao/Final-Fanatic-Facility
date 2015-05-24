@@ -70,7 +70,7 @@ public final class Translator {
 				continue;
 			if (entry.scope == 1 && entry.type == Tokens.STRING_CONSTANT) {
 				out.println(getStringConstantLabel(entry.uId));
-				out.printf("\t.ascii \"%s\"", StringConstant.toPrintableString((String) entry.ref));
+				out.printf("\t.asciiz \"%s\"", StringConstant.toMIPSString((String) entry.ref));
 				out.println();
 			}
 			if (entry.scope != 1 || entry.type != Tokens.VARIABLE || entry.ref instanceof FunctionType)
@@ -165,7 +165,7 @@ public final class Translator {
 				throw new CompilationError("Internal Error.");
 		}
 		out.println("new_line:\n" +
-				"\t.asciiz \"\\n\"\n");
+				"\t.asciiz \"____\\n\"\n");
 	}
 
 	public static int getDelta(int uId) {
@@ -188,7 +188,13 @@ public final class Translator {
 			else
 				throw new CompilationError("Internal Error.");
 		} else {
-			out.printf("\taddiu $t%d, $sp, %d%s", reg, getDelta(uId), Utility.NEW_LINE);
+			int delta = getDelta(uId);
+			if (-32768 <= delta && delta <= 32767)
+				out.printf("\taddiu $t%d, $sp, %d%s", reg, getDelta(uId), Utility.NEW_LINE);
+			else {
+				out.printf("\tli $t%d, %d%s", reg, delta, Utility.NEW_LINE);
+				out.printf("\tadd $t%d, $sp, $t%d%s", reg, reg, Utility.NEW_LINE);
+			}
 		}
 	}
 
@@ -207,15 +213,20 @@ public final class Translator {
 					out.printf("\tla $t%d, %s%s", reg, getStringConstantLabelName(uId), Utility.NEW_LINE);
 				else if (e.type == Tokens.VARIABLE) {
 					out.printf("\tla $t%d, %s%s", reg, getGlobalVariableLabelName(uId), Utility.NEW_LINE);
-/*
 					if (!(e.ref instanceof FunctionType || e.ref instanceof ArrayPointerType || e.ref instanceof StructOrUnionType))
 						out.printf("\tlw $t%d, 0($t%d)%s", reg, reg, Utility.NEW_LINE);
-*/
 				} else
 					throw new CompilationError("Internal Error.");
 			} else { // local variables
-				if (e.ref instanceof ArrayPointerType || e.ref instanceof StructOrUnionType)
-					out.printf("\taddiu $t%d, $sp, %d%s", reg, getDelta(uId), Utility.NEW_LINE);
+				if (e.ref instanceof ArrayPointerType || e.ref instanceof StructOrUnionType) {
+					int delta = getDelta(uId);
+					if (-32768 <= delta && delta <= 32767)
+						out.printf("\taddiu $t%d, $sp, %d%s", reg, getDelta(uId), Utility.NEW_LINE);
+					else {
+						out.printf("\tli $t%d, %d%s", reg, delta, Utility.NEW_LINE);
+						out.printf("\tadd $t%d, $sp, $t%d%s", reg, reg, Utility.NEW_LINE);
+					}
+				}
 				else
 					out.printf("\tlw $t%d, %d($sp)%s", reg, getDelta(uId), Utility.NEW_LINE);
 			}
@@ -234,11 +245,24 @@ public final class Translator {
 	}
 
 	public static void storeFromTRegisterToIRRegister(int reg, int uId, PrintWriter out) {
-		out.printf("\tsw $t%d, %d($sp)%s", reg, getDelta(uId), Utility.NEW_LINE);
+		storeFromPhysicalRegisterToIRRegister("$t" + reg, uId, out);
 	}
 
 	public static void storeFromPhysicalRegisterToIRRegister(String reg, int uId, PrintWriter out) {
-		out.printf("\tsw %s, %d($sp)%s", reg, getDelta(uId), Utility.NEW_LINE);
+		SymbolTableEntry e = Environment.symbolNames.table.get(uId);
+		if (e.scope == 1) { // global variables: all global variables are arrays
+			if (e.type == Tokens.STRING_CONSTANT)
+				throw new CompilationError("Internal Error.");
+			else if (e.type == Tokens.VARIABLE) {
+				out.printf("\tla $v1, %s%s", getGlobalVariableLabelName(uId), Utility.NEW_LINE);
+				if (!(e.ref instanceof FunctionType || e.ref instanceof ArrayPointerType || e.ref instanceof StructOrUnionType))
+					out.printf("\tsw %s, 0($v1)%s", reg, Utility.NEW_LINE);
+				else
+					throw new CompilationError("Internal Error.");
+			} else
+				throw new CompilationError("Internal Error.");
+		} else
+			out.printf("\tsw %s, %d($sp)%s", reg, getDelta(uId), Utility.NEW_LINE);
 	}
 
 	public static void generateFunction(PrintWriter out) {
@@ -248,8 +272,12 @@ public final class Translator {
 			out.println("main:");
 
 		out.println(getFunctionLabel());
-		out.println("\taddiu $sp, $sp, -" + ControlFlowGraph.frameSize);
-//		out.println("\tsw $sp, 0($sp)");
+		if (-32768 <= ControlFlowGraph.frameSize && ControlFlowGraph.frameSize <= 32767)
+			out.println("\taddiu $sp, $sp, -" + ControlFlowGraph.frameSize);
+		else {
+			out.printf("\tli $t0, -%d%s", ControlFlowGraph.frameSize, Utility.NEW_LINE);
+			out.println("\taddu $sp, $sp, $t0");
+		}
 		out.println("\tsw $ra, 4($sp)");
 
 		ArrayList<CFGVertex> sequence = Sequentializer.process();
@@ -336,7 +364,7 @@ public final class Translator {
 				} else if (ins instanceof AddReg) {
 					loadFromIRRegisterToTRegister(((AddReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((AddReg) ins).rt, 1, out);
-					out.println("\tadd $t2, $t0, $t1");
+					out.println("\taddu $t2, $t0, $t1");
 					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
 				} else if (ins instanceof BitwiseAndReg) {
 					loadFromIRRegisterToTRegister(((BitwiseAndReg) ins).rs, 0, out);
@@ -425,7 +453,7 @@ public final class Translator {
 				} else if (ins instanceof SubtractReg) {
 					loadFromIRRegisterToTRegister(((SubtractReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((SubtractReg) ins).rt, 1, out);
-					out.println("\tsub $t2, $t0, $t1");
+					out.println("\tsubu $t2, $t0, $t1");
 					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
 				} else
 					throw new CompilationError("Internal Error.");
@@ -434,18 +462,25 @@ public final class Translator {
 				IRRegister r = vertex.branchRegister;
 				if (r == null)
 					throw new CompilationError("Internal Error.");
+				out.println();
+				out.println("#\tbranchIfFalse " + r);
 				loadFromIRRegisterToTRegister(r, 0, out);
-//				out.printf("\tla $t1, %s%s", getVertexLabelName(vertex.branchIfFalse.id), Utility.NEW_LINE);
 				out.printf("\tbeq $t0, $0, %s%s", getVertexLabelName(vertex.branchIfFalse.id), Utility.NEW_LINE);
 			}
 			if (vertex.unconditionalNext != null) {
+				out.println();
+				out.println("#\tunconditionalNext");
 				out.printf("\tj %s%s", getVertexLabelName(vertex.unconditionalNext.id), Utility.NEW_LINE);
-//				out.println("\tb ");
 			}
 		}
 
 		out.println("\tlw $ra, 4($sp)");
-		out.println("\taddiu $sp, $sp, " + ControlFlowGraph.frameSize);
+		if (-32768 <= ControlFlowGraph.frameSize && ControlFlowGraph.frameSize <= 32767)
+			out.println("\taddiu $sp, $sp, " + ControlFlowGraph.frameSize);
+		else {
+			out.printf("\tli $t0, %d%s", ControlFlowGraph.frameSize, Utility.NEW_LINE);
+			out.println("\taddu $sp, $sp, $t0");
+		}
 		out.println("\tjr $ra");
 	}
 

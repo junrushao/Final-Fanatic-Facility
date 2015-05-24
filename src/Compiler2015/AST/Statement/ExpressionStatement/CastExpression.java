@@ -25,7 +25,6 @@ public class CastExpression extends Expression {
 		this.e = e;
 	}
 
-	// TODO: I don't think it is completely right
 	public static Expression getExpression(Type t, Expression c) {
 		if (t instanceof VoidType)
 			throw new CompilationError("Cannot cast to void");
@@ -62,7 +61,7 @@ public class CastExpression extends Expression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e.emitCFG(builder);
-		e.eliminateArrayRegister(builder);
+		e.readInArrayRegister(builder);
 		if (e.type.sizeof() == castTo.sizeof())
 			tempRegister = e.tempRegister.clone();
 		else {
@@ -76,4 +75,11 @@ public class CastExpression extends Expression {
 		e.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
 
+	@Override
+	public CastExpression clone() {
+		CastExpression ret = (CastExpression) super.clone();
+		ret.castTo = ret.castTo.clone();
+		ret.e = ret.e.clone();
+		return ret;
+	}
 }

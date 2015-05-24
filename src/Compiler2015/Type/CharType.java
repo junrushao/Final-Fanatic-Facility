@@ -26,4 +26,8 @@ public class CharType extends Type {
 		return "char";
 	}
 
+	@Override
+	public CharType clone() {
+		return instance;
+	}
 }

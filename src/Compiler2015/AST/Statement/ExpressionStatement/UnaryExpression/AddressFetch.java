@@ -38,7 +38,7 @@ public class AddressFetch extends UnaryExpression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e.emitCFG(builder);
-		e.eliminateArrayRegister(builder);
+		e.readInArrayRegister(builder);
 		tempRegister = Environment.getVirtualRegister();
 		if (e instanceof IdentifierExpression) {
 			int uId = ((IdentifierExpression) e).uId;
@@ -51,5 +51,10 @@ public class AddressFetch extends UnaryExpression {
 		} else {
 			builder.addInstruction(new Move((VirtualRegister) tempRegister, e.tempRegister));
 		}
+	}
+
+	@Override
+	public AddressFetch clone() {
+		return (AddressFetch) super.clone();
 	}
 }

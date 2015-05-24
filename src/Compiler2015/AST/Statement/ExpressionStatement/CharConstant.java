@@ -39,4 +39,9 @@ public class CharConstant extends Constant {
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		tempRegister = new ImmediateValue((int) c);
 	}
+
+	@Override
+	public CharConstant clone() {
+		return (CharConstant) super.clone();
+	}
 }

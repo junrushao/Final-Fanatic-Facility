@@ -71,7 +71,7 @@ public class Subtract extends BinaryExpression {
 		// calculate immediately
 		Integer v1 = Expression.toInt(a1), v2 = Expression.toInt(a2);
 		if (v1 != null && v2 != null)
-			return new IntConstant(v1 + v2);
+			return new IntConstant(v1 - v2);
 
 		if (a1.type instanceof CharType)
 			a1 = CastExpression.getExpression(IntType.instance, a1);
@@ -107,10 +107,15 @@ public class Subtract extends BinaryExpression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		left.emitCFG(builder);
-		left.eliminateArrayRegister(builder);
+		left.readInArrayRegister(builder);
 		right.emitCFG(builder);
-		right.eliminateArrayRegister(builder);
+		right.readInArrayRegister(builder);
 		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new SubtractReg((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
+	}
+
+	@Override
+	public Subtract clone() {
+		return (Subtract) super.clone();
 	}
 }

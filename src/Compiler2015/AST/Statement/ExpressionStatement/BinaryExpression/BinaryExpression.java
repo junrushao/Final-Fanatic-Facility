@@ -27,4 +27,12 @@ public abstract class BinaryExpression extends Expression {
 		left.collectGlobalNonArrayVariablesUsed(dumpTo);
 		right.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
+
+	@Override
+	public BinaryExpression clone() {
+		BinaryExpression ret = (BinaryExpression) super.clone();
+		ret.left = ret.left.clone();
+		ret.right = ret.right.clone();
+		return ret;
+	}
 }

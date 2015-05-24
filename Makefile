@@ -9,6 +9,7 @@ all: clean
 		./Compiler2015/*.java \
 		-d ../bin
 	cp ./lib/antlr-4.5-complete.jar ./bin
+	cp ./lib/StdLib.c ./bin
 	cd ./bin && jar xf ./antlr-4.5-complete.jar \
 			 && rm -rf ./META-INF \
 			 && jar cef Compiler2015/Main Compiler2015.jar ./ \

@@ -52,7 +52,7 @@ public class StructOrUnionType extends Type {
 				memberDelta.put(name, last);
 			}
 			if (!isUnion)
-				last += type.sizeof();
+				last += Utility.align(type.sizeof());
 		}
 	}
 
@@ -66,11 +66,11 @@ public class StructOrUnionType extends Type {
 		int ans = 0;
 		if (isUnion)
 			for (Type t : types)
-				ans = Math.max(ans, t.sizeof());
+				ans = Math.max(ans, Utility.align(t.sizeof()));
 		else
 			for (Type t : types)
-				ans += t.sizeof();
-		return (ans + Panel.getRegisterSize() - 1) / Panel.getRegisterSize();
+				ans += Utility.align(t.sizeof());
+		return ans;
 	}
 
 	@Override
@@ -97,5 +97,10 @@ public class StructOrUnionType extends Type {
 			sb.append(indent).append(String.format("%s %s", aa, bb)).append(Utility.NEW_LINE);
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public StructOrUnionType clone() {
+		return (StructOrUnionType) super.clone();
 	}
 }

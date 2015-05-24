@@ -3,7 +3,7 @@ package Compiler2015.Type;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.Utility.Utility;
 
-public abstract class Type {
+public abstract class Type implements Cloneable {
 	/**
 	 * @param a one type
 	 * @param b the other type
@@ -47,4 +47,14 @@ public abstract class Type {
 	public abstract int sizeof();
 
 	public abstract int classifiedSizeof();
+
+	@Override
+	public Type clone() {
+		try {
+			return (Type) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

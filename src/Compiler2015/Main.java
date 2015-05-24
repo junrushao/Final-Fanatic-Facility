@@ -42,7 +42,7 @@ public class Main {
 			}
 			Panel.prettyPrinterType = null;
 			Panel.emitAST = true;
-			Panel.emitCFG = true;
+			Panel.emitCFG = false;
 			Panel.checkMain = false;
 			return;
 		}

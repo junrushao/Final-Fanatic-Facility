@@ -21,4 +21,9 @@ public class Sizeof extends UnaryExpression {
 		e.emitCFG(builder);
 		tempRegister = new ImmediateValue(e.type.sizeof());
 	}
+
+	@Override
+	public Sizeof clone() {
+		return (Sizeof) super.clone();
+	}
 }

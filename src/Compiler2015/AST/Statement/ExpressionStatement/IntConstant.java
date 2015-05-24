@@ -40,4 +40,10 @@ public class IntConstant extends Constant {
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		tempRegister = new ImmediateValue(c);
 	}
+
+	@Override
+	public IntConstant clone() {
+		return (IntConstant) super.clone();
+	}
+
 }

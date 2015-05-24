@@ -6,11 +6,11 @@ import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
+import Compiler2015.IR.Instruction.Arithmetic.AddReg;
 import Compiler2015.IR.Instruction.ReadArray;
 import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
-import Compiler2015.Utility.Panel;
 
 import java.util.HashMap;
 
@@ -53,7 +53,17 @@ public class MemberAccess extends Expression {
 		if (!(su.type instanceof StructOrUnionType))
 			throw new CompilationError("Internal Error.");
 		su.emitCFG(builder);
-//		su.eliminateArrayRegister(builder);
+		if (!(su.tempRegister instanceof VirtualRegister))
+			throw new CompilationError("Internal Error.");
+		StructOrUnionType structType = (StructOrUnionType) su.type;
+		int delta = structType.memberDelta.get(memberName);
+		if (this.type instanceof ArrayPointerType || this.type instanceof StructOrUnionType) {
+			tempRegister = Environment.getVirtualRegister();
+			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, su.tempRegister, new ImmediateValue(delta)));
+		} else {
+			tempRegister = new ArrayRegister((VirtualRegister) su.tempRegister, new ImmediateValue(delta), type.sizeof());
+		}
+/*
 		StructOrUnionType type = (StructOrUnionType) su.type;
 		int delta = type.memberDelta.get(memberName);
 		int size = this.type instanceof StructOrUnionType || this.type instanceof ArrayPointerType ? Panel.getPointerSize() : this.type.sizeof();
@@ -64,14 +74,22 @@ public class MemberAccess extends Expression {
 		else {
 			tempRegister = new ArrayRegister((VirtualRegister) su.tempRegister, new ImmediateValue(delta), size);
 		}
+*/
 	}
 
 	@Override
-	public void eliminateArrayRegister(ExpressionCFGBuilder builder) {
+	public void readInArrayRegister(ExpressionCFGBuilder builder) {
 		if (tempRegister instanceof ArrayRegister) {
 			VirtualRegister newReg = Environment.getVirtualRegister();
 			builder.addInstruction(new ReadArray(newReg, (ArrayRegister) tempRegister));
 			tempRegister = newReg.clone();
 		}
+	}
+
+	@Override
+	public MemberAccess clone() {
+		MemberAccess ret = (MemberAccess) super.clone();
+		ret.su = ret.su.clone();
+		return ret;
 	}
 }

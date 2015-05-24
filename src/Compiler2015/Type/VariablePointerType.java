@@ -30,4 +30,9 @@ public class VariablePointerType extends Pointer {
 	public String toString() {
 		return "Pointer(" + pointTo.toString() + ")";
 	}
+
+	@Override
+	public VariablePointerType clone() {
+		return (VariablePointerType) super.clone();
+	}
 }

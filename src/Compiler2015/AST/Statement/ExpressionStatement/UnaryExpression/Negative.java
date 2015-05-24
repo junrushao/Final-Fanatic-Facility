@@ -36,8 +36,13 @@ public class Negative extends UnaryExpression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e.emitCFG(builder);
-		e.eliminateArrayRegister(builder);
+		e.readInArrayRegister(builder);
 		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new NegateReg((VirtualRegister) tempRegister, e.tempRegister));
+	}
+
+	@Override
+	public Negative clone() {
+		return (Negative) super.clone();
 	}
 }

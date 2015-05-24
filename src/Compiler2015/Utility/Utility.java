@@ -6,6 +6,11 @@ public final class Utility {
 
 	public final static String NEW_LINE = System.lineSeparator();
 
+	public static int align(int x) {
+		int size = Panel.getRegisterSize();
+		return (x + size - 1) / size * size;
+	}
+
 	public static StringBuilder getSeveralSameCharacter(char c, int n) {
 		StringBuilder sb = new StringBuilder(n);
 		for (int i = 0; i < n; ++i)

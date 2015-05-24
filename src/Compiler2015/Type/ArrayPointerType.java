@@ -116,6 +116,11 @@ public class ArrayPointerType extends Pointer {
 	}
 
 	@Override
+	public ArrayPointerType clone() {
+		return (ArrayPointerType) super.clone();
+	}
+
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Array");

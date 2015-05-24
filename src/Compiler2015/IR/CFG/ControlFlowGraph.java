@@ -4,18 +4,17 @@ import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.IRRegister.ArrayRegister;
-import Compiler2015.IR.IRRegister.ImmediateValue;
-import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.*;
-import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.FunctionType;
-import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
 import Compiler2015.Utility.Panel;
+import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ControlFlowGraph {
@@ -27,8 +26,6 @@ public class ControlFlowGraph {
 	public static int tempVertexCount;
 	public static CompoundStatement scope;
 	public static Type returnType;
-
-	public static HashMap<Integer, VirtualRegister> globalNonArrayVariables;
 
 	public static HashMap<Integer, Integer> tempDelta;
 	public static HashMap<Integer, Integer> parameterDelta;
@@ -75,14 +72,19 @@ public class ControlFlowGraph {
 		frameSize = Panel.getRegisterSize() * 2; // [0, 3] for $fp, [4, 7] for $ra
 		for (Map.Entry<Integer, Integer> entry : tempDelta.entrySet()) {
 			entry.setValue(frameSize);
-//			System.err.printf("delta[%d] = %d\n", entry.getKey(), entry.getValue());
-			frameSize += Panel.getRegisterSize();
+			int uId = entry.getKey();
+			SymbolTableEntry e = Environment.symbolNames.table.get(uId);
+			if (e.type == Tokens.VARIABLE)
+				frameSize += Utility.align(((Type) e.ref).sizeof());
+			else if (e.type == Tokens.TEMPORARY_REGISTER)
+				frameSize += Panel.getRegisterSize();
+			else
+				throw new CompilationError("Internal Error.");
 		}
-		frameSize += Math.max(4, returnType.sizeof()); // for return value
+		frameSize += Utility.align(returnType.sizeof()); // for return value
 		for (int uId : scope.parametersUId) {
 			parameterDelta.put(uId, frameSize);
-//			System.err.printf("delta[%d] = %d\n", uId, frameSize);
-			frameSize += Math.max(4, ((Type) Environment.symbolNames.table.get(uId).ref).sizeof());
+			frameSize += Utility.align(((Type) Environment.symbolNames.table.get(uId).ref).sizeof());
 		}
 	}
 
@@ -116,37 +118,11 @@ public class ControlFlowGraph {
 		root = null;
 		outBody = ControlFlowGraph.getNewVertex();
 
-		// collect useful information: global variables used in the function
-		globalNonArrayVariables = new HashMap<>();
-		body.collectGlobalNonArrayVariablesUsed(globalNonArrayVariables);
-
 		// emit control flow graph
 		body.emitCFG();
 		root = body.beginCFGBlock;
 		if (body.endCFGBlock.unconditionalNext == null)
 			body.endCFGBlock.unconditionalNext = outBody;
-
-		// load global variables before entering the function
-		{
-			ArrayList<IRInstruction> ins = new ArrayList<>();
-			for (Map.Entry<Integer, VirtualRegister> element : ControlFlowGraph.globalNonArrayVariables.entrySet()) {
-				SymbolTableEntry entry = Environment.symbolNames.table.get(element.getKey());
-				int size = entry.ref instanceof StructOrUnionType || entry.ref instanceof ArrayPointerType ? Panel.getPointerSize() : ((Type) entry.ref).sizeof();
-				ins.add(new ReadArray(element.getValue(), new ArrayRegister(new VirtualRegister(entry.uId), ImmediateValue.zero, size)));
-			}
-			ins.addAll(root.internal);
-			root.internal = ins;
-		}
-
-		// store back global variables after function completes
-		{
-			for (Map.Entry<Integer, VirtualRegister> element : ControlFlowGraph.globalNonArrayVariables.entrySet()) {
-				SymbolTableEntry entry = Environment.symbolNames.table.get(element.getKey());
-				int size = entry.ref instanceof StructOrUnionType || entry.ref instanceof ArrayPointerType ? Panel.getPointerSize() : ((Type) entry.ref).sizeof();
-				outBody.internal.add(new WriteArray(new ArrayRegister(new VirtualRegister(entry.uId), ImmediateValue.zero, size), element.getValue()));
-			}
-			outBody.internal.add(Pop.instance);
-		}
 
 		// remove unnecessary jumps
 		vertices.stream().forEach(ControlFlowGraph::findGoto);

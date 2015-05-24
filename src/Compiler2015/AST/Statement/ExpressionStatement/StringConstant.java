@@ -156,6 +156,22 @@ public class StringConstant extends Expression {
 		return new StringConstant(sb.toString());
 	}
 
+	public static String toMIPSString(String s) {
+		StringBuilder sb = new StringBuilder();
+		for (char c : s.toCharArray()) {
+			if (c < 32 || c >= 127) {
+				String str = Integer.toOctalString(c);
+				while (str.length() < 3)
+					str = "0" + str;
+				sb.append("\\").append(str);
+			} else if (c == '\"')
+				sb.append("\\\"");
+			else
+				sb.append(c);
+		}
+		return sb.append("\\000").toString();
+	}
+
 	public static String toPrintableString(String s) {
 		StringBuilder sb = new StringBuilder();
 		for (char c : s.toCharArray()) {

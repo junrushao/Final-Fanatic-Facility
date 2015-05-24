@@ -37,7 +37,7 @@ public class CFGVertex {
 		if (unconditionalNext != null)
 			sb.append(Utility.getIndent(2)).append("--> ").append(unconditionalNext.id).append(Utility.NEW_LINE);
 		if (branchIfFalse != null)
-			sb.append(Utility.getIndent(2)).append("--(BEQ 0)--> ").append(branchIfFalse.id).append(Utility.NEW_LINE);
+			sb.append(Utility.getIndent(2)).append("--(BEQ 0)--> ").append(branchIfFalse.id).append("  ").append(branchRegister).append(Utility.NEW_LINE);
 		phis.entrySet().stream().forEach(x -> sb.append(Utility.getIndent(2)).append(new VirtualRegister(x.getKey()).toString()).append("_").append(x.getValue().vid[0]).append(" = phi").append(x.getValue().toString()).append(Utility.NEW_LINE));
 		internal.stream().forEach(x -> sb.append(Utility.getIndent(2)).append(x).append(Utility.NEW_LINE));
 		return sb.toString();

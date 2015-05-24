@@ -1,22 +1,21 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
 import Compiler2015.Environment.Environment;
-import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
-import Compiler2015.IR.IRRegister.ArrayRegister;
-import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
-import Compiler2015.IR.Instruction.*;
-import Compiler2015.Type.*;
-import Compiler2015.Utility.Panel;
+import Compiler2015.IR.Instruction.Call;
+import Compiler2015.IR.Instruction.FetchReturn;
+import Compiler2015.IR.Instruction.PushStack;
+import Compiler2015.Type.ArrayPointerType;
+import Compiler2015.Type.FunctionPointerType;
+import Compiler2015.Type.FunctionType;
+import Compiler2015.Type.Type;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * f(...)
@@ -101,20 +100,12 @@ public class FunctionCall extends Expression {
 		function.emitCFG(builder);
 		for (Expression e : argumentExpressionList) {
 			e.emitCFG(builder);
-			e.eliminateArrayRegister(builder);
+			e.readInArrayRegister(builder);
 		}
 		for (Expression e : vaList) {
 			e.emitCFG(builder);
-			e.eliminateArrayRegister(builder);
+			e.readInArrayRegister(builder);
 		}
-		if (!isLib)
-			for (Map.Entry<Integer, VirtualRegister> element : ControlFlowGraph.globalNonArrayVariables.entrySet()) {
-				SymbolTableEntry entry = Environment.symbolNames.table.get(element.getKey());
-				int uId = entry.uId;
-				int size = entry.ref instanceof StructOrUnionType || entry.ref instanceof ArrayPointerType ? Panel.getPointerSize() : ((Type) entry.ref).sizeof();
-				builder.addInstruction(new WriteArray(new ArrayRegister(new VirtualRegister(uId), new ImmediateValue(0), size), element.getValue()));
-			}
-
 		// push in reverse order
 		for (int i = vaList.length - 1; i >= 0; --i)
 			pushStack(builder, vaList[i], true);
@@ -124,12 +115,15 @@ public class FunctionCall extends Expression {
 		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new Call(function.tempRegister));
 		builder.addInstruction(new FetchReturn((VirtualRegister) tempRegister, function.type));
-		if (!isLib)
-			for (Map.Entry<Integer, VirtualRegister> element : ControlFlowGraph.globalNonArrayVariables.entrySet()) {
-				SymbolTableEntry entry = Environment.symbolNames.table.get(element.getKey());
-				int uId = entry.uId;
-				int size = entry.ref instanceof StructOrUnionType || entry.ref instanceof ArrayPointerType ? Panel.getPointerSize() : ((Type) entry.ref).sizeof();
-				builder.addInstruction(new ReadArray(element.getValue(), new ArrayRegister(new VirtualRegister(uId), new ImmediateValue(0), size)));
-			}
+//		builder.addInstruction(new Move((VirtualRegister) tempRegister, tempRegister));
+	}
+
+	@Override
+	public FunctionCall clone() {
+		FunctionCall ret = (FunctionCall) super.clone();
+		ret.function = ret.function.clone();
+		ret.argumentExpressionList = ret.argumentExpressionList.clone();
+		ret.vaList = ret.vaList.clone();
+		return ret;
 	}
 }

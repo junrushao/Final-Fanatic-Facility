@@ -75,4 +75,8 @@ public class FunctionType extends Type {
 				+ (hasVaList ? ", ..." : "") + ")";
 	}
 
+	@Override
+	public FunctionType clone() {
+		return (FunctionType) super.clone();
+	}
 }

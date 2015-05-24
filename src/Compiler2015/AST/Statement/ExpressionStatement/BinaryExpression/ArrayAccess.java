@@ -142,26 +142,56 @@ public class ArrayAccess extends BinaryExpression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		left.emitCFG(builder);
-		left.eliminateArrayRegister(builder);
 		right.emitCFG(builder);
-		right.eliminateArrayRegister(builder);
+		right.readInArrayRegister(builder);
 
-		VirtualRegister leftRegister;
-		// for a pointer which is not array pointer, we should load it in to know what it refers to
-		if (left.type instanceof ArrayPointerType) {
-			leftRegister = (VirtualRegister) left.tempRegister;
-		} else { // other pointer types
+		if (left.type instanceof ArrayPointerType && (this.type instanceof ArrayPointerType || this.type instanceof StructOrUnionType)) {
+			left.convertArrayRegisterToPointer(builder);
+			tempRegister = Environment.getVirtualRegister();
+			VirtualRegister delta = getTypeDelta(builder, right.tempRegister, new ImmediateValue(type.sizeof()));
+			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, left.tempRegister, delta));
+		} else if (this.type instanceof ArrayPointerType || this.type instanceof StructOrUnionType) {
+			left.readInArrayRegister(builder);
+			tempRegister = Environment.getVirtualRegister();
+			VirtualRegister delta = getTypeDelta(builder, right.tempRegister, new ImmediateValue(type.sizeof()));
+			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, left.tempRegister, delta));
+		} else if (right.tempRegister instanceof ImmediateValue) {
+			left.readInArrayRegister(builder);
+			tempRegister = new ArrayRegister((VirtualRegister) left.tempRegister,
+					new ImmediateValue(((ImmediateValue) right.tempRegister).a * type.sizeof()),
+					type.sizeof());
+		} else if (right.tempRegister instanceof VirtualRegister) {
+			left.readInArrayRegister(builder);
+			VirtualRegister address = Environment.getVirtualRegister();
+			VirtualRegister delta = getTypeDelta(builder, right.tempRegister, new ImmediateValue(type.sizeof()));
+			builder.addInstruction(new AddReg(address, left.tempRegister, delta));
+			tempRegister = new ArrayRegister(address, new ImmediateValue(0), type.sizeof());
+		} else
+			throw new CompilationError("Internal Error.");
+
 /*
-			if (!(left.type instanceof Pointer))
-				throw new CompilationError("Internal Error.");
-			leftRegister = Environment.getVirtualRegister();
-			builder.addInstruction(new ReadArray(leftRegister, new ArrayRegister((VirtualRegister) left.tempRegister, ImmediateValue.zero, Panel.getPointerSize())));
-*/
+		VirtualRegister leftRegister = null;
+		if (left.tempRegister instanceof VirtualRegister)
 			leftRegister = (VirtualRegister) left.tempRegister;
+		else if (left.tempRegister instanceof ArrayRegister) {
+			leftRegister = Environment.getVirtualRegister();
+			builder.addInstruction(new AddReg(leftRegister, ((ArrayRegister) left.tempRegister).a, ((ArrayRegister) left.tempRegister).b));
+		}
+
+		// int (*a)[10];
+		// a[b] <=> *(a + 10 * b)
+		// int a[10][10]
+		// a[b] <=> a + 10 * b
+		if (this.type instanceof ArrayPointerType) {
+			tempRegister = Environment.getVirtualRegister();
+			VirtualRegister r = Environment.getVirtualRegister();
+			builder.addInstruction(new MultiplyReg(r, right.tempRegister, new ImmediateValue(type.sizeof())));
+			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, leftRegister, r));
+			return;
 		}
 
 		// for a pointer to a struct, we should do nothing
-		if (type instanceof StructOrUnionType) {
+		if (this.type instanceof StructOrUnionType) {
 			// left[right] <=> *(leftRegister + right.tempRegister * struct.sizeof)
 			tempRegister = Environment.getVirtualRegister();
 			VirtualRegister r = Environment.getVirtualRegister();
@@ -184,14 +214,23 @@ public class ArrayAccess extends BinaryExpression {
 			tempRegister = new ArrayRegister(leftRegister, new ImmediateValue(delta), type.classifiedSizeof());
 		} else
 			throw new CompilationError("Internal Error.");
+*/
 	}
 
 	@Override
-	public void eliminateArrayRegister(ExpressionCFGBuilder builder) {
+	public void readInArrayRegister(ExpressionCFGBuilder builder) {
 		if (tempRegister instanceof ArrayRegister) {
-			VirtualRegister newReg = Environment.getVirtualRegister();
-			builder.addInstruction(new ReadArray(newReg, (ArrayRegister) tempRegister));
-			tempRegister = newReg;
+			if (this.type instanceof StructOrUnionType) {
+				VirtualRegister newRegister = Environment.getVirtualRegister();
+				VirtualRegister r = Environment.getVirtualRegister();
+				builder.addInstruction(new MultiplyReg(r, right.tempRegister, new ImmediateValue(type.sizeof())));
+				builder.addInstruction(new AddReg(newRegister, tempRegister, r));
+				tempRegister = newRegister;
+			} else {
+				VirtualRegister newReg = Environment.getVirtualRegister();
+				builder.addInstruction(new ReadArray(newReg, (ArrayRegister) tempRegister));
+				tempRegister = newReg;
+			}
 		}
 	}
 }

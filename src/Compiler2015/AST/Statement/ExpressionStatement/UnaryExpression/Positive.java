@@ -35,4 +35,9 @@ public class Positive extends UnaryExpression {
 		tempRegister = e.tempRegister.clone();
 		builder.addInstruction(new Move((VirtualRegister) tempRegister, e.tempRegister));
 	}
+
+	@Override
+	public Positive clone() {
+		return (Positive) super.clone();
+	}
 }

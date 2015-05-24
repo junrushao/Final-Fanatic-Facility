@@ -39,7 +39,7 @@ public class ReturnStatement extends Statement {
 		else {
 			ExpressionCFGBuilder builder = new ExpressionCFGBuilder();
 			e.emitCFG(builder);
-			e.eliminateArrayRegister(builder);
+			e.readInArrayRegister(builder);
 			beginCFGBlock = builder.s;
 			endCFGBlock = builder.t;
 			endCFGBlock.internal.add(new SetReturn(e.tempRegister));

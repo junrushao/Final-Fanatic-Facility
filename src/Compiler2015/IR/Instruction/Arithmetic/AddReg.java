@@ -1,5 +1,7 @@
 package Compiler2015.IR.Instruction.Arithmetic;
 
+import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.DoubleSource;
@@ -11,6 +13,8 @@ public class AddReg extends Arithmetic implements DoubleSource {
 	public IRRegister rs, rt;
 
 	public AddReg(VirtualRegister rd, IRRegister rs, IRRegister rt) {
+		if (rs instanceof ArrayRegister || rt instanceof ArrayRegister)
+			throw new CompilationError("Internal Error");
 		this.rd = rd.clone();
 		this.rs = rs.clone();
 		this.rt = rt.clone();

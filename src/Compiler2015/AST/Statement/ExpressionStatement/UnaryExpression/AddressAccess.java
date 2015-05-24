@@ -17,10 +17,6 @@ public class AddressAccess extends UnaryExpression {
 		this.isLValue = !(type instanceof ArrayPointerType) && !(type instanceof FunctionType) && !(type instanceof VoidType);
 	}
 
-	public String getOperator() {
-		return "*";
-	}
-
 	public static Expression getExpression(Expression e) {
 		if (e.type instanceof VoidType) {
 			throw new CompilationError("Type Error");
@@ -38,8 +34,17 @@ public class AddressAccess extends UnaryExpression {
 		return new ArrayAccess(e, new IntConstant(0), tmp.type, tmp.isLValue);
 	}
 
+	public String getOperator() {
+		return "*";
+	}
+
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		throw new CompilationError("Internal Error.");
+	}
+
+	@Override
+	public AddressAccess clone() {
+		return (AddressAccess) super.clone();
 	}
 }

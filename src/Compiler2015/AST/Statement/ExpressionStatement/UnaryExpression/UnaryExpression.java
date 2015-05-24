@@ -23,4 +23,12 @@ public abstract class UnaryExpression extends Expression {
 	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
 		e.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
+
+	@Override
+	public UnaryExpression clone() {
+		UnaryExpression ret = (UnaryExpression) super.clone();
+		ret.e = ret.e.clone();
+		return ret;
+	}
+
 }

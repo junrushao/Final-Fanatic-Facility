@@ -3,7 +3,6 @@ package Compiler2015.AST.Statement.ExpressionStatement;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.ArrayPointerType;
@@ -51,9 +50,11 @@ public class IdentifierExpression extends Expression {
 
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
-		if (ControlFlowGraph.globalNonArrayVariables.containsKey(uId))
-			tempRegister = ControlFlowGraph.globalNonArrayVariables.get(uId).clone();
-		else
-			tempRegister = new VirtualRegister(uId);
+		tempRegister = new VirtualRegister(uId);
+	}
+
+	@Override
+	public IdentifierExpression clone() {
+		return (IdentifierExpression) super.clone();
 	}
 }

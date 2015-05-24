@@ -41,7 +41,15 @@ public class CommaExpression extends Expression {
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e1.emitCFG(builder);
 		e2.emitCFG(builder);
-		e2.eliminateArrayRegister(builder);
+		e2.readInArrayRegister(builder);
 		tempRegister = e2.tempRegister.clone();
+	}
+
+	@Override
+	public CommaExpression clone() {
+		CommaExpression ret = (CommaExpression) super.clone();
+		ret.e1 = ret.e1.clone();
+		ret.e2 = ret.e2.clone();
+		return ret;
 	}
 }

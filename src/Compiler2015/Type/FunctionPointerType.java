@@ -24,4 +24,8 @@ public class FunctionPointerType extends Pointer {
 		return Panel.getPointerSize();
 	}
 
+	@Override
+	public FunctionPointerType clone() {
+		return (FunctionPointerType) super.clone();
+	}
 }

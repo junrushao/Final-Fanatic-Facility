@@ -6,11 +6,8 @@ import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.IRRegister.ArrayRegister;
-import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
-import Compiler2015.IR.Instruction.Arithmetic.AddReg;
-import Compiler2015.IR.Instruction.Arithmetic.MultiplyReg;
 import Compiler2015.IR.Instruction.Move;
 import Compiler2015.IR.Instruction.ReadArray;
 import Compiler2015.IR.Instruction.WriteArray;
@@ -107,25 +104,25 @@ public class Assign extends BinaryExpression {
 		if (operator.equals("="))
 			return new Assign(a1, a2);
 		if (operator.equals("*="))
-			return new Assign(a1, new Multiply(a1, a2));
+			return new Assign(a1.clone(), new Multiply(a1, a2));
 		if (operator.equals("/="))
-			return new Assign(a1, new Divide(a1, a2));
+			return new Assign(a1.clone(), new Divide(a1, a2));
 		if (operator.equals("%="))
-			return new Assign(a1, new Modulo(a1, a2));
+			return new Assign(a1.clone(), new Modulo(a1, a2));
 		if (operator.equals("+="))
-			return new Assign(a1, Add.getExpression(a1, a2));
+			return new Assign(a1.clone(), Add.getExpression(a1, a2));
 		if (operator.equals("-="))
-			return new Assign(a1, Subtract.getExpression(a1, a2));
+			return new Assign(a1.clone(), Subtract.getExpression(a1, a2));
 		if (operator.equals("<<="))
-			return new Assign(a1, new ShiftLeft(a1, a2));
+			return new Assign(a1.clone(), new ShiftLeft(a1, a2));
 		if (operator.equals(">>="))
-			return new Assign(a1, new ShiftRight(a1, a2));
+			return new Assign(a1.clone(), new ShiftRight(a1, a2));
 		if (operator.equals("&="))
-			return new Assign(a1, new BitwiseAnd(a1, a2));
+			return new Assign(a1.clone(), new BitwiseAnd(a1, a2));
 		if (operator.equals("^="))
-			return new Assign(a1, new BitwiseXOR(a1, a2));
+			return new Assign(a1.clone(), new BitwiseXOR(a1, a2));
 		if (operator.equals("|="))
-			return new Assign(a1, new BitwiseOr(a1, a2));
+			return new Assign(a1.clone(), new BitwiseOr(a1, a2));
 		throw new CompilationError("Internal Error");
 	}
 
@@ -138,7 +135,30 @@ public class Assign extends BinaryExpression {
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		left.emitCFG(builder);
 		right.emitCFG(builder);
-		right.eliminateArrayRegister(builder);
+		if (left.type instanceof StructOrUnionType) {
+			left.convertArrayRegisterToPointer(builder);
+			right.convertArrayRegisterToPointer(builder);
+
+			StructOrUnionType type = (StructOrUnionType) left.type;
+			int size = type.sizeof(), registerSize = Panel.getRegisterSize();
+			for (int i = 0; i < size; i += registerSize) {
+				VirtualRegister t = Environment.getVirtualRegister();
+				builder.addInstruction(new ReadArray(t, new ArrayRegister((VirtualRegister) right.tempRegister, new ImmediateValue(i), registerSize)));
+				builder.addInstruction(new WriteArray(new ArrayRegister((VirtualRegister) left.tempRegister, new ImmediateValue(i), registerSize), t));
+			}
+			tempRegister = left.tempRegister.clone();
+		} else if (left.tempRegister instanceof ArrayRegister) {
+			right.readInArrayRegister(builder);
+			builder.addInstruction(new WriteArray((ArrayRegister) left.tempRegister, right.tempRegister));
+			tempRegister = left.tempRegister.clone();
+		} else if (left.tempRegister instanceof VirtualRegister) {
+			right.readInArrayRegister(builder);
+			builder.addInstruction(new Move((VirtualRegister) left.tempRegister, right.tempRegister));
+			tempRegister = left.tempRegister.clone();
+		} else
+			throw new CompilationError("Internal Error.");
+/*
+		right.readInArrayRegister(builder);
 		if (left.type instanceof StructOrUnionType) {
 			// right-hand side must be a instance of StructOrUnionType as well, which will not do any lvalue self-elimination
 			// a = b = c should be taken into consideration
@@ -170,10 +190,11 @@ public class Assign extends BinaryExpression {
 			builder.addInstruction(new Move((VirtualRegister) left.tempRegister, right.tempRegister));
 			tempRegister = left.tempRegister.clone();
 		}
+*/
 	}
 
 	@Override
-	public void eliminateArrayRegister(ExpressionCFGBuilder builder) {
+	public void readInArrayRegister(ExpressionCFGBuilder builder) {
 		if (tempRegister instanceof ArrayRegister) {
 			VirtualRegister newReg = Environment.getVirtualRegister();
 			builder.addInstruction(new ReadArray(newReg, (ArrayRegister) tempRegister));
