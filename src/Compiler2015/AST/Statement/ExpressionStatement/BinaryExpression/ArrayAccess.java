@@ -7,8 +7,8 @@ import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
-import Compiler2015.IR.Instruction.Arithmetic.AddReg;
-import Compiler2015.IR.Instruction.Arithmetic.MultiplyReg;
+import Compiler2015.IR.Instruction.AddReg;
+import Compiler2015.IR.Instruction.MultiplyReg;
 import Compiler2015.IR.Instruction.ReadArray;
 import Compiler2015.Type.*;
 

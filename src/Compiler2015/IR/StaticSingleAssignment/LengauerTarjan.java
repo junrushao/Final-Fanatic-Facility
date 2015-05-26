@@ -33,19 +33,12 @@ public final class LengauerTarjan {
 		vertices.stream().filter(v -> v.id != -1)
 				.forEach(v -> {
 					vi[v.id].me = v;
-					if (v.unconditionalNext != null) {
+					if (v.unconditionalNext != null)
 						vi[v.unconditionalNext.id].pred.add(vi[v.id]);
-						v.unconditionalNext.predecessor.put(v, null);
-					}
-					if (v.branchIfFalse != null) {
+					if (v.branchIfFalse != null)
 						vi[v.branchIfFalse.id].pred.add(vi[v.id]);
-						v.branchIfFalse.predecessor.put(v, null);
-					}
 				});
-		vertices.forEach(v -> {
-			final int[] cnt = {0};
-			v.predecessor.entrySet().stream().forEach(e -> e.setValue(++cnt[0]));
-		});
+
 		// calculate semi-dominator
 		for (int dfn = n; dfn >= 2; --dfn) {
 			VertexInfo w = vi[dfn];

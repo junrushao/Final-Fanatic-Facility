@@ -1,4 +1,4 @@
-package Compiler2015.IR.Instruction.Arithmetic;
+package Compiler2015.IR.Instruction;
 
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.IRRegister.ArrayRegister;
@@ -6,14 +6,14 @@ import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 
 /**
- * rd = rs + rt
+ * rd = rs == rt
  */
-public class AddReg extends Arithmetic {
+public class SetEqualTo extends IRInstruction {
 	public IRRegister rs, rt;
 
-	public AddReg(VirtualRegister rd, IRRegister rs, IRRegister rt) {
+	public SetEqualTo(VirtualRegister rd, IRRegister rs, IRRegister rt) {
 		if (rs instanceof ArrayRegister || rt instanceof ArrayRegister)
-			throw new CompilationError("Internal Error");
+			throw new CompilationError("Internal Error.");
 		this.rd = rd.clone();
 		this.rs = rs.clone();
 		this.rt = rt.clone();
@@ -44,6 +44,6 @@ public class AddReg extends Arithmetic {
 
 	@Override
 	public String toString() {
-		return String.format("%s = %s + %s", rd, rs, rt);
+		return String.format("%s = %s == %s", rd, rs, rt);
 	}
 }

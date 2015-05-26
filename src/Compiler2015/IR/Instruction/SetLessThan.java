@@ -1,4 +1,4 @@
-package Compiler2015.IR.Instruction.Arithmetic;
+package Compiler2015.IR.Instruction;
 
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.IRRegister.ArrayRegister;
@@ -8,7 +8,7 @@ import Compiler2015.IR.IRRegister.VirtualRegister;
 /**
  * rd = rs < rt
  */
-public class SetLessThan extends Arithmetic {
+public class SetLessThan extends IRInstruction {
 	public IRRegister rs, rt;
 
 	public SetLessThan(VirtualRegister rd, IRRegister rs, IRRegister rt) {

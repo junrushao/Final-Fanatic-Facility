@@ -13,7 +13,6 @@ import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
-import Compiler2015.IR.Instruction.Arithmetic.*;
 import Compiler2015.IR.Instruction.*;
 import Compiler2015.Type.*;
 import Compiler2015.Utility.Panel;
@@ -292,9 +291,12 @@ public final class NaiveTranslator {
 		ArrayList<CFGVertex> sequence = NaiveSequentializer.process();
 		int sizeOfAllArguments = 0;
 		int sizeOfExtraArguments = 0;
-		for (CFGVertex vertex : sequence) {
+		IRRegister lastNop = null;
+		for (int itr = 0, itrEnd = sequence.size(); itr < itrEnd; ++itr) {
+			CFGVertex vertex = sequence.get(itr);
 			out.println(getVertexLabel(vertex.id));
 			for (IRInstruction ins : vertex.internal) {
+				lastNop = null;
 				out.println(Utility.NEW_LINE + "#\t" + ins);
 				if (ins instanceof Call) {
 					if (!(((Call) ins).func instanceof VirtualRegister))
@@ -455,19 +457,20 @@ public final class NaiveTranslator {
 					loadFromIRRegisterToTRegister(((SubtractReg) ins).rt, 1, out);
 					out.println("\tsubu $t2, $t0, $t1");
 					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+				} else if (ins instanceof Nop) {
+					lastNop = ((Nop) ins).rs;
 				} else
 					throw new CompilationError("Internal Error.");
 			}
 			if (vertex.branchIfFalse != null) {
-				IRRegister r = vertex.branchRegister;
-				if (r == null)
+				if (lastNop == null)
 					throw new CompilationError("Internal Error.");
 				out.println();
-				out.println("#\tbranchIfFalse " + r);
-				loadFromIRRegisterToTRegister(r, 0, out);
+				out.println("#\tbranchIfFalse " + lastNop);
+				loadFromIRRegisterToTRegister(lastNop, 0, out);
 				out.printf("\tbeq $t0, $0, %s%s", getVertexLabelName(vertex.branchIfFalse.id), Utility.NEW_LINE);
 			}
-			if (vertex.unconditionalNext != null) {
+			if (vertex.unconditionalNext != null && !(itr + 1 < itrEnd && sequence.get(itr + 1).id == vertex.unconditionalNext.id)) {
 				out.println();
 				out.println("#\tunconditionalNext");
 				out.printf("\tj %s%s", getVertexLabelName(vertex.unconditionalNext.id), Utility.NEW_LINE);

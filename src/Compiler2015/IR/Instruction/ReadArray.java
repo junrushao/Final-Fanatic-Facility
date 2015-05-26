@@ -2,12 +2,11 @@ package Compiler2015.IR.Instruction;
 
 import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
-import Compiler2015.IR.Instruction.Arithmetic.Arithmetic;
 
 /**
  * rd <- rs, i.e. c = a[b]
  */
-public class ReadArray extends Arithmetic {
+public class ReadArray extends IRInstruction {
 	public ArrayRegister rs;
 	public int memoryVersion = 0;
 

@@ -496,10 +496,11 @@ public class Compiler2015Parser extends Parser {
 						{
 							setState(111);
 							switch (getInterpreter().adaptivePredict(_input, 0, _ctx)) {
-								case 1: {
-									setState(108);
-									functionDefinition();
-								}
+								case 1:
+						{
+							setState(108);
+							functionDefinition();
+						}
 								break;
 								case 2: {
 									setState(109);
@@ -511,13 +512,13 @@ public class Compiler2015Parser extends Parser {
 									match(Semi);
 								}
 								break;
-							}
-						}
 					}
+						}
+				}
 					setState(115);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input, 1, _ctx);
-				}
+			}
 				setState(116);
 				match(EOF);
 			}
@@ -555,7 +556,7 @@ public class Compiler2015Parser extends Parser {
 						{
 							setState(121);
 							declaratorList();
-						}
+					}
 					}
 
 					setState(124);
@@ -577,7 +578,7 @@ public class Compiler2015Parser extends Parser {
 						{
 							setState(128);
 							initDeclaratorList();
-						}
+					}
 					}
 
 					setState(131);
@@ -626,8 +627,8 @@ public class Compiler2015Parser extends Parser {
 						}
 					}
 					setState(143);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
 				}
 				TypeAnalyser.enter(_localctx.returnType);
 				setState(145);
@@ -649,7 +650,7 @@ public class Compiler2015Parser extends Parser {
 							if (name == null || name.equals(""))
 								throw new CompilationError("No parameter name.");
 
-					}
+				}
 					break;
 				}
 				setState(152);
@@ -719,13 +720,13 @@ public class Compiler2015Parser extends Parser {
 							setState(158);
 							match(Comma);
 							setState(159);
-							initDeclarator();
+				initDeclarator();
 						}
 					}
 					setState(164);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -763,7 +764,7 @@ public class Compiler2015Parser extends Parser {
 						((InitDeclaratorContext) _localctx).init = ((InitDeclaratorContext) _localctx).initializer.ret;
 						Environment.symbolNames.defineVariable(_localctx.uId, _localctx.type, _localctx.init);
 
-					}
+				}
 				}
 
 			}
@@ -869,7 +870,7 @@ public class Compiler2015Parser extends Parser {
 							setState(191);
 							((StructOrUnionSpecifier1Context) _localctx).Identifier = match(Identifier);
 							((StructOrUnionSpecifier1Context) _localctx).name = (((StructOrUnionSpecifier1Context) _localctx).Identifier != null ? ((StructOrUnionSpecifier1Context) _localctx).Identifier.getText() : null);
-						}
+					}
 					}
 
 					setState(195);
@@ -887,13 +888,13 @@ public class Compiler2015Parser extends Parser {
 
 									StructBuilder.addAttributes(((StructOrUnionSpecifier1Context) _localctx).structDeclaration.types, ((StructOrUnionSpecifier1Context) _localctx).structDeclaration.names);
 
-								}
-							}
 						}
+							}
+					}
 						setState(204);
 						_errHandler.sync(this);
 						_alt = getInterpreter().adaptivePredict(_input, 11, _ctx);
-					}
+				}
 					setState(205);
 					match(R3);
 					((StructOrUnionSpecifier1Context) _localctx).ret = StructBuilder.exit();
@@ -986,24 +987,24 @@ public class Compiler2015Parser extends Parser {
 
 						setState(231);
 						_errHandler.sync(this);
-						_la = _input.LA(1);
+				_la = _input.LA(1);
 						while (_la == Comma) {
-							{
-								{
-									setState(225);
-									match(Comma);
-									setState(226);
-									((StructDeclarationContext) _localctx).d2 = declarator();
+					{
+						{
+							setState(225);
+							match(Comma);
+							setState(226);
+							((StructDeclarationContext) _localctx).d2 = declarator();
 
-									_localctx.types.add(TypeAnalyser.analyse());
-									_localctx.names.add(((StructDeclarationContext) _localctx).d2.name);
+							_localctx.types.add(TypeAnalyser.analyse());
+							_localctx.names.add(((StructDeclarationContext) _localctx).d2.name);
 
-								}
-							}
+					}
+					}
 							setState(233);
 							_errHandler.sync(this);
 							_la = _input.LA(1);
-						}
+				}
 					}
 				}
 
@@ -1045,9 +1046,9 @@ public class Compiler2015Parser extends Parser {
 						}
 					}
 					setState(244);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
 				setState(245);
 				((DeclaratorContext) _localctx).directDeclarator = directDeclarator(0);
 				((DeclaratorContext) _localctx).name = ((DeclaratorContext) _localctx).directDeclarator.name;
@@ -1108,13 +1109,13 @@ public class Compiler2015Parser extends Parser {
 							setState(252);
 							match(Comma);
 							setState(253);
-							plainDeclarator();
+				plainDeclarator();
 						}
 					}
 					setState(258);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -1217,37 +1218,37 @@ public class Compiler2015Parser extends Parser {
 										throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 									((DirectDeclaratorContext) _localctx).name = ((DirectDeclaratorContext) _localctx).d3.name;
 									setState(283);
-									match(L1);
+						match(L1);
 									setState(284);
-									match(R1);
+						match(R1);
 									TypeAnalyser.addParameter();
 								}
 								break;
-								case 4: {
-									_localctx = new DirectDeclaratorContext(_parentctx, _parentState);
-									_localctx.d4 = _prevctx;
-									_localctx.d4 = _prevctx;
-									pushNewRecursionContext(_localctx, _startState, RULE_directDeclarator);
-									setState(286);
-									if (!(precpred(_ctx, 1)))
-										throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-									((DirectDeclaratorContext) _localctx).name = ((DirectDeclaratorContext) _localctx).d4.name;
-									setState(288);
-									match(L1);
-									setState(289);
-									((DirectDeclaratorContext) _localctx).parameterTypeList = parameterTypeList();
-									setState(290);
-									match(R1);
-									TypeAnalyser.addParameter(((DirectDeclaratorContext) _localctx).parameterTypeList.types, ((DirectDeclaratorContext) _localctx).parameterTypeList.names, ((DirectDeclaratorContext) _localctx).parameterTypeList.hasVaList);
-								}
-								break;
-							}
+								case 4:
+						{
+							_localctx = new DirectDeclaratorContext(_parentctx, _parentState);
+							_localctx.d4 = _prevctx;
+							_localctx.d4 = _prevctx;
+							pushNewRecursionContext(_localctx, _startState, RULE_directDeclarator);
+							setState(286);
+							if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
+							((DirectDeclaratorContext) _localctx).name = ((DirectDeclaratorContext) _localctx).d4.name;
+							setState(288);
+							match(L1);
+							setState(289);
+							((DirectDeclaratorContext) _localctx).parameterTypeList = parameterTypeList();
+							setState(290);
+							match(R1);
+							TypeAnalyser.addParameter(((DirectDeclaratorContext) _localctx).parameterTypeList.types, ((DirectDeclaratorContext) _localctx).parameterTypeList.names, ((DirectDeclaratorContext) _localctx).parameterTypeList.hasVaList);
 						}
+								break;
 					}
+						}
+				}
 					setState(297);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input, 20, _ctx);
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -1281,7 +1282,7 @@ public class Compiler2015Parser extends Parser {
 						setState(301);
 						match(T__6);
 						((ParameterTypeListContext) _localctx).hasVaList = true;
-					}
+				}
 				}
 
 			}
@@ -1327,13 +1328,13 @@ public class Compiler2015Parser extends Parser {
 								_localctx.types.add(((ParameterListContext) _localctx).p2.type);
 								_localctx.names.add(((ParameterListContext) _localctx).p2.name);
 
-							}
-						}
 					}
+						}
+				}
 					setState(315);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input, 22, _ctx);
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -1430,8 +1431,8 @@ public class Compiler2015Parser extends Parser {
 							}
 						}
 						setState(335);
-						_errHandler.sync(this);
-						_la = _input.LA(1);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
 					} while (_la == STAR);
 				}
 				break;
@@ -1450,9 +1451,9 @@ public class Compiler2015Parser extends Parser {
 							}
 						}
 						setState(343);
-						_errHandler.sync(this);
-						_la = _input.LA(1);
-					}
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 					setState(344);
 					directAbstractDeclarator(0);
 				}
@@ -1553,9 +1554,9 @@ public class Compiler2015Parser extends Parser {
 									if (!(precpred(_ctx, 4)))
 										throw new FailedPredicateException(this, "precpred(_ctx, 4)");
 									setState(371);
-									match(L2);
+						match(L2);
 									setState(372);
-									match(R2);
+						match(R2);
 									TypeAnalyser.addArray(null);
 								}
 								break;
@@ -1566,11 +1567,11 @@ public class Compiler2015Parser extends Parser {
 									if (!(precpred(_ctx, 3)))
 										throw new FailedPredicateException(this, "precpred(_ctx, 3)");
 									setState(375);
-									match(L2);
+						match(L2);
 									setState(376);
 									((DirectAbstractDeclaratorContext) _localctx).constantExpression = constantExpression();
 									setState(377);
-									match(R2);
+						match(R2);
 									TypeAnalyser.addArray(((DirectAbstractDeclaratorContext) _localctx).constantExpression.ret);
 								}
 								break;
@@ -1581,40 +1582,40 @@ public class Compiler2015Parser extends Parser {
 									if (!(precpred(_ctx, 2)))
 										throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 									setState(381);
-									match(L1);
+						match(L1);
 									setState(382);
-									match(R1);
+						match(R1);
 									TypeAnalyser.addParameter();
 								}
 								break;
-								case 4: {
-									_localctx = new DirectAbstractDeclaratorContext(_parentctx, _parentState);
-									pushNewRecursionContext(_localctx, _startState, RULE_directAbstractDeclarator);
-									setState(384);
-									if (!(precpred(_ctx, 1)))
-										throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-									setState(385);
-									match(L1);
-									setState(387);
-									switch (getInterpreter().adaptivePredict(_input, 28, _ctx)) {
-										case 1: {
-											setState(386);
-											((DirectAbstractDeclaratorContext) _localctx).parameterTypeList = parameterTypeList();
-										}
-										break;
-									}
-									setState(389);
-									match(R1);
-									TypeAnalyser.addParameter(((DirectAbstractDeclaratorContext) _localctx).parameterTypeList.types, ((DirectAbstractDeclaratorContext) _localctx).parameterTypeList.names, ((DirectAbstractDeclaratorContext) _localctx).parameterTypeList.hasVaList);
-								}
-								break;
+								case 4:
+						{
+							_localctx = new DirectAbstractDeclaratorContext(_parentctx, _parentState);
+							pushNewRecursionContext(_localctx, _startState, RULE_directAbstractDeclarator);
+							setState(384);
+							if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
+							setState(385);
+							match(L1);
+							setState(387);
+							switch (getInterpreter().adaptivePredict(_input, 28, _ctx)) {
+								case 1: {
+									setState(386);
+									((DirectAbstractDeclaratorContext) _localctx).parameterTypeList = parameterTypeList();
 							}
+								break;
 						}
+							setState(389);
+							match(R1);
+							TypeAnalyser.addParameter(((DirectAbstractDeclaratorContext) _localctx).parameterTypeList.types, ((DirectAbstractDeclaratorContext) _localctx).parameterTypeList.names, ((DirectAbstractDeclaratorContext) _localctx).parameterTypeList.hasVaList);
+						}
+								break;
 					}
+						}
+				}
 					setState(395);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input, 30, _ctx);
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -1691,9 +1692,9 @@ public class Compiler2015Parser extends Parser {
 							}
 						}
 						setState(414);
-						_errHandler.sync(this);
-						_la = _input.LA(1);
-					}
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 					setState(415);
 					match(R3);
 				}
@@ -1778,9 +1779,9 @@ public class Compiler2015Parser extends Parser {
 						setState(436);
 						((ExpressionStatementContext) _localctx).expression = expression();
 						((ExpressionStatementContext) _localctx).ret = ((ExpressionStatementContext) _localctx).expression.ret;
-					}
-					break;
 				}
+					break;
+			}
 				setState(441);
 				match(Semi);
 			}
@@ -1811,8 +1812,8 @@ public class Compiler2015Parser extends Parser {
 						int uId = Environment.symbolNames.defineVariable(_localctx.toDefineNames.get(i), _localctx.toDefineTypes.get(i));
 						_localctx.givenVariables.add(uId);
 						_localctx.parameters.add(uId);
-					}
-				}
+								}
+							}
 
 				setState(452);
 				_errHandler.sync(this);
@@ -1825,7 +1826,7 @@ public class Compiler2015Parser extends Parser {
 								case 1: {
 									setState(445);
 									declaration();
-								}
+						}
 								break;
 								case 2: {
 									{
@@ -1840,9 +1841,9 @@ public class Compiler2015Parser extends Parser {
 									functionDefinition();
 								}
 								break;
-							}
-						}
 					}
+						}
+				}
 					setState(454);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input, 36, _ctx);
@@ -1890,7 +1891,7 @@ public class Compiler2015Parser extends Parser {
 						setState(466);
 						((SelectionStatementContext) _localctx).st2 = statement();
 						((SelectionStatementContext) _localctx).s2 = ((SelectionStatementContext) _localctx).st2.ret;
-					}
+				}
 					break;
 				}
 
@@ -1952,7 +1953,7 @@ public class Compiler2015Parser extends Parser {
 							setState(483);
 							((IterationStatement2Context) _localctx).ex1 = expression();
 							((IterationStatement2Context) _localctx).e1 = ((IterationStatement2Context) _localctx).ex1.ret;
-						}
+					}
 						break;
 					}
 					setState(488);
@@ -1963,7 +1964,7 @@ public class Compiler2015Parser extends Parser {
 							setState(489);
 							((IterationStatement2Context) _localctx).ex2 = expression();
 							((IterationStatement2Context) _localctx).e2 = ((IterationStatement2Context) _localctx).ex2.ret;
-						}
+					}
 						break;
 					}
 					setState(494);
@@ -1974,7 +1975,7 @@ public class Compiler2015Parser extends Parser {
 							setState(495);
 							((IterationStatement2Context) _localctx).ex3 = expression();
 							((IterationStatement2Context) _localctx).e3 = ((IterationStatement2Context) _localctx).ex3.ret;
-						}
+					}
 						break;
 					}
 					setState(500);
@@ -2049,7 +2050,7 @@ public class Compiler2015Parser extends Parser {
 							setState(514);
 							((JumpStatement3Context) _localctx).expression = expression();
 							((JumpStatement3Context) _localctx).e = ((JumpStatement3Context) _localctx).expression.ret;
-						}
+					}
 						break;
 					}
 					setState(519);
@@ -2100,9 +2101,9 @@ public class Compiler2015Parser extends Parser {
 						}
 					}
 					setState(533);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2203,7 +2204,7 @@ public class Compiler2015Parser extends Parser {
 					_errHandler.recoverInline(this);
 				} else {
 					consume();
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2263,9 +2264,9 @@ public class Compiler2015Parser extends Parser {
 						}
 					}
 					setState(566);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2301,9 +2302,9 @@ public class Compiler2015Parser extends Parser {
 						}
 					}
 					setState(577);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2339,9 +2340,9 @@ public class Compiler2015Parser extends Parser {
 						}
 					}
 					setState(588);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2377,9 +2378,9 @@ public class Compiler2015Parser extends Parser {
 						}
 					}
 					setState(599);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2415,9 +2416,9 @@ public class Compiler2015Parser extends Parser {
 						}
 					}
 					setState(610);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2455,12 +2456,12 @@ public class Compiler2015Parser extends Parser {
 							else
 								((EqualityExpressionContext) _localctx).ret = NotEqualTo.getExpression(_localctx.ret, ((EqualityExpressionContext) _localctx).a2.ret);
 
-						}
+				}
 					}
 					setState(621);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2485,7 +2486,7 @@ public class Compiler2015Parser extends Parser {
 					_errHandler.recoverInline(this);
 				} else {
 					consume();
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2527,12 +2528,12 @@ public class Compiler2015Parser extends Parser {
 							else
 								((RelationalExpressionContext) _localctx).ret = GE.getExpression(_localctx.ret, ((RelationalExpressionContext) _localctx).a2.ret);
 
-						}
+				}
 					}
 					setState(634);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2557,7 +2558,7 @@ public class Compiler2015Parser extends Parser {
 					_errHandler.recoverInline(this);
 				} else {
 					consume();
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2595,12 +2596,12 @@ public class Compiler2015Parser extends Parser {
 							else
 								((ShiftExpressionContext) _localctx).ret = ShiftRight.getExpression(_localctx.ret, ((ShiftExpressionContext) _localctx).a2.ret);
 
-						}
+				}
 					}
 					setState(647);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2625,7 +2626,7 @@ public class Compiler2015Parser extends Parser {
 					_errHandler.recoverInline(this);
 				} else {
 					consume();
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2663,12 +2664,12 @@ public class Compiler2015Parser extends Parser {
 							else
 								((AdditiveExpressionContext) _localctx).ret = Subtract.getExpression(_localctx.ret, ((AdditiveExpressionContext) _localctx).a2.ret);
 
-						}
+				}
 					}
 					setState(660);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2693,7 +2694,7 @@ public class Compiler2015Parser extends Parser {
 					_errHandler.recoverInline(this);
 				} else {
 					consume();
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2733,12 +2734,12 @@ public class Compiler2015Parser extends Parser {
 							else
 								((MultiplicativeExpressionContext) _localctx).ret = Modulo.getExpression(_localctx.ret, ((MultiplicativeExpressionContext) _localctx).a2.ret);
 
-						}
+				}
 					}
 					setState(673);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2763,7 +2764,7 @@ public class Compiler2015Parser extends Parser {
 					_errHandler.recoverInline(this);
 				} else {
 					consume();
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -3033,7 +3034,7 @@ public class Compiler2015Parser extends Parser {
 					_errHandler.recoverInline(this);
 				} else {
 					consume();
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -3076,22 +3077,22 @@ public class Compiler2015Parser extends Parser {
 						{
 							setState(772);
 							switch (getInterpreter().adaptivePredict(_input, 60, _ctx)) {
-								case 1: {
-									_localctx = new PostfixExpressionContext(_parentctx, _parentState);
-									_localctx.p = _prevctx;
-									_localctx.p = _prevctx;
-									pushNewRecursionContext(_localctx, _startState, RULE_postfixExpression);
-									setState(743);
-									if (!(precpred(_ctx, 6)))
-										throw new FailedPredicateException(this, "precpred(_ctx, 6)");
-									setState(744);
-									match(L2);
-									setState(745);
-									((PostfixExpressionContext) _localctx).expression = expression();
-									setState(746);
-									match(R2);
-									((PostfixExpressionContext) _localctx).ret = ArrayAccess.getExpression(((PostfixExpressionContext) _localctx).p.ret, ((PostfixExpressionContext) _localctx).expression.ret);
-								}
+								case 1:
+						{
+							_localctx = new PostfixExpressionContext(_parentctx, _parentState);
+							_localctx.p = _prevctx;
+							_localctx.p = _prevctx;
+							pushNewRecursionContext(_localctx, _startState, RULE_postfixExpression);
+							setState(743);
+							if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
+							setState(744);
+							match(L2);
+							setState(745);
+							((PostfixExpressionContext) _localctx).expression = expression();
+							setState(746);
+							match(R2);
+							((PostfixExpressionContext) _localctx).ret = ArrayAccess.getExpression(((PostfixExpressionContext) _localctx).p.ret, ((PostfixExpressionContext) _localctx).expression.ret);
+						}
 								break;
 								case 2: {
 									_localctx = new PostfixExpressionContext(_parentctx, _parentState);
@@ -3109,9 +3110,9 @@ public class Compiler2015Parser extends Parser {
 											setState(751);
 											((PostfixExpressionContext) _localctx).arguments = arguments();
 											((PostfixExpressionContext) _localctx).arg = ((PostfixExpressionContext) _localctx).arguments.ret;
-										}
+							}
 										break;
-									}
+						}
 									setState(756);
 									match(R1);
 									((PostfixExpressionContext) _localctx).ret = FunctionCall.getExpression(((PostfixExpressionContext) _localctx).p.ret, _localctx.arg);
@@ -3173,13 +3174,13 @@ public class Compiler2015Parser extends Parser {
 									((PostfixExpressionContext) _localctx).ret = PostfixSelfDec.getExpression(((PostfixExpressionContext) _localctx).p.ret);
 								}
 								break;
-							}
-						}
 					}
+						}
+				}
 					setState(776);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input, 61, _ctx);
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -3217,12 +3218,12 @@ public class Compiler2015Parser extends Parser {
 
 							_localctx.ret.add(((ArgumentsContext) _localctx).a2.ret);
 
-						}
+				}
 					}
 					setState(787);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				}
+			}
 			}
 		} catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -3285,7 +3286,7 @@ public class Compiler2015Parser extends Parser {
 
 									_localctx.s.add((((PrimaryExpression3Context) _localctx).StringLiteral != null ? ((PrimaryExpression3Context) _localctx).StringLiteral.getText() : null));
 
-								}
+						}
 							}
 							break;
 							default:
@@ -3371,7 +3372,7 @@ public class Compiler2015Parser extends Parser {
 							if (name == null || name.equals(""))
 								throw new CompilationError("No parameter name.");
 
-					}
+				}
 					break;
 				}
 				setState(819);
@@ -3387,7 +3388,7 @@ public class Compiler2015Parser extends Parser {
 
 						((LambdaExpressionContext) _localctx).type = ((LambdaExpressionContext) _localctx).typeName.ret;
 
-					}
+				}
 				}
 
 
@@ -3585,12 +3586,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_compilationUnit;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterCompilationUnit(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitCompilationUnit(this);
@@ -3642,7 +3641,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterDeclaration1(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitDeclaration1(this);
@@ -3672,7 +3670,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterDeclaration2(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitDeclaration2(this);
@@ -3695,7 +3692,6 @@ public class Compiler2015Parser extends Parser {
 		public DirectDeclaratorContext directDeclarator;
 		public ParameterTypeListContext parameterTypeList;
 		public CompoundStatementContext compoundStatement;
-
 		public FunctionDefinitionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -3736,13 +3732,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_functionDefinition;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterFunctionDefinition(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -3775,13 +3769,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_initDeclaratorList;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterInitDeclaratorList(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -3796,7 +3788,6 @@ public class Compiler2015Parser extends Parser {
 		public int uId;
 		public DeclaratorContext declarator;
 		public InitializerContext initializer;
-
 		public InitDeclaratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -3817,12 +3808,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_initDeclarator;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterInitDeclarator(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitInitDeclarator(this);
@@ -3833,7 +3822,6 @@ public class Compiler2015Parser extends Parser {
 		public Type ret;
 		public TypedefNameContext typedefName;
 		public StructOrUnionSpecifierContext structOrUnionSpecifier;
-
 		public TypeSpecifierContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -3850,12 +3838,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_typeSpecifier;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterTypeSpecifier(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitTypeSpecifier(this);
@@ -3866,7 +3852,6 @@ public class Compiler2015Parser extends Parser {
 		public Type ret;
 		public boolean isUnion;
 		public String name;
-
 		public StructOrUnionSpecifierContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -3925,7 +3910,6 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterStructOrUnionSpecifier1(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -3954,7 +3938,6 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterStructOrUnionSpecifier2(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -3964,7 +3947,6 @@ public class Compiler2015Parser extends Parser {
 
 	public static class StructOrUnionContext extends ParserRuleContext {
 		public boolean isUnion;
-
 		public StructOrUnionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -3973,12 +3955,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_structOrUnion;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterStructOrUnion(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitStructOrUnion(this);
@@ -3991,7 +3971,6 @@ public class Compiler2015Parser extends Parser {
 		public TypeSpecifierContext typeSpecifier;
 		public DeclaratorContext d1;
 		public DeclaratorContext d2;
-
 		public StructDeclarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4024,13 +4003,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_structDeclaration;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterStructDeclaration(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitStructDeclaration(this);
@@ -4041,7 +4018,6 @@ public class Compiler2015Parser extends Parser {
 		public String name;
 		public int n = 0;
 		public DirectDeclaratorContext directDeclarator;
-
 		public DeclaratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4062,12 +4038,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_declarator;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterDeclarator(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitDeclarator(this);
@@ -4078,7 +4052,6 @@ public class Compiler2015Parser extends Parser {
 		public Type type;
 		public String name;
 		public DeclaratorContext declarator;
-
 		public PlainDeclaratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4091,12 +4064,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_plainDeclarator;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterPlainDeclarator(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitPlainDeclarator(this);
@@ -4128,12 +4099,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_declaratorList;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterDeclaratorList(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitDeclaratorList(this);
@@ -4150,7 +4119,6 @@ public class Compiler2015Parser extends Parser {
 		public DeclaratorContext declarator;
 		public ConstantExpressionContext constantExpression;
 		public ParameterTypeListContext parameterTypeList;
-
 		public DirectDeclaratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4179,12 +4147,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_directDeclarator;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterDirectDeclarator(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitDirectDeclarator(this);
@@ -4196,7 +4162,6 @@ public class Compiler2015Parser extends Parser {
 		public ArrayList<String> names;
 		public boolean hasVaList = false;
 		public ParameterListContext parameterList;
-
 		public ParameterTypeListContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4213,13 +4178,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_parameterTypeList;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterParameterTypeList(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitParameterTypeList(this);
@@ -4231,7 +4194,6 @@ public class Compiler2015Parser extends Parser {
 		public ArrayList<String> names;
 		public ParameterDeclarationContext p1;
 		public ParameterDeclarationContext p2;
-
 		public ParameterListContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4256,12 +4218,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_parameterList;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterParameterList(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitParameterList(this);
@@ -4271,7 +4231,6 @@ public class Compiler2015Parser extends Parser {
 	public static class ParameterDeclarationContext extends ParserRuleContext {
 		public Type type;
 		public String name;
-
 		public ParameterDeclarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4308,7 +4267,6 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterParameterDeclaration1(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -4338,7 +4296,6 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterParameterDeclaration2(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -4367,7 +4324,6 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterParameterDeclaration3(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -4377,7 +4333,6 @@ public class Compiler2015Parser extends Parser {
 
 	public static class AbstractDeclaratorContext extends ParserRuleContext {
 		public int n = 0;
-
 		public AbstractDeclaratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4390,13 +4345,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_abstractDeclarator;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterAbstractDeclarator(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -4407,7 +4360,6 @@ public class Compiler2015Parser extends Parser {
 	public static class DirectAbstractDeclaratorContext extends ParserRuleContext {
 		public ConstantExpressionContext constantExpression;
 		public ParameterTypeListContext parameterTypeList;
-
 		public DirectAbstractDeclaratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4432,13 +4384,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_directAbstractDeclarator;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterDirectAbstractDeclarator(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -4449,7 +4399,6 @@ public class Compiler2015Parser extends Parser {
 	public static class TypedefNameContext extends ParserRuleContext {
 		public Type ret;
 		public Token Identifier;
-
 		public TypedefNameContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4462,12 +4411,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_typedefName;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterTypedefName(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitTypedefName(this);
@@ -4476,7 +4423,6 @@ public class Compiler2015Parser extends Parser {
 
 	public static class InitializerContext extends ParserRuleContext {
 		public SimpleInitializerList ret;
-
 		public InitializerContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4531,7 +4477,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterInitializer2(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitInitializer2(this);
@@ -4553,7 +4498,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterInitializer1(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitInitializer1(this);
@@ -4567,7 +4511,6 @@ public class Compiler2015Parser extends Parser {
 		public SelectionStatementContext selectionStatement;
 		public IterationStatementContext iterationStatement;
 		public JumpStatementContext jumpStatement;
-
 		public StatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4596,12 +4539,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_statement;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterStatement(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitStatement(this);
@@ -4611,7 +4552,6 @@ public class Compiler2015Parser extends Parser {
 	public static class ExpressionStatementContext extends ParserRuleContext {
 		public Statement ret = null;
 		public ExpressionContext expression;
-
 		public ExpressionStatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4624,13 +4564,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_expressionStatement;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterExpressionStatement(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -4650,7 +4588,6 @@ public class Compiler2015Parser extends Parser {
 		public CompoundStatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-
 		public CompoundStatementContext(ParserRuleContext parent, int invokingState, ArrayList<Type> toDefineTypes, ArrayList<String> toDefineNames) {
 			super(parent, invokingState);
 			this.toDefineTypes = toDefineTypes;
@@ -4693,13 +4630,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_compoundStatement;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterCompoundStatement(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitCompoundStatement(this);
@@ -4714,7 +4649,6 @@ public class Compiler2015Parser extends Parser {
 		public ExpressionContext expression;
 		public StatementContext st1;
 		public StatementContext st2;
-
 		public SelectionStatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4751,13 +4685,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_selectionStatement;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterSelectionStatement(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -4772,7 +4704,6 @@ public class Compiler2015Parser extends Parser {
 		public Expression e1 = null;
 		public Expression e2 = null;
 		public Expression e3;
-
 		public IterationStatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4843,7 +4774,6 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterIterationStatement2(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -4884,7 +4814,6 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterIterationStatement1(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -4895,7 +4824,6 @@ public class Compiler2015Parser extends Parser {
 	public static class JumpStatementContext extends ParserRuleContext {
 		public Statement ret;
 		public Expression e = null;
-
 		public JumpStatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4919,12 +4847,10 @@ public class Compiler2015Parser extends Parser {
 		public JumpStatement1Context(JumpStatementContext ctx) {
 			copyFrom(ctx);
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterJumpStatement1(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitJumpStatement1(this);
@@ -4935,12 +4861,10 @@ public class Compiler2015Parser extends Parser {
 		public JumpStatement2Context(JumpStatementContext ctx) {
 			copyFrom(ctx);
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterJumpStatement2(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitJumpStatement2(this);
@@ -4962,7 +4886,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterJumpStatement3(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitJumpStatement3(this);
@@ -4973,7 +4896,6 @@ public class Compiler2015Parser extends Parser {
 		public Expression ret;
 		public AssignmentExpressionContext a1;
 		public AssignmentExpressionContext a2;
-
 		public ExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4998,12 +4920,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_expression;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterExpression(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitExpression(this);
@@ -5012,7 +4932,6 @@ public class Compiler2015Parser extends Parser {
 
 	public static class AssignmentExpressionContext extends ParserRuleContext {
 		public Expression ret;
-
 		public AssignmentExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5052,7 +4971,6 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterAssignmentExpression3(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -5076,7 +4994,6 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterAssignmentExpression1(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -5110,7 +5027,6 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterAssignmentExpression2(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -5127,13 +5043,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_assignmentOperator;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterAssignmentOperator(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -5144,7 +5058,6 @@ public class Compiler2015Parser extends Parser {
 	public static class ConstantExpressionContext extends ParserRuleContext {
 		public Expression ret;
 		public LogicalOrExpressionContext logicalOrExpression;
-
 		public ConstantExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5157,13 +5070,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_constantExpression;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterConstantExpression(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -5175,7 +5086,6 @@ public class Compiler2015Parser extends Parser {
 		public Expression ret;
 		public LogicalAndExpressionContext a1;
 		public LogicalAndExpressionContext a2;
-
 		public LogicalOrExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5200,13 +5110,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_logicalOrExpression;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterLogicalOrExpression(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -5218,7 +5126,6 @@ public class Compiler2015Parser extends Parser {
 		public Expression ret;
 		public InclusiveOrExpressionContext a1;
 		public InclusiveOrExpressionContext a2;
-
 		public LogicalAndExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5243,13 +5150,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_logicalAndExpression;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterLogicalAndExpression(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -5261,7 +5166,6 @@ public class Compiler2015Parser extends Parser {
 		public Expression ret;
 		public ExclusiveOrExpressionContext a1;
 		public ExclusiveOrExpressionContext a2;
-
 		public InclusiveOrExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5286,13 +5190,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_inclusiveOrExpression;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterInclusiveOrExpression(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -5304,7 +5206,6 @@ public class Compiler2015Parser extends Parser {
 		public Expression ret;
 		public AndExpressionContext a1;
 		public AndExpressionContext a2;
-
 		public ExclusiveOrExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5329,13 +5230,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_exclusiveOrExpression;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterExclusiveOrExpression(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -5347,7 +5246,6 @@ public class Compiler2015Parser extends Parser {
 		public Expression ret;
 		public EqualityExpressionContext a1;
 		public EqualityExpressionContext a2;
-
 		public AndExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5372,12 +5270,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_andExpression;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterAndExpression(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitAndExpression(this);
@@ -5389,7 +5285,6 @@ public class Compiler2015Parser extends Parser {
 		public RelationalExpressionContext a1;
 		public EqualityOperatorContext op;
 		public RelationalExpressionContext a2;
-
 		public EqualityExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5414,13 +5309,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_equalityExpression;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterEqualityExpression(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -5437,12 +5330,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_equalityOperator;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterEqualityOperator(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitEqualityOperator(this);
@@ -5454,7 +5345,6 @@ public class Compiler2015Parser extends Parser {
 		public ShiftExpressionContext a1;
 		public RelationalOperatorContext op;
 		public ShiftExpressionContext a2;
-
 		public RelationalExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5479,13 +5369,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_relationalExpression;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterRelationalExpression(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -5502,13 +5390,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_relationalOperator;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterRelationalOperator(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -5521,7 +5407,6 @@ public class Compiler2015Parser extends Parser {
 		public AdditiveExpressionContext a1;
 		public ShiftOperatorContext op;
 		public AdditiveExpressionContext a2;
-
 		public ShiftExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5546,12 +5431,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_shiftExpression;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterShiftExpression(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitShiftExpression(this);
@@ -5567,12 +5450,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_shiftOperator;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterShiftOperator(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitShiftOperator(this);
@@ -5584,7 +5465,6 @@ public class Compiler2015Parser extends Parser {
 		public MultiplicativeExpressionContext a1;
 		public AdditiveOperatorContext op;
 		public MultiplicativeExpressionContext a2;
-
 		public AdditiveExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5609,13 +5489,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_additiveExpression;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterAdditiveExpression(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -5632,12 +5510,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_additiveOperator;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterAdditiveOperator(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitAdditiveOperator(this);
@@ -5650,7 +5526,6 @@ public class Compiler2015Parser extends Parser {
 		public CastExpressionContext castExpression;
 		public MultiplicativeOperatorContext op;
 		public CastExpressionContext a2;
-
 		public MultiplicativeExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5675,13 +5550,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_multiplicativeExpression;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterMultiplicativeExpression(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -5698,13 +5571,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_multiplicativeOperator;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterMultiplicativeOperator(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -5714,7 +5585,6 @@ public class Compiler2015Parser extends Parser {
 
 	public static class CastExpressionContext extends ParserRuleContext {
 		public Expression ret;
-
 		public CastExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5748,7 +5618,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterCastExpression1(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitCastExpression1(this);
@@ -5783,7 +5652,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterCastExpression2(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitCastExpression2(this);
@@ -5792,7 +5660,6 @@ public class Compiler2015Parser extends Parser {
 
 	public static class TypeNameContext extends ParserRuleContext {
 		public Type ret;
-
 		public TypeNameContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5826,7 +5693,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterTypeName1(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitTypeName1(this);
@@ -5852,7 +5718,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterTypeName2(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitTypeName2(this);
@@ -5861,7 +5726,6 @@ public class Compiler2015Parser extends Parser {
 
 	public static class UnaryExpressionContext extends ParserRuleContext {
 		public Expression ret;
-
 		public UnaryExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5895,7 +5759,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression2(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression2(this);
@@ -5917,7 +5780,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression1(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression1(this);
@@ -5943,7 +5805,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression6(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression6(this);
@@ -5969,7 +5830,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression5(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression5(this);
@@ -5996,7 +5856,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression4(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression4(this);
@@ -6018,7 +5877,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression3(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression3(this);
@@ -6045,7 +5903,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression8(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression8(this);
@@ -6071,7 +5928,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression7(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression7(this);
@@ -6087,12 +5943,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_unaryOperator;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryOperator(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryOperator(this);
@@ -6107,7 +5961,6 @@ public class Compiler2015Parser extends Parser {
 		public ExpressionContext expression;
 		public ArgumentsContext arguments;
 		public Token Identifier;
-
 		public PostfixExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -6136,13 +5989,11 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_postfixExpression;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterPostfixExpression(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitPostfixExpression(this);
@@ -6153,7 +6004,6 @@ public class Compiler2015Parser extends Parser {
 		public ArrayList<Expression> ret;
 		public AssignmentExpressionContext a1;
 		public AssignmentExpressionContext a2;
-
 		public ArgumentsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -6178,12 +6028,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_arguments;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterArguments(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitArguments(this);
@@ -6193,7 +6041,6 @@ public class Compiler2015Parser extends Parser {
 	public static class PrimaryExpressionContext extends ParserRuleContext {
 		public Expression ret;
 		public ArrayList<String> s;
-
 		public PrimaryExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -6229,7 +6076,6 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterPrimaryExpression1(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -6257,7 +6103,6 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterPrimaryExpression3(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -6281,7 +6126,6 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterPrimaryExpression2(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -6305,7 +6149,6 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterPrimaryExpression5(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -6329,7 +6172,6 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterPrimaryExpression4(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -6349,7 +6191,6 @@ public class Compiler2015Parser extends Parser {
 		public ParameterTypeListContext parameterTypeList;
 		public TypeNameContext typeName;
 		public CompoundStatementContext compoundStatement;
-
 		public LambdaExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -6370,12 +6211,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_lambdaExpression;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterLambdaExpression(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitLambdaExpression(this);
@@ -6388,7 +6227,6 @@ public class Compiler2015Parser extends Parser {
 		public Token OctalConstant;
 		public Token HexadecimalConstant;
 		public Token CharacterConstant;
-
 		public ConstantContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -6413,12 +6251,10 @@ public class Compiler2015Parser extends Parser {
 		public int getRuleIndex() {
 			return RULE_constant;
 		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterConstant(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitConstant(this);
