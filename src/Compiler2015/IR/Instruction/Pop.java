@@ -16,4 +16,22 @@ public class Pop extends IRInstruction implements NonSource {
 	public int getRd() {
 		return -1;
 	}
+
+	@Override
+	public int[] getAllDef() {
+		return new int[0];
+	}
+
+	@Override
+	public int[] getAllUse() {
+		return new int[0];
+	}
+
+	@Override
+	public void setAllDefVersion(int[] version) {
+	}
+
+	@Override
+	public void setAllUseVersion(int[] version) {
+	}
 }

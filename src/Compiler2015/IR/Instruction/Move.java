@@ -15,6 +15,27 @@ public class Move extends IRInstruction implements SingleSource {
 	}
 
 	@Override
+	public int[] getAllDef() {
+		return new int[]{rd.getUId()};
+	}
+
+	@Override
+	public int[] getAllUse() {
+		return new int[]{rs.getUId()};
+	}
+
+	@Override
+	public void setAllDefVersion(int[] version) {
+		rd.setVersion(version[0]);
+	}
+
+	@Override
+	public void setAllUseVersion(int[] version) {
+		if (rs instanceof VirtualRegister)
+			((VirtualRegister) rs).setVersion(version[0]);
+	}
+
+	@Override
 	public String toString() {
 		return "Move " + rd + " = " + rs;
 	}

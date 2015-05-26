@@ -22,6 +22,26 @@ public class SetReturn extends IRInstruction implements SingleSource {
 	}
 
 	@Override
+	public int[] getAllDef() {
+		return new int[0];
+	}
+
+	@Override
+	public int[] getAllUse() {
+		return new int[]{v0.getUId()};
+	}
+
+	@Override
+	public void setAllDefVersion(int[] version) {
+	}
+
+	@Override
+	public void setAllUseVersion(int[] version) {
+		if (v0 instanceof VirtualRegister)
+			((VirtualRegister) v0).setVersion(version[0]);
+	}
+
+	@Override
 	public int getRs() {
 		return v0.getUId();
 	}

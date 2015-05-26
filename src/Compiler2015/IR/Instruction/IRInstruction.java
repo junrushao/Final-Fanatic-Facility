@@ -14,6 +14,14 @@ public abstract class IRInstruction {
 		rd.setVersion(x);
 	}
 
+	public abstract int[] getAllDef();
+
+	public abstract int[] getAllUse();
+
+	public abstract void setAllDefVersion(int version[]);
+
+	public abstract void setAllUseVersion(int version[]);
+
 	@Override
 	public abstract String toString();
 }

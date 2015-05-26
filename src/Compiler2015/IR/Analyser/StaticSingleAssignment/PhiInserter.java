@@ -1,4 +1,4 @@
-package Compiler2015.IR.CFG.StaticSingleAssignment;
+package Compiler2015.IR.Analyser.StaticSingleAssignment;
 
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
@@ -19,32 +19,32 @@ public class PhiInserter {
 	public void process() {
 		for (CFGVertex n : vertices)
 			for (IRInstruction ins : n.internal) {
-				rm.addVariable(ins.getRd(), n);
+				RegisterManager.addVariable(ins.getRd(), n);
 				if (ins instanceof NonSource) {
 					continue;
 				}
 				if (ins instanceof SingleSource) {
-					rm.addVariable(((SingleSource) ins).getRs(), null);
+					RegisterManager.addVariable(((SingleSource) ins).getRs(), null);
 				} else if (ins instanceof DoubleSource) {
-					rm.addVariable(((DoubleSource) ins).getRs(), null);
-					rm.addVariable(((DoubleSource) ins).getRt(), null);
+					RegisterManager.addVariable(((DoubleSource) ins).getRs(), null);
+					RegisterManager.addVariable(((DoubleSource) ins).getRt(), null);
 				} else if (ins instanceof TripleSource) {
-					rm.addVariable(((TripleSource) ins).getA(), null);
-					rm.addVariable(((TripleSource) ins).getB(), null);
-					rm.addVariable(((TripleSource) ins).getC(), null);
+					RegisterManager.addVariable(((TripleSource) ins).getA(), null);
+					RegisterManager.addVariable(((TripleSource) ins).getB(), null);
+					RegisterManager.addVariable(((TripleSource) ins).getC(), null);
 				} else
 					throw new CompilationError("Internal Error.");
 			}
-		rm.checkDefSite();
-		rm.insertPhi();
-		renaming(rm.root);
+		RegisterManager.checkDefSite();
+		RegisterManager.insertPhi();
+		renaming(RegisterManager.root);
 	}
 
 	public void renaming(CFGVertex n) {
 		// phi functions' definition
 		for (HashMap.Entry<Integer, PhiFunction> s : n.phis.entrySet()) {
 			int a = s.getKey();
-			RegisterManager.RegisterManagerEntry re = rm.manager.get(a);
+			RegisterManager.RegisterManagerEntry re = RegisterManager.manager.get(a);
 			int i = ++re.count;
 			re.stack.push(i);
 			s.getValue().vid[0] = i;
@@ -56,37 +56,37 @@ public class PhiInserter {
 			if (ins instanceof SingleSource) {
 				x = ((SingleSource) ins).getRs();
 				if (x != -1)
-					((SingleSource) ins).setRsVersion(rm.getPeek(x));
+					((SingleSource) ins).setRsVersion(RegisterManager.getPeek(x));
 			} else if (ins instanceof DoubleSource) {
 				x = ((DoubleSource) ins).getRs();
 				if (x != -1)
-					((DoubleSource) ins).setRsVersion(rm.getPeek(x));
+					((DoubleSource) ins).setRsVersion(RegisterManager.getPeek(x));
 
 				x = ((DoubleSource) ins).getRt();
 				if (x != -1)
-					((DoubleSource) ins).setRtVersion(rm.getPeek(x));
+					((DoubleSource) ins).setRtVersion(RegisterManager.getPeek(x));
 			} else if (ins instanceof TripleSource) {
 				x = ((TripleSource) ins).getA();
 				if (x != -1)
-					((TripleSource) ins).setAVersion(rm.getPeek(x));
+					((TripleSource) ins).setAVersion(RegisterManager.getPeek(x));
 
 				x = ((TripleSource) ins).getB();
 				if (x != -1)
-					((TripleSource) ins).setBVersion(rm.getPeek(x));
+					((TripleSource) ins).setBVersion(RegisterManager.getPeek(x));
 
 				x = ((TripleSource) ins).getC();
 				if (x != -1)
-					((TripleSource) ins).setCVersion(rm.getPeek(x));
+					((TripleSource) ins).setCVersion(RegisterManager.getPeek(x));
 			} else if (!(ins instanceof NonSource))
 				throw new CompilationError("Internal Error.");
 
 			// rename def
 			int a = ins.getRd();
 			if (a != -1) {
-				RegisterManager.RegisterManagerEntry re = rm.manager.get(a);
+				RegisterManager.RegisterManagerEntry re = RegisterManager.manager.get(a);
 				int i = ++re.count;
 				re.stack.push(i);
-				ins.setRdVersion(rm.getPeek(a));
+				ins.setRdVersion(RegisterManager.getPeek(a));
 			}
 		}
 		// define operands of succeeding phi-functions
@@ -96,7 +96,7 @@ public class PhiInserter {
 			int j = y.predecessor.get(n);
 			for (HashMap.Entry<Integer, PhiFunction> phi : y.phis.entrySet()) {
 				int a = phi.getKey();
-				phi.getValue().vid[j] = rm.getPeek(a);
+				phi.getValue().vid[j] = RegisterManager.getPeek(a);
 			}
 		}
 		// rename recursively
@@ -104,13 +104,13 @@ public class PhiInserter {
 		// eliminate side-effect in stack: phi-functions
 		for (HashMap.Entry<Integer, PhiFunction> s : n.phis.entrySet()) {
 			int a = s.getKey();
-			rm.manager.get(a).stack.pop();
+			RegisterManager.manager.get(a).stack.pop();
 		}
 		// eliminate side-effect in stack: normal statements
 		for (IRInstruction ins : n.internal) {
 			int a = ins.getRd();
 			if (a != -1)
-				rm.manager.get(a).stack.pop();
+				RegisterManager.manager.get(a).stack.pop();
 		}
 	}
 }

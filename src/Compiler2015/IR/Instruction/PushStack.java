@@ -27,6 +27,26 @@ public class PushStack extends IRInstruction implements SingleSource {
 	}
 
 	@Override
+	public int[] getAllDef() {
+		return new int[0];
+	}
+
+	@Override
+	public int[] getAllUse() {
+		return new int[]{push.getUId()};
+	}
+
+	@Override
+	public void setAllDefVersion(int[] version) {
+	}
+
+	@Override
+	public void setAllUseVersion(int[] version) {
+		if (push instanceof VirtualRegister)
+			((VirtualRegister) push).setVersion(version[0]);
+	}
+
+	@Override
 	public int getRs() {
 		return push.getUId();
 	}

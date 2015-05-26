@@ -1,6 +1,6 @@
 package Compiler2015.IR.CFG;
 
-import Compiler2015.IR.CFG.StaticSingleAssignment.PhiFunction;
+import Compiler2015.IR.Analyser.StaticSingleAssignment.PhiFunction;
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.IRInstruction;

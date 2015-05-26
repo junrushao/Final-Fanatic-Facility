@@ -1,23 +1,18 @@
-package Compiler2015.IR.CFG.StaticSingleAssignment;
+package Compiler2015.IR.Analyser.StaticSingleAssignment;
 
 import Compiler2015.IR.CFG.CFGVertex;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class LengauerTarjan {
+public final class LengauerTarjan {
 
-	public HashSet<CFGVertex> vertices;
-	public CFGVertex root;
-	public int n;
-	public VertexInfo vi[];
+	public static HashSet<CFGVertex> vertices;
+	public static CFGVertex root;
+	public static int n;
+	public static VertexInfo vi[];
 
-	public LengauerTarjan(HashSet<CFGVertex> vertices, CFGVertex root) {
-		this.vertices = vertices;
-		this.root = root;
-	}
-
-	public void compress(VertexInfo v) {
+	public static void compress(VertexInfo v) {
 		VertexInfo a = v.ancestor;
 		if (a.ancestor == null)
 			return;
@@ -27,14 +22,16 @@ public class LengauerTarjan {
 		v.ancestor = a.ancestor;
 	}
 
-	public VertexInfo bestInPath(VertexInfo v) {
+	public static VertexInfo bestInPath(VertexInfo v) {
 		if (v.ancestor == null)
 			return v;
 		compress(v);
 		return v.best;
 	}
 
-	public void process(int n) {
+	public static void process(HashSet<CFGVertex> vertices, CFGVertex root, int n) {
+		LengauerTarjan.vertices = vertices;
+		LengauerTarjan.root = root;
 		vi = new VertexInfo[n + 1];
 		for (int i = 1; i <= n; ++i) vi[i] = new VertexInfo();
 		// add predecessor edges
@@ -50,7 +47,7 @@ public class LengauerTarjan {
 						v.branchIfFalse.predecessor.put(v, null);
 					}
 				});
-		vertices.stream().forEach(v -> {
+		vertices.forEach(v -> {
 			final int[] cnt = {0};
 			v.predecessor.entrySet().stream().forEach(e -> e.setValue(++cnt[0]));
 		});
@@ -89,7 +86,6 @@ public class LengauerTarjan {
 			}
 		});
 
-		vertices.forEach(v -> System.out.printf("v = %d, fa = %d\n", v.id, v.idom.id));
 		// calculate dominance frontier
 		for (VertexInfo toAdd : vi)
 			if (toAdd != null && toAdd.pred.size() > 1)
@@ -98,7 +94,7 @@ public class LengauerTarjan {
 						here.me.dominanceFrontier.add(toAdd.me);
 	}
 
-	public class VertexInfo {
+	public static class VertexInfo {
 		public CFGVertex me;
 		public VertexInfo semi = this, best = this, idom = null, ancestor = null;
 		public ArrayList<VertexInfo> pred = new ArrayList<>(4);

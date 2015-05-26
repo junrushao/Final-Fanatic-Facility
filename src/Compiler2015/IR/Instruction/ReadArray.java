@@ -17,6 +17,27 @@ public class ReadArray extends Arithmetic implements TripleSource {
 	}
 
 	@Override
+	public int[] getAllDef() {
+		return new int[]{rd.getUId()};
+	}
+
+	@Override
+	public int[] getAllUse() {
+		return new int[]{rs.a.getUId(), rs.b.getUId(), 0};
+	}
+
+	@Override
+	public void setAllDefVersion(int[] version) {
+		rd.setVersion(version[0]);
+	}
+
+	@Override
+	public void setAllUseVersion(int[] version) {
+		rs.a.setVersion(version[0]);
+		memoryVersion = version[2];
+	}
+
+	@Override
 	public String toString() {
 		return "ReadArray " + rd + " = " + rs + " -> M = " + memoryVersion;
 	}

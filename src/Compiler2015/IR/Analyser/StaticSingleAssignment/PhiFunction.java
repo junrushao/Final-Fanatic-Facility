@@ -1,4 +1,4 @@
-package Compiler2015.IR.CFG.StaticSingleAssignment;
+package Compiler2015.IR.Analyser.StaticSingleAssignment;
 
 import java.util.Arrays;
 

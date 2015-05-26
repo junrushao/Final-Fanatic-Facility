@@ -51,6 +51,28 @@ public class WriteArray extends IRInstruction implements TripleSource {
 	}
 
 	@Override
+	public int[] getAllDef() {
+		return new int[]{0};
+	}
+
+	@Override
+	public int[] getAllUse() {
+		return new int[]{rd.a.getUId(), rd.b.getUId(), rs.getUId()};
+	}
+
+	@Override
+	public void setAllDefVersion(int[] version) {
+		memoryVersion = version[0];
+	}
+
+	@Override
+	public void setAllUseVersion(int[] version) {
+		rd.a.setVersion(version[0]);
+		if (rs instanceof VirtualRegister)
+			((VirtualRegister) rs).setVersion(version[0]);
+	}
+
+	@Override
 	public void setAVersion(int x) {
 		rd.a.setVersion(x);
 	}

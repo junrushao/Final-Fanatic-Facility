@@ -1,4 +1,4 @@
-package Compiler2015.IR.CFG.StaticSingleAssignment;
+package Compiler2015.IR.Analyser.StaticSingleAssignment;
 
 import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
@@ -8,12 +8,12 @@ import Compiler2015.Utility.Tokens;
 import java.util.*;
 
 public class RegisterManager {
-	public HashMap<Integer, RegisterManagerEntry> manager;
-	public CFGVertex root;
+	public static HashMap<Integer, RegisterManagerEntry> manager;
+	public static CFGVertex root;
 
-	public RegisterManager(ArrayList<Integer> predefined, CFGVertex root) {
-		this.manager = new HashMap<>();
-		this.root = root;
+	public static void init(ArrayList<Integer> predefined, CFGVertex root) {
+		RegisterManager.manager = new HashMap<>();
+		RegisterManager.root = root;
 		predefined.add(0); // add memory
 		for (Integer x : predefined)
 			manager.put(x, new RegisterManagerEntry() {{
@@ -26,7 +26,7 @@ public class RegisterManager {
 				}}));
 	}
 
-	public void addVariable(int uId, CFGVertex site) {
+	public static void addVariable(int uId, CFGVertex site) {
 		if (uId == -1)
 			return;
 //		System.out.printf("uId = %d, site = %s\n", uId, site == null ? "null" : site.id);
@@ -39,14 +39,14 @@ public class RegisterManager {
 			++manager.get(uId).useCnt;
 	}
 
-	public void checkDefSite() {
+	public static void checkDefSite() {
 		manager.entrySet().stream().forEach(e -> {
 			if (e.getValue().defsite.isEmpty())
 				throw new CompilationError("Internal Error.");
 		});
 	}
 
-	public void insertPhi() {
+	public static void insertPhi() {
 		for (Map.Entry<Integer, RegisterManagerEntry> entry : manager.entrySet()) {
 			int a = entry.getKey();
 //			if (entry.getUId().defsite.size() == 1 && entry.getUId().useCnt <= 1)
@@ -65,11 +65,11 @@ public class RegisterManager {
 		}
 	}
 
-	public int getPeek(int x) {
+	public static int getPeek(int x) {
 		return manager.get(x).stack.peek();
 	}
 
-	public class RegisterManagerEntry {
+	public static class RegisterManagerEntry {
 		public HashSet<CFGVertex> defsite = new HashSet<>();
 		public int count = 0;
 		public int useCnt = 0;

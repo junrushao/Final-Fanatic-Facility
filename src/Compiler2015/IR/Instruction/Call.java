@@ -26,6 +26,26 @@ public class Call extends IRInstruction implements SingleSource {
 	}
 
 	@Override
+	public int[] getAllDef() {
+		return new int[0];
+	}
+
+	@Override
+	public int[] getAllUse() {
+		return new int[]{func.getUId()};
+	}
+
+	@Override
+	public void setAllDefVersion(int[] version) {
+	}
+
+	@Override
+	public void setAllUseVersion(int[] version) {
+		if (func instanceof VirtualRegister)
+			((VirtualRegister) func).setVersion(version[0]);
+	}
+
+	@Override
 	public int getRs() {
 		return func.getUId();
 	}

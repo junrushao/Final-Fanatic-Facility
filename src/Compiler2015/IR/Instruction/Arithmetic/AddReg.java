@@ -21,6 +21,29 @@ public class AddReg extends Arithmetic implements DoubleSource {
 	}
 
 	@Override
+	public int[] getAllDef() {
+		return new int[]{rd.getUId()};
+	}
+
+	@Override
+	public int[] getAllUse() {
+		return new int[]{rs.getUId(), rt.getUId()};
+	}
+
+	@Override
+	public void setAllDefVersion(int[] version) {
+		rd.setVersion(version[0]);
+	}
+
+	@Override
+	public void setAllUseVersion(int[] version) {
+		if (rs instanceof VirtualRegister)
+			((VirtualRegister) rs).setVersion(version[0]);
+		if (rt instanceof VirtualRegister)
+			((VirtualRegister) rt).setVersion(version[1]);
+	}
+
+	@Override
 	public String toString() {
 		return String.format("%s = %s + %s", rd, rs, rt);
 	}

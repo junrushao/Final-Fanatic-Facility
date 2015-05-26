@@ -15,6 +15,25 @@ public class GlobalAddressFetch extends Arithmetic implements SingleSource {
 	}
 
 	@Override
+	public int[] getAllDef() {
+		return new int[]{rd.getUId()};
+	}
+
+	@Override
+	public int[] getAllUse() {
+		return new int[0];
+	}
+
+	@Override
+	public void setAllDefVersion(int[] version) {
+		rd.setVersion(version[0]);
+	}
+
+	@Override
+	public void setAllUseVersion(int[] version) {
+	}
+
+	@Override
 	public String toString() {
 		return String.format("%s = Global & #%d", rd, uId);
 	}

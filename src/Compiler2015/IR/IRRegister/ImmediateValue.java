@@ -3,7 +3,6 @@ package Compiler2015.IR.IRRegister;
 import Compiler2015.Exception.CompilationError;
 
 public class ImmediateValue implements IRRegister {
-	public static ImmediateValue zero = new ImmediateValue(0);
 	public int a;
 
 	public ImmediateValue(int a) {

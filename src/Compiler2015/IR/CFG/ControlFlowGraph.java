@@ -3,6 +3,7 @@ package Compiler2015.IR.CFG;
 import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.Analyser.StaticSingleAssignment.LengauerTarjan;
 import Compiler2015.Type.FunctionType;
 import Compiler2015.Type.Type;
 import Compiler2015.Utility.Utility;
@@ -86,10 +87,8 @@ public class ControlFlowGraph {
 		if (vertices.size() != n)
 			throw new CompilationError("Internal Error.");
 
+		LengauerTarjan.process(vertices, root, n);
 /*
-		// build dominator tree, calculate dominance frontiers
-		LengauerTarjan dominatorTreeSolver = new LengauerTarjan(vertices, root);
-		dominatorTreeSolver.process(n);
 
 		// insert phi-functions
 		RegisterManager rm = new RegisterManager(body.givenVariables, root);
