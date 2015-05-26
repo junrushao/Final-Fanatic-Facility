@@ -7,7 +7,7 @@ import Compiler2015.IR.Instruction.Arithmetic.Arithmetic;
 /**
  * rd <- rs, i.e. c = a[b]
  */
-public class ReadArray extends Arithmetic implements TripleSource {
+public class ReadArray extends Arithmetic {
 	public ArrayRegister rs;
 	public int memoryVersion = 0;
 
@@ -40,34 +40,5 @@ public class ReadArray extends Arithmetic implements TripleSource {
 	@Override
 	public String toString() {
 		return "ReadArray " + rd + " = " + rs + " -> M = " + memoryVersion;
-	}
-
-	@Override
-	public int getA() {
-		return rs.a.getUId();
-	}
-
-	@Override
-	public int getB() {
-		return rs.b.getUId();
-	}
-
-	@Override
-	public int getC() {
-		return 0;
-	}
-
-	@Override
-	public void setAVersion(int x) {
-		rs.a.setVersion(x);
-	}
-
-	@Override
-	public void setBVersion(int x) {
-	}
-
-	@Override
-	public void setCVersion(int x) {
-		memoryVersion = x;
 	}
 }

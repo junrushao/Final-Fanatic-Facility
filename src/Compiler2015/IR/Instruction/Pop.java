@@ -1,6 +1,6 @@
 package Compiler2015.IR.Instruction;
 
-public class Pop extends IRInstruction implements NonSource {
+public class Pop extends IRInstruction {
 
 	public static Pop instance = new Pop();
 
@@ -10,11 +10,6 @@ public class Pop extends IRInstruction implements NonSource {
 
 	public String toString() {
 		return "Pop";
-	}
-
-	@Override
-	public int getRd() {
-		return -1;
 	}
 
 	@Override

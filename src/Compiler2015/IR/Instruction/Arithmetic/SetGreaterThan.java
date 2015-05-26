@@ -4,12 +4,11 @@ import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
-import Compiler2015.IR.Instruction.DoubleSource;
 
 /**
  * rd = rs > rt
  */
-public class SetGreaterThan extends Arithmetic implements DoubleSource {
+public class SetGreaterThan extends Arithmetic {
 	public IRRegister rs, rt;
 
 	public SetGreaterThan(VirtualRegister rd, IRRegister rs, IRRegister rt) {
@@ -46,27 +45,5 @@ public class SetGreaterThan extends Arithmetic implements DoubleSource {
 	@Override
 	public String toString() {
 		return String.format("%s = %s > %s", rd, rs, rt);
-	}
-
-	@Override
-	public int getRs() {
-		return rs.getUId();
-	}
-
-	@Override
-	public int getRt() {
-		return rt.getUId();
-	}
-
-	@Override
-	public void setRsVersion(int x) {
-		if (rs instanceof VirtualRegister)
-			((VirtualRegister) rs).setVersion(x);
-	}
-
-	@Override
-	public void setRtVersion(int x) {
-		if (rt instanceof VirtualRegister)
-			((VirtualRegister) rt).setVersion(x);
 	}
 }

@@ -7,7 +7,7 @@ import Compiler2015.IR.IRRegister.VirtualRegister;
  * rd = func()
  * If return type of func is void, rd is useless.
  */
-public class Call extends IRInstruction implements SingleSource {
+public class Call extends IRInstruction {
 	public IRRegister func;
 
 	public Call(IRRegister func) {
@@ -18,11 +18,6 @@ public class Call extends IRInstruction implements SingleSource {
 	@Override
 	public String toString() {
 		return "Call " + func;
-	}
-
-	@Override
-	public int getRd() {
-		return -1;
 	}
 
 	@Override
@@ -43,16 +38,5 @@ public class Call extends IRInstruction implements SingleSource {
 	public void setAllUseVersion(int[] version) {
 		if (func instanceof VirtualRegister)
 			((VirtualRegister) func).setVersion(version[0]);
-	}
-
-	@Override
-	public int getRs() {
-		return func.getUId();
-	}
-
-	@Override
-	public void setRsVersion(int x) {
-		if (func instanceof VirtualRegister)
-			((VirtualRegister) func).setVersion(x);
 	}
 }

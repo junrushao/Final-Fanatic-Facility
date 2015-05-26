@@ -4,7 +4,7 @@ import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.Type;
 
-public class PushStack extends IRInstruction implements SingleSource {
+public class PushStack extends IRInstruction {
 	public IRRegister push;
 	public boolean isExtra;
 	public Type pushType;
@@ -19,11 +19,6 @@ public class PushStack extends IRInstruction implements SingleSource {
 	@Override
 	public String toString() {
 		return "Push " + push;
-	}
-
-	@Override
-	public int getRd() {
-		return -1;
 	}
 
 	@Override
@@ -44,16 +39,5 @@ public class PushStack extends IRInstruction implements SingleSource {
 	public void setAllUseVersion(int[] version) {
 		if (push instanceof VirtualRegister)
 			((VirtualRegister) push).setVersion(version[0]);
-	}
-
-	@Override
-	public int getRs() {
-		return push.getUId();
-	}
-
-	@Override
-	public void setRsVersion(int x) {
-		if (push instanceof VirtualRegister)
-			((VirtualRegister) push).setVersion(x);
 	}
 }

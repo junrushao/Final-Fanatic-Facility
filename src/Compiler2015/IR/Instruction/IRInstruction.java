@@ -6,14 +6,6 @@ public abstract class IRInstruction {
 
 	public VirtualRegister rd;
 
-	public int getRd() {
-		return rd.getUId();
-	}
-
-	public void setRdVersion(int x) {
-		rd.setVersion(x);
-	}
-
 	public abstract int[] getAllDef();
 
 	public abstract int[] getAllUse();

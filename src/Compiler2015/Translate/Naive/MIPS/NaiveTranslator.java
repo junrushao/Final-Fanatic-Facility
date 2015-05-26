@@ -209,28 +209,6 @@ public final class NaiveTranslator {
 		throw new CompilationError("Internal Error.");
 	}
 
-	public static void loadAddressOfVariable(int uId, int reg, PrintWriter out) {
-		if (uId <= 0)
-			throw new CompilationError("Internal Error.");
-		SymbolTableEntry e = Environment.symbolNames.table.get(uId);
-		if (e.scope == 1) {
-			if (e.type == Tokens.STRING_CONSTANT)
-				out.printf("\tla $t%d, %s%s", reg, getStringConstantLabelName(uId), Utility.NEW_LINE);
-			else if (e.type == Tokens.VARIABLE)
-				out.printf("\tla $t%d, %s%s", reg, getGlobalVariableLabelName(uId), Utility.NEW_LINE);
-			else
-				throw new CompilationError("Internal Error.");
-		} else {
-			int delta = getDelta(uId);
-			if (-32768 <= delta && delta <= 32767)
-				out.printf("\taddiu $t%d, $sp, %d%s", reg, getDelta(uId), Utility.NEW_LINE);
-			else {
-				out.printf("\tli $t%d, %d%s", reg, delta, Utility.NEW_LINE);
-				out.printf("\tadd $t%d, $sp, $t%d%s", reg, reg, Utility.NEW_LINE);
-			}
-		}
-	}
-
 	public static void loadFromIRRegisterToTRegister(IRRegister from, int reg, PrintWriter out) {
 		if (from instanceof ImmediateValue) {
 			out.printf("\tli $t%d, %d%s", reg, ((ImmediateValue) from).a, Utility.NEW_LINE);
@@ -339,11 +317,11 @@ public final class NaiveTranslator {
 							out.printf("\taddiu $sp, $sp, %d%s", sizeOfExtraArguments, Utility.NEW_LINE);
 					}
 				} else if (ins instanceof FetchReturn) {
-					storeFromPhysicalRegisterToIRRegister("$v0", ins.getRd(), out);
+					storeFromPhysicalRegisterToIRRegister("$v0", ins.getAllDef()[0], out);
 					sizeOfAllArguments = sizeOfExtraArguments = 0;
 				} else if (ins instanceof Move) {
 					loadFromIRRegisterToTRegister(((Move) ins).rs, 0, out);
-					storeFromTRegisterToIRRegister(0, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(0, ins.getAllDef()[0], out);
 				} else if (ins instanceof Pop) {
 					// do nothing
 					out.print("");
@@ -379,7 +357,7 @@ public final class NaiveTranslator {
 					}
 				} else if (ins instanceof ReadArray) {
 					loadFromIRRegisterToTRegister(((ReadArray) ins).rs, 0, out);
-					storeFromTRegisterToIRRegister(0, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(0, ins.getAllDef()[0], out);
 				} else if (ins instanceof WriteArray) {
 					loadFromIRRegisterToTRegister(((WriteArray) ins).rs, 1, out);
 					loadFromIRRegisterToTRegister(((WriteArray) ins).rd.a, 0, out);
@@ -398,90 +376,90 @@ public final class NaiveTranslator {
 					loadFromIRRegisterToTRegister(((AddReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((AddReg) ins).rt, 1, out);
 					out.println("\taddu $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
 				} else if (ins instanceof BitwiseAndReg) {
 					loadFromIRRegisterToTRegister(((BitwiseAndReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((BitwiseAndReg) ins).rt, 1, out);
 					out.println("\tand $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
 				} else if (ins instanceof BitwiseNotReg) {
 					loadFromIRRegisterToTRegister(((BitwiseNotReg) ins).rs, 0, out);
 					out.println("\tnot $t1, $t0");
-					storeFromTRegisterToIRRegister(1, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(1, ins.getAllDef()[0], out);
 				} else if (ins instanceof BitwiseOrReg) {
 					loadFromIRRegisterToTRegister(((BitwiseOrReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((BitwiseOrReg) ins).rt, 1, out);
 					out.println("\tor $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
 				} else if (ins instanceof BitwiseXORReg) {
 					loadFromIRRegisterToTRegister(((BitwiseXORReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((BitwiseXORReg) ins).rt, 1, out);
 					out.println("\txor $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
 				} else if (ins instanceof DivideReg) {
 					loadFromIRRegisterToTRegister(((DivideReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((DivideReg) ins).rt, 1, out);
 					out.println("\tdiv $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
 				} else if (ins instanceof ModuloReg) {
 					loadFromIRRegisterToTRegister(((ModuloReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((ModuloReg) ins).rt, 1, out);
 					out.println("\trem $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
 				} else if (ins instanceof MultiplyReg) {
 					loadFromIRRegisterToTRegister(((MultiplyReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((MultiplyReg) ins).rt, 1, out);
 					out.println("\tmul $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
 				} else if (ins instanceof NegateReg) {
 					loadFromIRRegisterToTRegister(((NegateReg) ins).rs, 0, out);
 					out.println("\tneg $t1, $t0");
-					storeFromTRegisterToIRRegister(1, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(1, ins.getAllDef()[0], out);
 				} else if (ins instanceof SetEqualTo) {
 					loadFromIRRegisterToTRegister(((SetEqualTo) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((SetEqualTo) ins).rt, 1, out);
 					out.println("\tseq $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
 				} else if (ins instanceof SetGE) {
 					loadFromIRRegisterToTRegister(((SetGE) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((SetGE) ins).rt, 1, out);
 					out.println("\tsge $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
 				} else if (ins instanceof SetGreaterThan) {
 					loadFromIRRegisterToTRegister(((SetGreaterThan) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((SetGreaterThan) ins).rt, 1, out);
 					out.println("\tsgt $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
 				} else if (ins instanceof SetLE) {
 					loadFromIRRegisterToTRegister(((SetLE) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((SetLE) ins).rt, 1, out);
 					out.println("\tsle $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
 				} else if (ins instanceof SetLessThan) {
 					loadFromIRRegisterToTRegister(((SetLessThan) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((SetLessThan) ins).rt, 1, out);
 					out.println("\tslt $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
 				} else if (ins instanceof SetNotEqual) {
 					loadFromIRRegisterToTRegister(((SetNotEqual) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((SetNotEqual) ins).rt, 1, out);
 					out.println("\tsne $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
 				} else if (ins instanceof ShiftLeftReg) {
 					loadFromIRRegisterToTRegister(((ShiftLeftReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((ShiftLeftReg) ins).rt, 1, out);
 					out.println("\tsll $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
 				} else if (ins instanceof ShiftRightReg) { // sra
 					loadFromIRRegisterToTRegister(((ShiftRightReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((ShiftRightReg) ins).rt, 1, out);
 					out.println("\tsra $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
 				} else if (ins instanceof SubtractReg) {
 					loadFromIRRegisterToTRegister(((SubtractReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((SubtractReg) ins).rt, 1, out);
 					out.println("\tsubu $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
 				} else
 					throw new CompilationError("Internal Error.");
 			}
@@ -539,21 +517,10 @@ public final class NaiveTranslator {
 		ControlFlowGraph.parameterDelta = new HashMap<>();
 		for (CFGVertex vertex : ControlFlowGraph.vertices) {
 			for (IRInstruction ins : vertex.internal) {
-				classifyVirtualRegister(ins.getRd());
-				if (ins instanceof NonSource) {
-					continue;
-				}
-				if (ins instanceof SingleSource) {
-					classifyVirtualRegister(((SingleSource) ins).getRs());
-				} else if (ins instanceof DoubleSource) {
-					classifyVirtualRegister(((DoubleSource) ins).getRs());
-					classifyVirtualRegister(((DoubleSource) ins).getRt());
-				} else if (ins instanceof TripleSource) {
-					classifyVirtualRegister(((TripleSource) ins).getA());
-					classifyVirtualRegister(((TripleSource) ins).getB());
-					classifyVirtualRegister(((TripleSource) ins).getC());
-				} else
-					throw new CompilationError("Internal Error.");
+				for (int uId : ins.getAllDef())
+					classifyVirtualRegister(uId);
+				for (int uId : ins.getAllUse())
+					classifyVirtualRegister(uId);
 			}
 		}
 		ControlFlowGraph.frameSize = Panel.getRegisterSize() * 2; // [0, 3] for $fp, [4, 7] for $ra
