@@ -85,11 +85,13 @@ public class ForStatement extends Statement implements Loop {
 		else {
 			beginCFGBlock = loop;
 		}
+		if (c != null)
+			c.emitCFG();
 		if (d == null)
 			d = new CompoundStatement(new ArrayList<>(0), new ArrayList<>(0), new ArrayList<>(0), new ArrayList<>(0));
 		d.emitCFG();
 		if (c != null) {
-			c.emitCFG();
+//			c.emitCFG();
 			if (d.endCFGBlock.unconditionalNext == null)
 				d.endCFGBlock.unconditionalNext = c.beginCFGBlock;
 			c.endCFGBlock.unconditionalNext = loop;

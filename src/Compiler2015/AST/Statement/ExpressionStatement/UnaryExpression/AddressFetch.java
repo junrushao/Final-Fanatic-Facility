@@ -6,10 +6,10 @@ import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
+import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.Arithmetic.GlobalAddressFetch;
 import Compiler2015.IR.Instruction.Arithmetic.LocalAddressFetch;
-import Compiler2015.IR.Instruction.Move;
 import Compiler2015.Type.VariablePointerType;
 import Compiler2015.Type.VoidType;
 
@@ -38,7 +38,26 @@ public class AddressFetch extends UnaryExpression {
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e.emitCFG(builder);
-		e.readInArrayRegister(builder);
+		if (e instanceof IdentifierExpression) {
+			int uId = ((IdentifierExpression) e).uId;
+			tempRegister = Environment.getVirtualRegister();
+			SymbolTableEntry e = Environment.symbolNames.table.get(uId);
+			if (e.scope == 1) {
+				builder.addInstruction(new GlobalAddressFetch((VirtualRegister) tempRegister, uId));
+			} else {
+				builder.addInstruction(new LocalAddressFetch((VirtualRegister) tempRegister, uId));
+			}
+		} else {
+			if (e.tempRegister instanceof ArrayRegister) {
+				e.convertArrayRegisterToPointer(builder);
+				tempRegister = e.tempRegister.clone();
+			} else if (e.tempRegister instanceof VirtualRegister) {
+				tempRegister = e.tempRegister.clone();
+			}
+			throw new CompilationError("Hehe");
+		}
+/*
+		e.convertArrayRegisterToPointer(builder);
 		tempRegister = Environment.getVirtualRegister();
 		if (e instanceof IdentifierExpression) {
 			int uId = ((IdentifierExpression) e).uId;
@@ -51,6 +70,7 @@ public class AddressFetch extends UnaryExpression {
 		} else {
 			builder.addInstruction(new Move((VirtualRegister) tempRegister, e.tempRegister));
 		}
+*/
 	}
 
 	@Override

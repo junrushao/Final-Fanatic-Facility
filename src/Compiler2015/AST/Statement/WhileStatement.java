@@ -31,7 +31,7 @@ public class WhileStatement extends Statement implements Loop {
 	public String deepToString(int depth) {
 		StringBuilder sb = Utility.getIndent(depth).append("WHILE").append(Utility.NEW_LINE);
 		String aa = e.deepToString(depth + 1);
-		String bb = a.deepToString(depth + 1);
+		String bb = a == null ? "" : a.deepToString(depth + 1);
 		return sb.append(aa).append(bb).toString();
 	}
 

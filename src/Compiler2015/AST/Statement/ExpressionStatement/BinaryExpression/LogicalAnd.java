@@ -96,7 +96,8 @@ public class LogicalAnd extends BinaryExpression implements Logical {
 			Logical leftP = (Logical) left;
 			right.emitCFG();
 			right.endCFGBlock.unconditionalNext = trueTo;
-			right.endCFGBlock.branchIfFalse = falseTo;
+			right.setBranch(falseTo, right.tempRegister);
+//			right.endCFGBlock.branchIfFalse = falseTo;
 			leftP.emitCFG(right.beginCFGBlock, falseTo);
 			beginCFGBlock = leftP.getStartNode();
 		}
@@ -105,16 +106,19 @@ public class LogicalAnd extends BinaryExpression implements Logical {
 			rightP.emitCFG(trueTo, falseTo);
 			left.emitCFG();
 			left.endCFGBlock.unconditionalNext = right.beginCFGBlock;
-			left.endCFGBlock.branchIfFalse = falseTo;
+			left.setBranch(falseTo, left.tempRegister);
+//			left.endCFGBlock.branchIfFalse = falseTo;
 			beginCFGBlock = left.beginCFGBlock;
 		}
 		else { // left is not Logical while right is not neither
 			left.emitCFG();
 			right.emitCFG();
 			left.endCFGBlock.unconditionalNext = right.beginCFGBlock;
-			left.endCFGBlock.branchIfFalse = falseTo;
+			left.setBranch(falseTo, left.tempRegister);
+//			left.endCFGBlock.branchIfFalse = falseTo;
 			right.endCFGBlock.unconditionalNext = trueTo;
-			right.endCFGBlock.branchIfFalse = falseTo;
+			right.setBranch(falseTo, right.tempRegister);
+//			right.endCFGBlock.branchIfFalse = falseTo;
 			beginCFGBlock = left.beginCFGBlock;
 		}
 	}

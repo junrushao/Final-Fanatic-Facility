@@ -1,4 +1,4 @@
-// Generated from /home/junrushao/IdeaProjects/compiler2015/src/Compiler2015/Parser/Compiler2015.g4 by ANTLR 4.5
+// Generated from Compiler2015.g4 by ANTLR 4.5
 package Compiler2015.Parser;
 
 import Compiler2015.AST.SimpleInitializerList;
@@ -16,7 +16,6 @@ import org.antlr.v4.runtime.atn.ATNDeserializer;
 import org.antlr.v4.runtime.atn.ParserATNSimulator;
 import org.antlr.v4.runtime.atn.PredictionContextCache;
 import org.antlr.v4.runtime.dfa.DFA;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -455,7 +454,7 @@ public class Compiler2015Parser extends Parser {
 	}
 
 	@Override
-	@NotNull
+
 	public Vocabulary getVocabulary() {
 		return VOCABULARY;
 	}
@@ -2268,8 +2267,9 @@ public class Compiler2015Parser extends Parser {
 			_la = _input.LA(1);
 				if (!((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__11) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << T__17) | (1L << T__18) | (1L << T__19) | (1L << T__20) | (1L << EQ))) != 0))) {
 			_errHandler.recoverInline(this);
-			}
+				} else {
 				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -2565,8 +2565,9 @@ public class Compiler2015Parser extends Parser {
 			_la = _input.LA(1);
 				if (!(_la == T__21 || _la == T__22)) {
 			_errHandler.recoverInline(this);
-			}
+				} else {
 				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -2640,8 +2641,9 @@ public class Compiler2015Parser extends Parser {
 			_la = _input.LA(1);
 				if (!((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__23) | (1L << T__24) | (1L << T__25) | (1L << T__26))) != 0))) {
 			_errHandler.recoverInline(this);
-			}
+				} else {
 				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -2711,8 +2713,9 @@ public class Compiler2015Parser extends Parser {
 			_la = _input.LA(1);
 				if (!(_la == T__27 || _la == T__28)) {
 			_errHandler.recoverInline(this);
-			}
+				} else {
 				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -2782,8 +2785,9 @@ public class Compiler2015Parser extends Parser {
 			_la = _input.LA(1);
 				if (!(_la == T__29 || _la == T__30)) {
 			_errHandler.recoverInline(this);
-			}
+				} else {
 				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -2855,8 +2859,9 @@ public class Compiler2015Parser extends Parser {
 			_la = _input.LA(1);
 				if (!((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__31) | (1L << T__32) | (1L << STAR))) != 0))) {
 			_errHandler.recoverInline(this);
-			}
+				} else {
 				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -3132,8 +3137,9 @@ public class Compiler2015Parser extends Parser {
 			_la = _input.LA(1);
 				if (!((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__29) | (1L << T__30) | (1L << T__36) | (1L << T__37) | (1L << STAR) | (1L << And))) != 0))) {
 			_errHandler.recoverInline(this);
-			}
+				} else {
 				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -4835,7 +4841,6 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterAssignmentExpression3(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -5612,7 +5617,6 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression8(this);
 		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression8(this);

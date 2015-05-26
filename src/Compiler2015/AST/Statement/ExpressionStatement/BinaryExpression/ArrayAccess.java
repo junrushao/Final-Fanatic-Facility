@@ -139,6 +139,7 @@ public class ArrayAccess extends BinaryExpression {
 		return "[]";
 	}
 
+	// left[a[3]] => ReadArray(c, a + 3) => left[c]
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		left.emitCFG(builder);

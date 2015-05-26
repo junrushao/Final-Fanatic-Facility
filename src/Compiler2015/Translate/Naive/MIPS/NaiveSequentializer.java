@@ -5,7 +5,7 @@ import Compiler2015.IR.CFG.ControlFlowGraph;
 
 import java.util.ArrayList;
 
-public final class Sequentializer {
+public final class NaiveSequentializer {
 	public static ArrayList<CFGVertex> process() {
 		ArrayList<CFGVertex> ret = new ArrayList<>(ControlFlowGraph.vertices);
 		ControlFlowGraph.outBody.id = Integer.MAX_VALUE;

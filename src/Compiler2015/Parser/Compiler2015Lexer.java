@@ -1,4 +1,4 @@
-// Generated from /home/junrushao/IdeaProjects/compiler2015/src/Compiler2015/Parser/Compiler2015.g4 by ANTLR 4.5
+// Generated from Compiler2015.g4 by ANTLR 4.5
 package Compiler2015.Parser;
 
 import org.antlr.v4.runtime.*;
@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.atn.ATNDeserializer;
 import org.antlr.v4.runtime.atn.LexerATNSimulator;
 import org.antlr.v4.runtime.atn.PredictionContextCache;
 import org.antlr.v4.runtime.dfa.DFA;
-import org.antlr.v4.runtime.misc.NotNull;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class Compiler2015Lexer extends Lexer {
@@ -307,7 +306,7 @@ public class Compiler2015Lexer extends Lexer {
 	}
 
 	@Override
-	@NotNull
+
 	public Vocabulary getVocabulary() {
 		return VOCABULARY;
 	}

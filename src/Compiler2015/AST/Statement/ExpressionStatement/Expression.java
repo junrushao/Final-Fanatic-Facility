@@ -43,6 +43,7 @@ public abstract class Expression extends Statement implements Cloneable {
 
 	public abstract void emitCFG(ExpressionCFGBuilder builder);
 
+	// c = a[b]
 	public void readInArrayRegister(ExpressionCFGBuilder builder) {
 		if (this.tempRegister == null)
 			throw new CompilationError("Internal Error.");
@@ -50,6 +51,7 @@ public abstract class Expression extends Statement implements Cloneable {
 			throw new CompilationError("Internal Error.");
 	}
 
+	// a[b] -> a + b
 	public void convertArrayRegisterToPointer(ExpressionCFGBuilder builder) {
 		if (this.tempRegister == null)
 			throw new CompilationError("Internal Error.");

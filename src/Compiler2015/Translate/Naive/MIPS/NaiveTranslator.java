@@ -23,7 +23,7 @@ import Compiler2015.Utility.Utility;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-public final class Translator {
+public final class NaiveTranslator {
 
 	public static String getFunctionLabel() {
 		return String.format("___global___uId_%d___name_%s:",
@@ -70,8 +70,8 @@ public final class Translator {
 				continue;
 			if (entry.scope == 1 && entry.type == Tokens.STRING_CONSTANT) {
 				out.println(getStringConstantLabel(entry.uId));
-				out.printf("\t.asciiz \"%s\"", StringConstant.toMIPSString((String) entry.ref));
-				out.println();
+				out.printf("\t.asciiz \"%s\"%s", StringConstant.toMIPSString((String) entry.ref), Utility.NEW_LINE);
+				out.println("\t.align 2");
 			}
 			if (entry.scope != 1 || entry.type != Tokens.VARIABLE || entry.ref instanceof FunctionType)
 				continue;
@@ -83,6 +83,7 @@ public final class Translator {
 					out.println(getGlobalVariableLabel(uId));
 					out.printf("\t.space %d", type.sizeof());
 					out.println();
+					out.println("\t.align 2");
 				} else {
 					class ValuePairs {
 						int position, value;
@@ -118,10 +119,12 @@ public final class Translator {
 						if (pointer < pairs.size() && pairs.get(pointer).position == i) {
 							out.printf("%s %d", prefix, pairs.get(pointer).value);
 							out.println();
+							out.println("\t.align 2");
 							++pointer;
 						} else {
 							out.printf("%s 0", prefix);
 							out.println();
+							out.println("\t.align 2");
 						}
 					}
 				}
@@ -130,26 +133,31 @@ public final class Translator {
 				Integer value = entry.info == null ? Integer.valueOf(0) : Constant.toInt(((Initializer) entry.info).entries.get(0).value);
 				out.printf("\t.byte %d", value);
 				out.println();
+				out.println("\t.align 2");
 			} else if (type instanceof FunctionPointerType) {
 				out.println(getGlobalVariableLabel(uId));
 				out.printf("\t.word %d", entry.info == null ? 0 :
 						Constant.toInt(((Initializer) entry.info).entries.get(0).value));
 				out.println();
+				out.println("\t.align 2");
 			} else if (type instanceof IntType) {
 				out.println(getGlobalVariableLabel(uId));
 				out.printf("\t.word %d", entry.info == null ? 0 :
 						Constant.toInt(((Initializer) entry.info).entries.get(0).value));
 				out.println();
+				out.println("\t.align 2");
 			} else if (type instanceof StructOrUnionType) {
 				out.println(getGlobalVariableLabel(uId));
 				out.printf("\t.space %d", type.sizeof());
 				out.println();
+				out.println("\t.align 2");
 			} else if (type instanceof VariablePointerType) {
 				if (type.equals(new VariablePointerType(CharType.instance)) && entry.info != null && ((Initializer) entry.info).entries.get(0).value instanceof StringConstant) {
 					StringConstant sc = ((StringConstant) ((Initializer) entry.info).entries.get(0).value);
 					out.println(getGlobalVariableLabel(uId));
 					out.printf("\t.word %s", getStringConstantLabelName(sc.uId));
 					out.println();
+					out.println("\t.align 2");
 				} else {
 					out.println(getGlobalVariableLabel(uId));
 					Integer value = entry.info == null ? Integer.valueOf(0) : Constant.toInt(((Initializer) entry.info).entries.get(0).value);
@@ -160,12 +168,14 @@ public final class Translator {
 					} else
 						throw new CompilationError("Not supported now.");
 					out.println();
+					out.println("\t.align 2");
 				}
 			} else
 				throw new CompilationError("Internal Error.");
 		}
 		out.println("new_line:\n" +
 				"\t.asciiz \"____\\n\"\n");
+		out.println("\t.align 2");
 	}
 
 	public static int getDelta(int uId) {
@@ -280,7 +290,7 @@ public final class Translator {
 		}
 		out.println("\tsw $ra, 4($sp)");
 
-		ArrayList<CFGVertex> sequence = Sequentializer.process();
+		ArrayList<CFGVertex> sequence = NaiveSequentializer.process();
 		int sizeOfAllArguments = 0;
 		int sizeOfExtraArguments = 0;
 		for (CFGVertex vertex : sequence) {

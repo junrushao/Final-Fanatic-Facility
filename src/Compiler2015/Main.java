@@ -9,7 +9,7 @@ import Compiler2015.Parser.Compiler2015Lexer;
 import Compiler2015.Parser.Compiler2015Parser;
 import Compiler2015.Parser.ParseErrorListener;
 import Compiler2015.Parser.PrettyPrinterListener;
-import Compiler2015.Translate.Naive.MIPS.Translator;
+import Compiler2015.Translate.Naive.MIPS.NaiveTranslator;
 import Compiler2015.Type.FunctionType;
 import Compiler2015.Utility.Panel;
 import Compiler2015.Utility.Tokens;
@@ -122,7 +122,7 @@ public class Main {
 			throw new CompilationError("Internal Error.");
 
 		try {
-			Translator.generateGlobalVariables(out);
+			NaiveTranslator.generateGlobalVariables(out);
 //			out.println("printf_buf: .space 2");
 			out.println(".text");
 /*
@@ -140,10 +140,10 @@ public class Main {
 			for (int i = 1, size = Environment.symbolNames.table.size(); i < size; ++i) { // prevent scanning the added registers
 				SymbolTableEntry entry = Environment.symbolNames.table.get(i);
 				if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionType && entry.info != null) {
-					ControlFlowGraph.process((CompoundStatement) entry.info, (CompoundStatement) entry.info, entry.uId);
+					ControlFlowGraph.process((CompoundStatement) entry.info, entry.uId);
 					if (Panel.emitCFG)
 						System.out.println(ControlFlowGraph.toStr());
-					Translator.generateFunction(out);
+					NaiveTranslator.generateFunction(out);
 				}
 			}
 		} finally {

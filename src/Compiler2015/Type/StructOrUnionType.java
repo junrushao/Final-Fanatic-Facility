@@ -36,6 +36,7 @@ public class StructOrUnionType extends Type {
 		int last = 0;
 		memberDelta = new HashMap<>();
 		for (int i = 0; i < n; ++i) {
+			if (isUnion) last = 0;
 			String name = names.get(i);
 			Type type = types.get(i);
 			if (name == null || name.equals("")) {

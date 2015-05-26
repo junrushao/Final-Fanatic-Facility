@@ -108,11 +108,12 @@ public class ControlFlowGraph {
 		}
 	}
 
-	public static void process(CompoundStatement scope, CompoundStatement body, int uId) {
+	public static void process(CompoundStatement body, int uId) {
+		System.out.println("now processing " + uId);
 		nowUId = uId;
 		tempVertexCount = 0;
 		vertices.clear();
-		ControlFlowGraph.scope = scope;
+		ControlFlowGraph.scope = body;
 		returnType = ((FunctionType) Environment.symbolNames.table.get(uId).ref).returnType;
 
 		root = null;
@@ -125,7 +126,7 @@ public class ControlFlowGraph {
 			body.endCFGBlock.unconditionalNext = outBody;
 
 		// remove unnecessary jumps
-		vertices.stream().forEach(ControlFlowGraph::findGoto);
+//		vertices.stream().forEach(ControlFlowGraph::findGoto);
 		vertices.stream().forEach(x -> {
 			if (x.branchIfFalse != null && x.branchRegister == null) {
 				if (x.internal.isEmpty())
