@@ -112,6 +112,7 @@ public class Main {
 		}
 
 		// make control flow graph & dump raw MIPS assembly code
+/*
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("test.s")));
@@ -120,23 +121,10 @@ public class Main {
 		}
 		if (out == null)
 			throw new CompilationError("Internal Error.");
-
-		try {
-			NaiveTranslator.generateGlobalVariables(out);
-//			out.println("printf_buf: .space 2");
-			out.println(".text");
-/*
-
-			try { // load libraries
-				BufferedReader reader = new BufferedReader(new FileReader("./src/Compiler2015/StdLib/lib.s"));
-				reader.lines().forEach(out::println);
-				reader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-				throw new CompilationError("Internal Error.");
-			}
-
 */
+		try (PrintWriter out = new PrintWriter(System.out)) {
+			NaiveTranslator.generateGlobalVariables(out);
+			out.println(".text");
 			for (int i = 1, size = Environment.symbolNames.table.size(); i < size; ++i) { // prevent scanning the added registers
 				SymbolTableEntry entry = Environment.symbolNames.table.get(i);
 				if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionType && entry.info != null) {
@@ -146,10 +134,7 @@ public class Main {
 					NaiveTranslator.generateFunction(out);
 				}
 			}
-		} finally {
-			out.close();
 		}
-
 	}
 
 	public void loadLibraries() {
@@ -161,7 +146,6 @@ public class Main {
 			e.printStackTrace();
 			throw new CompilationError("Cannot find StdLib.c");
 		}
-//		System.err.println(input.getSourceName());
 		// parse & AST construction
 		Compiler2015Lexer lexer = new Compiler2015Lexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);

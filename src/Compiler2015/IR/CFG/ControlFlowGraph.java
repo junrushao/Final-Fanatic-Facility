@@ -98,18 +98,17 @@ public class ControlFlowGraph {
 	public static void findGoto(CFGVertex x) {
 		if (x == outBody)
 			return;
-		if (x.unconditionalNext != null && x.unconditionalNext != outBody && x.unconditionalNext.internal.isEmpty()) {
+		if (x.unconditionalNext != null && x.unconditionalNext != outBody && x.unconditionalNext.internal.isEmpty() && x.unconditionalNext.branchIfFalse == null) {
 			findGoto(x.unconditionalNext);
 			x.unconditionalNext = x.unconditionalNext.unconditionalNext;
 		}
-		if (x.branchIfFalse != null && x.branchIfFalse != outBody && x.branchIfFalse.internal.isEmpty()) {
+		if (x.branchIfFalse != null && x.branchIfFalse != outBody && x.branchIfFalse.internal.isEmpty() && x.branchIfFalse.branchIfFalse == null) {
 			findGoto(x.branchIfFalse);
 			x.branchIfFalse = x.branchIfFalse.unconditionalNext;
 		}
 	}
 
 	public static void process(CompoundStatement body, int uId) {
-		System.out.println("now processing " + uId);
 		nowUId = uId;
 		tempVertexCount = 0;
 		vertices.clear();
@@ -126,7 +125,6 @@ public class ControlFlowGraph {
 			body.endCFGBlock.unconditionalNext = outBody;
 
 		// remove unnecessary jumps
-//		vertices.stream().forEach(ControlFlowGraph::findGoto);
 		vertices.stream().forEach(x -> {
 			if (x.branchIfFalse != null && x.branchRegister == null) {
 				if (x.internal.isEmpty())
@@ -134,6 +132,7 @@ public class ControlFlowGraph {
 				x.branchRegister = x.internal.get(x.internal.size() - 1).rd;
 			}
 		});
+		vertices.stream().forEach(ControlFlowGraph::findGoto);
 
 		// eliminate unreachable vertices
 		// warning: if out is unreachable, it will be labelled -1
