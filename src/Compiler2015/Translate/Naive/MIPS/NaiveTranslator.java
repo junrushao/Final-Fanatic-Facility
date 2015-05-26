@@ -22,6 +22,8 @@ import Compiler2015.Utility.Utility;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class NaiveTranslator {
 
@@ -276,7 +278,7 @@ public final class NaiveTranslator {
 	}
 
 	public static void generateFunction(PrintWriter out) {
-		ControlFlowGraph.scanVirtualRegister(); // calculate space of stack frame
+		scanVirtualRegister(); // calculate space of stack frame
 
 		if (Environment.symbolNames.table.get(ControlFlowGraph.nowUId).name.equals("main"))
 			out.println("main:");
@@ -515,5 +517,56 @@ public final class NaiveTranslator {
 			out.println("\tli $v0, 11");
 			out.println("\tsyscall");
 		}
+	}
+
+	public static void scanVirtualRegister() {
+		ControlFlowGraph.tempDelta = new HashMap<>();
+		ControlFlowGraph.parameterDelta = new HashMap<>();
+		for (CFGVertex vertex : ControlFlowGraph.vertices) {
+			for (IRInstruction ins : vertex.internal) {
+				classifyVirtualRegister(ins.getRd());
+				if (ins instanceof NonSource) {
+					continue;
+				}
+				if (ins instanceof SingleSource) {
+					classifyVirtualRegister(((SingleSource) ins).getRs());
+				} else if (ins instanceof DoubleSource) {
+					classifyVirtualRegister(((DoubleSource) ins).getRs());
+					classifyVirtualRegister(((DoubleSource) ins).getRt());
+				} else if (ins instanceof TripleSource) {
+					classifyVirtualRegister(((TripleSource) ins).getA());
+					classifyVirtualRegister(((TripleSource) ins).getB());
+					classifyVirtualRegister(((TripleSource) ins).getC());
+				} else
+					throw new CompilationError("Internal Error.");
+			}
+		}
+		ControlFlowGraph.frameSize = Panel.getRegisterSize() * 2; // [0, 3] for $fp, [4, 7] for $ra
+		for (Map.Entry<Integer, Integer> entry : ControlFlowGraph.tempDelta.entrySet()) {
+			entry.setValue(ControlFlowGraph.frameSize);
+			int uId = entry.getKey();
+			SymbolTableEntry e = Environment.symbolNames.table.get(uId);
+			if (e.type == Tokens.VARIABLE)
+				ControlFlowGraph.frameSize += Utility.align(((Type) e.ref).sizeof());
+			else if (e.type == Tokens.TEMPORARY_REGISTER)
+				ControlFlowGraph.frameSize += Panel.getRegisterSize();
+			else
+				throw new CompilationError("Internal Error.");
+		}
+		ControlFlowGraph.frameSize += Utility.align(ControlFlowGraph.returnType.sizeof()); // for return value
+		for (int uId : ControlFlowGraph.scope.parametersUId) {
+			ControlFlowGraph.parameterDelta.put(uId, ControlFlowGraph.frameSize);
+			ControlFlowGraph.frameSize += Utility.align(((Type) Environment.symbolNames.table.get(uId).ref).sizeof());
+		}
+	}
+
+	public static void classifyVirtualRegister(int uId) {
+		if (uId == -1 || uId == 0)
+			return;
+		SymbolTableEntry e = Environment.symbolNames.table.get(uId);
+		if (e.scope <= 1)
+			return;
+		if (!ControlFlowGraph.scope.parametersUId.contains(uId))
+			ControlFlowGraph.tempDelta.put(uId, -1);
 	}
 }

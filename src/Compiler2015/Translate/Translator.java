@@ -1,4 +1,4 @@
 package Compiler2015.Translate;
 
-public class Translator {
+public final class Translator {
 }

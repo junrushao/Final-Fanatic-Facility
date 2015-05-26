@@ -19,7 +19,7 @@ public abstract class Statement extends ASTNode {
 	public void setBranch(CFGVertex branchTo, IRRegister register) {
 		if (endCFGBlock.branchIfFalse == null) {
 			endCFGBlock.branchIfFalse = branchTo;
-			endCFGBlock.branchRegister = register;
+			endCFGBlock.branchRegister = register.clone();
 		}
 	}
 }

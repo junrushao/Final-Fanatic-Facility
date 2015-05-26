@@ -10,23 +10,6 @@ public final class NaiveSequentializer {
 		ArrayList<CFGVertex> ret = new ArrayList<>(ControlFlowGraph.vertices);
 		ControlFlowGraph.outBody.id = Integer.MAX_VALUE;
 		ret.sort((o1, o2) -> o1.id - o2.id);
-/*
-		int pos, index;
-		CFGVertex tmp;
-
-		pos = 0;
-		index = ret.indexOf(ControlFlowGraph.root);
-		tmp = ret.get(pos);
-		ret.set(index, tmp);
-		ret.set(pos, ControlFlowGraph.root);
-
-		pos = ret.size() - 1;
-		index = ret.indexOf(ControlFlowGraph.outBody);
-		tmp = ret.get(pos);
-		ret.set(index, tmp);
-		ret.set(pos, ControlFlowGraph.outBody);
-*/
-
 		return ret;
 	}
 }

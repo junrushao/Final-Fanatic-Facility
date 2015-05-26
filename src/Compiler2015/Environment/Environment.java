@@ -10,6 +10,7 @@ import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Stack;
 
 public class Environment {
@@ -29,6 +30,7 @@ public class Environment {
 	public static int uIdOfMalloc;
 	public static int uIdOfPutString;
 	public static int uIdOfPutInt;
+	public static HashSet<Integer> globalNonArrayVariablesAndLocalAddressFetchedVariables;
 
 	static {
 		init();
@@ -69,6 +71,7 @@ public class Environment {
 		classTable = classNames.table;
 		totalTempRegisters = 0;
 		variableDelta = new HashMap<>();
+		globalNonArrayVariablesAndLocalAddressFetchedVariables = new HashSet<>();
 
 		uIdOfPutChar = symbolNames.defineVariable(
 				"putchar",
@@ -145,9 +148,9 @@ public class Environment {
 		return e != null && e.type == Tokens.VARIABLE;
 	}
 
-	public static boolean isVaraible(int uId) {
-		return symbolNames.table.get(uId).type == Tokens.VARIABLE;
-	}
+//	public static boolean isVaraible(int uId) {
+//		return symbolNames.table.get(uId).type == Tokens.VARIABLE;
+//	}
 
 	public static boolean isTypedefName(String name) {
 		SymbolTableEntry e = symbolNames.queryName(name);

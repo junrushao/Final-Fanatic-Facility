@@ -2,19 +2,14 @@ package Compiler2015.IR.CFG;
 
 import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.Environment.Environment;
-import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.Instruction.*;
 import Compiler2015.Type.FunctionType;
 import Compiler2015.Type.Type;
-import Compiler2015.Utility.Panel;
-import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ControlFlowGraph {
@@ -35,57 +30,6 @@ public class ControlFlowGraph {
 		vertices = new HashSet<>();
 		root = outBody = null;
 		nowUId = 0;
-	}
-
-	public static void classifyVirtualRegister(int uId) {
-		if (uId == -1 || uId == 0)
-			return;
-		SymbolTableEntry e = Environment.symbolNames.table.get(uId);
-		if (e.scope <= 1)
-			return;
-		if (!scope.parametersUId.contains(uId))
-			tempDelta.put(uId, -1);
-	}
-
-	public static void scanVirtualRegister() {
-		tempDelta = new HashMap<>();
-		parameterDelta = new HashMap<>();
-		for (CFGVertex vertex : vertices) {
-			for (IRInstruction ins : vertex.internal) {
-				classifyVirtualRegister(ins.getRd());
-				if (ins instanceof NonSource) {
-					continue;
-				}
-				if (ins instanceof SingleSource) {
-					classifyVirtualRegister(((SingleSource) ins).getRs());
-				} else if (ins instanceof DoubleSource) {
-					classifyVirtualRegister(((DoubleSource) ins).getRs());
-					classifyVirtualRegister(((DoubleSource) ins).getRt());
-				} else if (ins instanceof TripleSource) {
-					classifyVirtualRegister(((TripleSource) ins).getA());
-					classifyVirtualRegister(((TripleSource) ins).getB());
-					classifyVirtualRegister(((TripleSource) ins).getC());
-				} else
-					throw new CompilationError("Internal Error.");
-			}
-		}
-		frameSize = Panel.getRegisterSize() * 2; // [0, 3] for $fp, [4, 7] for $ra
-		for (Map.Entry<Integer, Integer> entry : tempDelta.entrySet()) {
-			entry.setValue(frameSize);
-			int uId = entry.getKey();
-			SymbolTableEntry e = Environment.symbolNames.table.get(uId);
-			if (e.type == Tokens.VARIABLE)
-				frameSize += Utility.align(((Type) e.ref).sizeof());
-			else if (e.type == Tokens.TEMPORARY_REGISTER)
-				frameSize += Panel.getRegisterSize();
-			else
-				throw new CompilationError("Internal Error.");
-		}
-		frameSize += Utility.align(returnType.sizeof()); // for return value
-		for (int uId : scope.parametersUId) {
-			parameterDelta.put(uId, frameSize);
-			frameSize += Utility.align(((Type) Environment.symbolNames.table.get(uId).ref).sizeof());
-		}
 	}
 
 	public static CFGVertex getNewVertex() {
@@ -129,7 +73,7 @@ public class ControlFlowGraph {
 			if (x.branchIfFalse != null && x.branchRegister == null) {
 				if (x.internal.isEmpty())
 					System.err.println("fuck id = " + x.id);
-				x.branchRegister = x.internal.get(x.internal.size() - 1).rd;
+				x.branchRegister = x.internal.get(x.internal.size() - 1).rd.clone();
 			}
 		});
 		vertices.stream().forEach(ControlFlowGraph::findGoto);
