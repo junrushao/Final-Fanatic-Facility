@@ -100,6 +100,7 @@ public class Main {
 			Environment.finalCheck();
 
 		ASTModifier.process();
+
 		// emit AST
 		if (Panel.emitAST) {
 			System.out.println(Environment.toStr());
