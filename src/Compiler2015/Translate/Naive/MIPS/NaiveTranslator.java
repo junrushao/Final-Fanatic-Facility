@@ -423,12 +423,6 @@ public final class NaiveTranslator {
 					loadFromIRRegisterToTRegister(((DivideReg) ins).rt, 1, out);
 					out.println("\tdiv $t2, $t0, $t1");
 					storeFromTRegisterToIRRegister(2, ins.getRd(), out);
-				} else if (ins instanceof GlobalAddressFetch) {
-					loadAddressOfVariable(((GlobalAddressFetch) ins).uId, 0, out);
-					storeFromTRegisterToIRRegister(0, ins.getRd(), out);
-				} else if (ins instanceof LocalAddressFetch) {
-					loadAddressOfVariable(((LocalAddressFetch) ins).uId, 0, out);
-					storeFromTRegisterToIRRegister(0, ins.getRd(), out);
 				} else if (ins instanceof ModuloReg) {
 					loadFromIRRegisterToTRegister(((ModuloReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((ModuloReg) ins).rt, 1, out);

@@ -1,9 +1,9 @@
 package Compiler2015.IR.CFG;
 
-import Compiler2015.IR.Analyser.StaticSingleAssignment.PhiFunction;
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.IRInstruction;
+import Compiler2015.IR.Instruction.PhiFunction;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class CFGVertex {
 	}
 
 	public void addPhi(int x) {
-		phis.put(x, new PhiFunction(predecessor.size()));
+		phis.put(x, new PhiFunction(predecessor.size(), new VirtualRegister(x)));
 	}
 
 	@Override
@@ -38,7 +38,10 @@ public class CFGVertex {
 			sb.append(Utility.getIndent(2)).append("--> ").append(unconditionalNext.id).append(Utility.NEW_LINE);
 		if (branchIfFalse != null)
 			sb.append(Utility.getIndent(2)).append("--(BEQ 0)--> ").append(branchIfFalse.id).append("  ").append(branchRegister).append(Utility.NEW_LINE);
-		phis.entrySet().stream().forEach(x -> sb.append(Utility.getIndent(2)).append(new VirtualRegister(x.getKey()).toString()).append("_").append(x.getValue().vid[0]).append(" = phi").append(x.getValue().toString()).append(Utility.NEW_LINE));
+		phis.entrySet().stream().forEach(
+				x -> sb.append(Utility.getIndent(2))
+						.append(new VirtualRegister(x.getKey()).toString())
+						.append("_").append(x.getValue().toString()).append(Utility.NEW_LINE));
 		internal.stream().forEach(x -> sb.append(Utility.getIndent(2)).append(x).append(Utility.NEW_LINE));
 		return sb.toString();
 	}

@@ -1,4 +1,4 @@
-package Compiler2015.IR.Analyser.StaticSingleAssignment;
+package Compiler2015.IR.StaticSingleAssignment;
 
 import Compiler2015.IR.CFG.CFGVertex;
 

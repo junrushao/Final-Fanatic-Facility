@@ -3,13 +3,10 @@ package Compiler2015.AST.Statement.ExpressionStatement.UnaryExpression;
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.AST.Statement.ExpressionStatement.IdentifierExpression;
 import Compiler2015.Environment.Environment;
-import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
-import Compiler2015.IR.Instruction.Arithmetic.GlobalAddressFetch;
-import Compiler2015.IR.Instruction.Arithmetic.LocalAddressFetch;
 import Compiler2015.Type.VariablePointerType;
 import Compiler2015.Type.VoidType;
 
@@ -42,14 +39,7 @@ public class AddressFetch extends UnaryExpression {
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		e.emitCFG(builder);
 		if (e instanceof IdentifierExpression) {
-			int uId = ((IdentifierExpression) e).uId;
-			tempRegister = Environment.getVirtualRegister();
-			SymbolTableEntry e = Environment.symbolNames.table.get(uId);
-			if (e.scope == 1) {
-				builder.addInstruction(new GlobalAddressFetch((VirtualRegister) tempRegister, uId));
-			} else {
-				builder.addInstruction(new LocalAddressFetch((VirtualRegister) tempRegister, uId));
-			}
+			throw new CompilationError("Internal Error.");
 		} else {
 			if (e.tempRegister instanceof ArrayRegister) {
 				e.convertArrayRegisterToPointer(builder);
