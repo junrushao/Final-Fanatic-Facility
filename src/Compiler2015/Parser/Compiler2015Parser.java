@@ -502,17 +502,18 @@ public class Compiler2015Parser extends Parser {
 							functionDefinition();
 						}
 								break;
-								case 2: {
-									setState(109);
-									declaration();
-								}
+								case 2:
+						{
+							setState(109);
+							declaration();
+						}
 								break;
 								case 3: {
 									setState(110);
 									match(Semi);
-								}
+						}
 								break;
-					}
+							}
 						}
 				}
 					setState(115);
@@ -1005,7 +1006,7 @@ public class Compiler2015Parser extends Parser {
 							_errHandler.sync(this);
 							_la = _input.LA(1);
 				}
-					}
+				}
 				}
 
 				setState(236);
@@ -1148,7 +1149,7 @@ public class Compiler2015Parser extends Parser {
 						setState(260);
 						((DirectDeclaratorContext) _localctx).Identifier = match(Identifier);
 						((DirectDeclaratorContext) _localctx).name = (((DirectDeclaratorContext) _localctx).Identifier != null ? ((DirectDeclaratorContext) _localctx).Identifier.getText() : null);
-					}
+				}
 					break;
 					case L1: {
 						setState(262);
@@ -1174,23 +1175,23 @@ public class Compiler2015Parser extends Parser {
 						{
 							setState(293);
 							switch (getInterpreter().adaptivePredict(_input, 19, _ctx)) {
-								case 1: {
-									_localctx = new DirectDeclaratorContext(_parentctx, _parentState);
-									_localctx.d1 = _prevctx;
-									_localctx.d1 = _prevctx;
-									pushNewRecursionContext(_localctx, _startState, RULE_directDeclarator);
-									setState(269);
-									if (!(precpred(_ctx, 4)))
-										throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-									((DirectDeclaratorContext) _localctx).name = ((DirectDeclaratorContext) _localctx).d1.name;
-									setState(271);
-									match(L2);
-									setState(272);
-									((DirectDeclaratorContext) _localctx).constantExpression = constantExpression();
-									setState(273);
-									match(R2);
-									TypeAnalyser.addArray(((DirectDeclaratorContext) _localctx).constantExpression.ret);
-								}
+								case 1:
+						{
+							_localctx = new DirectDeclaratorContext(_parentctx, _parentState);
+							_localctx.d1 = _prevctx;
+							_localctx.d1 = _prevctx;
+							pushNewRecursionContext(_localctx, _startState, RULE_directDeclarator);
+							setState(269);
+							if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
+							((DirectDeclaratorContext) _localctx).name = ((DirectDeclaratorContext) _localctx).d1.name;
+							setState(271);
+							match(L2);
+							setState(272);
+							((DirectDeclaratorContext) _localctx).constantExpression = constantExpression();
+							setState(273);
+							match(R2);
+							TypeAnalyser.addArray(((DirectDeclaratorContext) _localctx).constantExpression.ret);
+						}
 								break;
 								case 2: {
 									_localctx = new DirectDeclaratorContext(_parentctx, _parentState);
@@ -1497,7 +1498,7 @@ public class Compiler2015Parser extends Parser {
 						abstractDeclarator();
 						setState(350);
 						match(R1);
-					}
+				}
 					break;
 					case 2: {
 						setState(352);
@@ -1547,18 +1548,18 @@ public class Compiler2015Parser extends Parser {
 						{
 							setState(391);
 							switch (getInterpreter().adaptivePredict(_input, 29, _ctx)) {
-								case 1: {
-									_localctx = new DirectAbstractDeclaratorContext(_parentctx, _parentState);
-									pushNewRecursionContext(_localctx, _startState, RULE_directAbstractDeclarator);
-									setState(370);
-									if (!(precpred(_ctx, 4)))
-										throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-									setState(371);
+								case 1:
+						{
+							_localctx = new DirectAbstractDeclaratorContext(_parentctx, _parentState);
+							pushNewRecursionContext(_localctx, _startState, RULE_directAbstractDeclarator);
+							setState(370);
+							if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
+							setState(371);
 						match(L2);
-									setState(372);
+							setState(372);
 						match(R2);
-									TypeAnalyser.addArray(null);
-								}
+							TypeAnalyser.addArray(null);
+						}
 								break;
 								case 2: {
 									_localctx = new DirectAbstractDeclaratorContext(_parentctx, _parentState);
@@ -1823,9 +1824,10 @@ public class Compiler2015Parser extends Parser {
 						{
 							setState(450);
 							switch (getInterpreter().adaptivePredict(_input, 35, _ctx)) {
-								case 1: {
-									setState(445);
-									declaration();
+								case 1:
+						{
+							setState(445);
+							declaration();
 						}
 								break;
 								case 2: {
@@ -1833,7 +1835,7 @@ public class Compiler2015Parser extends Parser {
 										setState(446);
 										((CompoundStatementContext) _localctx).statement = statement();
 										_localctx.statements.add(((CompoundStatementContext) _localctx).statement.ret);
-									}
+						}
 								}
 								break;
 								case 3: {
@@ -1841,7 +1843,7 @@ public class Compiler2015Parser extends Parser {
 									functionDefinition();
 								}
 								break;
-					}
+							}
 						}
 				}
 					setState(454);
@@ -3116,7 +3118,7 @@ public class Compiler2015Parser extends Parser {
 									setState(756);
 									match(R1);
 									((PostfixExpressionContext) _localctx).ret = FunctionCall.getExpression(((PostfixExpressionContext) _localctx).p.ret, _localctx.arg);
-								}
+						}
 								break;
 								case 3: {
 									_localctx = new PostfixExpressionContext(_parentctx, _parentState);
@@ -3174,7 +3176,7 @@ public class Compiler2015Parser extends Parser {
 									((PostfixExpressionContext) _localctx).ret = PostfixSelfDec.getExpression(((PostfixExpressionContext) _localctx).p.ret);
 								}
 								break;
-					}
+							}
 						}
 				}
 					setState(776);
@@ -3287,7 +3289,7 @@ public class Compiler2015Parser extends Parser {
 									_localctx.s.add((((PrimaryExpression3Context) _localctx).StringLiteral != null ? ((PrimaryExpression3Context) _localctx).StringLiteral.getText() : null));
 
 						}
-							}
+						}
 							break;
 							default:
 								throw new NoViableAltException(this);

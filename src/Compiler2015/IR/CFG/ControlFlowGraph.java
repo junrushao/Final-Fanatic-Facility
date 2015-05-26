@@ -9,6 +9,7 @@ import Compiler2015.Type.FunctionType;
 import Compiler2015.Type.Type;
 import Compiler2015.Utility.Utility;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -42,6 +43,12 @@ public class ControlFlowGraph {
 		return ret;
 	}
 
+	public static CFGVertex getNewTempVertex() {
+		CFGVertex ret = new CFGVertex();
+		ret.id = -1;
+		return ret;
+	}
+
 	public static void process(CompoundStatement body, int uId) {
 		nowUId = uId;
 		tempVertexCount = 0;
@@ -71,8 +78,8 @@ public class ControlFlowGraph {
 			}
 		});
 
-		// merge blocks
 		mergeBlocks();
+		splitEdges();
 
 		vertices.stream().filter(v -> v.id != -1).forEach(v -> {
 			if (v.unconditionalNext != null)
@@ -94,13 +101,57 @@ public class ControlFlowGraph {
 */
 	}
 
-	public static void mergeBlocks() {
-		// eliminate unreachable vertices
-		// warning: if outBody is unreachable, it will be labelled -1
+	public static void splitEdges() {
+		int n = DepthFirstSearcher.process(vertices, root);
+		List<CFGVertex> unreachable = vertices.stream().filter(x -> x.id == -1).collect(Collectors.toList());
+		unreachable.stream().forEach(vertices::remove);
+		if (vertices.size() != n)
+			throw new CompilationError("Internal Error.");
+		int inDegree[] = new int[n + 1];
+		int outDegree[] = new int[n + 1];
+		ArrayList<CFGVertex> added = new ArrayList<>();
+		for (CFGVertex x : vertices) {
+			final int finalN = n;
+			Stream.of(x.unconditionalNext, x.branchIfFalse).filter(y -> y != null).forEach(
+					y -> {
+						if (!(1 <= x.id && x.id <= finalN))
+							throw new CompilationError("Internal Error.");
+						if (!(1 <= y.id && y.id <= finalN))
+							throw new CompilationError("Internal Error.");
+						++outDegree[x.id];
+						++inDegree[y.id];
+					}
+			);
+		}
+		for (CFGVertex x : vertices)
+			if (x.unconditionalNext != null && x.branchIfFalse != null) {
+				CFGVertex y, z;
+				y = x.unconditionalNext;
+				if (inDegree[y.id] > 1) {
+					z = getNewTempVertex();
+					x.unconditionalNext = z;
+					z.unconditionalNext = y;
+					added.add(z);
+				}
+				y = x.branchIfFalse;
+				if (inDegree[y.id] > 1) {
+					z = getNewTempVertex();
+					x.branchIfFalse = z;
+					z.unconditionalNext = y;
+					added.add(z);
+				}
+			}
+		vertices.addAll(added);
+		n = DepthFirstSearcher.process(vertices, root);
+		unreachable = vertices.stream().filter(x -> x.id == -1).collect(Collectors.toList());
+		unreachable.stream().forEach(vertices::remove);
+		if (vertices.size() != n)
+			throw new CompilationError("Internal Error.");
+	}
 
+	public static void mergeBlocks() {
 		boolean changed;
 		do {
-//			System.err.println("I am angry");
 			changed = false;
 			int n = DepthFirstSearcher.process(vertices, root);
 			List<CFGVertex> unreachable = vertices.stream().filter(x -> x.id == -1).collect(Collectors.toList());
