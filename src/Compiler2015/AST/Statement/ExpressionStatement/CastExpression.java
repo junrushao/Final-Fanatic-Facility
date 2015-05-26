@@ -82,4 +82,9 @@ public class CastExpression extends Expression {
 		ret.e = ret.e.clone();
 		return ret;
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new CastExpression(castTo, e.rebuild());
+	}
 }

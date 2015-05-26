@@ -85,6 +85,15 @@ public class WhileStatement extends Statement implements Loop {
 	}
 
 	@Override
+	public Statement rebuild() {
+		if (e != null)
+			e = e.rebuild();
+		if (a != null)
+			a = a.rebuild();
+		return this;
+	}
+
+	@Override
 	public CFGVertex getLoop() {
 		return beginCFGBlock;
 	}

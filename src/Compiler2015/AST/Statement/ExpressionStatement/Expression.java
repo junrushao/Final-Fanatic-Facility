@@ -97,4 +97,7 @@ public abstract class Expression extends Statement implements Cloneable {
 		}
 		return ret;
 	}
+
+	@Override
+	public abstract Expression rebuild();
 }

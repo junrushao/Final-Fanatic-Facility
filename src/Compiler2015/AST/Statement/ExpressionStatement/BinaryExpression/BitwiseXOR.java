@@ -150,4 +150,9 @@ public class BitwiseXOR extends BinaryExpression {
 		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new BitwiseXORReg((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new BitwiseXOR(left.rebuild(), right.rebuild());
+	}
 }

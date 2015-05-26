@@ -118,4 +118,9 @@ public class Subtract extends BinaryExpression {
 	public Subtract clone() {
 		return (Subtract) super.clone();
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new Subtract(left.rebuild(), right.rebuild());
+	}
 }

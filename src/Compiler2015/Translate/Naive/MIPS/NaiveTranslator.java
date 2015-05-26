@@ -88,13 +88,17 @@ public final class NaiveTranslator {
 					out.println("\t.align 2");
 				} else {
 					class ValuePairs {
-						int position, value;
+						int position;
+						Integer value;
+						Integer refUId;
 
-						public ValuePairs(int position, int value) {
+						public ValuePairs(int position, Integer value, Integer refUId) {
 							this.position = position;
 							this.value = value;
+							this.refUId = refUId;
 						}
 					}
+
 					ArrayPointerType t = (ArrayPointerType) type;
 					ArrayList<ValuePairs> pairs = new ArrayList<>();
 					for (Initializer.InitEntry _entry : ((Initializer) entry.info).entries) {
@@ -103,7 +107,16 @@ public final class NaiveTranslator {
 							pos += _entry.position[i] * mul;
 							mul *= t.dimensions.get(i);
 						}
-						pairs.add(new ValuePairs(pos, Constant.toInt(_entry.value)));
+//						if (pointTo instanceof VariablePointerType && ((VariablePointerType) pointTo).pointTo instanceof CharType)
+						Integer value = Constant.toInt(_entry.value);
+						Integer refUId = null;
+						if (value == null) {
+							if (_entry.value instanceof StringConstant)
+								refUId = ((StringConstant) _entry.value).uId;
+							else
+								throw new CompilationError("Not supported.");
+						}
+						pairs.add(new ValuePairs(pos, value, refUId));
 					}
 					pairs.sort((o1, o2) -> o1.position - o2.position);
 
@@ -119,10 +132,18 @@ public final class NaiveTranslator {
 					int pointer = 0;
 					for (int i = 0; i < size; ++i) {
 						if (pointer < pairs.size() && pairs.get(pointer).position == i) {
-							out.printf("%s %d", prefix, pairs.get(pointer).value);
-							out.println();
-							out.println("\t.align 2");
-							++pointer;
+							if (pairs.get(pointer).value != null) {
+								out.printf("%s %d", prefix, pairs.get(pointer).value);
+								out.println();
+								out.println("\t.align 2");
+								++pointer;
+							}
+							else {
+								out.printf("\t.word %s", getStringConstantLabelName(pairs.get(pointer).refUId));
+								out.println();
+								out.println("\t.align 2");
+								++pointer;
+							}
 						} else {
 							out.printf("%s 0", prefix);
 							out.println();

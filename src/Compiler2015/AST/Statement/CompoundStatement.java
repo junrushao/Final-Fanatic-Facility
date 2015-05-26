@@ -80,6 +80,7 @@ public class CompoundStatement extends Statement {
 					newStatements.add(ww);
 				}
 			}
+			e.info = null;
 		}
 		newStatements.addAll(statements);
 		statements = newStatements;
@@ -130,5 +131,12 @@ public class CompoundStatement extends Statement {
 	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
 		for (Statement s : statements)
 			s.collectGlobalNonArrayVariablesUsed(dumpTo);
+	}
+
+	@Override
+	public Statement rebuild() {
+		for (int i = 0, size = statements.size(); i < size; ++i)
+			statements.set(i, statements.get(i).rebuild());
+		return this;
 	}
 }

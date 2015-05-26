@@ -47,4 +47,9 @@ public class AddressAccess extends UnaryExpression {
 	public AddressAccess clone() {
 		return (AddressAccess) super.clone();
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new AddressAccess(e.rebuild());
+	}
 }

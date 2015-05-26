@@ -55,4 +55,11 @@ public class ReturnStatement extends Statement {
 		if (e != null)
 			e.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
+
+	@Override
+	public Statement rebuild() {
+		if (e != null)
+			e = e.rebuild();
+		return this;
+	}
 }

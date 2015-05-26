@@ -89,9 +89,7 @@ public class LengauerTarjan {
 			}
 		});
 
-		vertices.forEach(v -> {
-			System.out.printf("v = %d, fa = %d\n", v.id, v.idom.id);
-		});
+		vertices.forEach(v -> System.out.printf("v = %d, fa = %d\n", v.id, v.idom.id));
 		// calculate dominance frontier
 		for (VertexInfo toAdd : vi)
 			if (toAdd != null && toAdd.pred.size() > 1)

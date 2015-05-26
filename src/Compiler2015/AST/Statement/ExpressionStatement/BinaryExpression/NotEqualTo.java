@@ -87,4 +87,9 @@ public class NotEqualTo extends BinaryExpression {
 		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new SetNotEqual((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new NotEqualTo(left.rebuild(), right.rebuild());
+	}
 }

@@ -12,6 +12,29 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Initializer extends ASTNode {
+	public ArrayList<InitEntry> entries;
+
+	public Initializer(ArrayList<InitEntry> entries) {
+		this.entries = new ArrayList<>(entries);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("{");
+		boolean isFirst = true;
+		for (InitEntry i : entries) {
+			if (isFirst) isFirst = false;
+			else sb.append(", ");
+			sb.append(i.toString());
+		}
+		return sb.append("}").toString();
+	}
+
+	@Override
+	public String deepToString(int depth) {
+		return Utility.getIndent(depth).append(toString()).append(Utility.NEW_LINE).toString();
+	}
+
 	public static class InitEntry {
 		public int position[];
 		public Expression value;
@@ -56,14 +79,14 @@ public class Initializer extends ASTNode {
 			if (pos.single != null) { // leaf node
 				Expression e = pos.single;
 				if (!CastExpression.castable(e.type, t))
-					throw new CompilationError("Type not convertable.");
+					throw new CompilationError("Type not convertible.");
 				entries.add(new InitEntry(now, e));
 				return;
 			}
 			if (n == dimensions.size()) { // depth limit reached
 				Expression e = pos.toArrayList().get(0);
 				if (!CastExpression.castable(e.type, t))
-					throw new CompilationError("Type not convertable.");
+					throw new CompilationError("Type not convertible.");
 				entries.add(new InitEntry(now, e));
 				return;
 			}
@@ -82,29 +105,6 @@ public class Initializer extends ASTNode {
 			DFS(0, list);
 			return new Initializer(entries);
 		}
-	}
-
-	public ArrayList<InitEntry> entries;
-
-	public Initializer(ArrayList<InitEntry> entries) {
-		this.entries = new ArrayList<>(entries);
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder("{");
-		boolean isFirst = true;
-		for (InitEntry i : entries) {
-			if (isFirst) isFirst = false;
-			else sb.append(", ");
-			sb.append(i.toString());
-		}
-		return sb.append("}").toString();
-	}
-
-	@Override
-	public String deepToString(int depth) {
-		return Utility.getIndent(depth).append(toString()).append(Utility.NEW_LINE).toString();
 	}
 
 }

@@ -63,18 +63,6 @@ public class MemberAccess extends Expression {
 		} else {
 			tempRegister = new ArrayRegister((VirtualRegister) su.tempRegister, new ImmediateValue(delta), type.sizeof());
 		}
-/*
-		StructOrUnionType type = (StructOrUnionType) su.type;
-		int delta = type.memberDelta.get(memberName);
-		int size = this.type instanceof StructOrUnionType || this.type instanceof ArrayPointerType ? Panel.getPointerSize() : this.type.sizeof();
-		if (su.tempRegister instanceof ArrayRegister) {
-			ImmediateValue t = new ImmediateValue(((ArrayRegister) su.tempRegister).b.a + delta);
-			tempRegister = new ArrayRegister(((ArrayRegister) su.tempRegister).a, t, size);
-		}
-		else {
-			tempRegister = new ArrayRegister((VirtualRegister) su.tempRegister, new ImmediateValue(delta), size);
-		}
-*/
 	}
 
 	@Override
@@ -91,5 +79,10 @@ public class MemberAccess extends Expression {
 		MemberAccess ret = (MemberAccess) super.clone();
 		ret.su = ret.su.clone();
 		return ret;
+	}
+
+	@Override
+	public Expression rebuild() {
+		return new MemberAccess(su.rebuild(), memberName, this.type);
 	}
 }

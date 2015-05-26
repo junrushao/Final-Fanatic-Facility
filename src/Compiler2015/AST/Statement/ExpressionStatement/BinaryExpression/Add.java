@@ -146,4 +146,9 @@ public class Add extends BinaryExpression {
 		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new AddReg((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new Add(left.rebuild(), right.rebuild());
+	}
 }

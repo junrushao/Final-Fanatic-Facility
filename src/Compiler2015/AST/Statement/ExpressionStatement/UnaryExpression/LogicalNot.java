@@ -82,4 +82,9 @@ public class LogicalNot extends UnaryExpression implements Logical {
 	public LogicalNot clone() {
 		return (LogicalNot) super.clone();
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new LogicalNot(e.rebuild());
+	}
 }

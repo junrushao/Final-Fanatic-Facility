@@ -40,4 +40,9 @@ public class Positive extends UnaryExpression {
 	public Positive clone() {
 		return (Positive) super.clone();
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new Positive(e.rebuild());
+	}
 }

@@ -45,4 +45,9 @@ public class Negative extends UnaryExpression {
 	public Negative clone() {
 		return (Negative) super.clone();
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new Negative(e.rebuild());
+	}
 }

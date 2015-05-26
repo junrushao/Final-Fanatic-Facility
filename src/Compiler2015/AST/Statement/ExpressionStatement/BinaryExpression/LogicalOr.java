@@ -143,4 +143,9 @@ public class LogicalOr extends BinaryExpression implements Logical {
 
 		builder.addBlock(beginCFGBlock, endCFGBlock);
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new LogicalOr(left.rebuild(), right.rebuild());
+	}
 }

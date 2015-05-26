@@ -129,4 +129,17 @@ public class ForStatement extends Statement implements Loop {
 		if (d != null)
 			d.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
+
+	@Override
+	public Statement rebuild() {
+		if (a != null)
+			a = a.rebuild();
+		if (b != null)
+			b = b.rebuild();
+		if (c != null)
+			c = c.rebuild();
+		if (d != null)
+			d = d.rebuild();
+		return this;
+	}
 }

@@ -2,18 +2,30 @@
   <dictionary name="junrushao">
     <words>
       <w>addiu</w>
+      <w>addu</w>
       <w>antlr</w>
+      <w>asciiz</w>
+      <w>convertable</w>
       <w>defsite</w>
       <w>dominator</w>
+      <w>fxxk</w>
       <w>idom</w>
       <w>initializers</w>
       <w>inserter</w>
       <w>junrushao</w>
       <w>lengauer</w>
       <w>pred</w>
+      <w>preprocessing</w>
+      <w>putchar</w>
+      <w>putint</w>
+      <w>putstring</w>
+      <w>sequentializer</w>
       <w>structs</w>
+      <w>subu</w>
       <w>syscall</w>
       <w>tarjan</w>
+      <w>undimensioned</w>
+      <w>yzgysjr</w>
     </words>
   </dictionary>
 </component>

@@ -99,4 +99,15 @@ public class IfStatement extends Statement {
 		if (ifFalse != null)
 			ifFalse.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
+
+	@Override
+	public Statement rebuild() {
+		if (e != null)
+			e = e.rebuild();
+		if (ifTrue != null)
+			ifTrue = ifTrue.rebuild();
+		if (ifFalse != null)
+			ifFalse = ifFalse.rebuild();
+		return this;
+	}
 }

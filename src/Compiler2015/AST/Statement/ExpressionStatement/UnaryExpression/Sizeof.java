@@ -26,4 +26,9 @@ public class Sizeof extends UnaryExpression {
 	public Sizeof clone() {
 		return (Sizeof) super.clone();
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new Sizeof(e.rebuild());
+	}
 }

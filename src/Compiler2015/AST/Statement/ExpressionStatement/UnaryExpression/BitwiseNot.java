@@ -45,4 +45,9 @@ public class BitwiseNot extends UnaryExpression {
 	public BitwiseNot clone() {
 		return (BitwiseNot) super.clone();
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new BitwiseNot(e.rebuild());
+	}
 }

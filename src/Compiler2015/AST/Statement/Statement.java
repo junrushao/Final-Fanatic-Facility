@@ -22,4 +22,6 @@ public abstract class Statement extends ASTNode {
 			endCFGBlock.branchRegister = register.clone();
 		}
 	}
+
+	public abstract Statement rebuild();
 }

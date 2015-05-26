@@ -36,4 +36,9 @@ public class BreakStatement extends Statement {
 	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
 
 	}
+
+	@Override
+	public Statement rebuild() {
+		return this;
+	}
 }

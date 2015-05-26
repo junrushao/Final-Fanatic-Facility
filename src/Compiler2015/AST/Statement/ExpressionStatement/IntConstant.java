@@ -46,4 +46,9 @@ public class IntConstant extends Constant {
 		return (IntConstant) super.clone();
 	}
 
+	@Override
+	public Expression rebuild() {
+		return this;
+	}
+
 }

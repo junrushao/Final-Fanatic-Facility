@@ -1,5 +1,6 @@
 package Compiler2015.AST.Statement.ExpressionStatement;
 
+import Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression.ArrayAccess;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
@@ -56,5 +57,14 @@ public class IdentifierExpression extends Expression {
 	@Override
 	public IdentifierExpression clone() {
 		return (IdentifierExpression) super.clone();
+	}
+
+	@Override
+	public Expression rebuild() {
+		if (Environment.globalNonArrayVariablesAndLocalAddressFetchedVariables.contains(uId)) {
+			return new ArrayAccess(new IdentifierExpression(uId, (Type) Environment.symbolNames.table.get(uId).ref), new IntConstant(0), this.type, true);
+		} else {
+			return this;
+		}
 	}
 }

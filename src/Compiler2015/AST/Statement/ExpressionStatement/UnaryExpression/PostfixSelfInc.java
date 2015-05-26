@@ -63,4 +63,9 @@ public class PostfixSelfInc extends UnaryExpression {
 	public PostfixSelfInc clone() {
 		return (PostfixSelfInc) super.clone();
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new PostfixSelfInc(e.rebuild());
+	}
 }

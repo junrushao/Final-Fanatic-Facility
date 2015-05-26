@@ -96,7 +96,6 @@ public class FunctionCall extends Expression {
 
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
-		boolean isLib = function instanceof IdentifierExpression && Environment.isLibraryFunctions(((IdentifierExpression) function).uId);
 		function.emitCFG(builder);
 		for (Expression e : argumentExpressionList) {
 			e.emitCFG(builder);
@@ -114,8 +113,7 @@ public class FunctionCall extends Expression {
 
 		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new Call(function.tempRegister));
-		builder.addInstruction(new FetchReturn((VirtualRegister) tempRegister, function.type));
-//		builder.addInstruction(new Move((VirtualRegister) tempRegister, tempRegister));
+		builder.addInstruction(new FetchReturn((VirtualRegister) tempRegister));
 	}
 
 	@Override
@@ -125,5 +123,15 @@ public class FunctionCall extends Expression {
 		ret.argumentExpressionList = ret.argumentExpressionList.clone();
 		ret.vaList = ret.vaList.clone();
 		return ret;
+	}
+
+	@Override
+	public Expression rebuild() {
+		function = function.rebuild();
+		for (int i = 0; i < argumentExpressionList.length; ++i)
+			argumentExpressionList[i] = argumentExpressionList[i].rebuild();
+		for (int i = 0; i < vaList.length; ++i)
+			vaList[i] = vaList[i].rebuild();
+		return this;
 	}
 }

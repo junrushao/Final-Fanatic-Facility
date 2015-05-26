@@ -152,4 +152,9 @@ public class Modulo extends BinaryExpression {
 		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new ModuloReg((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new Modulo(left.rebuild(), right.rebuild());
+	}
 }

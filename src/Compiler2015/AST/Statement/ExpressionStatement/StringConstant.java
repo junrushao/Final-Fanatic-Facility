@@ -205,4 +205,9 @@ public class StringConstant extends Expression {
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		tempRegister = new VirtualRegister(uId);
 	}
+
+	@Override
+	public Expression rebuild() {
+		return this;
+	}
 }

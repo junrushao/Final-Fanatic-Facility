@@ -157,40 +157,6 @@ public class Assign extends BinaryExpression {
 			tempRegister = left.tempRegister.clone();
 		} else
 			throw new CompilationError("Internal Error.");
-/*
-		right.readInArrayRegister(builder);
-		if (left.type instanceof StructOrUnionType) {
-			// right-hand side must be a instance of StructOrUnionType as well, which will not do any lvalue self-elimination
-			// a = b = c should be taken into consideration
-			IRRegister t1, t2 = right.tempRegister.clone();
-			if (left.tempRegister instanceof ArrayRegister) {
-				t1 = Environment.getVirtualRegister();
-				IRRegister t3 = Environment.getVirtualRegister();
-				builder.addInstruction(new MultiplyReg((VirtualRegister) t3, ((ArrayRegister) left.tempRegister).b, new ImmediateValue(type.sizeof())));
-				builder.addInstruction(new AddReg((VirtualRegister) t1, ((ArrayRegister) left.tempRegister).a, t3));
-			}
-			else {
-				t1 = left.tempRegister.clone();
-			}
-
-			StructOrUnionType type = (StructOrUnionType) left.type;
-			int size = type.sizeof(), registerSize = Panel.getRegisterSize();
-			for (int i = 0; i < size; i += registerSize) {
-				VirtualRegister t = Environment.getVirtualRegister();
-				builder.addInstruction(new ReadArray(t, new ArrayRegister((VirtualRegister) t2, new ImmediateValue(i), registerSize)));
-				builder.addInstruction(new WriteArray(new ArrayRegister((VirtualRegister) t1, new ImmediateValue(i), registerSize), t));
-			}
-			tempRegister = t1.clone();
-		}
-		else if (left.tempRegister instanceof ArrayRegister) {
-			builder.addInstruction(new WriteArray((ArrayRegister) left.tempRegister, right.tempRegister));
-			tempRegister = left.tempRegister.clone();
-		}
-		else {
-			builder.addInstruction(new Move((VirtualRegister) left.tempRegister, right.tempRegister));
-			tempRegister = left.tempRegister.clone();
-		}
-*/
 	}
 
 	@Override
@@ -200,6 +166,11 @@ public class Assign extends BinaryExpression {
 			builder.addInstruction(new ReadArray(newReg, (ArrayRegister) tempRegister));
 			tempRegister = newReg.clone();
 		}
+	}
+
+	@Override
+	public Expression rebuild() {
+		return new Assign(left.rebuild(), right.rebuild());
 	}
 
 }

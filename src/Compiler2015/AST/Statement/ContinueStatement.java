@@ -36,4 +36,9 @@ public class ContinueStatement extends Statement {
 	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
 
 	}
+
+	@Override
+	public Statement rebuild() {
+		return this;
+	}
 }

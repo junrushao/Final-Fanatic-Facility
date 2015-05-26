@@ -52,4 +52,9 @@ public class CommaExpression extends Expression {
 		ret.e2 = ret.e2.clone();
 		return ret;
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new CommaExpression(e1.rebuild(), e2.rebuild());
+	}
 }

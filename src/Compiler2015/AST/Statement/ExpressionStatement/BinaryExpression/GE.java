@@ -86,4 +86,9 @@ public class GE extends BinaryExpression {
 		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new SetGE((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new GE(left.rebuild(), right.rebuild());
+	}
 }

@@ -149,4 +149,9 @@ public class ShiftRight extends BinaryExpression {
 		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new ShiftRightReg((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new ShiftRight(left.rebuild(), right.rebuild());
+	}
 }

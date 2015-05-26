@@ -86,4 +86,9 @@ public class GreaterThan extends BinaryExpression {
 		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new SetGreaterThan((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new GreaterThan(left.rebuild(), right.rebuild());
+	}
 }

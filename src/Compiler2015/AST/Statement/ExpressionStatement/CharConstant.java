@@ -44,4 +44,9 @@ public class CharConstant extends Constant {
 	public CharConstant clone() {
 		return (CharConstant) super.clone();
 	}
+
+	@Override
+	public Expression rebuild() {
+		return this;
+	}
 }

@@ -87,4 +87,9 @@ public class LE extends BinaryExpression {
 		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new SetLE((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new LE(left.rebuild(), right.rebuild());
+	}
 }

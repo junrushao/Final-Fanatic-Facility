@@ -169,53 +169,6 @@ public class ArrayAccess extends BinaryExpression {
 			tempRegister = new ArrayRegister(address, new ImmediateValue(0), type.sizeof());
 		} else
 			throw new CompilationError("Internal Error.");
-
-/*
-		VirtualRegister leftRegister = null;
-		if (left.tempRegister instanceof VirtualRegister)
-			leftRegister = (VirtualRegister) left.tempRegister;
-		else if (left.tempRegister instanceof ArrayRegister) {
-			leftRegister = Environment.getVirtualRegister();
-			builder.addInstruction(new AddReg(leftRegister, ((ArrayRegister) left.tempRegister).a, ((ArrayRegister) left.tempRegister).b));
-		}
-
-		// int (*a)[10];
-		// a[b] <=> *(a + 10 * b)
-		// int a[10][10]
-		// a[b] <=> a + 10 * b
-		if (this.type instanceof ArrayPointerType) {
-			tempRegister = Environment.getVirtualRegister();
-			VirtualRegister r = Environment.getVirtualRegister();
-			builder.addInstruction(new MultiplyReg(r, right.tempRegister, new ImmediateValue(type.sizeof())));
-			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, leftRegister, r));
-			return;
-		}
-
-		// for a pointer to a struct, we should do nothing
-		if (this.type instanceof StructOrUnionType) {
-			// left[right] <=> *(leftRegister + right.tempRegister * struct.sizeof)
-			tempRegister = Environment.getVirtualRegister();
-			VirtualRegister r = Environment.getVirtualRegister();
-			builder.addInstruction(new MultiplyReg(r, right.tempRegister, new ImmediateValue(type.sizeof())));
-			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, leftRegister, r));
-		}
-
-		if (right.tempRegister instanceof VirtualRegister) {
-			// in fact it is not ArrayAccess but (left + right * size)[0]
-			// r1 = right * type.size
-			VirtualRegister r1 = Environment.getVirtualRegister();
-			builder.addInstruction(new MultiplyReg(r1, right.tempRegister, new ImmediateValue(type.sizeof())));
-			// r2 = left + r1
-			VirtualRegister r2 = Environment.getVirtualRegister();
-			builder.addInstruction(new AddReg(r2, leftRegister, r1));
-			// tempRegister = r2[0]
-			tempRegister = new ArrayRegister(r2, ImmediateValue.zero, type.classifiedSizeof());
-		} else if (right.tempRegister instanceof ImmediateValue) {
-			int delta = ((ImmediateValue) right.tempRegister).a * type.sizeof();
-			tempRegister = new ArrayRegister(leftRegister, new ImmediateValue(delta), type.classifiedSizeof());
-		} else
-			throw new CompilationError("Internal Error.");
-*/
 	}
 
 	@Override
@@ -233,5 +186,10 @@ public class ArrayAccess extends BinaryExpression {
 				tempRegister = newReg;
 			}
 		}
+	}
+
+	@Override
+	public Expression rebuild() {
+		return new ArrayAccess(left.rebuild(), right.rebuild(), type, isLValue);
 	}
 }

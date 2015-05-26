@@ -144,4 +144,9 @@ public class LogicalAnd extends BinaryExpression implements Logical {
 
 		builder.addBlock(beginCFGBlock, endCFGBlock);
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new LogicalAnd(left.rebuild(), right.rebuild());
+	}
 }

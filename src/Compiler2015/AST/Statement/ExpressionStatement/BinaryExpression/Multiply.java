@@ -149,4 +149,9 @@ public class Multiply extends BinaryExpression {
 		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new MultiplyReg((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new Multiply(left.rebuild(), right.rebuild());
+	}
 }

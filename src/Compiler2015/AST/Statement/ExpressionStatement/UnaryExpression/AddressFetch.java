@@ -20,6 +20,9 @@ public class AddressFetch extends UnaryExpression {
 	public AddressFetch(Expression e) {
 		super(e);
 		this.type = new VariablePointerType(e.type);
+		if (e instanceof IdentifierExpression) {
+			Environment.globalNonArrayVariablesAndLocalAddressFetchedVariables.add(((IdentifierExpression) e).uId);
+		}
 	}
 
 	public static Expression getExpression(Expression e) {
@@ -54,27 +57,21 @@ public class AddressFetch extends UnaryExpression {
 			} else if (e.tempRegister instanceof VirtualRegister) {
 				tempRegister = e.tempRegister.clone();
 			}
-			throw new CompilationError("Hehe");
 		}
-/*
-		e.convertArrayRegisterToPointer(builder);
-		tempRegister = Environment.getVirtualRegister();
-		if (e instanceof IdentifierExpression) {
-			int uId = ((IdentifierExpression) e).uId;
-			SymbolTableEntry e = Environment.symbolNames.table.get(uId);
-			if (e.scope == 1) {
-				builder.addInstruction(new GlobalAddressFetch((VirtualRegister) tempRegister, uId));
-			} else {
-				builder.addInstruction(new LocalAddressFetch((VirtualRegister) tempRegister, uId));
-			}
-		} else {
-			builder.addInstruction(new Move((VirtualRegister) tempRegister, e.tempRegister));
-		}
-*/
 	}
 
 	@Override
 	public AddressFetch clone() {
 		return (AddressFetch) super.clone();
+	}
+
+	@Override
+	public Expression rebuild() {
+		if (e instanceof IdentifierExpression) {
+			if (!Environment.globalNonArrayVariablesAndLocalAddressFetchedVariables.contains(((IdentifierExpression) e).uId))
+				throw new CompilationError("Internal Error.");
+			return e.clone();
+		} else
+			return new AddressFetch(e.rebuild());
 	}
 }

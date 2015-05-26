@@ -152,4 +152,9 @@ public class Divide extends BinaryExpression {
 		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new DivideReg((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new Divide(left.rebuild(), right.rebuild());
+	}
 }

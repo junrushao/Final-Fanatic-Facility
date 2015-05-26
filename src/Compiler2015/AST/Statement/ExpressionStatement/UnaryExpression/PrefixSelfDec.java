@@ -60,4 +60,9 @@ public class PrefixSelfDec extends UnaryExpression {
 	public PrefixSelfDec clone() {
 		return (PrefixSelfDec) super.clone();
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new PrefixSelfDec(e.rebuild());
+	}
 }

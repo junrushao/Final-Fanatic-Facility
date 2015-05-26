@@ -86,4 +86,9 @@ public class LessThan extends BinaryExpression {
 		tempRegister = Environment.getVirtualRegister();
 		builder.addInstruction(new SetLessThan((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new LessThan(left.rebuild(), right.rebuild());
+	}
 }

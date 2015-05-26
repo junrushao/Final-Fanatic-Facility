@@ -85,4 +85,9 @@ public class PointerMemberAccess extends Expression {
 		ret.su = ret.su.clone();
 		return ret;
 	}
+
+	@Override
+	public Expression rebuild() {
+		return new PointerMemberAccess(su.rebuild(), memberName, this.type);
+	}
 }

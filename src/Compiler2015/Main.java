@@ -9,6 +9,7 @@ import Compiler2015.Parser.Compiler2015Lexer;
 import Compiler2015.Parser.Compiler2015Parser;
 import Compiler2015.Parser.ParseErrorListener;
 import Compiler2015.Parser.PrettyPrinterListener;
+import Compiler2015.Translate.ASTModifier;
 import Compiler2015.Translate.Naive.MIPS.NaiveTranslator;
 import Compiler2015.Type.FunctionType;
 import Compiler2015.Utility.Panel;
@@ -98,6 +99,7 @@ public class Main {
 		if (Panel.checkMain)
 			Environment.finalCheck();
 
+		ASTModifier.process();
 		// emit AST
 		if (Panel.emitAST) {
 			System.out.println(Environment.toStr());
@@ -111,18 +113,7 @@ public class Main {
 			System.out.println(printer.toString());
 		}
 
-		// make control flow graph & dump raw MIPS assembly code
-/*
-		PrintWriter out = null;
-		try {
-			out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("test.s")));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if (out == null)
-			throw new CompilationError("Internal Error.");
-*/
-		try (PrintWriter out = new PrintWriter(System.out)) {
+		PrintWriter out = new PrintWriter(System.out);
 			NaiveTranslator.generateGlobalVariables(out);
 			out.println(".text");
 			for (int i = 1, size = Environment.symbolNames.table.size(); i < size; ++i) { // prevent scanning the added registers
@@ -134,7 +125,7 @@ public class Main {
 					NaiveTranslator.generateFunction(out);
 				}
 			}
-		}
+		out.close();
 	}
 
 	public void loadLibraries() {
