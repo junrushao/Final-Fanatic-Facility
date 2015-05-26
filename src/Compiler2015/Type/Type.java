@@ -8,7 +8,7 @@ public abstract class Type implements Cloneable {
 	 * @param a one type
 	 * @param b the other type
 	 * @return if a could be a parameter while b is the counterpart in parameter list of function declaration
-	 * <p/>
+	 * <p>
 	 * 1. void types are not allowed
 	 * 2. Struct / Union types are compared strictly
 	 * 3. the resting types, including numeric ones and pointers, are allowed to cast as they wish to
@@ -45,8 +45,6 @@ public abstract class Type implements Cloneable {
 	public abstract String toString();
 
 	public abstract int sizeof();
-
-	public abstract int classifiedSizeof();
 
 	@Override
 	public Type clone() {

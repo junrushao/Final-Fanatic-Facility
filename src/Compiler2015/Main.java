@@ -115,17 +115,17 @@ public class Main {
 		}
 
 		PrintWriter out = new PrintWriter(System.out);
-			NaiveTranslator.generateGlobalVariables(out);
-			out.println(".text");
-			for (int i = 1, size = Environment.symbolNames.table.size(); i < size; ++i) { // prevent scanning the added registers
-				SymbolTableEntry entry = Environment.symbolNames.table.get(i);
-				if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionType && entry.info != null) {
-					ControlFlowGraph.process((CompoundStatement) entry.info, entry.uId);
-					if (Panel.emitCFG)
-						System.out.println(ControlFlowGraph.toStr());
-					NaiveTranslator.generateFunction(out);
-				}
+		NaiveTranslator.generateGlobalVariables(out);
+		out.println(".text");
+		for (int i = 1, size = Environment.symbolNames.table.size(); i < size; ++i) { // prevent scanning the added registers
+			SymbolTableEntry entry = Environment.symbolNames.table.get(i);
+			if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionType && entry.info != null) {
+				ControlFlowGraph.process((CompoundStatement) entry.info, entry.uId);
+				if (Panel.emitCFG)
+					System.out.println(ControlFlowGraph.toStr());
+				NaiveTranslator.generateFunction(out);
 			}
+		}
 		out.close();
 	}
 

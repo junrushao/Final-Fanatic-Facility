@@ -1,7 +1,6 @@
 package Compiler2015.Type;
 
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.Utility.Panel;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
@@ -23,12 +22,6 @@ public class StructOrUnionType extends Type {
 		this.names = new ArrayList<>();
 		this.directlyAccessibleMembers = new HashMap<>();
 		this.memberDelta = null;
-	}
-
-	public StructOrUnionType() {
-		this.types = new ArrayList<>();
-		this.names = new ArrayList<>();
-		this.directlyAccessibleMembers = new HashMap<>();
 	}
 
 	public void calcMemberDelta() {
@@ -72,11 +65,6 @@ public class StructOrUnionType extends Type {
 			for (Type t : types)
 				ans += Utility.align(t.sizeof());
 		return ans;
-	}
-
-	@Override
-	public int classifiedSizeof() {
-		return Panel.getPointerSize();
 	}
 
 	@Override

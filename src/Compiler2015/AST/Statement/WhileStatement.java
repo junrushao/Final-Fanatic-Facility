@@ -6,12 +6,10 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.IR.CFG.ControlFlowGraph;
-import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.IntType;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * while (e) a;
@@ -67,21 +65,12 @@ public class WhileStatement extends Statement implements Loop {
 			Logical ep = (Logical) e;
 			ep.emitCFG(a.beginCFGBlock, out);
 			loop.unconditionalNext = ep.getStartNode();
-		}
-		else {
+		} else {
 			e.emitCFG();
 			e.endCFGBlock.unconditionalNext = a.beginCFGBlock;
 			e.endCFGBlock.branchIfFalse = out;
 			loop.unconditionalNext = e.beginCFGBlock;
 		}
-	}
-
-	@Override
-	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
-		if (e != null)
-			e.collectGlobalNonArrayVariablesUsed(dumpTo);
-		if (a != null)
-			a.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
 
 	@Override

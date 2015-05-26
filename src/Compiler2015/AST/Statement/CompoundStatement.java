@@ -10,7 +10,6 @@ import Compiler2015.AST.Statement.ExpressionStatement.IntConstant;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
-import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.FunctionType;
 import Compiler2015.Type.Type;
@@ -18,7 +17,6 @@ import Compiler2015.Type.VariablePointerType;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * { ... }
@@ -125,12 +123,6 @@ public class CompoundStatement extends Statement {
 		}
 		beginCFGBlock = builder.s;
 		endCFGBlock = builder.t;
-	}
-
-	@Override
-	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
-		for (Statement s : statements)
-			s.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
 
 	@Override

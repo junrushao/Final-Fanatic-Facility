@@ -15,7 +15,6 @@ import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * f(...)
@@ -79,15 +78,6 @@ public class FunctionCall extends Expression {
 				function.toString(),
 				argumentExpressionList == null ? "" : Utility.toString(Arrays.asList(argumentExpressionList)),
 				vaList == null ? "" : Utility.toString(Arrays.asList(vaList)));
-	}
-
-	@Override
-	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
-		function.collectGlobalNonArrayVariablesUsed(dumpTo);
-		for (Expression e : argumentExpressionList)
-			e.collectGlobalNonArrayVariablesUsed(dumpTo);
-		for (Expression e : vaList)
-			e.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
 
 	public void pushStack(ExpressionCFGBuilder builder, Expression e, boolean isExtra) {

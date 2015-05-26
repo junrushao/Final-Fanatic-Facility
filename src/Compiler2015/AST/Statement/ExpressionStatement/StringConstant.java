@@ -8,7 +8,6 @@ import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.CharType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class StringConstant extends Expression {
 	/**
@@ -180,8 +179,7 @@ public class StringConstant extends Expression {
 				while (str.length() < 3)
 					str = "0" + str;
 				sb.append("\\").append(str);
-			}
-			else if (c == '\'')
+			} else if (c == '\'')
 				sb.append("\\\'");
 			else if (c == '\"')
 				sb.append("\\\"");
@@ -194,11 +192,6 @@ public class StringConstant extends Expression {
 	@Override
 	public String toString() {
 		return "\"" + toPrintableString(c) + "\"";
-	}
-
-	@Override
-	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
-
 	}
 
 	@Override

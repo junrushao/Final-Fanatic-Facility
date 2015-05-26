@@ -15,31 +15,31 @@ import java.util.stream.Collectors;
 
 /**
  * For function
- *     ref = FunctionType
- *     info = statement
+ * ref = FunctionType
+ * info = statement
  * For variable
- *     ref = type
- *     info = initializer
+ * ref = type
+ * info = initializer
  * For typedefName
- *     ref = type
- *     info = null
+ * ref = type
+ * info = null
  * For struct / union
- *     ref = definition
- *     info = status
+ * ref = definition
+ * info = status
  * For string constant
- *     ref = string
- *     info = null
- *
+ * ref = string
+ * info = null
+ * <p>
  * The operations in symbol table could be considered to has two main steps:
- *     + declaration
- *         declare some symbol exists for some use
- *     + definition
- *         define clearly what the use is
- *
+ * + declaration
+ * declare some symbol exists for some use
+ * + definition
+ * define clearly what the use is
+ * <p>
  * 1. TypedefName is a special case, which always has a single step.
  * 2. In global scope, a variable could be declared several times but defined only once(or never)
  * 3. In fact, function is a special type of variable, so I do not take it into consideration
- *
+ * <p>
  * In my implementation, "info = null" means something is declared but not defined.
  */
 public class SymbolTable {
@@ -99,7 +99,7 @@ public class SymbolTable {
 
 	/**
 	 * @param uId uId of the variable
-	 * @param t type of the variable
+	 * @param t   type of the variable
 	 * @return uId of the function
 	 */
 	public int defineVariable(int uId, Type t, Object init) {
@@ -262,7 +262,7 @@ public class SymbolTable {
 	}
 
 	/**
-	 * @param name name of the struct / union
+	 * @param name    name of the struct / union
 	 * @param isUnion is it union or struct
 	 */
 	public int declareStructOrUnion(String name, boolean isUnion) {
@@ -287,7 +287,7 @@ public class SymbolTable {
 
 	/**
 	 * @param name typedef name
-	 * @param ref the original type name
+	 * @param ref  the original type name
 	 * @return uId of the name
 	 */
 	public int defineTypedefName(String name, Type ref) {
@@ -316,7 +316,6 @@ public class SymbolTable {
 	}
 
 	/**
-	 *
 	 * @param c the string constant
 	 * @return uId of the string
 	 */

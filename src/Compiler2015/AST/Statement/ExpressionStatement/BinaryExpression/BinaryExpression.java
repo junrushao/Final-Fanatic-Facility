@@ -1,9 +1,6 @@
 package Compiler2015.AST.Statement.ExpressionStatement.BinaryExpression;
 
 import Compiler2015.AST.Statement.ExpressionStatement.Expression;
-import Compiler2015.IR.IRRegister.VirtualRegister;
-
-import java.util.HashMap;
 
 public abstract class BinaryExpression extends Expression {
 	public Expression left, right;
@@ -20,12 +17,6 @@ public abstract class BinaryExpression extends Expression {
 	@Override
 	public String toString() {
 		return String.format("(%s %s %s)", getOperator(), left.toString(), right.toString());
-	}
-
-	@Override
-	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
-		left.collectGlobalNonArrayVariablesUsed(dumpTo);
-		right.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
 
 	@Override

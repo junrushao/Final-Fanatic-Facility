@@ -5,12 +5,9 @@ import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.Move;
-import Compiler2015.Type.IntType;
 import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
 import Compiler2015.Type.VoidType;
-
-import java.util.HashMap;
 
 /**
  * (castTo)e
@@ -43,16 +40,6 @@ public class CastExpression extends Expression {
 		return from.equals(to) || !(from instanceof StructOrUnionType || to instanceof StructOrUnionType);
 	}
 
-	public static Expression castToNumeric(Expression e) {
-		if (!Type.isNumeric(e.type)) {
-			if (CastExpression.castable(e.type, IntType.instance))
-				e = CastExpression.getExpression(IntType.instance, e);
-			else
-				throw new CompilationError("Cannot cast to numeric types.");
-		}
-		return e;
-	}
-
 	@Override
 	public String toString() {
 		return String.format("(CastTo %s %s)", castTo, e);
@@ -68,11 +55,6 @@ public class CastExpression extends Expression {
 			tempRegister = Environment.getVirtualRegister();
 			builder.addInstruction(new Move((VirtualRegister) tempRegister, e.tempRegister));
 		}
-	}
-
-	@Override
-	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
-		e.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
 
 	@Override

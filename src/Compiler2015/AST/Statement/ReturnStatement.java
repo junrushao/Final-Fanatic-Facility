@@ -4,17 +4,15 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
-import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.SetReturn;
 import Compiler2015.Utility.Utility;
-
-import java.util.HashMap;
 
 /**
  * return e
  */
 public class ReturnStatement extends Statement {
 	public Expression e;
+
 	public ReturnStatement(Expression e) {
 		this.e = e;
 	}
@@ -35,8 +33,7 @@ public class ReturnStatement extends Statement {
 		if (e == null) {
 			beginCFGBlock = endCFGBlock = ControlFlowGraph.getNewVertex();
 //			endCFGBlock.internal.add(Pop.instance);
-		}
-		else {
+		} else {
 			ExpressionCFGBuilder builder = new ExpressionCFGBuilder();
 			e.emitCFG(builder);
 			e.readInArrayRegister(builder);
@@ -48,12 +45,6 @@ public class ReturnStatement extends Statement {
 //			endCFGBlock.internal.add(Pop.instance);
 		}
 		endCFGBlock.unconditionalNext = ControlFlowGraph.outBody;
-	}
-
-	@Override
-	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
-		if (e != null)
-			e.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
 
 	@Override

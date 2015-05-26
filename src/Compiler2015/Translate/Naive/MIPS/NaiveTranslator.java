@@ -137,8 +137,7 @@ public final class NaiveTranslator {
 								out.println();
 								out.println("\t.align 2");
 								++pointer;
-							}
-							else {
+							} else {
 								out.printf("\t.word %s", getStringConstantLabelName(pairs.get(pointer).refUId));
 								out.println();
 								out.println("\t.align 2");
@@ -237,8 +236,7 @@ public final class NaiveTranslator {
 						out.printf("\tli $t%d, %d%s", reg, delta, Utility.NEW_LINE);
 						out.printf("\tadd $t%d, $sp, $t%d%s", reg, reg, Utility.NEW_LINE);
 					}
-				}
-				else
+				} else
 					out.printf("\tlw $t%d, %d($sp)%s", reg, getDelta(uId), Utility.NEW_LINE);
 			}
 		} else if (from instanceof ArrayRegister) {
@@ -322,9 +320,6 @@ public final class NaiveTranslator {
 				} else if (ins instanceof Move) {
 					loadFromIRRegisterToTRegister(((Move) ins).rs, 0, out);
 					storeFromTRegisterToIRRegister(0, ins.getAllDef()[0], out);
-				} else if (ins instanceof Pop) {
-					// do nothing
-					out.print("");
 				} else if (ins instanceof PushStack) {
 					PushStack pushIns = (PushStack) ins;
 					int size = pushIns.pushType.sizeof();

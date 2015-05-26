@@ -27,10 +27,10 @@ import java.util.Stack;
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class Compiler2015Parser extends Parser {
 	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9,
-		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17,
-		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24,
-		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31,
+			T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, T__7 = 8, T__8 = 9,
+			T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, T__14 = 15, T__15 = 16, T__16 = 17,
+			T__17 = 18, T__18 = 19, T__19 = 20, T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24,
+			T__24 = 25, T__25 = 26, T__26 = 27, T__27 = 28, T__28 = 29, T__29 = 30, T__30 = 31,
 			T__31 = 32, T__32 = 33, T__33 = 34, T__34 = 35, T__35 = 36, T__36 = 37, T__37 = 38,
 			T__38 = 39, T__39 = 40, Typedef = 41, Semi = 42, Comma = 43, L1 = 44, R1 = 45, L2 = 46,
 			R2 = 47, L3 = 48, R3 = 49, EQ = 50, STAR = 51, If = 52, Else = 53, While = 54, For = 55,
@@ -39,39 +39,39 @@ public class Compiler2015Parser extends Parser {
 			StringLiteral = 67, Preprocessing = 68, Whitespace = 69, Newline = 70, BlockComment = 71,
 			LineComment = 72;
 	public static final int
-		RULE_compilationUnit = 0, RULE_declaration = 1, RULE_functionDefinition = 2,
-		RULE_initDeclaratorList = 3, RULE_initDeclarator = 4, RULE_typeSpecifier = 5,
-		RULE_structOrUnionSpecifier = 6, RULE_structOrUnion = 7, RULE_structDeclaration = 8,
-		RULE_declarator = 9, RULE_plainDeclarator = 10, RULE_declaratorList = 11,
-		RULE_directDeclarator = 12, RULE_parameterTypeList = 13, RULE_parameterList = 14,
-		RULE_parameterDeclaration = 15, RULE_abstractDeclarator = 16, RULE_directAbstractDeclarator = 17,
-		RULE_typedefName = 18, RULE_initializer = 19, RULE_statement = 20, RULE_expressionStatement = 21,
-		RULE_compoundStatement = 22, RULE_selectionStatement = 23, RULE_iterationStatement = 24,
-		RULE_jumpStatement = 25, RULE_expression = 26, RULE_assignmentExpression = 27,
-		RULE_assignmentOperator = 28, RULE_constantExpression = 29, RULE_logicalOrExpression = 30,
-		RULE_logicalAndExpression = 31, RULE_inclusiveOrExpression = 32, RULE_exclusiveOrExpression = 33,
-		RULE_andExpression = 34, RULE_equalityExpression = 35, RULE_equalityOperator = 36,
-		RULE_relationalExpression = 37, RULE_relationalOperator = 38, RULE_shiftExpression = 39,
-		RULE_shiftOperator = 40, RULE_additiveExpression = 41, RULE_additiveOperator = 42,
-		RULE_multiplicativeExpression = 43, RULE_multiplicativeOperator = 44,
-		RULE_castExpression = 45, RULE_typeName = 46, RULE_unaryExpression = 47,
-		RULE_unaryOperator = 48, RULE_postfixExpression = 49, RULE_arguments = 50,
-		RULE_primaryExpression = 51, RULE_lambdaExpression = 52, RULE_constant = 53;
+			RULE_compilationUnit = 0, RULE_declaration = 1, RULE_functionDefinition = 2,
+			RULE_initDeclaratorList = 3, RULE_initDeclarator = 4, RULE_typeSpecifier = 5,
+			RULE_structOrUnionSpecifier = 6, RULE_structOrUnion = 7, RULE_structDeclaration = 8,
+			RULE_declarator = 9, RULE_plainDeclarator = 10, RULE_declaratorList = 11,
+			RULE_directDeclarator = 12, RULE_parameterTypeList = 13, RULE_parameterList = 14,
+			RULE_parameterDeclaration = 15, RULE_abstractDeclarator = 16, RULE_directAbstractDeclarator = 17,
+			RULE_typedefName = 18, RULE_initializer = 19, RULE_statement = 20, RULE_expressionStatement = 21,
+			RULE_compoundStatement = 22, RULE_selectionStatement = 23, RULE_iterationStatement = 24,
+			RULE_jumpStatement = 25, RULE_expression = 26, RULE_assignmentExpression = 27,
+			RULE_assignmentOperator = 28, RULE_constantExpression = 29, RULE_logicalOrExpression = 30,
+			RULE_logicalAndExpression = 31, RULE_inclusiveOrExpression = 32, RULE_exclusiveOrExpression = 33,
+			RULE_andExpression = 34, RULE_equalityExpression = 35, RULE_equalityOperator = 36,
+			RULE_relationalExpression = 37, RULE_relationalOperator = 38, RULE_shiftExpression = 39,
+			RULE_shiftOperator = 40, RULE_additiveExpression = 41, RULE_additiveOperator = 42,
+			RULE_multiplicativeExpression = 43, RULE_multiplicativeOperator = 44,
+			RULE_castExpression = 45, RULE_typeName = 46, RULE_unaryExpression = 47,
+			RULE_unaryOperator = 48, RULE_postfixExpression = 49, RULE_arguments = 50,
+			RULE_primaryExpression = 51, RULE_lambdaExpression = 52, RULE_constant = 53;
 	public static final String[] ruleNames = {
-		"compilationUnit", "declaration", "functionDefinition", "initDeclaratorList",
-		"initDeclarator", "typeSpecifier", "structOrUnionSpecifier", "structOrUnion",
-		"structDeclaration", "declarator", "plainDeclarator", "declaratorList",
-		"directDeclarator", "parameterTypeList", "parameterList", "parameterDeclaration",
-		"abstractDeclarator", "directAbstractDeclarator", "typedefName", "initializer",
-		"statement", "expressionStatement", "compoundStatement", "selectionStatement",
-		"iterationStatement", "jumpStatement", "expression", "assignmentExpression",
-		"assignmentOperator", "constantExpression", "logicalOrExpression", "logicalAndExpression",
-		"inclusiveOrExpression", "exclusiveOrExpression", "andExpression", "equalityExpression",
-		"equalityOperator", "relationalExpression", "relationalOperator", "shiftExpression",
-		"shiftOperator", "additiveExpression", "additiveOperator", "multiplicativeExpression",
-		"multiplicativeOperator", "castExpression", "typeName", "unaryExpression",
-		"unaryOperator", "postfixExpression", "arguments", "primaryExpression",
-		"lambdaExpression", "constant"
+			"compilationUnit", "declaration", "functionDefinition", "initDeclaratorList",
+			"initDeclarator", "typeSpecifier", "structOrUnionSpecifier", "structOrUnion",
+			"structDeclaration", "declarator", "plainDeclarator", "declaratorList",
+			"directDeclarator", "parameterTypeList", "parameterList", "parameterDeclaration",
+			"abstractDeclarator", "directAbstractDeclarator", "typedefName", "initializer",
+			"statement", "expressionStatement", "compoundStatement", "selectionStatement",
+			"iterationStatement", "jumpStatement", "expression", "assignmentExpression",
+			"assignmentOperator", "constantExpression", "logicalOrExpression", "logicalAndExpression",
+			"inclusiveOrExpression", "exclusiveOrExpression", "andExpression", "equalityExpression",
+			"equalityOperator", "relationalExpression", "relationalOperator", "shiftExpression",
+			"shiftOperator", "additiveExpression", "additiveOperator", "multiplicativeExpression",
+			"multiplicativeOperator", "castExpression", "typeName", "unaryExpression",
+			"unaryOperator", "postfixExpression", "arguments", "primaryExpression",
+			"lambdaExpression", "constant"
 	};
 	/**
 	 * @deprecated Use {@link #VOCABULARY} instead.
@@ -80,17 +80,17 @@ public class Compiler2015Parser extends Parser {
 	public static final String[] tokenNames;
 	public static final String _serializedATN =
 			"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3J\u034b\4\2\t\2\4" +
-		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
-		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
-		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
-		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\4\37\t\37\4 \t \4!"+
-		"\t!\4\"\t\"\4#\t#\4$\t$\4%\t%\4&\t&\4\'\t\'\4(\t(\4)\t)\4*\t*\4+\t+\4"+
-		",\t,\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t\61\4\62\t\62\4\63\t\63\4\64\t"+
-		"\64\4\65\t\65\4\66\t\66\4\67\t\67\3\2\3\2\3\2\7\2r\n\2\f\2\16\2u\13\2"+
-		"\3\2\3\2\3\3\3\3\3\3\3\3\5\3}\n\3\3\3\3\3\3\3\3\3\3\3\5\3\u0084\n\3\3"+
-		"\3\3\3\5\3\u0088\n\3\3\4\3\4\3\4\3\4\7\4\u008e\n\4\f\4\16\4\u0091\13\4"+
-		"\3\4\3\4\3\4\3\4\3\4\3\4\5\4\u0099\n\4\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5"+
-		"\7\5\u00a3\n\5\f\5\16\5\u00a6\13\5\3\6\3\6\3\6\3\6\3\6\3\6\5\6\u00ae\n"+
+					"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t" +
+					"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22" +
+					"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31" +
+					"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\4\37\t\37\4 \t \4!" +
+					"\t!\4\"\t\"\4#\t#\4$\t$\4%\t%\4&\t&\4\'\t\'\4(\t(\4)\t)\4*\t*\4+\t+\4" +
+					",\t,\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t\61\4\62\t\62\4\63\t\63\4\64\t" +
+					"\64\4\65\t\65\4\66\t\66\4\67\t\67\3\2\3\2\3\2\7\2r\n\2\f\2\16\2u\13\2" +
+					"\3\2\3\2\3\3\3\3\3\3\3\3\5\3}\n\3\3\3\3\3\3\3\3\3\3\3\5\3\u0084\n\3\3" +
+					"\3\3\3\5\3\u0088\n\3\3\4\3\4\3\4\3\4\7\4\u008e\n\4\f\4\16\4\u0091\13\4" +
+					"\3\4\3\4\3\4\3\4\3\4\3\4\5\4\u0099\n\4\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5" +
+					"\7\5\u00a3\n\5\f\5\16\5\u00a6\13\5\3\6\3\6\3\6\3\6\3\6\3\6\5\6\u00ae\n" +
 					"\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\5\7\u00be\n" +
 					"\7\3\b\3\b\3\b\3\b\5\b\u00c4\n\b\3\b\3\b\3\b\3\b\3\b\7\b\u00cb\n\b\f\b" +
 					"\16\b\u00ce\13\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\5\b\u00d8\n\b\3\t\3\t" +
@@ -131,7 +131,7 @@ public class Compiler2015Parser extends Parser {
 					"\16+\u0296\13+\3,\3,\3-\3-\3-\3-\3-\3-\7-\u02a0\n-\f-\16-\u02a3\13-\3" +
 					".\3.\3/\3/\3/\3/\3/\3/\3/\3/\3/\5/\u02b0\n/\3\60\3\60\3\60\3\60\3\60\3" +
 					"\60\3\60\3\60\5\60\u02ba\n\60\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61" +
-		"\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61"+
+					"\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61" +
 					"\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61" +
 					"\3\61\3\61\5\61\u02e2\n\61\3\62\3\62\3\63\3\63\3\63\3\63\3\63\3\63\3\63" +
 					"\3\63\3\63\3\63\3\63\3\63\3\63\3\63\3\63\5\63\u02f5\n\63\3\63\3\63\3\63" +
@@ -393,10 +393,10 @@ public class Compiler2015Parser extends Parser {
 					"\u0227\u0236\u0241\u024c\u0257\u0262\u026d\u027a\u0287\u0294\u02a1\u02af" +
 					"\u02b9\u02e1\u02f4\u0306\u0308\u0313\u0320\u032b\u0333\u033a\u0348";
 	public static final ATN _ATN =
-		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
+			new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
-		new PredictionContextCache();
+			new PredictionContextCache();
 	private static final String[] _LITERAL_NAMES = {
 			null, "'void'", "'char'", "'int'", "'va_list'", "'struct'", "'union'",
 			"'...'", "'continue'", "'break'", "'return'", "'va_start'", "'*='", "'/='",
@@ -408,9 +408,9 @@ public class Compiler2015Parser extends Parser {
 			"'sizeof'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, null, null, null, null, null, null, null, null, null, null, null,
-		null, null, null, null, null, null, null, null, null, null, null, null,
-		null, null, null, null, null, null, null, null, null, null, null, null,
+			null, null, null, null, null, null, null, null, null, null, null, null,
+			null, null, null, null, null, null, null, null, null, null, null, null,
+			null, null, null, null, null, null, null, null, null, null, null, null,
 			null, null, null, null, null, "Typedef", "Semi", "Comma", "L1", "R1",
 			"L2", "R2", "L3", "R3", "EQ", "STAR", "If", "Else", "While", "For", "OrOr",
 			"AndAnd", "Or", "Caret", "And", "SizeOf", "Identifier", "DecimalConstant",
@@ -419,7 +419,9 @@ public class Compiler2015Parser extends Parser {
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
-	static { RuntimeMetaData.checkVersion("4.5", RuntimeMetaData.VERSION); }
+	static {
+		RuntimeMetaData.checkVersion("4.5", RuntimeMetaData.VERSION);
+	}
 
 	static {
 		tokenNames = new String[_SYMBOLIC_NAMES.length];
@@ -444,7 +446,7 @@ public class Compiler2015Parser extends Parser {
 
 	public Compiler2015Parser(TokenStream input) {
 		super(input);
-		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
+		_interp = new ParserATNSimulator(this, _ATN, _decisionToDFA, _sharedContextCache);
 	}
 
 	@Override
@@ -460,16 +462,24 @@ public class Compiler2015Parser extends Parser {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "Compiler2015.g4"; }
+	public String getGrammarFileName() {
+		return "Compiler2015.g4";
+	}
 
 	@Override
-	public String[] getRuleNames() { return ruleNames; }
+	public String[] getRuleNames() {
+		return ruleNames;
+	}
 
 	@Override
-	public String getSerializedATN() { return _serializedATN; }
+	public String getSerializedATN() {
+		return _serializedATN;
+	}
 
 	@Override
-	public ATN getATN() { return _ATN; }
+	public ATN getATN() {
+		return _ATN;
+	}
 
 	public final CompilationUnitContext compilationUnit() throws RecognitionException {
 		CompilationUnitContext _localctx = new CompilationUnitContext(_ctx, getState());
@@ -478,49 +488,44 @@ public class Compiler2015Parser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(113);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,1,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					{
-					setState(111);
-					switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
-					case 1:
-						{
-						setState(108);
-						functionDefinition();
-						}
-						break;
-					case 2:
-						{
-						setState(109);
-						declaration();
-						}
-						break;
-					case 3:
-						{
-						setState(110);
-						match(Semi);
-						}
-						break;
-					}
-					}
-				}
-				setState(115);
+				setState(113);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,1,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input, 1, _ctx);
+				while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER) {
+					if (_alt == 1) {
+						{
+							setState(111);
+							switch (getInterpreter().adaptivePredict(_input, 0, _ctx)) {
+								case 1: {
+									setState(108);
+									functionDefinition();
+								}
+								break;
+								case 2: {
+									setState(109);
+									declaration();
+								}
+								break;
+								case 3: {
+									setState(110);
+									match(Semi);
+								}
+								break;
+							}
+						}
+					}
+					setState(115);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input, 1, _ctx);
+				}
+				setState(116);
+				match(EOF);
 			}
-			setState(116);
-			match(EOF);
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -532,64 +537,62 @@ public class Compiler2015Parser extends Parser {
 		int _la;
 		try {
 			setState(133);
-			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
-			case 1:
-				_localctx = new Declaration1Context(_localctx);
-				enterOuterAlt(_localctx, 1);
+			switch (getInterpreter().adaptivePredict(_input, 4, _ctx)) {
+				case 1:
+					_localctx = new Declaration1Context(_localctx);
+					enterOuterAlt(_localctx, 1);
 				{
-				setState(118);
-				match(Typedef);
-				setState(119);
-				((Declaration1Context)_localctx).typeSpecifier = typeSpecifier();
+					setState(118);
+					match(Typedef);
+					setState(119);
+					((Declaration1Context) _localctx).typeSpecifier = typeSpecifier();
 
-								TypeAnalyser.enter(((Declaration1Context)_localctx).typeSpecifier.ret);
+					TypeAnalyser.enter(((Declaration1Context) _localctx).typeSpecifier.ret);
 
-				setState(122);
-				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << L1) | (1L << STAR) | (1L << Identifier))) != 0)) {
-					{
-					setState(121);
-					declaratorList();
+					setState(122);
+					_la = _input.LA(1);
+					if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << L1) | (1L << STAR) | (1L << Identifier))) != 0)) {
+						{
+							setState(121);
+							declaratorList();
+						}
 					}
-				}
 
-				setState(124);
-				match(Semi);
+					setState(124);
+					match(Semi);
 				}
 				break;
-			case 2:
-				_localctx = new Declaration2Context(_localctx);
-				enterOuterAlt(_localctx, 2);
+				case 2:
+					_localctx = new Declaration2Context(_localctx);
+					enterOuterAlt(_localctx, 2);
 				{
-				setState(126);
-				((Declaration2Context)_localctx).typeSpecifier = typeSpecifier();
+					setState(126);
+					((Declaration2Context) _localctx).typeSpecifier = typeSpecifier();
 
-								TypeAnalyser.enter(((Declaration2Context)_localctx).typeSpecifier.ret);
+					TypeAnalyser.enter(((Declaration2Context) _localctx).typeSpecifier.ret);
 
-				setState(129);
-				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << L1) | (1L << STAR) | (1L << Identifier))) != 0)) {
-					{
-					setState(128);
-					initDeclaratorList();
+					setState(129);
+					_la = _input.LA(1);
+					if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << L1) | (1L << STAR) | (1L << Identifier))) != 0)) {
+						{
+							setState(128);
+							initDeclaratorList();
+						}
 					}
-				}
 
-				setState(131);
-				match(Semi);
+					setState(131);
+					match(Semi);
 				}
 				break;
 			}
 
-				TypeAnalyser.exit();
+			TypeAnalyser.exit();
 
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -599,75 +602,74 @@ public class Compiler2015Parser extends Parser {
 		FunctionDefinitionContext _localctx = new FunctionDefinitionContext(_ctx, getState());
 		enterRule(_localctx, 4, RULE_functionDefinition);
 
-			((FunctionDefinitionContext)_localctx).parameterTypes =  new ArrayList<Type>();
-			((FunctionDefinitionContext)_localctx).parameterNames =  new ArrayList<String>();
-			((FunctionDefinitionContext)_localctx).loopStack =  Environment.loopStack;
-			Environment.loopStack = new Stack<>();
+		((FunctionDefinitionContext) _localctx).parameterTypes = new ArrayList<Type>();
+		((FunctionDefinitionContext) _localctx).parameterNames = new ArrayList<String>();
+		((FunctionDefinitionContext) _localctx).loopStack = Environment.loopStack;
+		Environment.loopStack = new Stack<>();
 
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(135);
-			((FunctionDefinitionContext)_localctx).typeSpecifier = typeSpecifier();
-			 ((FunctionDefinitionContext)_localctx).returnType =  ((FunctionDefinitionContext)_localctx).typeSpecifier.ret;
-			setState(141);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==STAR) {
-				{
-				{
-				setState(137);
-				match(STAR);
-				 ((FunctionDefinitionContext)_localctx).returnType =  new VariablePointerType(_localctx.returnType);
-				}
-				}
-				setState(143);
+				setState(135);
+				((FunctionDefinitionContext) _localctx).typeSpecifier = typeSpecifier();
+				((FunctionDefinitionContext) _localctx).returnType = ((FunctionDefinitionContext) _localctx).typeSpecifier.ret;
+				setState(141);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			}
-			 TypeAnalyser.enter(_localctx.returnType);
-			setState(145);
-			((FunctionDefinitionContext)_localctx).directDeclarator = directDeclarator(0);
-			setState(146);
-			match(L1);
-			setState(150);
-			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
-			case 1:
-				{
-				setState(147);
-				((FunctionDefinitionContext)_localctx).parameterTypeList = parameterTypeList();
-
-								((FunctionDefinitionContext)_localctx).parameterTypes =  ((FunctionDefinitionContext)_localctx).parameterTypeList.types;
-								((FunctionDefinitionContext)_localctx).parameterNames =  ((FunctionDefinitionContext)_localctx).parameterTypeList.names;
-								((FunctionDefinitionContext)_localctx).hasVaList =  ((FunctionDefinitionContext)_localctx).parameterTypeList.hasVaList;
-								if (_localctx.parameterNames.size() != 0 && (new HashSet<>(_localctx.parameterNames).size()) != _localctx.parameterNames.size())
-									throw new CompilationError("parameter should have different names.");
-								for (String name : _localctx.parameterNames)
-									if (name == null || name.equals(""))
-										throw new CompilationError("No parameter name.");
-
+				while (_la == STAR) {
+					{
+						{
+							setState(137);
+							match(STAR);
+							((FunctionDefinitionContext) _localctx).returnType = new VariablePointerType(_localctx.returnType);
+						}
+					}
+					setState(143);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
 				}
-				break;
-			}
-			setState(152);
-			match(R1);
+				TypeAnalyser.enter(_localctx.returnType);
+				setState(145);
+				((FunctionDefinitionContext) _localctx).directDeclarator = directDeclarator(0);
+				setState(146);
+				match(L1);
+				setState(150);
+				switch (getInterpreter().adaptivePredict(_input, 6, _ctx)) {
+					case 1: {
+						setState(147);
+						((FunctionDefinitionContext) _localctx).parameterTypeList = parameterTypeList();
 
-						TypeAnalyser.addParameter(_localctx.parameterTypes, _localctx.parameterNames, _localctx.hasVaList);
-						((FunctionDefinitionContext)_localctx).type =  (FunctionType) TypeAnalyser.analyse(true);
-						((FunctionDefinitionContext)_localctx).name =  ((FunctionDefinitionContext)_localctx).directDeclarator.name;
+						((FunctionDefinitionContext) _localctx).parameterTypes = ((FunctionDefinitionContext) _localctx).parameterTypeList.types;
+						((FunctionDefinitionContext) _localctx).parameterNames = ((FunctionDefinitionContext) _localctx).parameterTypeList.names;
+						((FunctionDefinitionContext) _localctx).hasVaList = ((FunctionDefinitionContext) _localctx).parameterTypeList.hasVaList;
+						if (_localctx.parameterNames.size() != 0 && (new HashSet<>(_localctx.parameterNames).size()) != _localctx.parameterNames.size())
+							throw new CompilationError("parameter should have different names.");
+						for (String name : _localctx.parameterNames)
+							if (name == null || name.equals(""))
+								throw new CompilationError("No parameter name.");
 
-						if (!Environment.isCompleteType(_localctx.type))
-							throw new CompilationError("Incomplete type.");
+					}
+					break;
+				}
+				setState(152);
+				match(R1);
 
-						Environment.functionReturnStack.push(_localctx.type.returnType);
-						if (Environment.symbolNames.currentScope == 1)
-							((FunctionDefinitionContext)_localctx).uId =  Environment.symbolNames.defineVariable(_localctx.name, _localctx.type);
-						else
-							((FunctionDefinitionContext)_localctx).uId =  Environment.symbolNames.defineLocalFunction(_localctx.name, _localctx.type);
+				TypeAnalyser.addParameter(_localctx.parameterTypes, _localctx.parameterNames, _localctx.hasVaList);
+				((FunctionDefinitionContext) _localctx).type = (FunctionType) TypeAnalyser.analyse(true);
+				((FunctionDefinitionContext) _localctx).name = ((FunctionDefinitionContext) _localctx).directDeclarator.name;
 
-						((FunctionDefinitionContext)_localctx).parameterTypes =  _localctx.type.parameterTypes;
-						((FunctionDefinitionContext)_localctx).parameterNames =  _localctx.type.parameterNames;
+				if (!Environment.isCompleteType(_localctx.type))
+					throw new CompilationError("Incomplete type.");
+
+				Environment.functionReturnStack.push(_localctx.type.returnType);
+				if (Environment.symbolNames.currentScope == 1)
+					((FunctionDefinitionContext) _localctx).uId = Environment.symbolNames.defineVariable(_localctx.name, _localctx.type);
+				else
+					((FunctionDefinitionContext) _localctx).uId = Environment.symbolNames.defineLocalFunction(_localctx.name, _localctx.type);
+
+				((FunctionDefinitionContext) _localctx).parameterTypes = _localctx.type.parameterTypes;
+				((FunctionDefinitionContext) _localctx).parameterNames = _localctx.type.parameterNames;
 
 				((FunctionDefinitionContext) _localctx).typePassDown = new ArrayList<>(_localctx.parameterTypes);
 				((FunctionDefinitionContext) _localctx).namePassDown = new ArrayList<>(_localctx.parameterNames);
@@ -676,26 +678,24 @@ public class Compiler2015Parser extends Parser {
 				//				_localctx.namePassDown.add(".return");
 				//			}
 
-			setState(154);
+				setState(154);
 				((FunctionDefinitionContext) _localctx).compoundStatement = compoundStatement(_localctx.typePassDown, _localctx.namePassDown);
 
-						((FunctionDefinitionContext)_localctx).s =  ((FunctionDefinitionContext)_localctx).compoundStatement.ret;
-						_localctx.s.youAreAFrame(Environment.symbolNames.currentScope + 1);
-						Environment.symbolNames.defineVariable(_localctx.uId, _localctx.type, _localctx.s);
-						Environment.functionReturnStack.pop();
+				((FunctionDefinitionContext) _localctx).s = ((FunctionDefinitionContext) _localctx).compoundStatement.ret;
+				_localctx.s.youAreAFrame(Environment.symbolNames.currentScope + 1);
+				Environment.symbolNames.defineVariable(_localctx.uId, _localctx.type, _localctx.s);
+				Environment.functionReturnStack.pop();
 
 			}
 
-				TypeAnalyser.exit();
-				Environment.loopStack = _localctx.loopStack;
+			TypeAnalyser.exit();
+			Environment.loopStack = _localctx.loopStack;
 
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -708,32 +708,30 @@ public class Compiler2015Parser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(157);
-			initDeclarator();
-			setState(162);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==Comma) {
-				{
-				{
-				setState(158);
-				match(Comma);
-				setState(159);
+				setState(157);
 				initDeclarator();
-				}
-				}
-				setState(164);
+				setState(162);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
+				while (_la == Comma) {
+					{
+						{
+							setState(158);
+							match(Comma);
+							setState(159);
+							initDeclarator();
+						}
+					}
+					setState(164);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -746,36 +744,34 @@ public class Compiler2015Parser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(165);
-			((InitDeclaratorContext)_localctx).declarator = declarator();
+				setState(165);
+				((InitDeclaratorContext) _localctx).declarator = declarator();
 
-						((InitDeclaratorContext)_localctx).type =  TypeAnalyser.analyse();
-						((InitDeclaratorContext)_localctx).name =  ((InitDeclaratorContext)_localctx).declarator.name;
-						((InitDeclaratorContext)_localctx).uId =  Environment.symbolNames.defineVariable(_localctx.name, _localctx.type);
+				((InitDeclaratorContext) _localctx).type = TypeAnalyser.analyse();
+				((InitDeclaratorContext) _localctx).name = ((InitDeclaratorContext) _localctx).declarator.name;
+				((InitDeclaratorContext) _localctx).uId = Environment.symbolNames.defineVariable(_localctx.name, _localctx.type);
 
-			setState(171);
-			_la = _input.LA(1);
-			if (_la==EQ) {
-				{
-				setState(167);
-				match(EQ);
-				setState(168);
-				((InitDeclaratorContext)_localctx).initializer = initializer();
+				setState(171);
+				_la = _input.LA(1);
+				if (_la == EQ) {
+					{
+						setState(167);
+						match(EQ);
+						setState(168);
+						((InitDeclaratorContext) _localctx).initializer = initializer();
 
-								((InitDeclaratorContext)_localctx).init =  ((InitDeclaratorContext)_localctx).initializer.ret;
-								Environment.symbolNames.defineVariable(_localctx.uId, _localctx.type, _localctx.init);
+						((InitDeclaratorContext) _localctx).init = ((InitDeclaratorContext) _localctx).initializer.ret;
+						Environment.symbolNames.defineVariable(_localctx.uId, _localctx.type, _localctx.init);
 
+					}
 				}
-			}
 
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -786,63 +782,61 @@ public class Compiler2015Parser extends Parser {
 		enterRule(_localctx, 10, RULE_typeSpecifier);
 		try {
 			setState(187);
-			switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
-			case 1:
-				enterOuterAlt(_localctx, 1);
+			switch (getInterpreter().adaptivePredict(_input, 9, _ctx)) {
+				case 1:
+					enterOuterAlt(_localctx, 1);
 				{
-				setState(173);
-				match(T__0);
-				 ((TypeSpecifierContext)_localctx).ret =  VoidType.instance;
+					setState(173);
+					match(T__0);
+					((TypeSpecifierContext) _localctx).ret = VoidType.instance;
 				}
 				break;
-			case 2:
-				enterOuterAlt(_localctx, 2);
+				case 2:
+					enterOuterAlt(_localctx, 2);
 				{
-				setState(175);
-				match(T__1);
-				 ((TypeSpecifierContext)_localctx).ret =  CharType.instance;
+					setState(175);
+					match(T__1);
+					((TypeSpecifierContext) _localctx).ret = CharType.instance;
 				}
 				break;
-			case 3:
-				enterOuterAlt(_localctx, 3);
+				case 3:
+					enterOuterAlt(_localctx, 3);
 				{
-				setState(177);
-				match(T__2);
-				 ((TypeSpecifierContext)_localctx).ret =  IntType.instance;
+					setState(177);
+					match(T__2);
+					((TypeSpecifierContext) _localctx).ret = IntType.instance;
 				}
 				break;
-			case 4:
-				enterOuterAlt(_localctx, 4);
+				case 4:
+					enterOuterAlt(_localctx, 4);
 				{
-				setState(179);
+					setState(179);
 					match(T__3);
 					((TypeSpecifierContext) _localctx).ret = new VariablePointerType(CharType.instance);
 				}
 				break;
-			case 5:
-				enterOuterAlt(_localctx, 5);
+				case 5:
+					enterOuterAlt(_localctx, 5);
 				{
 					setState(181);
 					((TypeSpecifierContext) _localctx).typedefName = typedefName();
 					((TypeSpecifierContext) _localctx).ret = ((TypeSpecifierContext) _localctx).typedefName.ret;
 				}
-			break;
+				break;
 				case 6:
 					enterOuterAlt(_localctx, 6);
 				{
 					setState(184);
-				((TypeSpecifierContext)_localctx).structOrUnionSpecifier = structOrUnionSpecifier();
-				 ((TypeSpecifierContext)_localctx).ret =  ((TypeSpecifierContext)_localctx).structOrUnionSpecifier.ret;
+					((TypeSpecifierContext) _localctx).structOrUnionSpecifier = structOrUnionSpecifier();
+					((TypeSpecifierContext) _localctx).ret = ((TypeSpecifierContext) _localctx).structOrUnionSpecifier.ret;
 				}
 				break;
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -852,82 +846,80 @@ public class Compiler2015Parser extends Parser {
 		StructOrUnionSpecifierContext _localctx = new StructOrUnionSpecifierContext(_ctx, getState());
 		enterRule(_localctx, 12, RULE_structOrUnionSpecifier);
 
-			((StructOrUnionSpecifierContext)_localctx).name =  "";
+		((StructOrUnionSpecifierContext) _localctx).name = "";
 
 		int _la;
 		try {
 			int _alt;
 			setState(213);
-			switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
-			case 1:
-				_localctx = new StructOrUnionSpecifier1Context(_localctx);
-				enterOuterAlt(_localctx, 1);
+			switch (getInterpreter().adaptivePredict(_input, 12, _ctx)) {
+				case 1:
+					_localctx = new StructOrUnionSpecifier1Context(_localctx);
+					enterOuterAlt(_localctx, 1);
 				{
 					setState(189);
-				((StructOrUnionSpecifier1Context)_localctx).structOrUnion = structOrUnion();
+					((StructOrUnionSpecifier1Context) _localctx).structOrUnion = structOrUnion();
 
-							((StructOrUnionSpecifier1Context)_localctx).isUnion =  ((StructOrUnionSpecifier1Context)_localctx).structOrUnion.isUnion;
+					((StructOrUnionSpecifier1Context) _localctx).isUnion = ((StructOrUnionSpecifier1Context) _localctx).structOrUnion.isUnion;
 
 					setState(193);
-				_la = _input.LA(1);
-				if (_la==Identifier) {
-					{
-						setState(191);
-					((StructOrUnionSpecifier1Context)_localctx).Identifier = match(Identifier);
-					 ((StructOrUnionSpecifier1Context)_localctx).name =  (((StructOrUnionSpecifier1Context)_localctx).Identifier!=null?((StructOrUnionSpecifier1Context)_localctx).Identifier.getText():null);
+					_la = _input.LA(1);
+					if (_la == Identifier) {
+						{
+							setState(191);
+							((StructOrUnionSpecifier1Context) _localctx).Identifier = match(Identifier);
+							((StructOrUnionSpecifier1Context) _localctx).name = (((StructOrUnionSpecifier1Context) _localctx).Identifier != null ? ((StructOrUnionSpecifier1Context) _localctx).Identifier.getText() : null);
+						}
 					}
-				}
 
 					setState(195);
-				match(L3);
-				 StructBuilder.enter(_localctx.name, _localctx.isUnion);
+					match(L3);
+					StructBuilder.enter(_localctx.name, _localctx.isUnion);
 					setState(202);
-				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,11,_ctx);
-				while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-					if ( _alt==1 ) {
-						{
-						{
-							setState(197);
-						((StructOrUnionSpecifier1Context)_localctx).structDeclaration = structDeclaration();
-
-											StructBuilder.addAttributes(((StructOrUnionSpecifier1Context)_localctx).structDeclaration.types, ((StructOrUnionSpecifier1Context)_localctx).structDeclaration.names);
-
-						}
-						}
-					}
-					setState(204);
 					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,11,_ctx);
-				}
+					_alt = getInterpreter().adaptivePredict(_input, 11, _ctx);
+					while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER) {
+						if (_alt == 1) {
+							{
+								{
+									setState(197);
+									((StructOrUnionSpecifier1Context) _localctx).structDeclaration = structDeclaration();
+
+									StructBuilder.addAttributes(((StructOrUnionSpecifier1Context) _localctx).structDeclaration.types, ((StructOrUnionSpecifier1Context) _localctx).structDeclaration.names);
+
+								}
+							}
+						}
+						setState(204);
+						_errHandler.sync(this);
+						_alt = getInterpreter().adaptivePredict(_input, 11, _ctx);
+					}
 					setState(205);
-				match(R3);
-				 ((StructOrUnionSpecifier1Context)_localctx).ret =  StructBuilder.exit();
+					match(R3);
+					((StructOrUnionSpecifier1Context) _localctx).ret = StructBuilder.exit();
 				}
 				break;
-			case 2:
-				_localctx = new StructOrUnionSpecifier2Context(_localctx);
-				enterOuterAlt(_localctx, 2);
+				case 2:
+					_localctx = new StructOrUnionSpecifier2Context(_localctx);
+					enterOuterAlt(_localctx, 2);
 				{
 					setState(208);
-				((StructOrUnionSpecifier2Context)_localctx).structOrUnion = structOrUnion();
-				 ((StructOrUnionSpecifier2Context)_localctx).isUnion =  ((StructOrUnionSpecifier2Context)_localctx).structOrUnion.isUnion;
+					((StructOrUnionSpecifier2Context) _localctx).structOrUnion = structOrUnion();
+					((StructOrUnionSpecifier2Context) _localctx).isUnion = ((StructOrUnionSpecifier2Context) _localctx).structOrUnion.isUnion;
 					setState(210);
-				((StructOrUnionSpecifier2Context)_localctx).Identifier = match(Identifier);
+					((StructOrUnionSpecifier2Context) _localctx).Identifier = match(Identifier);
 
-							((StructOrUnionSpecifier2Context)_localctx).name =  (((StructOrUnionSpecifier2Context)_localctx).Identifier!=null?((StructOrUnionSpecifier2Context)_localctx).Identifier.getText():null);
-							((StructOrUnionSpecifier2Context)_localctx).ret =  StructBuilder.declareDirectly(_localctx.name, _localctx.isUnion);
+					((StructOrUnionSpecifier2Context) _localctx).name = (((StructOrUnionSpecifier2Context) _localctx).Identifier != null ? ((StructOrUnionSpecifier2Context) _localctx).Identifier.getText() : null);
+					((StructOrUnionSpecifier2Context) _localctx).ret = StructBuilder.declareDirectly(_localctx.name, _localctx.isUnion);
 
 				}
 				break;
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -940,31 +932,29 @@ public class Compiler2015Parser extends Parser {
 			setState(219);
 			switch (_input.LA(1)) {
 				case T__4:
-				enterOuterAlt(_localctx, 1);
+					enterOuterAlt(_localctx, 1);
 				{
 					setState(215);
 					match(T__4);
-				 ((StructOrUnionContext)_localctx).isUnion =  false;
+					((StructOrUnionContext) _localctx).isUnion = false;
 				}
 				break;
 				case T__5:
-				enterOuterAlt(_localctx, 2);
+					enterOuterAlt(_localctx, 2);
 				{
 					setState(217);
 					match(T__5);
-				 ((StructOrUnionContext)_localctx).isUnion =  true;
+					((StructOrUnionContext) _localctx).isUnion = true;
 				}
 				break;
-			default:
-				throw new NoViableAltException(this);
+				default:
+					throw new NoViableAltException(this);
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -974,65 +964,63 @@ public class Compiler2015Parser extends Parser {
 		StructDeclarationContext _localctx = new StructDeclarationContext(_ctx, getState());
 		enterRule(_localctx, 16, RULE_structDeclaration);
 
-			((StructDeclarationContext)_localctx).types =  new ArrayList<Type>();
-			((StructDeclarationContext)_localctx).names =  new ArrayList<String>();
+		((StructDeclarationContext) _localctx).types = new ArrayList<Type>();
+		((StructDeclarationContext) _localctx).names = new ArrayList<String>();
 
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(221);
-			((StructDeclarationContext)_localctx).typeSpecifier = typeSpecifier();
-			 TypeAnalyser.enter(((StructDeclarationContext)_localctx).typeSpecifier.ret);
+				((StructDeclarationContext) _localctx).typeSpecifier = typeSpecifier();
+				TypeAnalyser.enter(((StructDeclarationContext) _localctx).typeSpecifier.ret);
 				setState(234);
-			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << L1) | (1L << STAR) | (1L << Identifier))) != 0)) {
-				{
-					setState(223);
-				((StructDeclarationContext)_localctx).d1 = declarator();
-
-								_localctx.types.add(TypeAnalyser.analyse());
-								_localctx.names.add(((StructDeclarationContext)_localctx).d1.name);
-
-					setState(231);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (_la==Comma) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << L1) | (1L << STAR) | (1L << Identifier))) != 0)) {
 					{
-					{
-						setState(225);
-					match(Comma);
-						setState(226);
-					((StructDeclarationContext)_localctx).d2 = declarator();
+						setState(223);
+						((StructDeclarationContext) _localctx).d1 = declarator();
 
-										_localctx.types.add(TypeAnalyser.analyse());
-										_localctx.names.add(((StructDeclarationContext)_localctx).d2.name);
+						_localctx.types.add(TypeAnalyser.analyse());
+						_localctx.names.add(((StructDeclarationContext) _localctx).d1.name);
 
+						setState(231);
+						_errHandler.sync(this);
+						_la = _input.LA(1);
+						while (_la == Comma) {
+							{
+								{
+									setState(225);
+									match(Comma);
+									setState(226);
+									((StructDeclarationContext) _localctx).d2 = declarator();
+
+									_localctx.types.add(TypeAnalyser.analyse());
+									_localctx.names.add(((StructDeclarationContext) _localctx).d2.name);
+
+								}
+							}
+							setState(233);
+							_errHandler.sync(this);
+							_la = _input.LA(1);
+						}
 					}
-					}
-					setState(233);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
 				}
-				}
-			}
 
 				setState(236);
-			match(Semi);
+				match(Semi);
 			}
 
-				for (Type t : _localctx.types)
-					if (t instanceof FunctionType)
-						throw new CompilationError("Could not declare / define functions inside struct / union.");
-				TypeAnalyser.exit();
+			for (Type t : _localctx.types)
+				if (t instanceof FunctionType)
+					throw new CompilationError("Could not declare / define functions inside struct / union.");
+			TypeAnalyser.exit();
 
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -1046,35 +1034,33 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(242);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==STAR) {
-				{
-				{
-					setState(238);
-				match(STAR);
-				 ++_localctx.n;
-				}
-				}
-				setState(244);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			}
+				while (_la == STAR) {
+					{
+						{
+							setState(238);
+							match(STAR);
+							++_localctx.n;
+						}
+					}
+					setState(244);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 				setState(245);
-			((DeclaratorContext)_localctx).directDeclarator = directDeclarator(0);
-			 ((DeclaratorContext)_localctx).name =  ((DeclaratorContext)_localctx).directDeclarator.name;
+				((DeclaratorContext) _localctx).directDeclarator = directDeclarator(0);
+				((DeclaratorContext) _localctx).name = ((DeclaratorContext) _localctx).directDeclarator.name;
 			}
 
-				for (int i = 0; i < _localctx.n; ++i)
-					TypeAnalyser.addStar();
+			for (int i = 0; i < _localctx.n; ++i)
+				TypeAnalyser.addStar();
 
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -1087,20 +1073,18 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(248);
-			((PlainDeclaratorContext)_localctx).declarator = declarator();
+				((PlainDeclaratorContext) _localctx).declarator = declarator();
 
-						((PlainDeclaratorContext)_localctx).type =  TypeAnalyser.analyse();
-						((PlainDeclaratorContext)_localctx).name =  ((PlainDeclaratorContext)_localctx).declarator.name;
-						Environment.symbolNames.defineTypedefName(_localctx.name, _localctx.type);
+				((PlainDeclaratorContext) _localctx).type = TypeAnalyser.analyse();
+				((PlainDeclaratorContext) _localctx).name = ((PlainDeclaratorContext) _localctx).declarator.name;
+				Environment.symbolNames.defineTypedefName(_localctx.name, _localctx.type);
 
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -1114,31 +1098,29 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(251);
-			plainDeclarator();
-				setState(256);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==Comma) {
-				{
-				{
-					setState(252);
-				match(Comma);
-					setState(253);
 				plainDeclarator();
-				}
-				}
-				setState(258);
+				setState(256);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
+				while (_la == Comma) {
+					{
+						{
+							setState(252);
+							match(Comma);
+							setState(253);
+							plainDeclarator();
+						}
+					}
+					setState(258);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -1160,122 +1142,118 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(267);
-			switch (_input.LA(1)) {
-			case Identifier:
-				{
-					setState(260);
-				((DirectDeclaratorContext)_localctx).Identifier = match(Identifier);
-				 ((DirectDeclaratorContext)_localctx).name =  (((DirectDeclaratorContext)_localctx).Identifier!=null?((DirectDeclaratorContext)_localctx).Identifier.getText():null);
+				switch (_input.LA(1)) {
+					case Identifier: {
+						setState(260);
+						((DirectDeclaratorContext) _localctx).Identifier = match(Identifier);
+						((DirectDeclaratorContext) _localctx).name = (((DirectDeclaratorContext) _localctx).Identifier != null ? ((DirectDeclaratorContext) _localctx).Identifier.getText() : null);
+					}
+					break;
+					case L1: {
+						setState(262);
+						match(L1);
+						setState(263);
+						((DirectDeclaratorContext) _localctx).declarator = declarator();
+						setState(264);
+						match(R1);
+						((DirectDeclaratorContext) _localctx).name = ((DirectDeclaratorContext) _localctx).declarator.name;
+					}
+					break;
+					default:
+						throw new NoViableAltException(this);
 				}
-				break;
-			case L1:
-				{
-					setState(262);
-				match(L1);
-					setState(263);
-				((DirectDeclaratorContext)_localctx).declarator = declarator();
-					setState(264);
-				match(R1);
-				 ((DirectDeclaratorContext)_localctx).name =  ((DirectDeclaratorContext)_localctx).declarator.name;
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-			_ctx.stop = _input.LT(-1);
+				_ctx.stop = _input.LT(-1);
 				setState(295);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,20,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					if ( _parseListeners!=null ) triggerExitRuleEvent();
-					_prevctx = _localctx;
-					{
-						setState(293);
-					switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
-					case 1:
-						{
-						_localctx = new DirectDeclaratorContext(_parentctx, _parentState);
-						_localctx.d1 = _prevctx;
-						_localctx.d1 = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_directDeclarator);
-							setState(269);
-						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-						 ((DirectDeclaratorContext)_localctx).name =  ((DirectDeclaratorContext)_localctx).d1.name;
-							setState(271);
-						match(L2);
-							setState(272);
-						((DirectDeclaratorContext)_localctx).constantExpression = constantExpression();
-							setState(273);
-						match(R2);
-						 TypeAnalyser.addArray(((DirectDeclaratorContext)_localctx).constantExpression.ret);
-						}
-						break;
-					case 2:
-						{
-						_localctx = new DirectDeclaratorContext(_parentctx, _parentState);
-						_localctx.d2 = _prevctx;
-						_localctx.d2 = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_directDeclarator);
-							setState(276);
-						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-						 ((DirectDeclaratorContext)_localctx).name =  ((DirectDeclaratorContext)_localctx).d2.name;
-							setState(278);
-						match(L2);
-							setState(279);
-						match(R2);
-						 TypeAnalyser.addArray(null);
-						}
-						break;
-					case 3:
-						{
-						_localctx = new DirectDeclaratorContext(_parentctx, _parentState);
-						_localctx.d3 = _prevctx;
-						_localctx.d3 = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_directDeclarator);
-							setState(281);
-						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-						 ((DirectDeclaratorContext)_localctx).name =  ((DirectDeclaratorContext)_localctx).d3.name;
-							setState(283);
-						match(L1);
-							setState(284);
-						match(R1);
-						 TypeAnalyser.addParameter();
-						}
-						break;
-					case 4:
-						{
-						_localctx = new DirectDeclaratorContext(_parentctx, _parentState);
-						_localctx.d4 = _prevctx;
-						_localctx.d4 = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_directDeclarator);
-							setState(286);
-						if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-						 ((DirectDeclaratorContext)_localctx).name =  ((DirectDeclaratorContext)_localctx).d4.name;
-							setState(288);
-						match(L1);
-							setState(289);
-						((DirectDeclaratorContext)_localctx).parameterTypeList = parameterTypeList();
-							setState(290);
-						match(R1);
-						 TypeAnalyser.addParameter(((DirectDeclaratorContext)_localctx).parameterTypeList.types, ((DirectDeclaratorContext)_localctx).parameterTypeList.names, ((DirectDeclaratorContext)_localctx).parameterTypeList.hasVaList);
-						}
-						break;
-					}
-					}
-				}
-				setState(297);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,20,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input, 20, _ctx);
+				while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER) {
+					if (_alt == 1) {
+						if (_parseListeners != null) triggerExitRuleEvent();
+						_prevctx = _localctx;
+						{
+							setState(293);
+							switch (getInterpreter().adaptivePredict(_input, 19, _ctx)) {
+								case 1: {
+									_localctx = new DirectDeclaratorContext(_parentctx, _parentState);
+									_localctx.d1 = _prevctx;
+									_localctx.d1 = _prevctx;
+									pushNewRecursionContext(_localctx, _startState, RULE_directDeclarator);
+									setState(269);
+									if (!(precpred(_ctx, 4)))
+										throw new FailedPredicateException(this, "precpred(_ctx, 4)");
+									((DirectDeclaratorContext) _localctx).name = ((DirectDeclaratorContext) _localctx).d1.name;
+									setState(271);
+									match(L2);
+									setState(272);
+									((DirectDeclaratorContext) _localctx).constantExpression = constantExpression();
+									setState(273);
+									match(R2);
+									TypeAnalyser.addArray(((DirectDeclaratorContext) _localctx).constantExpression.ret);
+								}
+								break;
+								case 2: {
+									_localctx = new DirectDeclaratorContext(_parentctx, _parentState);
+									_localctx.d2 = _prevctx;
+									_localctx.d2 = _prevctx;
+									pushNewRecursionContext(_localctx, _startState, RULE_directDeclarator);
+									setState(276);
+									if (!(precpred(_ctx, 3)))
+										throw new FailedPredicateException(this, "precpred(_ctx, 3)");
+									((DirectDeclaratorContext) _localctx).name = ((DirectDeclaratorContext) _localctx).d2.name;
+									setState(278);
+									match(L2);
+									setState(279);
+									match(R2);
+									TypeAnalyser.addArray(null);
+								}
+								break;
+								case 3: {
+									_localctx = new DirectDeclaratorContext(_parentctx, _parentState);
+									_localctx.d3 = _prevctx;
+									_localctx.d3 = _prevctx;
+									pushNewRecursionContext(_localctx, _startState, RULE_directDeclarator);
+									setState(281);
+									if (!(precpred(_ctx, 2)))
+										throw new FailedPredicateException(this, "precpred(_ctx, 2)");
+									((DirectDeclaratorContext) _localctx).name = ((DirectDeclaratorContext) _localctx).d3.name;
+									setState(283);
+									match(L1);
+									setState(284);
+									match(R1);
+									TypeAnalyser.addParameter();
+								}
+								break;
+								case 4: {
+									_localctx = new DirectDeclaratorContext(_parentctx, _parentState);
+									_localctx.d4 = _prevctx;
+									_localctx.d4 = _prevctx;
+									pushNewRecursionContext(_localctx, _startState, RULE_directDeclarator);
+									setState(286);
+									if (!(precpred(_ctx, 1)))
+										throw new FailedPredicateException(this, "precpred(_ctx, 1)");
+									((DirectDeclaratorContext) _localctx).name = ((DirectDeclaratorContext) _localctx).d4.name;
+									setState(288);
+									match(L1);
+									setState(289);
+									((DirectDeclaratorContext) _localctx).parameterTypeList = parameterTypeList();
+									setState(290);
+									match(R1);
+									TypeAnalyser.addParameter(((DirectDeclaratorContext) _localctx).parameterTypeList.types, ((DirectDeclaratorContext) _localctx).parameterTypeList.names, ((DirectDeclaratorContext) _localctx).parameterTypeList.hasVaList);
+								}
+								break;
+							}
+						}
+					}
+					setState(297);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input, 20, _ctx);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			unrollRecursionContexts(_parentctx);
 		}
 		return _localctx;
@@ -1289,31 +1267,29 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(298);
-			((ParameterTypeListContext)_localctx).parameterList = parameterList();
+				((ParameterTypeListContext) _localctx).parameterList = parameterList();
 
-						((ParameterTypeListContext)_localctx).types =  ((ParameterTypeListContext)_localctx).parameterList.types;
-						((ParameterTypeListContext)_localctx).names =  ((ParameterTypeListContext)_localctx).parameterList.names;
+				((ParameterTypeListContext) _localctx).types = ((ParameterTypeListContext) _localctx).parameterList.types;
+				((ParameterTypeListContext) _localctx).names = ((ParameterTypeListContext) _localctx).parameterList.names;
 
 				setState(303);
-			_la = _input.LA(1);
-			if (_la==Comma) {
-				{
-					setState(300);
-				match(Comma);
-					setState(301);
-					match(T__6);
-				 ((ParameterTypeListContext)_localctx).hasVaList =  true;
+				_la = _input.LA(1);
+				if (_la == Comma) {
+					{
+						setState(300);
+						match(Comma);
+						setState(301);
+						match(T__6);
+						((ParameterTypeListContext) _localctx).hasVaList = true;
+					}
 				}
-			}
 
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -1323,49 +1299,47 @@ public class Compiler2015Parser extends Parser {
 		ParameterListContext _localctx = new ParameterListContext(_ctx, getState());
 		enterRule(_localctx, 28, RULE_parameterList);
 
-			((ParameterListContext)_localctx).types =  new ArrayList<Type>();
-			((ParameterListContext)_localctx).names =  new ArrayList<String>();
+		((ParameterListContext) _localctx).types = new ArrayList<Type>();
+		((ParameterListContext) _localctx).names = new ArrayList<String>();
 
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(305);
-			((ParameterListContext)_localctx).p1 = parameterDeclaration();
+				((ParameterListContext) _localctx).p1 = parameterDeclaration();
 
-						_localctx.types.add(((ParameterListContext)_localctx).p1.type);
-						_localctx.names.add(((ParameterListContext)_localctx).p1.name);
+				_localctx.types.add(((ParameterListContext) _localctx).p1.type);
+				_localctx.names.add(((ParameterListContext) _localctx).p1.name);
 
 				setState(313);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,22,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					{
-					{
-						setState(307);
-					match(Comma);
-						setState(308);
-					((ParameterListContext)_localctx).p2 = parameterDeclaration();
-
-									_localctx.types.add(((ParameterListContext)_localctx).p2.type);
-									_localctx.names.add(((ParameterListContext)_localctx).p2.name);
-
-					}
-					}
-				}
-				setState(315);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,22,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input, 22, _ctx);
+				while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER) {
+					if (_alt == 1) {
+						{
+							{
+								setState(307);
+								match(Comma);
+								setState(308);
+								((ParameterListContext) _localctx).p2 = parameterDeclaration();
+
+								_localctx.types.add(((ParameterListContext) _localctx).p2.type);
+								_localctx.names.add(((ParameterListContext) _localctx).p2.name);
+
+							}
+						}
+					}
+					setState(315);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input, 22, _ctx);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -1376,61 +1350,59 @@ public class Compiler2015Parser extends Parser {
 		enterRule(_localctx, 30, RULE_parameterDeclaration);
 		try {
 			setState(329);
-			switch ( getInterpreter().adaptivePredict(_input,23,_ctx) ) {
-			case 1:
-				_localctx = new ParameterDeclaration1Context(_localctx);
-				enterOuterAlt(_localctx, 1);
+			switch (getInterpreter().adaptivePredict(_input, 23, _ctx)) {
+				case 1:
+					_localctx = new ParameterDeclaration1Context(_localctx);
+					enterOuterAlt(_localctx, 1);
 				{
 					setState(316);
-				((ParameterDeclaration1Context)_localctx).t1 = ((ParameterDeclaration1Context)_localctx).typeSpecifier = typeSpecifier();
+					((ParameterDeclaration1Context) _localctx).t1 = ((ParameterDeclaration1Context) _localctx).typeSpecifier = typeSpecifier();
 
-							TypeAnalyser.enter(((ParameterDeclaration1Context)_localctx).typeSpecifier.ret);
-							((ParameterDeclaration1Context)_localctx).type =  ((ParameterDeclaration1Context)_localctx).typeSpecifier.ret;
-							((ParameterDeclaration1Context)_localctx).name =  "";
+					TypeAnalyser.enter(((ParameterDeclaration1Context) _localctx).typeSpecifier.ret);
+					((ParameterDeclaration1Context) _localctx).type = ((ParameterDeclaration1Context) _localctx).typeSpecifier.ret;
+					((ParameterDeclaration1Context) _localctx).name = "";
 
 				}
 				break;
-			case 2:
-				_localctx = new ParameterDeclaration2Context(_localctx);
-				enterOuterAlt(_localctx, 2);
+				case 2:
+					_localctx = new ParameterDeclaration2Context(_localctx);
+					enterOuterAlt(_localctx, 2);
 				{
 					setState(319);
-				((ParameterDeclaration2Context)_localctx).t2 = ((ParameterDeclaration2Context)_localctx).typeSpecifier = typeSpecifier();
-				 TypeAnalyser.enter(((ParameterDeclaration2Context)_localctx).typeSpecifier.ret);
+					((ParameterDeclaration2Context) _localctx).t2 = ((ParameterDeclaration2Context) _localctx).typeSpecifier = typeSpecifier();
+					TypeAnalyser.enter(((ParameterDeclaration2Context) _localctx).typeSpecifier.ret);
 					setState(321);
-				((ParameterDeclaration2Context)_localctx).declarator = declarator();
+					((ParameterDeclaration2Context) _localctx).declarator = declarator();
 
-							((ParameterDeclaration2Context)_localctx).type =  TypeAnalyser.analyse();
-							((ParameterDeclaration2Context)_localctx).name =  ((ParameterDeclaration2Context)_localctx).declarator.name;
+					((ParameterDeclaration2Context) _localctx).type = TypeAnalyser.analyse();
+					((ParameterDeclaration2Context) _localctx).name = ((ParameterDeclaration2Context) _localctx).declarator.name;
 
 				}
 				break;
-			case 3:
-				_localctx = new ParameterDeclaration3Context(_localctx);
-				enterOuterAlt(_localctx, 3);
+				case 3:
+					_localctx = new ParameterDeclaration3Context(_localctx);
+					enterOuterAlt(_localctx, 3);
 				{
 					setState(324);
-				((ParameterDeclaration3Context)_localctx).t3 = ((ParameterDeclaration3Context)_localctx).typeSpecifier = typeSpecifier();
-				 TypeAnalyser.enter(((ParameterDeclaration3Context)_localctx).typeSpecifier.ret);
+					((ParameterDeclaration3Context) _localctx).t3 = ((ParameterDeclaration3Context) _localctx).typeSpecifier = typeSpecifier();
+					TypeAnalyser.enter(((ParameterDeclaration3Context) _localctx).typeSpecifier.ret);
 					setState(326);
-				abstractDeclarator();
+					abstractDeclarator();
 
-							((ParameterDeclaration3Context)_localctx).type =  TypeAnalyser.analyse();
-							((ParameterDeclaration3Context)_localctx).name =  "";
+					((ParameterDeclaration3Context) _localctx).type = TypeAnalyser.analyse();
+					((ParameterDeclaration3Context) _localctx).name = "";
 
 				}
 				break;
 			}
 
-				TypeAnalyser.exit();
+			TypeAnalyser.exit();
 
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -1442,61 +1414,59 @@ public class Compiler2015Parser extends Parser {
 		int _la;
 		try {
 			setState(345);
-			switch ( getInterpreter().adaptivePredict(_input,26,_ctx) ) {
-			case 1:
-				enterOuterAlt(_localctx, 1);
+			switch (getInterpreter().adaptivePredict(_input, 26, _ctx)) {
+				case 1:
+					enterOuterAlt(_localctx, 1);
 				{
 					setState(333);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				do {
-					{
-					{
-						setState(331);
-					match(STAR);
-					 ++_localctx.n;
-					}
-					}
-					setState(335);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				} while ( _la==STAR );
+					do {
+						{
+							{
+								setState(331);
+								match(STAR);
+								++_localctx.n;
+							}
+						}
+						setState(335);
+						_errHandler.sync(this);
+						_la = _input.LA(1);
+					} while (_la == STAR);
 				}
 				break;
-			case 2:
-				enterOuterAlt(_localctx, 2);
+				case 2:
+					enterOuterAlt(_localctx, 2);
 				{
 					setState(341);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==STAR) {
-					{
-					{
-						setState(337);
-					match(STAR);
-					 ++_localctx.n;
-					}
-					}
-					setState(343);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				}
+					while (_la == STAR) {
+						{
+							{
+								setState(337);
+								match(STAR);
+								++_localctx.n;
+							}
+						}
+						setState(343);
+						_errHandler.sync(this);
+						_la = _input.LA(1);
+					}
 					setState(344);
-				directAbstractDeclarator(0);
+					directAbstractDeclarator(0);
 				}
 				break;
 			}
 
-				for (int i = 0; i < _localctx.n; ++i)
-					TypeAnalyser.addStar();
+			for (int i = 0; i < _localctx.n; ++i)
+				TypeAnalyser.addStar();
 
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -1518,147 +1488,139 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(368);
-			switch ( getInterpreter().adaptivePredict(_input,27,_ctx) ) {
-			case 1:
-				{
-					setState(348);
-				match(L1);
-					setState(349);
-				abstractDeclarator();
-					setState(350);
-				match(R1);
-				}
-				break;
-			case 2:
-				{
-					setState(352);
-				match(L2);
-					setState(353);
-				match(R2);
-				 TypeAnalyser.addArray(null);
-				}
-				break;
-			case 3:
-				{
-					setState(355);
-				match(L2);
-					setState(356);
-				((DirectAbstractDeclaratorContext)_localctx).constantExpression = constantExpression();
-					setState(357);
-				match(R2);
-				 TypeAnalyser.addArray(((DirectAbstractDeclaratorContext)_localctx).constantExpression.ret);
-				}
-				break;
-			case 4:
-				{
-					setState(360);
-				match(L1);
-					setState(361);
-				match(R1);
-				 TypeAnalyser.addParameter();
-				}
-				break;
-			case 5:
-				{
-					setState(363);
-				match(L1);
-					setState(364);
-				((DirectAbstractDeclaratorContext)_localctx).parameterTypeList = parameterTypeList();
-					setState(365);
-				match(R1);
-				 TypeAnalyser.addParameter(((DirectAbstractDeclaratorContext)_localctx).parameterTypeList.types, ((DirectAbstractDeclaratorContext)_localctx).parameterTypeList.names, ((DirectAbstractDeclaratorContext)_localctx).parameterTypeList.hasVaList);
-				}
-				break;
-			}
-			_ctx.stop = _input.LT(-1);
-				setState(393);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,30,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					if ( _parseListeners!=null ) triggerExitRuleEvent();
-					_prevctx = _localctx;
-					{
-						setState(391);
-					switch ( getInterpreter().adaptivePredict(_input,29,_ctx) ) {
-					case 1:
-						{
-						_localctx = new DirectAbstractDeclaratorContext(_parentctx, _parentState);
-						pushNewRecursionContext(_localctx, _startState, RULE_directAbstractDeclarator);
-							setState(370);
-						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-							setState(371);
-						match(L2);
-							setState(372);
-						match(R2);
-						 TypeAnalyser.addArray(null);
-						}
-						break;
-					case 2:
-						{
-						_localctx = new DirectAbstractDeclaratorContext(_parentctx, _parentState);
-						pushNewRecursionContext(_localctx, _startState, RULE_directAbstractDeclarator);
-							setState(374);
-						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-							setState(375);
-						match(L2);
-							setState(376);
-						((DirectAbstractDeclaratorContext)_localctx).constantExpression = constantExpression();
-							setState(377);
-						match(R2);
-						 TypeAnalyser.addArray(((DirectAbstractDeclaratorContext)_localctx).constantExpression.ret);
-						}
-						break;
-					case 3:
-						{
-						_localctx = new DirectAbstractDeclaratorContext(_parentctx, _parentState);
-						pushNewRecursionContext(_localctx, _startState, RULE_directAbstractDeclarator);
-							setState(380);
-						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-							setState(381);
+				switch (getInterpreter().adaptivePredict(_input, 27, _ctx)) {
+					case 1: {
+						setState(348);
 						match(L1);
-							setState(382);
+						setState(349);
+						abstractDeclarator();
+						setState(350);
 						match(R1);
-						 TypeAnalyser.addParameter();
-						}
-						break;
-					case 4:
-						{
-						_localctx = new DirectAbstractDeclaratorContext(_parentctx, _parentState);
-						pushNewRecursionContext(_localctx, _startState, RULE_directAbstractDeclarator);
-							setState(384);
-						if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-						setState(385);
-							match(L1);
-							setState(387);
-						switch ( getInterpreter().adaptivePredict(_input,28,_ctx) ) {
-						case 1:
-							{
-								setState(386);
-							((DirectAbstractDeclaratorContext)_localctx).parameterTypeList = parameterTypeList();
-							}
-							break;
-						}
-							setState(389);
+					}
+					break;
+					case 2: {
+						setState(352);
+						match(L2);
+						setState(353);
+						match(R2);
+						TypeAnalyser.addArray(null);
+					}
+					break;
+					case 3: {
+						setState(355);
+						match(L2);
+						setState(356);
+						((DirectAbstractDeclaratorContext) _localctx).constantExpression = constantExpression();
+						setState(357);
+						match(R2);
+						TypeAnalyser.addArray(((DirectAbstractDeclaratorContext) _localctx).constantExpression.ret);
+					}
+					break;
+					case 4: {
+						setState(360);
+						match(L1);
+						setState(361);
 						match(R1);
-						 TypeAnalyser.addParameter(((DirectAbstractDeclaratorContext)_localctx).parameterTypeList.types, ((DirectAbstractDeclaratorContext)_localctx).parameterTypeList.names, ((DirectAbstractDeclaratorContext)_localctx).parameterTypeList.hasVaList);
-						}
-						break;
+						TypeAnalyser.addParameter();
 					}
+					break;
+					case 5: {
+						setState(363);
+						match(L1);
+						setState(364);
+						((DirectAbstractDeclaratorContext) _localctx).parameterTypeList = parameterTypeList();
+						setState(365);
+						match(R1);
+						TypeAnalyser.addParameter(((DirectAbstractDeclaratorContext) _localctx).parameterTypeList.types, ((DirectAbstractDeclaratorContext) _localctx).parameterTypeList.names, ((DirectAbstractDeclaratorContext) _localctx).parameterTypeList.hasVaList);
 					}
+					break;
 				}
-				setState(395);
+				_ctx.stop = _input.LT(-1);
+				setState(393);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,30,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input, 30, _ctx);
+				while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER) {
+					if (_alt == 1) {
+						if (_parseListeners != null) triggerExitRuleEvent();
+						_prevctx = _localctx;
+						{
+							setState(391);
+							switch (getInterpreter().adaptivePredict(_input, 29, _ctx)) {
+								case 1: {
+									_localctx = new DirectAbstractDeclaratorContext(_parentctx, _parentState);
+									pushNewRecursionContext(_localctx, _startState, RULE_directAbstractDeclarator);
+									setState(370);
+									if (!(precpred(_ctx, 4)))
+										throw new FailedPredicateException(this, "precpred(_ctx, 4)");
+									setState(371);
+									match(L2);
+									setState(372);
+									match(R2);
+									TypeAnalyser.addArray(null);
+								}
+								break;
+								case 2: {
+									_localctx = new DirectAbstractDeclaratorContext(_parentctx, _parentState);
+									pushNewRecursionContext(_localctx, _startState, RULE_directAbstractDeclarator);
+									setState(374);
+									if (!(precpred(_ctx, 3)))
+										throw new FailedPredicateException(this, "precpred(_ctx, 3)");
+									setState(375);
+									match(L2);
+									setState(376);
+									((DirectAbstractDeclaratorContext) _localctx).constantExpression = constantExpression();
+									setState(377);
+									match(R2);
+									TypeAnalyser.addArray(((DirectAbstractDeclaratorContext) _localctx).constantExpression.ret);
+								}
+								break;
+								case 3: {
+									_localctx = new DirectAbstractDeclaratorContext(_parentctx, _parentState);
+									pushNewRecursionContext(_localctx, _startState, RULE_directAbstractDeclarator);
+									setState(380);
+									if (!(precpred(_ctx, 2)))
+										throw new FailedPredicateException(this, "precpred(_ctx, 2)");
+									setState(381);
+									match(L1);
+									setState(382);
+									match(R1);
+									TypeAnalyser.addParameter();
+								}
+								break;
+								case 4: {
+									_localctx = new DirectAbstractDeclaratorContext(_parentctx, _parentState);
+									pushNewRecursionContext(_localctx, _startState, RULE_directAbstractDeclarator);
+									setState(384);
+									if (!(precpred(_ctx, 1)))
+										throw new FailedPredicateException(this, "precpred(_ctx, 1)");
+									setState(385);
+									match(L1);
+									setState(387);
+									switch (getInterpreter().adaptivePredict(_input, 28, _ctx)) {
+										case 1: {
+											setState(386);
+											((DirectAbstractDeclaratorContext) _localctx).parameterTypeList = parameterTypeList();
+										}
+										break;
+									}
+									setState(389);
+									match(R1);
+									TypeAnalyser.addParameter(((DirectAbstractDeclaratorContext) _localctx).parameterTypeList.types, ((DirectAbstractDeclaratorContext) _localctx).parameterTypeList.names, ((DirectAbstractDeclaratorContext) _localctx).parameterTypeList.hasVaList);
+								}
+								break;
+							}
+						}
+					}
+					setState(395);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input, 30, _ctx);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			unrollRecursionContexts(_parentctx);
 		}
 		return _localctx;
@@ -1671,18 +1633,17 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(396);
-			if (!( Environment.isTypedefName(_input.LT(1).getText()) )) throw new FailedPredicateException(this, " Environment.isTypedefName(_input.LT(1).getText()) ");
+				if (!(Environment.isTypedefName(_input.LT(1).getText())))
+					throw new FailedPredicateException(this, " Environment.isTypedefName(_input.LT(1).getText()) ");
 				setState(397);
-			((TypedefNameContext)_localctx).Identifier = match(Identifier);
-			 ((TypedefNameContext)_localctx).ret =  (Type)Environment.symbolNames.queryName((((TypedefNameContext)_localctx).Identifier!=null?((TypedefNameContext)_localctx).Identifier.getText():null)).ref;
+				((TypedefNameContext) _localctx).Identifier = match(Identifier);
+				((TypedefNameContext) _localctx).ret = (Type) Environment.symbolNames.queryName((((TypedefNameContext) _localctx).Identifier != null ? ((TypedefNameContext) _localctx).Identifier.getText() : null)).ref;
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -1694,57 +1655,55 @@ public class Compiler2015Parser extends Parser {
 		int _la;
 		try {
 			setState(417);
-			switch ( getInterpreter().adaptivePredict(_input,32,_ctx) ) {
-			case 1:
-				_localctx = new Initializer1Context(_localctx);
-				enterOuterAlt(_localctx, 1);
+			switch (getInterpreter().adaptivePredict(_input, 32, _ctx)) {
+				case 1:
+					_localctx = new Initializer1Context(_localctx);
+					enterOuterAlt(_localctx, 1);
 				{
 					setState(400);
-				((Initializer1Context)_localctx).assignmentExpression = assignmentExpression();
-				 ((Initializer1Context)_localctx).ret =  new SimpleInitializerList(((Initializer1Context)_localctx).assignmentExpression.ret);
+					((Initializer1Context) _localctx).assignmentExpression = assignmentExpression();
+					((Initializer1Context) _localctx).ret = new SimpleInitializerList(((Initializer1Context) _localctx).assignmentExpression.ret);
 				}
 				break;
-			case 2:
-				_localctx = new Initializer2Context(_localctx);
-				enterOuterAlt(_localctx, 2);
+				case 2:
+					_localctx = new Initializer2Context(_localctx);
+					enterOuterAlt(_localctx, 2);
 				{
 					setState(403);
-				match(L3);
+					match(L3);
 					setState(404);
-				((Initializer2Context)_localctx).i1 = initializer();
+					((Initializer2Context) _localctx).i1 = initializer();
 
-								((Initializer2Context)_localctx).ret =  new SimpleInitializerList(new ArrayList<SimpleInitializerList>());
-								_localctx.ret.list.add(((Initializer2Context)_localctx).i1.ret);
+					((Initializer2Context) _localctx).ret = new SimpleInitializerList(new ArrayList<SimpleInitializerList>());
+					_localctx.ret.list.add(((Initializer2Context) _localctx).i1.ret);
 
 					setState(412);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==Comma) {
-					{
-					{
-						setState(406);
-					match(Comma);
-						setState(407);
-					((Initializer2Context)_localctx).i2 = initializer();
-					 _localctx.ret.list.add(((Initializer2Context)_localctx).i2.ret);
-					}
-					}
-					setState(414);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				}
+					while (_la == Comma) {
+						{
+							{
+								setState(406);
+								match(Comma);
+								setState(407);
+								((Initializer2Context) _localctx).i2 = initializer();
+								_localctx.ret.list.add(((Initializer2Context) _localctx).i2.ret);
+							}
+						}
+						setState(414);
+						_errHandler.sync(this);
+						_la = _input.LA(1);
+					}
 					setState(415);
-				match(R3);
+					match(R3);
 				}
 				break;
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -1755,55 +1714,53 @@ public class Compiler2015Parser extends Parser {
 		enterRule(_localctx, 40, RULE_statement);
 		try {
 			setState(434);
-			switch ( getInterpreter().adaptivePredict(_input,33,_ctx) ) {
-			case 1:
-				enterOuterAlt(_localctx, 1);
+			switch (getInterpreter().adaptivePredict(_input, 33, _ctx)) {
+				case 1:
+					enterOuterAlt(_localctx, 1);
 				{
 					setState(419);
-				((StatementContext)_localctx).expressionStatement = expressionStatement();
-				 ((StatementContext)_localctx).ret =  ((StatementContext)_localctx).expressionStatement.ret;
+					((StatementContext) _localctx).expressionStatement = expressionStatement();
+					((StatementContext) _localctx).ret = ((StatementContext) _localctx).expressionStatement.ret;
 				}
 				break;
-			case 2:
-				enterOuterAlt(_localctx, 2);
+				case 2:
+					enterOuterAlt(_localctx, 2);
 				{
 					setState(422);
-				((StatementContext)_localctx).compoundStatement = compoundStatement(null, null);
-				 ((StatementContext)_localctx).ret =  ((StatementContext)_localctx).compoundStatement.ret;
+					((StatementContext) _localctx).compoundStatement = compoundStatement(null, null);
+					((StatementContext) _localctx).ret = ((StatementContext) _localctx).compoundStatement.ret;
 				}
 				break;
-			case 3:
-				enterOuterAlt(_localctx, 3);
+				case 3:
+					enterOuterAlt(_localctx, 3);
 				{
 					setState(425);
-				((StatementContext)_localctx).selectionStatement = selectionStatement();
-				 ((StatementContext)_localctx).ret =  ((StatementContext)_localctx).selectionStatement.ret;
+					((StatementContext) _localctx).selectionStatement = selectionStatement();
+					((StatementContext) _localctx).ret = ((StatementContext) _localctx).selectionStatement.ret;
 				}
 				break;
-			case 4:
-				enterOuterAlt(_localctx, 4);
+				case 4:
+					enterOuterAlt(_localctx, 4);
 				{
 					setState(428);
-				((StatementContext)_localctx).iterationStatement = iterationStatement();
-				 ((StatementContext)_localctx).ret =  ((StatementContext)_localctx).iterationStatement.ret;
+					((StatementContext) _localctx).iterationStatement = iterationStatement();
+					((StatementContext) _localctx).ret = ((StatementContext) _localctx).iterationStatement.ret;
 				}
 				break;
-			case 5:
-				enterOuterAlt(_localctx, 5);
+				case 5:
+					enterOuterAlt(_localctx, 5);
 				{
 					setState(431);
-				((StatementContext)_localctx).jumpStatement = jumpStatement();
-				 ((StatementContext)_localctx).ret =  ((StatementContext)_localctx).jumpStatement.ret;
+					((StatementContext) _localctx).jumpStatement = jumpStatement();
+					((StatementContext) _localctx).ret = ((StatementContext) _localctx).jumpStatement.ret;
 				}
 				break;
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -1816,31 +1773,28 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(439);
-			switch ( getInterpreter().adaptivePredict(_input,34,_ctx) ) {
-			case 1:
-				{
-					setState(436);
-				((ExpressionStatementContext)_localctx).expression = expression();
-				 ((ExpressionStatementContext)_localctx).ret =  ((ExpressionStatementContext)_localctx).expression.ret;
+				switch (getInterpreter().adaptivePredict(_input, 34, _ctx)) {
+					case 1: {
+						setState(436);
+						((ExpressionStatementContext) _localctx).expression = expression();
+						((ExpressionStatementContext) _localctx).ret = ((ExpressionStatementContext) _localctx).expression.ret;
+					}
+					break;
 				}
-				break;
-			}
 				setState(441);
-			match(Semi);
+				match(Semi);
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
 	}
 
-	public final CompoundStatementContext compoundStatement(ArrayList<Type> toDefineTypes,ArrayList<String> toDefineNames) throws RecognitionException {
+	public final CompoundStatementContext compoundStatement(ArrayList<Type> toDefineTypes, ArrayList<String> toDefineNames) throws RecognitionException {
 		CompoundStatementContext _localctx = new CompoundStatementContext(_ctx, getState(), toDefineTypes, toDefineNames);
 		enterRule(_localctx, 44, RULE_compoundStatement);
 		try {
@@ -1848,68 +1802,63 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(443);
-			match(L3);
+				match(L3);
 
-							Environment.enterScope();
-							if (_localctx.toDefineTypes != null) {
-								int n = _localctx.toDefineTypes.size();
-								for (int i = 0; i < n; ++i) {
-									int uId = Environment.symbolNames.defineVariable(_localctx.toDefineNames.get(i), _localctx.toDefineTypes.get(i));
-									_localctx.givenVariables.add(uId);
-									_localctx.parameters.add(uId);
-								}
-							}
-
-				setState(452);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,36,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					{
-						setState(450);
-					switch ( getInterpreter().adaptivePredict(_input,35,_ctx) ) {
-					case 1:
-						{
-							setState(445);
-						declaration();
-						}
-						break;
-					case 2:
-						{
-						{
-							setState(446);
-						((CompoundStatementContext)_localctx).statement = statement();
-						 _localctx.statements.add(((CompoundStatementContext)_localctx).statement.ret);
-						}
-						}
-						break;
-					case 3:
-						{
-							setState(449);
-						functionDefinition();
-						}
-						break;
-					}
+				Environment.enterScope();
+				if (_localctx.toDefineTypes != null) {
+					int n = _localctx.toDefineTypes.size();
+					for (int i = 0; i < n; ++i) {
+						int uId = Environment.symbolNames.defineVariable(_localctx.toDefineNames.get(i), _localctx.toDefineTypes.get(i));
+						_localctx.givenVariables.add(uId);
+						_localctx.parameters.add(uId);
 					}
 				}
-				setState(454);
+
+				setState(452);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,36,_ctx);
-			}
+				_alt = getInterpreter().adaptivePredict(_input, 36, _ctx);
+				while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER) {
+					if (_alt == 1) {
+						{
+							setState(450);
+							switch (getInterpreter().adaptivePredict(_input, 35, _ctx)) {
+								case 1: {
+									setState(445);
+									declaration();
+								}
+								break;
+								case 2: {
+									{
+										setState(446);
+										((CompoundStatementContext) _localctx).statement = statement();
+										_localctx.statements.add(((CompoundStatementContext) _localctx).statement.ret);
+									}
+								}
+								break;
+								case 3: {
+									setState(449);
+									functionDefinition();
+								}
+								break;
+							}
+						}
+					}
+					setState(454);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input, 36, _ctx);
+				}
 				setState(455);
-			match(R3);
+				match(R3);
 
 				((CompoundStatementContext) _localctx).ret = new CompoundStatement(Environment.symbolNames.getVariablesInCurrentScope(), _localctx.statements, _localctx.givenVariables, _localctx.parameters);
-							Environment.exitScope();
+				Environment.exitScope();
 
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -1922,40 +1871,37 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(458);
-			match(If);
+				match(If);
 				setState(459);
-			match(L1);
+				match(L1);
 				setState(460);
-			((SelectionStatementContext)_localctx).expression = expression();
-			 ((SelectionStatementContext)_localctx).e1 =  ((SelectionStatementContext)_localctx).expression.ret;
+				((SelectionStatementContext) _localctx).expression = expression();
+				((SelectionStatementContext) _localctx).e1 = ((SelectionStatementContext) _localctx).expression.ret;
 				setState(462);
-			match(R1);
+				match(R1);
 				setState(463);
-			((SelectionStatementContext)_localctx).st1 = statement();
-			 ((SelectionStatementContext)_localctx).s1 =  ((SelectionStatementContext)_localctx).st1.ret;
+				((SelectionStatementContext) _localctx).st1 = statement();
+				((SelectionStatementContext) _localctx).s1 = ((SelectionStatementContext) _localctx).st1.ret;
 				setState(469);
-			switch ( getInterpreter().adaptivePredict(_input,37,_ctx) ) {
-			case 1:
-				{
-					setState(465);
-				match(Else);
-					setState(466);
-				((SelectionStatementContext)_localctx).st2 = statement();
-				 ((SelectionStatementContext)_localctx).s2 =  ((SelectionStatementContext)_localctx).st2.ret;
+				switch (getInterpreter().adaptivePredict(_input, 37, _ctx)) {
+					case 1: {
+						setState(465);
+						match(Else);
+						setState(466);
+						((SelectionStatementContext) _localctx).st2 = statement();
+						((SelectionStatementContext) _localctx).s2 = ((SelectionStatementContext) _localctx).st2.ret;
+					}
+					break;
 				}
-				break;
-			}
 
-						((SelectionStatementContext)_localctx).ret =  new IfStatement(_localctx.e1, _localctx.s1, _localctx.s2);
+				((SelectionStatementContext) _localctx).ret = new IfStatement(_localctx.e1, _localctx.s1, _localctx.s2);
 
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -1967,98 +1913,93 @@ public class Compiler2015Parser extends Parser {
 		try {
 			setState(505);
 			switch (_input.LA(1)) {
-			case While:
-				_localctx = new IterationStatement1Context(_localctx);
-				enterOuterAlt(_localctx, 1);
+				case While:
+					_localctx = new IterationStatement1Context(_localctx);
+					enterOuterAlt(_localctx, 1);
 				{
 					setState(473);
-				match(While);
+					match(While);
 					setState(474);
-				match(L1);
+					match(L1);
 					setState(475);
-				((IterationStatement1Context)_localctx).expression = expression();
+					((IterationStatement1Context) _localctx).expression = expression();
 					setState(476);
-				match(R1);
+					match(R1);
 
-								((IterationStatement1Context)_localctx).whileS =  new WhileStatement(((IterationStatement1Context)_localctx).expression.ret);
-								Environment.loopStack.push(_localctx.whileS);
+					((IterationStatement1Context) _localctx).whileS = new WhileStatement(((IterationStatement1Context) _localctx).expression.ret);
+					Environment.loopStack.push(_localctx.whileS);
 
 					setState(478);
-				((IterationStatement1Context)_localctx).statement = statement();
+					((IterationStatement1Context) _localctx).statement = statement();
 
-								_localctx.whileS.a = ((IterationStatement1Context)_localctx).statement.ret;
-								Environment.loopStack.pop();
-								((IterationStatement1Context)_localctx).ret =  _localctx.whileS;
+					_localctx.whileS.a = ((IterationStatement1Context) _localctx).statement.ret;
+					Environment.loopStack.pop();
+					((IterationStatement1Context) _localctx).ret = _localctx.whileS;
 
 				}
 				break;
-			case For:
-				_localctx = new IterationStatement2Context(_localctx);
-				enterOuterAlt(_localctx, 2);
+				case For:
+					_localctx = new IterationStatement2Context(_localctx);
+					enterOuterAlt(_localctx, 2);
 				{
 					setState(481);
-				match(For);
+					match(For);
 					setState(482);
-				match(L1);
+					match(L1);
 					setState(486);
-				switch ( getInterpreter().adaptivePredict(_input,38,_ctx) ) {
-				case 1:
-					{
-						setState(483);
-					((IterationStatement2Context)_localctx).ex1 = expression();
-					((IterationStatement2Context)_localctx).e1 =  ((IterationStatement2Context)_localctx).ex1.ret;
+					switch (getInterpreter().adaptivePredict(_input, 38, _ctx)) {
+						case 1: {
+							setState(483);
+							((IterationStatement2Context) _localctx).ex1 = expression();
+							((IterationStatement2Context) _localctx).e1 = ((IterationStatement2Context) _localctx).ex1.ret;
+						}
+						break;
 					}
-					break;
-				}
 					setState(488);
-				match(Semi);
+					match(Semi);
 					setState(492);
-				switch ( getInterpreter().adaptivePredict(_input,39,_ctx) ) {
-				case 1:
-					{
-						setState(489);
-					((IterationStatement2Context)_localctx).ex2 = expression();
-					((IterationStatement2Context)_localctx).e2 =  ((IterationStatement2Context)_localctx).ex2.ret;
+					switch (getInterpreter().adaptivePredict(_input, 39, _ctx)) {
+						case 1: {
+							setState(489);
+							((IterationStatement2Context) _localctx).ex2 = expression();
+							((IterationStatement2Context) _localctx).e2 = ((IterationStatement2Context) _localctx).ex2.ret;
+						}
+						break;
 					}
-					break;
-				}
 					setState(494);
-				match(Semi);
+					match(Semi);
 					setState(498);
-				switch ( getInterpreter().adaptivePredict(_input,40,_ctx) ) {
-				case 1:
-					{
-						setState(495);
-					((IterationStatement2Context)_localctx).ex3 = expression();
-					((IterationStatement2Context)_localctx).e3 =  ((IterationStatement2Context)_localctx).ex3.ret;
+					switch (getInterpreter().adaptivePredict(_input, 40, _ctx)) {
+						case 1: {
+							setState(495);
+							((IterationStatement2Context) _localctx).ex3 = expression();
+							((IterationStatement2Context) _localctx).e3 = ((IterationStatement2Context) _localctx).ex3.ret;
+						}
+						break;
 					}
-					break;
-				}
 					setState(500);
-				match(R1);
+					match(R1);
 
-								((IterationStatement2Context)_localctx).forS =  new ForStatement(_localctx.e1, _localctx.e2, _localctx.e3);
-								Environment.loopStack.push(_localctx.forS);
+					((IterationStatement2Context) _localctx).forS = new ForStatement(_localctx.e1, _localctx.e2, _localctx.e3);
+					Environment.loopStack.push(_localctx.forS);
 
 					setState(502);
-				((IterationStatement2Context)_localctx).statement = statement();
+					((IterationStatement2Context) _localctx).statement = statement();
 
-								_localctx.forS.d = ((IterationStatement2Context)_localctx).statement.ret;
-								Environment.loopStack.pop();
-								((IterationStatement2Context)_localctx).ret =  _localctx.forS;
+					_localctx.forS.d = ((IterationStatement2Context) _localctx).statement.ret;
+					Environment.loopStack.pop();
+					((IterationStatement2Context) _localctx).ret = _localctx.forS;
 
 				}
 				break;
-			default:
-				throw new NoViableAltException(this);
+				default:
+					throw new NoViableAltException(this);
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2071,68 +2012,65 @@ public class Compiler2015Parser extends Parser {
 			setState(521);
 			switch (_input.LA(1)) {
 				case T__7:
-				_localctx = new JumpStatement1Context(_localctx);
-				enterOuterAlt(_localctx, 1);
+					_localctx = new JumpStatement1Context(_localctx);
+					enterOuterAlt(_localctx, 1);
 				{
 					setState(507);
 					match(T__7);
 					setState(508);
-				match(Semi);
+					match(Semi);
 
-							((JumpStatement1Context)_localctx).ret =  new ContinueStatement(Environment.getTopLoop());
+					((JumpStatement1Context) _localctx).ret = new ContinueStatement(Environment.getTopLoop());
 
 				}
 				break;
 				case T__8:
-				_localctx = new JumpStatement2Context(_localctx);
-				enterOuterAlt(_localctx, 2);
+					_localctx = new JumpStatement2Context(_localctx);
+					enterOuterAlt(_localctx, 2);
 				{
 					setState(510);
 					match(T__8);
 					setState(511);
-				match(Semi);
+					match(Semi);
 
-							((JumpStatement2Context)_localctx).ret =  new BreakStatement(Environment.getTopLoop());
+					((JumpStatement2Context) _localctx).ret = new BreakStatement(Environment.getTopLoop());
 
 				}
 				break;
 				case T__9:
-				_localctx = new JumpStatement3Context(_localctx);
-				enterOuterAlt(_localctx, 3);
+					_localctx = new JumpStatement3Context(_localctx);
+					enterOuterAlt(_localctx, 3);
 				{
 					setState(513);
 					match(T__9);
 					setState(517);
-				switch ( getInterpreter().adaptivePredict(_input,42,_ctx) ) {
-				case 1:
-					{
-						setState(514);
-					((JumpStatement3Context)_localctx).expression = expression();
-					((JumpStatement3Context)_localctx).e =  ((JumpStatement3Context)_localctx).expression.ret;
+					switch (getInterpreter().adaptivePredict(_input, 42, _ctx)) {
+						case 1: {
+							setState(514);
+							((JumpStatement3Context) _localctx).expression = expression();
+							((JumpStatement3Context) _localctx).e = ((JumpStatement3Context) _localctx).expression.ret;
+						}
+						break;
 					}
-					break;
-				}
 					setState(519);
-				match(Semi);
+					match(Semi);
 
-							if (_localctx.e != null)
-								Environment.matchReturn(_localctx.e.type);
-							else
-								Environment.matchReturn(VoidType.instance);
-							((JumpStatement3Context)_localctx).ret =  new ReturnStatement(_localctx.e);
+					if (_localctx.e != null)
+						Environment.matchReturn(_localctx.e.type);
+					else
+						Environment.matchReturn(VoidType.instance);
+					((JumpStatement3Context) _localctx).ret = new ReturnStatement(_localctx.e);
 
 				}
 				break;
-			default:
-				throw new NoViableAltException(this);
+				default:
+					throw new NoViableAltException(this);
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2146,33 +2084,31 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(523);
-			((ExpressionContext)_localctx).a1 = assignmentExpression();
-			 ((ExpressionContext)_localctx).ret =  ((ExpressionContext)_localctx).a1.ret;
+				((ExpressionContext) _localctx).a1 = assignmentExpression();
+				((ExpressionContext) _localctx).ret = ((ExpressionContext) _localctx).a1.ret;
 				setState(531);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==Comma) {
-				{
-				{
-					setState(525);
-				match(Comma);
-					setState(526);
-				((ExpressionContext)_localctx).a2 = assignmentExpression();
-				 ((ExpressionContext)_localctx).ret =  CommaExpression.getExpression(_localctx.ret, ((ExpressionContext)_localctx).a2.ret);
-				}
-				}
-				setState(533);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
+				while (_la == Comma) {
+					{
+						{
+							setState(525);
+							match(Comma);
+							setState(526);
+							((ExpressionContext) _localctx).a2 = assignmentExpression();
+							((ExpressionContext) _localctx).ret = CommaExpression.getExpression(_localctx.ret, ((ExpressionContext) _localctx).a2.ret);
+						}
+					}
+					setState(533);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2183,27 +2119,27 @@ public class Compiler2015Parser extends Parser {
 		enterRule(_localctx, 54, RULE_assignmentExpression);
 		try {
 			setState(549);
-			switch ( getInterpreter().adaptivePredict(_input,45,_ctx) ) {
-			case 1:
-				_localctx = new AssignmentExpression1Context(_localctx);
-				enterOuterAlt(_localctx, 1);
+			switch (getInterpreter().adaptivePredict(_input, 45, _ctx)) {
+				case 1:
+					_localctx = new AssignmentExpression1Context(_localctx);
+					enterOuterAlt(_localctx, 1);
 				{
 					setState(534);
-				((AssignmentExpression1Context)_localctx).logicalOrExpression = logicalOrExpression();
-				 ((AssignmentExpression1Context)_localctx).ret =  ((AssignmentExpression1Context)_localctx).logicalOrExpression.ret;
+					((AssignmentExpression1Context) _localctx).logicalOrExpression = logicalOrExpression();
+					((AssignmentExpression1Context) _localctx).ret = ((AssignmentExpression1Context) _localctx).logicalOrExpression.ret;
 				}
 				break;
-			case 2:
-				_localctx = new AssignmentExpression2Context(_localctx);
-				enterOuterAlt(_localctx, 2);
+				case 2:
+					_localctx = new AssignmentExpression2Context(_localctx);
+					enterOuterAlt(_localctx, 2);
 				{
 					setState(537);
-				((AssignmentExpression2Context)_localctx).a = unaryExpression();
+					((AssignmentExpression2Context) _localctx).a = unaryExpression();
 					setState(538);
-				((AssignmentExpression2Context)_localctx).assignmentOperator = assignmentOperator();
+					((AssignmentExpression2Context) _localctx).assignmentOperator = assignmentOperator();
 					setState(539);
-				((AssignmentExpression2Context)_localctx).b = assignmentExpression();
-				 ((AssignmentExpression2Context)_localctx).ret =  Assign.getExpression(((AssignmentExpression2Context)_localctx).a.ret, ((AssignmentExpression2Context)_localctx).b.ret, (((AssignmentExpression2Context)_localctx).assignmentOperator!=null?_input.getText(((AssignmentExpression2Context)_localctx).assignmentOperator.start,((AssignmentExpression2Context)_localctx).assignmentOperator.stop):null));
+					((AssignmentExpression2Context) _localctx).b = assignmentExpression();
+					((AssignmentExpression2Context) _localctx).ret = Assign.getExpression(((AssignmentExpression2Context) _localctx).a.ret, ((AssignmentExpression2Context) _localctx).b.ret, (((AssignmentExpression2Context) _localctx).assignmentOperator != null ? _input.getText(((AssignmentExpression2Context) _localctx).assignmentOperator.start, ((AssignmentExpression2Context) _localctx).assignmentOperator.stop) : null));
 				}
 				break;
 				case 3:
@@ -2244,13 +2180,11 @@ public class Compiler2015Parser extends Parser {
 				}
 				break;
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2264,20 +2198,18 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(551);
-			_la = _input.LA(1);
+				_la = _input.LA(1);
 				if (!((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__11) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << T__17) | (1L << T__18) | (1L << T__19) | (1L << T__20) | (1L << EQ))) != 0))) {
-			_errHandler.recoverInline(this);
+					_errHandler.recoverInline(this);
 				} else {
-				consume();
+					consume();
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2290,20 +2222,18 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(553);
-			((ConstantExpressionContext)_localctx).logicalOrExpression = logicalOrExpression();
+				((ConstantExpressionContext) _localctx).logicalOrExpression = logicalOrExpression();
 
-						((ConstantExpressionContext)_localctx).ret =  ((ConstantExpressionContext)_localctx).logicalOrExpression.ret;
-						if (!(_localctx.ret instanceof Constant))
-							throw new CompilationError("Not constant.");
+				((ConstantExpressionContext) _localctx).ret = ((ConstantExpressionContext) _localctx).logicalOrExpression.ret;
+				if (!(_localctx.ret instanceof Constant))
+					throw new CompilationError("Not constant.");
 
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2317,33 +2247,31 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(556);
-			((LogicalOrExpressionContext)_localctx).a1 = logicalAndExpression();
-			 ((LogicalOrExpressionContext)_localctx).ret =  ((LogicalOrExpressionContext)_localctx).a1.ret;
+				((LogicalOrExpressionContext) _localctx).a1 = logicalAndExpression();
+				((LogicalOrExpressionContext) _localctx).ret = ((LogicalOrExpressionContext) _localctx).a1.ret;
 				setState(564);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==OrOr) {
-				{
-				{
-					setState(558);
-				match(OrOr);
-					setState(559);
-				((LogicalOrExpressionContext)_localctx).a2 = logicalAndExpression();
-				 ((LogicalOrExpressionContext)_localctx).ret =  LogicalOr.getExpression(_localctx.ret, ((LogicalOrExpressionContext)_localctx).a2.ret);
-				}
-				}
-				setState(566);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
+				while (_la == OrOr) {
+					{
+						{
+							setState(558);
+							match(OrOr);
+							setState(559);
+							((LogicalOrExpressionContext) _localctx).a2 = logicalAndExpression();
+							((LogicalOrExpressionContext) _localctx).ret = LogicalOr.getExpression(_localctx.ret, ((LogicalOrExpressionContext) _localctx).a2.ret);
+						}
+					}
+					setState(566);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2357,33 +2285,31 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(567);
-			((LogicalAndExpressionContext)_localctx).a1 = inclusiveOrExpression();
-			 ((LogicalAndExpressionContext)_localctx).ret =  ((LogicalAndExpressionContext)_localctx).a1.ret;
+				((LogicalAndExpressionContext) _localctx).a1 = inclusiveOrExpression();
+				((LogicalAndExpressionContext) _localctx).ret = ((LogicalAndExpressionContext) _localctx).a1.ret;
 				setState(575);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==AndAnd) {
-				{
-				{
-					setState(569);
-				match(AndAnd);
-					setState(570);
-				((LogicalAndExpressionContext)_localctx).a2 = inclusiveOrExpression();
-				 ((LogicalAndExpressionContext)_localctx).ret =  LogicalAnd.getExpression(_localctx.ret, ((LogicalAndExpressionContext)_localctx).a2.ret);
-				}
-				}
-				setState(577);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
+				while (_la == AndAnd) {
+					{
+						{
+							setState(569);
+							match(AndAnd);
+							setState(570);
+							((LogicalAndExpressionContext) _localctx).a2 = inclusiveOrExpression();
+							((LogicalAndExpressionContext) _localctx).ret = LogicalAnd.getExpression(_localctx.ret, ((LogicalAndExpressionContext) _localctx).a2.ret);
+						}
+					}
+					setState(577);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2397,33 +2323,31 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(578);
-			((InclusiveOrExpressionContext)_localctx).a1 = exclusiveOrExpression();
-			 ((InclusiveOrExpressionContext)_localctx).ret =  ((InclusiveOrExpressionContext)_localctx).a1.ret;
+				((InclusiveOrExpressionContext) _localctx).a1 = exclusiveOrExpression();
+				((InclusiveOrExpressionContext) _localctx).ret = ((InclusiveOrExpressionContext) _localctx).a1.ret;
 				setState(586);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==Or) {
-				{
-				{
-					setState(580);
-				match(Or);
-					setState(581);
-				((InclusiveOrExpressionContext)_localctx).a2 = exclusiveOrExpression();
-				 ((InclusiveOrExpressionContext)_localctx).ret =  BitwiseOr.getExpression(_localctx.ret, ((InclusiveOrExpressionContext)_localctx).a2.ret);
-				}
-				}
-				setState(588);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
+				while (_la == Or) {
+					{
+						{
+							setState(580);
+							match(Or);
+							setState(581);
+							((InclusiveOrExpressionContext) _localctx).a2 = exclusiveOrExpression();
+							((InclusiveOrExpressionContext) _localctx).ret = BitwiseOr.getExpression(_localctx.ret, ((InclusiveOrExpressionContext) _localctx).a2.ret);
+						}
+					}
+					setState(588);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2437,33 +2361,31 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(589);
-			((ExclusiveOrExpressionContext)_localctx).a1 = andExpression();
-			 ((ExclusiveOrExpressionContext)_localctx).ret =  ((ExclusiveOrExpressionContext)_localctx).a1.ret;
+				((ExclusiveOrExpressionContext) _localctx).a1 = andExpression();
+				((ExclusiveOrExpressionContext) _localctx).ret = ((ExclusiveOrExpressionContext) _localctx).a1.ret;
 				setState(597);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==Caret) {
-				{
-				{
-					setState(591);
-				match(Caret);
-					setState(592);
-				((ExclusiveOrExpressionContext)_localctx).a2 = andExpression();
-				 ((ExclusiveOrExpressionContext)_localctx).ret =  BitwiseXOR.getExpression(_localctx.ret, ((ExclusiveOrExpressionContext)_localctx).a2.ret);
-				}
-				}
-				setState(599);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
+				while (_la == Caret) {
+					{
+						{
+							setState(591);
+							match(Caret);
+							setState(592);
+							((ExclusiveOrExpressionContext) _localctx).a2 = andExpression();
+							((ExclusiveOrExpressionContext) _localctx).ret = BitwiseXOR.getExpression(_localctx.ret, ((ExclusiveOrExpressionContext) _localctx).a2.ret);
+						}
+					}
+					setState(599);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2477,33 +2399,31 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(600);
-			((AndExpressionContext)_localctx).a1 = equalityExpression();
-			 ((AndExpressionContext)_localctx).ret =  ((AndExpressionContext)_localctx).a1.ret;
+				((AndExpressionContext) _localctx).a1 = equalityExpression();
+				((AndExpressionContext) _localctx).ret = ((AndExpressionContext) _localctx).a1.ret;
 				setState(608);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==And) {
-				{
-				{
-					setState(602);
-				match(And);
-					setState(603);
-				((AndExpressionContext)_localctx).a2 = equalityExpression();
-				 ((AndExpressionContext)_localctx).ret =  BitwiseAnd.getExpression(_localctx.ret, ((AndExpressionContext)_localctx).a2.ret);
-				}
-				}
-				setState(610);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
+				while (_la == And) {
+					{
+						{
+							setState(602);
+							match(And);
+							setState(603);
+							((AndExpressionContext) _localctx).a2 = equalityExpression();
+							((AndExpressionContext) _localctx).ret = BitwiseAnd.getExpression(_localctx.ret, ((AndExpressionContext) _localctx).a2.ret);
+						}
+					}
+					setState(610);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2517,38 +2437,36 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(611);
-			((EqualityExpressionContext)_localctx).a1 = relationalExpression();
-			 ((EqualityExpressionContext)_localctx).ret =  ((EqualityExpressionContext)_localctx).a1.ret;
+				((EqualityExpressionContext) _localctx).a1 = relationalExpression();
+				((EqualityExpressionContext) _localctx).ret = ((EqualityExpressionContext) _localctx).a1.ret;
 				setState(619);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-				while (_la == T__21 || _la == T__22) {
-				{
-				{
-					setState(613);
-				((EqualityExpressionContext)_localctx).op = equalityOperator();
-					setState(614);
-				((EqualityExpressionContext)_localctx).a2 = relationalExpression();
-
-								if ((((EqualityExpressionContext)_localctx).op!=null?_input.getText(((EqualityExpressionContext)_localctx).op.start,((EqualityExpressionContext)_localctx).op.stop):null).equals("=="))
-									((EqualityExpressionContext)_localctx).ret =  EqualTo.getExpression(_localctx.ret, ((EqualityExpressionContext)_localctx).a2.ret);
-								else
-									((EqualityExpressionContext)_localctx).ret =  NotEqualTo.getExpression(_localctx.ret, ((EqualityExpressionContext)_localctx).a2.ret);
-
-				}
-				}
-					setState(621);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
+				while (_la == T__21 || _la == T__22) {
+					{
+						{
+							setState(613);
+							((EqualityExpressionContext) _localctx).op = equalityOperator();
+							setState(614);
+							((EqualityExpressionContext) _localctx).a2 = relationalExpression();
+
+							if ((((EqualityExpressionContext) _localctx).op != null ? _input.getText(((EqualityExpressionContext) _localctx).op.start, ((EqualityExpressionContext) _localctx).op.stop) : null).equals("=="))
+								((EqualityExpressionContext) _localctx).ret = EqualTo.getExpression(_localctx.ret, ((EqualityExpressionContext) _localctx).a2.ret);
+							else
+								((EqualityExpressionContext) _localctx).ret = NotEqualTo.getExpression(_localctx.ret, ((EqualityExpressionContext) _localctx).a2.ret);
+
+						}
+					}
+					setState(621);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2562,20 +2480,18 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(622);
-			_la = _input.LA(1);
+				_la = _input.LA(1);
 				if (!(_la == T__21 || _la == T__22)) {
-			_errHandler.recoverInline(this);
+					_errHandler.recoverInline(this);
 				} else {
-				consume();
+					consume();
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2589,42 +2505,40 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(624);
-			((RelationalExpressionContext)_localctx).a1 = shiftExpression();
-			 ((RelationalExpressionContext)_localctx).ret =  ((RelationalExpressionContext)_localctx).a1.ret;
+				((RelationalExpressionContext) _localctx).a1 = shiftExpression();
+				((RelationalExpressionContext) _localctx).ret = ((RelationalExpressionContext) _localctx).a1.ret;
 				setState(632);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__23) | (1L << T__24) | (1L << T__25) | (1L << T__26))) != 0)) {
-				{
-				{
-					setState(626);
-				((RelationalExpressionContext)_localctx).op = relationalOperator();
-					setState(627);
-				((RelationalExpressionContext)_localctx).a2 = shiftExpression();
-
-								if ((((RelationalExpressionContext)_localctx).op!=null?_input.getText(((RelationalExpressionContext)_localctx).op.start,((RelationalExpressionContext)_localctx).op.stop):null).equals("<"))
-									((RelationalExpressionContext)_localctx).ret =  LessThan.getExpression(_localctx.ret, ((RelationalExpressionContext)_localctx).a2.ret);
-								else if ((((RelationalExpressionContext)_localctx).op!=null?_input.getText(((RelationalExpressionContext)_localctx).op.start,((RelationalExpressionContext)_localctx).op.stop):null).equals(">"))
-									((RelationalExpressionContext)_localctx).ret =  GreaterThan.getExpression(_localctx.ret, ((RelationalExpressionContext)_localctx).a2.ret);
-								else if ((((RelationalExpressionContext)_localctx).op!=null?_input.getText(((RelationalExpressionContext)_localctx).op.start,((RelationalExpressionContext)_localctx).op.stop):null).equals("<="))
-									((RelationalExpressionContext)_localctx).ret =  LE.getExpression(_localctx.ret, ((RelationalExpressionContext)_localctx).a2.ret);
-								else
-									((RelationalExpressionContext)_localctx).ret =  GE.getExpression(_localctx.ret, ((RelationalExpressionContext)_localctx).a2.ret);
-
-				}
-				}
-					setState(634);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__23) | (1L << T__24) | (1L << T__25) | (1L << T__26))) != 0)) {
+					{
+						{
+							setState(626);
+							((RelationalExpressionContext) _localctx).op = relationalOperator();
+							setState(627);
+							((RelationalExpressionContext) _localctx).a2 = shiftExpression();
+
+							if ((((RelationalExpressionContext) _localctx).op != null ? _input.getText(((RelationalExpressionContext) _localctx).op.start, ((RelationalExpressionContext) _localctx).op.stop) : null).equals("<"))
+								((RelationalExpressionContext) _localctx).ret = LessThan.getExpression(_localctx.ret, ((RelationalExpressionContext) _localctx).a2.ret);
+							else if ((((RelationalExpressionContext) _localctx).op != null ? _input.getText(((RelationalExpressionContext) _localctx).op.start, ((RelationalExpressionContext) _localctx).op.stop) : null).equals(">"))
+								((RelationalExpressionContext) _localctx).ret = GreaterThan.getExpression(_localctx.ret, ((RelationalExpressionContext) _localctx).a2.ret);
+							else if ((((RelationalExpressionContext) _localctx).op != null ? _input.getText(((RelationalExpressionContext) _localctx).op.start, ((RelationalExpressionContext) _localctx).op.stop) : null).equals("<="))
+								((RelationalExpressionContext) _localctx).ret = LE.getExpression(_localctx.ret, ((RelationalExpressionContext) _localctx).a2.ret);
+							else
+								((RelationalExpressionContext) _localctx).ret = GE.getExpression(_localctx.ret, ((RelationalExpressionContext) _localctx).a2.ret);
+
+						}
+					}
+					setState(634);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2638,20 +2552,18 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(635);
-			_la = _input.LA(1);
+				_la = _input.LA(1);
 				if (!((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__23) | (1L << T__24) | (1L << T__25) | (1L << T__26))) != 0))) {
-			_errHandler.recoverInline(this);
+					_errHandler.recoverInline(this);
 				} else {
-				consume();
+					consume();
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2665,38 +2577,36 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(637);
-			((ShiftExpressionContext)_localctx).a1 = additiveExpression();
-			 ((ShiftExpressionContext)_localctx).ret =  ((ShiftExpressionContext)_localctx).a1.ret;
+				((ShiftExpressionContext) _localctx).a1 = additiveExpression();
+				((ShiftExpressionContext) _localctx).ret = ((ShiftExpressionContext) _localctx).a1.ret;
 				setState(645);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-				while (_la == T__27 || _la == T__28) {
-				{
-				{
-					setState(639);
-				((ShiftExpressionContext)_localctx).op = shiftOperator();
-					setState(640);
-				((ShiftExpressionContext)_localctx).a2 = additiveExpression();
-
-								if ((((ShiftExpressionContext)_localctx).op!=null?_input.getText(((ShiftExpressionContext)_localctx).op.start,((ShiftExpressionContext)_localctx).op.stop):null).equals("<<"))
-									((ShiftExpressionContext)_localctx).ret =  ShiftLeft.getExpression(_localctx.ret, ((ShiftExpressionContext)_localctx).a2.ret);
-								else
-									((ShiftExpressionContext)_localctx).ret =  ShiftRight.getExpression(_localctx.ret, ((ShiftExpressionContext)_localctx).a2.ret);
-
-				}
-				}
-					setState(647);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
+				while (_la == T__27 || _la == T__28) {
+					{
+						{
+							setState(639);
+							((ShiftExpressionContext) _localctx).op = shiftOperator();
+							setState(640);
+							((ShiftExpressionContext) _localctx).a2 = additiveExpression();
+
+							if ((((ShiftExpressionContext) _localctx).op != null ? _input.getText(((ShiftExpressionContext) _localctx).op.start, ((ShiftExpressionContext) _localctx).op.stop) : null).equals("<<"))
+								((ShiftExpressionContext) _localctx).ret = ShiftLeft.getExpression(_localctx.ret, ((ShiftExpressionContext) _localctx).a2.ret);
+							else
+								((ShiftExpressionContext) _localctx).ret = ShiftRight.getExpression(_localctx.ret, ((ShiftExpressionContext) _localctx).a2.ret);
+
+						}
+					}
+					setState(647);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2710,20 +2620,18 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(648);
-			_la = _input.LA(1);
+				_la = _input.LA(1);
 				if (!(_la == T__27 || _la == T__28)) {
-			_errHandler.recoverInline(this);
+					_errHandler.recoverInline(this);
 				} else {
-				consume();
+					consume();
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2737,38 +2645,36 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(650);
-			((AdditiveExpressionContext)_localctx).a1 = multiplicativeExpression();
-			 ((AdditiveExpressionContext)_localctx).ret =  ((AdditiveExpressionContext)_localctx).a1.ret;
+				((AdditiveExpressionContext) _localctx).a1 = multiplicativeExpression();
+				((AdditiveExpressionContext) _localctx).ret = ((AdditiveExpressionContext) _localctx).a1.ret;
 				setState(658);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-				while (_la == T__29 || _la == T__30) {
-				{
-				{
-					setState(652);
-				((AdditiveExpressionContext)_localctx).op = additiveOperator();
-					setState(653);
-				((AdditiveExpressionContext)_localctx).a2 = multiplicativeExpression();
-
-								if ((((AdditiveExpressionContext)_localctx).op!=null?_input.getText(((AdditiveExpressionContext)_localctx).op.start,((AdditiveExpressionContext)_localctx).op.stop):null).equals("+"))
-									((AdditiveExpressionContext)_localctx).ret =  Add.getExpression(_localctx.ret, ((AdditiveExpressionContext)_localctx).a2.ret);
-								else
-									((AdditiveExpressionContext)_localctx).ret =  Subtract.getExpression(_localctx.ret, ((AdditiveExpressionContext)_localctx).a2.ret);
-
-				}
-				}
-					setState(660);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
+				while (_la == T__29 || _la == T__30) {
+					{
+						{
+							setState(652);
+							((AdditiveExpressionContext) _localctx).op = additiveOperator();
+							setState(653);
+							((AdditiveExpressionContext) _localctx).a2 = multiplicativeExpression();
+
+							if ((((AdditiveExpressionContext) _localctx).op != null ? _input.getText(((AdditiveExpressionContext) _localctx).op.start, ((AdditiveExpressionContext) _localctx).op.stop) : null).equals("+"))
+								((AdditiveExpressionContext) _localctx).ret = Add.getExpression(_localctx.ret, ((AdditiveExpressionContext) _localctx).a2.ret);
+							else
+								((AdditiveExpressionContext) _localctx).ret = Subtract.getExpression(_localctx.ret, ((AdditiveExpressionContext) _localctx).a2.ret);
+
+						}
+					}
+					setState(660);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2782,20 +2688,18 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(661);
-			_la = _input.LA(1);
+				_la = _input.LA(1);
 				if (!(_la == T__29 || _la == T__30)) {
-			_errHandler.recoverInline(this);
+					_errHandler.recoverInline(this);
 				} else {
-				consume();
+					consume();
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2809,40 +2713,38 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(663);
-			((MultiplicativeExpressionContext)_localctx).a1 = ((MultiplicativeExpressionContext)_localctx).castExpression = castExpression();
-			 ((MultiplicativeExpressionContext)_localctx).ret =  ((MultiplicativeExpressionContext)_localctx).castExpression.ret;
+				((MultiplicativeExpressionContext) _localctx).a1 = ((MultiplicativeExpressionContext) _localctx).castExpression = castExpression();
+				((MultiplicativeExpressionContext) _localctx).ret = ((MultiplicativeExpressionContext) _localctx).castExpression.ret;
 				setState(671);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__31) | (1L << T__32) | (1L << STAR))) != 0)) {
-				{
-				{
-					setState(665);
-				((MultiplicativeExpressionContext)_localctx).op = multiplicativeOperator();
-					setState(666);
-				((MultiplicativeExpressionContext)_localctx).a2 = ((MultiplicativeExpressionContext)_localctx).castExpression = castExpression();
-
-								if ((((MultiplicativeExpressionContext)_localctx).op!=null?_input.getText(((MultiplicativeExpressionContext)_localctx).op.start,((MultiplicativeExpressionContext)_localctx).op.stop):null).equals("*"))
-									((MultiplicativeExpressionContext)_localctx).ret =  Multiply.getExpression(_localctx.ret, ((MultiplicativeExpressionContext)_localctx).a2.ret);
-								else if ((((MultiplicativeExpressionContext)_localctx).op!=null?_input.getText(((MultiplicativeExpressionContext)_localctx).op.start,((MultiplicativeExpressionContext)_localctx).op.stop):null).equals("/"))
-									((MultiplicativeExpressionContext)_localctx).ret =  Divide.getExpression(_localctx.ret, ((MultiplicativeExpressionContext)_localctx).a2.ret);
-								else
-									((MultiplicativeExpressionContext)_localctx).ret =  Modulo.getExpression(_localctx.ret, ((MultiplicativeExpressionContext)_localctx).a2.ret);
-
-				}
-				}
-					setState(673);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__31) | (1L << T__32) | (1L << STAR))) != 0)) {
+					{
+						{
+							setState(665);
+							((MultiplicativeExpressionContext) _localctx).op = multiplicativeOperator();
+							setState(666);
+							((MultiplicativeExpressionContext) _localctx).a2 = ((MultiplicativeExpressionContext) _localctx).castExpression = castExpression();
+
+							if ((((MultiplicativeExpressionContext) _localctx).op != null ? _input.getText(((MultiplicativeExpressionContext) _localctx).op.start, ((MultiplicativeExpressionContext) _localctx).op.stop) : null).equals("*"))
+								((MultiplicativeExpressionContext) _localctx).ret = Multiply.getExpression(_localctx.ret, ((MultiplicativeExpressionContext) _localctx).a2.ret);
+							else if ((((MultiplicativeExpressionContext) _localctx).op != null ? _input.getText(((MultiplicativeExpressionContext) _localctx).op.start, ((MultiplicativeExpressionContext) _localctx).op.stop) : null).equals("/"))
+								((MultiplicativeExpressionContext) _localctx).ret = Divide.getExpression(_localctx.ret, ((MultiplicativeExpressionContext) _localctx).a2.ret);
+							else
+								((MultiplicativeExpressionContext) _localctx).ret = Modulo.getExpression(_localctx.ret, ((MultiplicativeExpressionContext) _localctx).a2.ret);
+
+						}
+					}
+					setState(673);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2856,20 +2758,18 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(674);
-			_la = _input.LA(1);
+				_la = _input.LA(1);
 				if (!((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__31) | (1L << T__32) | (1L << STAR))) != 0))) {
-			_errHandler.recoverInline(this);
+					_errHandler.recoverInline(this);
 				} else {
-				consume();
+					consume();
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2880,41 +2780,39 @@ public class Compiler2015Parser extends Parser {
 		enterRule(_localctx, 90, RULE_castExpression);
 		try {
 			setState(685);
-			switch ( getInterpreter().adaptivePredict(_input,56,_ctx) ) {
-			case 1:
-				_localctx = new CastExpression1Context(_localctx);
-				enterOuterAlt(_localctx, 1);
+			switch (getInterpreter().adaptivePredict(_input, 56, _ctx)) {
+				case 1:
+					_localctx = new CastExpression1Context(_localctx);
+					enterOuterAlt(_localctx, 1);
 				{
 					setState(676);
-				((CastExpression1Context)_localctx).unaryExpression = unaryExpression();
-				 ((CastExpression1Context)_localctx).ret =  ((CastExpression1Context)_localctx).unaryExpression.ret;
+					((CastExpression1Context) _localctx).unaryExpression = unaryExpression();
+					((CastExpression1Context) _localctx).ret = ((CastExpression1Context) _localctx).unaryExpression.ret;
 				}
 				break;
-			case 2:
-				_localctx = new CastExpression2Context(_localctx);
-				enterOuterAlt(_localctx, 2);
+				case 2:
+					_localctx = new CastExpression2Context(_localctx);
+					enterOuterAlt(_localctx, 2);
 				{
 					setState(679);
-				match(L1);
+					match(L1);
 					setState(680);
-				((CastExpression2Context)_localctx).typeName = typeName();
+					((CastExpression2Context) _localctx).typeName = typeName();
 					setState(681);
-				match(R1);
+					match(R1);
 					setState(682);
-				((CastExpression2Context)_localctx).c1 = castExpression();
+					((CastExpression2Context) _localctx).c1 = castExpression();
 
-							((CastExpression2Context)_localctx).ret =  CastExpression.getExpression(((CastExpression2Context)_localctx).typeName.ret, ((CastExpression2Context)_localctx).c1.ret);
+					((CastExpression2Context) _localctx).ret = CastExpression.getExpression(((CastExpression2Context) _localctx).typeName.ret, ((CastExpression2Context) _localctx).c1.ret);
 
 				}
 				break;
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2925,44 +2823,42 @@ public class Compiler2015Parser extends Parser {
 		enterRule(_localctx, 92, RULE_typeName);
 		try {
 			setState(695);
-			switch ( getInterpreter().adaptivePredict(_input,57,_ctx) ) {
-			case 1:
-				_localctx = new TypeName1Context(_localctx);
-				enterOuterAlt(_localctx, 1);
+			switch (getInterpreter().adaptivePredict(_input, 57, _ctx)) {
+				case 1:
+					_localctx = new TypeName1Context(_localctx);
+					enterOuterAlt(_localctx, 1);
 				{
 					setState(687);
-				((TypeName1Context)_localctx).typeSpecifier = typeSpecifier();
+					((TypeName1Context) _localctx).typeSpecifier = typeSpecifier();
 
-							TypeAnalyser.enter(((TypeName1Context)_localctx).typeSpecifier.ret);
-							((TypeName1Context)_localctx).ret =  ((TypeName1Context)_localctx).typeSpecifier.ret;
+					TypeAnalyser.enter(((TypeName1Context) _localctx).typeSpecifier.ret);
+					((TypeName1Context) _localctx).ret = ((TypeName1Context) _localctx).typeSpecifier.ret;
 
 				}
 				break;
-			case 2:
-				_localctx = new TypeName2Context(_localctx);
-				enterOuterAlt(_localctx, 2);
+				case 2:
+					_localctx = new TypeName2Context(_localctx);
+					enterOuterAlt(_localctx, 2);
 				{
 					setState(690);
-				((TypeName2Context)_localctx).typeSpecifier = typeSpecifier();
-				 TypeAnalyser.enter(((TypeName2Context)_localctx).typeSpecifier.ret);
+					((TypeName2Context) _localctx).typeSpecifier = typeSpecifier();
+					TypeAnalyser.enter(((TypeName2Context) _localctx).typeSpecifier.ret);
 					setState(692);
-				abstractDeclarator();
+					abstractDeclarator();
 
-							((TypeName2Context)_localctx).ret =  TypeAnalyser.analyse();
+					((TypeName2Context) _localctx).ret = TypeAnalyser.analyse();
 
 				}
 				break;
 			}
 
-				TypeAnalyser.exit();
+			TypeAnalyser.exit();
 
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -2973,108 +2869,108 @@ public class Compiler2015Parser extends Parser {
 		enterRule(_localctx, 94, RULE_unaryExpression);
 		try {
 			setState(735);
-			switch ( getInterpreter().adaptivePredict(_input,58,_ctx) ) {
-			case 1:
-				_localctx = new UnaryExpression1Context(_localctx);
-				enterOuterAlt(_localctx, 1);
+			switch (getInterpreter().adaptivePredict(_input, 58, _ctx)) {
+				case 1:
+					_localctx = new UnaryExpression1Context(_localctx);
+					enterOuterAlt(_localctx, 1);
 				{
 					setState(697);
-				((UnaryExpression1Context)_localctx).postfixExpression = postfixExpression(0);
-				 ((UnaryExpression1Context)_localctx).ret =  ((UnaryExpression1Context)_localctx).postfixExpression.ret;
+					((UnaryExpression1Context) _localctx).postfixExpression = postfixExpression(0);
+					((UnaryExpression1Context) _localctx).ret = ((UnaryExpression1Context) _localctx).postfixExpression.ret;
 				}
 				break;
-			case 2:
-				_localctx = new UnaryExpression2Context(_localctx);
-				enterOuterAlt(_localctx, 2);
+				case 2:
+					_localctx = new UnaryExpression2Context(_localctx);
+					enterOuterAlt(_localctx, 2);
 				{
 					setState(700);
 					match(T__33);
 					setState(701);
-				((UnaryExpression2Context)_localctx).u1 = unaryExpression();
-				 ((UnaryExpression2Context)_localctx).ret =  PrefixSelfInc.getExpression(((UnaryExpression2Context)_localctx).u1.ret);
+					((UnaryExpression2Context) _localctx).u1 = unaryExpression();
+					((UnaryExpression2Context) _localctx).ret = PrefixSelfInc.getExpression(((UnaryExpression2Context) _localctx).u1.ret);
 				}
 				break;
-			case 3:
-				_localctx = new UnaryExpression3Context(_localctx);
-				enterOuterAlt(_localctx, 3);
+				case 3:
+					_localctx = new UnaryExpression3Context(_localctx);
+					enterOuterAlt(_localctx, 3);
 				{
 					setState(704);
 					match(T__34);
 					setState(705);
-				((UnaryExpression3Context)_localctx).u2 = unaryExpression();
-				 ((UnaryExpression3Context)_localctx).ret =  PrefixSelfDec.getExpression(((UnaryExpression3Context)_localctx).u2.ret);
+					((UnaryExpression3Context) _localctx).u2 = unaryExpression();
+					((UnaryExpression3Context) _localctx).ret = PrefixSelfDec.getExpression(((UnaryExpression3Context) _localctx).u2.ret);
 				}
 				break;
-			case 4:
-				_localctx = new UnaryExpression4Context(_localctx);
-				enterOuterAlt(_localctx, 4);
+				case 4:
+					_localctx = new UnaryExpression4Context(_localctx);
+					enterOuterAlt(_localctx, 4);
 				{
 					setState(708);
-				((UnaryExpression4Context)_localctx).op = unaryOperator();
+					((UnaryExpression4Context) _localctx).op = unaryOperator();
 					setState(709);
-				((UnaryExpression4Context)_localctx).a2 = castExpression();
+					((UnaryExpression4Context) _localctx).a2 = castExpression();
 
-							if ((((UnaryExpression4Context)_localctx).op!=null?_input.getText(((UnaryExpression4Context)_localctx).op.start,((UnaryExpression4Context)_localctx).op.stop):null).equals("&"))
-								((UnaryExpression4Context)_localctx).ret =  AddressFetch.getExpression(((UnaryExpression4Context)_localctx).a2.ret);
-							else if ((((UnaryExpression4Context)_localctx).op!=null?_input.getText(((UnaryExpression4Context)_localctx).op.start,((UnaryExpression4Context)_localctx).op.stop):null).equals("*"))
-								((UnaryExpression4Context)_localctx).ret =  AddressAccess.getExpression(((UnaryExpression4Context)_localctx).a2.ret);
-							else if ((((UnaryExpression4Context)_localctx).op!=null?_input.getText(((UnaryExpression4Context)_localctx).op.start,((UnaryExpression4Context)_localctx).op.stop):null).equals("+"))
-								((UnaryExpression4Context)_localctx).ret =  Positive.getExpression(((UnaryExpression4Context)_localctx).a2.ret);
-							else if ((((UnaryExpression4Context)_localctx).op!=null?_input.getText(((UnaryExpression4Context)_localctx).op.start,((UnaryExpression4Context)_localctx).op.stop):null).equals("-"))
-								((UnaryExpression4Context)_localctx).ret =  Negative.getExpression(((UnaryExpression4Context)_localctx).a2.ret);
-							else if ((((UnaryExpression4Context)_localctx).op!=null?_input.getText(((UnaryExpression4Context)_localctx).op.start,((UnaryExpression4Context)_localctx).op.stop):null).equals("~"))
-								((UnaryExpression4Context)_localctx).ret =  BitwiseNot.getExpression(((UnaryExpression4Context)_localctx).a2.ret);
-							else if ((((UnaryExpression4Context)_localctx).op!=null?_input.getText(((UnaryExpression4Context)_localctx).op.start,((UnaryExpression4Context)_localctx).op.stop):null).equals("!"))
-								((UnaryExpression4Context)_localctx).ret =  LogicalNot.getExpression(((UnaryExpression4Context)_localctx).a2.ret);
+					if ((((UnaryExpression4Context) _localctx).op != null ? _input.getText(((UnaryExpression4Context) _localctx).op.start, ((UnaryExpression4Context) _localctx).op.stop) : null).equals("&"))
+						((UnaryExpression4Context) _localctx).ret = AddressFetch.getExpression(((UnaryExpression4Context) _localctx).a2.ret);
+					else if ((((UnaryExpression4Context) _localctx).op != null ? _input.getText(((UnaryExpression4Context) _localctx).op.start, ((UnaryExpression4Context) _localctx).op.stop) : null).equals("*"))
+						((UnaryExpression4Context) _localctx).ret = AddressAccess.getExpression(((UnaryExpression4Context) _localctx).a2.ret);
+					else if ((((UnaryExpression4Context) _localctx).op != null ? _input.getText(((UnaryExpression4Context) _localctx).op.start, ((UnaryExpression4Context) _localctx).op.stop) : null).equals("+"))
+						((UnaryExpression4Context) _localctx).ret = Positive.getExpression(((UnaryExpression4Context) _localctx).a2.ret);
+					else if ((((UnaryExpression4Context) _localctx).op != null ? _input.getText(((UnaryExpression4Context) _localctx).op.start, ((UnaryExpression4Context) _localctx).op.stop) : null).equals("-"))
+						((UnaryExpression4Context) _localctx).ret = Negative.getExpression(((UnaryExpression4Context) _localctx).a2.ret);
+					else if ((((UnaryExpression4Context) _localctx).op != null ? _input.getText(((UnaryExpression4Context) _localctx).op.start, ((UnaryExpression4Context) _localctx).op.stop) : null).equals("~"))
+						((UnaryExpression4Context) _localctx).ret = BitwiseNot.getExpression(((UnaryExpression4Context) _localctx).a2.ret);
+					else if ((((UnaryExpression4Context) _localctx).op != null ? _input.getText(((UnaryExpression4Context) _localctx).op.start, ((UnaryExpression4Context) _localctx).op.stop) : null).equals("!"))
+						((UnaryExpression4Context) _localctx).ret = LogicalNot.getExpression(((UnaryExpression4Context) _localctx).a2.ret);
 
 				}
 				break;
-			case 5:
-				_localctx = new UnaryExpression5Context(_localctx);
-				enterOuterAlt(_localctx, 5);
+				case 5:
+					_localctx = new UnaryExpression5Context(_localctx);
+					enterOuterAlt(_localctx, 5);
 				{
 					setState(712);
-				match(SizeOf);
+					match(SizeOf);
 					setState(713);
-				match(L1);
+					match(L1);
 					setState(714);
-				((UnaryExpression5Context)_localctx).Identifier = match(Identifier);
+					((UnaryExpression5Context) _localctx).Identifier = match(Identifier);
 					setState(715);
-				match(R1);
+					match(R1);
 
-							if (Environment.isVariable((((UnaryExpression5Context)_localctx).Identifier!=null?((UnaryExpression5Context)_localctx).Identifier.getText():null)))
-								((UnaryExpression5Context)_localctx).ret =  new Sizeof(IdentifierExpression.getExpression((((UnaryExpression5Context)_localctx).Identifier!=null?((UnaryExpression5Context)_localctx).Identifier.getText():null)));
-							else if (Environment.isTypedefName((((UnaryExpression5Context)_localctx).Identifier!=null?((UnaryExpression5Context)_localctx).Identifier.getText():null)))
-								((UnaryExpression5Context)_localctx).ret =  new IntConstant(Environment._pretend_being_private_sizeof);
-							else
-								throw new CompilationError("Unknow " + (((UnaryExpression5Context)_localctx).Identifier!=null?((UnaryExpression5Context)_localctx).Identifier.getText():null));
+					if (Environment.isVariable((((UnaryExpression5Context) _localctx).Identifier != null ? ((UnaryExpression5Context) _localctx).Identifier.getText() : null)))
+						((UnaryExpression5Context) _localctx).ret = new Sizeof(IdentifierExpression.getExpression((((UnaryExpression5Context) _localctx).Identifier != null ? ((UnaryExpression5Context) _localctx).Identifier.getText() : null)));
+					else if (Environment.isTypedefName((((UnaryExpression5Context) _localctx).Identifier != null ? ((UnaryExpression5Context) _localctx).Identifier.getText() : null)))
+						((UnaryExpression5Context) _localctx).ret = new IntConstant(Environment._pretend_being_private_sizeof);
+					else
+						throw new CompilationError("Unknow " + (((UnaryExpression5Context) _localctx).Identifier != null ? ((UnaryExpression5Context) _localctx).Identifier.getText() : null));
 
 				}
 				break;
-			case 6:
-				_localctx = new UnaryExpression6Context(_localctx);
-				enterOuterAlt(_localctx, 6);
+				case 6:
+					_localctx = new UnaryExpression6Context(_localctx);
+					enterOuterAlt(_localctx, 6);
 				{
 					setState(717);
-				match(SizeOf);
+					match(SizeOf);
 					setState(718);
-				match(L1);
+					match(L1);
 					setState(719);
-				((UnaryExpression6Context)_localctx).typeName = typeName();
+					((UnaryExpression6Context) _localctx).typeName = typeName();
 					setState(720);
-				match(R1);
-				 ((UnaryExpression6Context)_localctx).ret =  new IntConstant(((UnaryExpression6Context)_localctx).typeName.ret.sizeof());
+					match(R1);
+					((UnaryExpression6Context) _localctx).ret = new IntConstant(((UnaryExpression6Context) _localctx).typeName.ret.sizeof());
 				}
 				break;
-			case 7:
-				_localctx = new UnaryExpression7Context(_localctx);
-				enterOuterAlt(_localctx, 7);
+				case 7:
+					_localctx = new UnaryExpression7Context(_localctx);
+					enterOuterAlt(_localctx, 7);
 				{
 					setState(723);
-				match(SizeOf);
+					match(SizeOf);
 					setState(724);
-				((UnaryExpression7Context)_localctx).u3 = unaryExpression();
-				 ((UnaryExpression7Context)_localctx).ret =  new Sizeof(((UnaryExpression7Context)_localctx).u3.ret);
+					((UnaryExpression7Context) _localctx).u3 = unaryExpression();
+					((UnaryExpression7Context) _localctx).ret = new Sizeof(((UnaryExpression7Context) _localctx).u3.ret);
 				}
 				break;
 				case 8:
@@ -3114,13 +3010,11 @@ public class Compiler2015Parser extends Parser {
 				}
 				break;
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -3134,20 +3028,18 @@ public class Compiler2015Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(737);
-			_la = _input.LA(1);
+				_la = _input.LA(1);
 				if (!((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__29) | (1L << T__30) | (1L << T__36) | (1L << T__37) | (1L << STAR) | (1L << And))) != 0))) {
-			_errHandler.recoverInline(this);
+					_errHandler.recoverInline(this);
 				} else {
-				consume();
+					consume();
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -3168,135 +3060,132 @@ public class Compiler2015Parser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			{
-				setState(740);
-			((PostfixExpressionContext)_localctx).primaryExpression = primaryExpression();
-			 ((PostfixExpressionContext)_localctx).ret =  ((PostfixExpressionContext)_localctx).primaryExpression.ret;
-			}
-			_ctx.stop = _input.LT(-1);
-				setState(774);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,61,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					if ( _parseListeners!=null ) triggerExitRuleEvent();
-					_prevctx = _localctx;
-					{
-						setState(772);
-					switch ( getInterpreter().adaptivePredict(_input,60,_ctx) ) {
-					case 1:
-						{
-						_localctx = new PostfixExpressionContext(_parentctx, _parentState);
-						_localctx.p = _prevctx;
-						_localctx.p = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_postfixExpression);
-							setState(743);
-						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
-							setState(744);
-						match(L2);
-							setState(745);
-						((PostfixExpressionContext)_localctx).expression = expression();
-							setState(746);
-						match(R2);
-						 ((PostfixExpressionContext)_localctx).ret =  ArrayAccess.getExpression(((PostfixExpressionContext)_localctx).p.ret, ((PostfixExpressionContext)_localctx).expression.ret);
-						}
-						break;
-					case 2:
-						{
-						_localctx = new PostfixExpressionContext(_parentctx, _parentState);
-						_localctx.p = _prevctx;
-						_localctx.p = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_postfixExpression);
-							setState(749);
-						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-							setState(750);
-						match(L1);
-							setState(754);
-						switch ( getInterpreter().adaptivePredict(_input,59,_ctx) ) {
-						case 1:
-							{
-								setState(751);
-							((PostfixExpressionContext)_localctx).arguments = arguments();
-							 ((PostfixExpressionContext)_localctx).arg =  ((PostfixExpressionContext)_localctx).arguments.ret;
-							}
-							break;
-						}
-							setState(756);
-						match(R1);
-						 ((PostfixExpressionContext)_localctx).ret =  FunctionCall.getExpression(((PostfixExpressionContext)_localctx).p.ret, _localctx.arg);
-						}
-						break;
-					case 3:
-						{
-						_localctx = new PostfixExpressionContext(_parentctx, _parentState);
-						_localctx.p = _prevctx;
-						_localctx.p = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_postfixExpression);
-							setState(758);
-						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-							setState(759);
-							match(T__38);
-							setState(760);
-						((PostfixExpressionContext)_localctx).Identifier = match(Identifier);
-						 ((PostfixExpressionContext)_localctx).ret =  MemberAccess.getExpression(((PostfixExpressionContext)_localctx).p.ret, (((PostfixExpressionContext)_localctx).Identifier!=null?((PostfixExpressionContext)_localctx).Identifier.getText():null));
-						}
-						break;
-					case 4:
-						{
-						_localctx = new PostfixExpressionContext(_parentctx, _parentState);
-						_localctx.p = _prevctx;
-						_localctx.p = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_postfixExpression);
-							setState(762);
-						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-							setState(763);
-							match(T__39);
-							setState(764);
-						((PostfixExpressionContext)_localctx).Identifier = match(Identifier);
-						 ((PostfixExpressionContext)_localctx).ret =  PointerMemberAccess.getExpression(((PostfixExpressionContext)_localctx).p.ret, (((PostfixExpressionContext)_localctx).Identifier!=null?((PostfixExpressionContext)_localctx).Identifier.getText():null));
-						}
-						break;
-					case 5:
-						{
-						_localctx = new PostfixExpressionContext(_parentctx, _parentState);
-						_localctx.p = _prevctx;
-						_localctx.p = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_postfixExpression);
-							setState(766);
-						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-							setState(767);
-							match(T__33);
-						 ((PostfixExpressionContext)_localctx).ret =  PostfixSelfInc.getExpression(((PostfixExpressionContext)_localctx).p.ret);
-						}
-						break;
-					case 6:
-						{
-						_localctx = new PostfixExpressionContext(_parentctx, _parentState);
-						_localctx.p = _prevctx;
-						_localctx.p = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_postfixExpression);
-							setState(769);
-						if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-							setState(770);
-							match(T__34);
-						 ((PostfixExpressionContext)_localctx).ret =  PostfixSelfDec.getExpression(((PostfixExpressionContext)_localctx).p.ret);
-						}
-						break;
-					}
-					}
+				{
+					setState(740);
+					((PostfixExpressionContext) _localctx).primaryExpression = primaryExpression();
+					((PostfixExpressionContext) _localctx).ret = ((PostfixExpressionContext) _localctx).primaryExpression.ret;
 				}
-				setState(776);
+				_ctx.stop = _input.LT(-1);
+				setState(774);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,61,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input, 61, _ctx);
+				while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER) {
+					if (_alt == 1) {
+						if (_parseListeners != null) triggerExitRuleEvent();
+						_prevctx = _localctx;
+						{
+							setState(772);
+							switch (getInterpreter().adaptivePredict(_input, 60, _ctx)) {
+								case 1: {
+									_localctx = new PostfixExpressionContext(_parentctx, _parentState);
+									_localctx.p = _prevctx;
+									_localctx.p = _prevctx;
+									pushNewRecursionContext(_localctx, _startState, RULE_postfixExpression);
+									setState(743);
+									if (!(precpred(_ctx, 6)))
+										throw new FailedPredicateException(this, "precpred(_ctx, 6)");
+									setState(744);
+									match(L2);
+									setState(745);
+									((PostfixExpressionContext) _localctx).expression = expression();
+									setState(746);
+									match(R2);
+									((PostfixExpressionContext) _localctx).ret = ArrayAccess.getExpression(((PostfixExpressionContext) _localctx).p.ret, ((PostfixExpressionContext) _localctx).expression.ret);
+								}
+								break;
+								case 2: {
+									_localctx = new PostfixExpressionContext(_parentctx, _parentState);
+									_localctx.p = _prevctx;
+									_localctx.p = _prevctx;
+									pushNewRecursionContext(_localctx, _startState, RULE_postfixExpression);
+									setState(749);
+									if (!(precpred(_ctx, 5)))
+										throw new FailedPredicateException(this, "precpred(_ctx, 5)");
+									setState(750);
+									match(L1);
+									setState(754);
+									switch (getInterpreter().adaptivePredict(_input, 59, _ctx)) {
+										case 1: {
+											setState(751);
+											((PostfixExpressionContext) _localctx).arguments = arguments();
+											((PostfixExpressionContext) _localctx).arg = ((PostfixExpressionContext) _localctx).arguments.ret;
+										}
+										break;
+									}
+									setState(756);
+									match(R1);
+									((PostfixExpressionContext) _localctx).ret = FunctionCall.getExpression(((PostfixExpressionContext) _localctx).p.ret, _localctx.arg);
+								}
+								break;
+								case 3: {
+									_localctx = new PostfixExpressionContext(_parentctx, _parentState);
+									_localctx.p = _prevctx;
+									_localctx.p = _prevctx;
+									pushNewRecursionContext(_localctx, _startState, RULE_postfixExpression);
+									setState(758);
+									if (!(precpred(_ctx, 4)))
+										throw new FailedPredicateException(this, "precpred(_ctx, 4)");
+									setState(759);
+									match(T__38);
+									setState(760);
+									((PostfixExpressionContext) _localctx).Identifier = match(Identifier);
+									((PostfixExpressionContext) _localctx).ret = MemberAccess.getExpression(((PostfixExpressionContext) _localctx).p.ret, (((PostfixExpressionContext) _localctx).Identifier != null ? ((PostfixExpressionContext) _localctx).Identifier.getText() : null));
+								}
+								break;
+								case 4: {
+									_localctx = new PostfixExpressionContext(_parentctx, _parentState);
+									_localctx.p = _prevctx;
+									_localctx.p = _prevctx;
+									pushNewRecursionContext(_localctx, _startState, RULE_postfixExpression);
+									setState(762);
+									if (!(precpred(_ctx, 3)))
+										throw new FailedPredicateException(this, "precpred(_ctx, 3)");
+									setState(763);
+									match(T__39);
+									setState(764);
+									((PostfixExpressionContext) _localctx).Identifier = match(Identifier);
+									((PostfixExpressionContext) _localctx).ret = PointerMemberAccess.getExpression(((PostfixExpressionContext) _localctx).p.ret, (((PostfixExpressionContext) _localctx).Identifier != null ? ((PostfixExpressionContext) _localctx).Identifier.getText() : null));
+								}
+								break;
+								case 5: {
+									_localctx = new PostfixExpressionContext(_parentctx, _parentState);
+									_localctx.p = _prevctx;
+									_localctx.p = _prevctx;
+									pushNewRecursionContext(_localctx, _startState, RULE_postfixExpression);
+									setState(766);
+									if (!(precpred(_ctx, 2)))
+										throw new FailedPredicateException(this, "precpred(_ctx, 2)");
+									setState(767);
+									match(T__33);
+									((PostfixExpressionContext) _localctx).ret = PostfixSelfInc.getExpression(((PostfixExpressionContext) _localctx).p.ret);
+								}
+								break;
+								case 6: {
+									_localctx = new PostfixExpressionContext(_parentctx, _parentState);
+									_localctx.p = _prevctx;
+									_localctx.p = _prevctx;
+									pushNewRecursionContext(_localctx, _startState, RULE_postfixExpression);
+									setState(769);
+									if (!(precpred(_ctx, 1)))
+										throw new FailedPredicateException(this, "precpred(_ctx, 1)");
+									setState(770);
+									match(T__34);
+									((PostfixExpressionContext) _localctx).ret = PostfixSelfDec.getExpression(((PostfixExpressionContext) _localctx).p.ret);
+								}
+								break;
+							}
+						}
+					}
+					setState(776);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input, 61, _ctx);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			unrollRecursionContexts(_parentctx);
 		}
 		return _localctx;
@@ -3306,42 +3195,40 @@ public class Compiler2015Parser extends Parser {
 		ArgumentsContext _localctx = new ArgumentsContext(_ctx, getState());
 		enterRule(_localctx, 100, RULE_arguments);
 
-			((ArgumentsContext)_localctx).ret =  new ArrayList<Expression>();
+		((ArgumentsContext) _localctx).ret = new ArrayList<Expression>();
 
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(777);
-			((ArgumentsContext)_localctx).a1 = assignmentExpression();
-			 _localctx.ret.add(((ArgumentsContext)_localctx).a1.ret);
+				((ArgumentsContext) _localctx).a1 = assignmentExpression();
+				_localctx.ret.add(((ArgumentsContext) _localctx).a1.ret);
 				setState(785);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==Comma) {
-				{
-				{
-					setState(779);
-				match(Comma);
-					setState(780);
-				((ArgumentsContext)_localctx).a2 = assignmentExpression();
-
-								_localctx.ret.add(((ArgumentsContext)_localctx).a2.ret);
-
-				}
-				}
-				setState(787);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
+				while (_la == Comma) {
+					{
+						{
+							setState(779);
+							match(Comma);
+							setState(780);
+							((ArgumentsContext) _localctx).a2 = assignmentExpression();
+
+							_localctx.ret.add(((ArgumentsContext) _localctx).a2.ret);
+
+						}
+					}
+					setState(787);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -3351,102 +3238,100 @@ public class Compiler2015Parser extends Parser {
 		PrimaryExpressionContext _localctx = new PrimaryExpressionContext(_ctx, getState());
 		enterRule(_localctx, 102, RULE_primaryExpression);
 
-			((PrimaryExpressionContext)_localctx).s =  new ArrayList<String>();
+		((PrimaryExpressionContext) _localctx).s = new ArrayList<String>();
 
 		try {
 			int _alt;
 			setState(809);
-			switch ( getInterpreter().adaptivePredict(_input,64,_ctx) ) {
-			case 1:
-				_localctx = new PrimaryExpression1Context(_localctx);
-				enterOuterAlt(_localctx, 1);
+			switch (getInterpreter().adaptivePredict(_input, 64, _ctx)) {
+				case 1:
+					_localctx = new PrimaryExpression1Context(_localctx);
+					enterOuterAlt(_localctx, 1);
 				{
 					setState(788);
-				if (!( Environment.isVariable(_input.LT(1).getText()) )) throw new FailedPredicateException(this, " Environment.isVariable(_input.LT(1).getText()) ");
+					if (!(Environment.isVariable(_input.LT(1).getText())))
+						throw new FailedPredicateException(this, " Environment.isVariable(_input.LT(1).getText()) ");
 					setState(789);
-				((PrimaryExpression1Context)_localctx).Identifier = match(Identifier);
+					((PrimaryExpression1Context) _localctx).Identifier = match(Identifier);
 
-							((PrimaryExpression1Context)_localctx).ret =  IdentifierExpression.getExpression((((PrimaryExpression1Context)_localctx).Identifier!=null?((PrimaryExpression1Context)_localctx).Identifier.getText():null));
+					((PrimaryExpression1Context) _localctx).ret = IdentifierExpression.getExpression((((PrimaryExpression1Context) _localctx).Identifier != null ? ((PrimaryExpression1Context) _localctx).Identifier.getText() : null));
 
 				}
 				break;
-			case 2:
-				_localctx = new PrimaryExpression2Context(_localctx);
-				enterOuterAlt(_localctx, 2);
+				case 2:
+					_localctx = new PrimaryExpression2Context(_localctx);
+					enterOuterAlt(_localctx, 2);
 				{
 					setState(791);
-				((PrimaryExpression2Context)_localctx).constant = constant();
+					((PrimaryExpression2Context) _localctx).constant = constant();
 
-							((PrimaryExpression2Context)_localctx).ret =  ((PrimaryExpression2Context)_localctx).constant.ret;
+					((PrimaryExpression2Context) _localctx).ret = ((PrimaryExpression2Context) _localctx).constant.ret;
 
 				}
 				break;
-			case 3:
-				_localctx = new PrimaryExpression3Context(_localctx);
-				enterOuterAlt(_localctx, 3);
+				case 3:
+					_localctx = new PrimaryExpression3Context(_localctx);
+					enterOuterAlt(_localctx, 3);
 				{
 					setState(796);
-				_errHandler.sync(this);
-				_alt = 1;
-				do {
-					switch (_alt) {
-					case 1:
-						{
-						{
-							setState(794);
-						((PrimaryExpression3Context)_localctx).StringLiteral = match(StringLiteral);
-
-									_localctx.s.add((((PrimaryExpression3Context)_localctx).StringLiteral!=null?((PrimaryExpression3Context)_localctx).StringLiteral.getText():null));
-
-						}
-						}
-						break;
-					default:
-						throw new NoViableAltException(this);
-					}
-					setState(798);
 					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,63,_ctx);
-				} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
+					_alt = 1;
+					do {
+						switch (_alt) {
+							case 1: {
+								{
+									setState(794);
+									((PrimaryExpression3Context) _localctx).StringLiteral = match(StringLiteral);
 
-							((PrimaryExpression3Context)_localctx).ret =  StringConstant.getExpression(_localctx.s);
+									_localctx.s.add((((PrimaryExpression3Context) _localctx).StringLiteral != null ? ((PrimaryExpression3Context) _localctx).StringLiteral.getText() : null));
+
+								}
+							}
+							break;
+							default:
+								throw new NoViableAltException(this);
+						}
+						setState(798);
+						_errHandler.sync(this);
+						_alt = getInterpreter().adaptivePredict(_input, 63, _ctx);
+					} while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER);
+
+					((PrimaryExpression3Context) _localctx).ret = StringConstant.getExpression(_localctx.s);
 
 				}
 				break;
-			case 4:
-				_localctx = new PrimaryExpression4Context(_localctx);
-				enterOuterAlt(_localctx, 4);
+				case 4:
+					_localctx = new PrimaryExpression4Context(_localctx);
+					enterOuterAlt(_localctx, 4);
 				{
 					setState(801);
-				match(L1);
+					match(L1);
 					setState(802);
-				((PrimaryExpression4Context)_localctx).expression = expression();
+					((PrimaryExpression4Context) _localctx).expression = expression();
 					setState(803);
-				match(R1);
+					match(R1);
 
-							((PrimaryExpression4Context)_localctx).ret =  ((PrimaryExpression4Context)_localctx).expression.ret;
+					((PrimaryExpression4Context) _localctx).ret = ((PrimaryExpression4Context) _localctx).expression.ret;
 
 				}
 				break;
-			case 5:
-				_localctx = new PrimaryExpression5Context(_localctx);
-				enterOuterAlt(_localctx, 5);
+				case 5:
+					_localctx = new PrimaryExpression5Context(_localctx);
+					enterOuterAlt(_localctx, 5);
 				{
 					setState(806);
-				((PrimaryExpression5Context)_localctx).lambdaExpression = lambdaExpression();
+					((PrimaryExpression5Context) _localctx).lambdaExpression = lambdaExpression();
 
-							((PrimaryExpression5Context)_localctx).ret =  ((PrimaryExpression5Context)_localctx).lambdaExpression.ret;
+					((PrimaryExpression5Context) _localctx).ret = ((PrimaryExpression5Context) _localctx).lambdaExpression.ret;
 
 				}
 				break;
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -3456,82 +3341,79 @@ public class Compiler2015Parser extends Parser {
 		LambdaExpressionContext _localctx = new LambdaExpressionContext(_ctx, getState());
 		enterRule(_localctx, 104, RULE_lambdaExpression);
 
-			((LambdaExpressionContext)_localctx).parameterTypes =  new ArrayList<Type>();
-			((LambdaExpressionContext)_localctx).parameterNames =  new ArrayList<String>();
-			((LambdaExpressionContext)_localctx).loopStack =  Environment.loopStack;
-			Environment.loopStack = new Stack<>();
+		((LambdaExpressionContext) _localctx).parameterTypes = new ArrayList<Type>();
+		((LambdaExpressionContext) _localctx).parameterNames = new ArrayList<String>();
+		((LambdaExpressionContext) _localctx).loopStack = Environment.loopStack;
+		Environment.loopStack = new Stack<>();
 
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 				setState(811);
-			match(L2);
+				match(L2);
 				setState(812);
-			match(R2);
+				match(R2);
 				setState(813);
-			match(L1);
+				match(L1);
 				setState(817);
-			switch ( getInterpreter().adaptivePredict(_input,65,_ctx) ) {
-			case 1:
-				{
-					setState(814);
-				((LambdaExpressionContext)_localctx).parameterTypeList = parameterTypeList();
+				switch (getInterpreter().adaptivePredict(_input, 65, _ctx)) {
+					case 1: {
+						setState(814);
+						((LambdaExpressionContext) _localctx).parameterTypeList = parameterTypeList();
 
-								((LambdaExpressionContext)_localctx).parameterTypes =  ((LambdaExpressionContext)_localctx).parameterTypeList.types;
-								((LambdaExpressionContext)_localctx).parameterNames =  ((LambdaExpressionContext)_localctx).parameterTypeList.names;
-								((LambdaExpressionContext)_localctx).hasVaList =  ((LambdaExpressionContext)_localctx).parameterTypeList.hasVaList;
-								if (_localctx.parameterNames.size() != 0 && (new HashSet<>(_localctx.parameterNames).size()) != _localctx.parameterNames.size())
-									throw new CompilationError("parameter should have different names.");
-								for (String name : _localctx.parameterNames)
-									if (name == null || name.equals(""))
-										throw new CompilationError("No parameter name.");
+						((LambdaExpressionContext) _localctx).parameterTypes = ((LambdaExpressionContext) _localctx).parameterTypeList.types;
+						((LambdaExpressionContext) _localctx).parameterNames = ((LambdaExpressionContext) _localctx).parameterTypeList.names;
+						((LambdaExpressionContext) _localctx).hasVaList = ((LambdaExpressionContext) _localctx).parameterTypeList.hasVaList;
+						if (_localctx.parameterNames.size() != 0 && (new HashSet<>(_localctx.parameterNames).size()) != _localctx.parameterNames.size())
+							throw new CompilationError("parameter should have different names.");
+						for (String name : _localctx.parameterNames)
+							if (name == null || name.equals(""))
+								throw new CompilationError("No parameter name.");
 
+					}
+					break;
 				}
-				break;
-			}
 				setState(819);
-			match(R1);
+				match(R1);
 				setState(824);
-			_la = _input.LA(1);
+				_la = _input.LA(1);
 				if (_la == T__39) {
-				{
-					setState(820);
-					match(T__39);
-					setState(821);
-				((LambdaExpressionContext)_localctx).typeName = typeName();
+					{
+						setState(820);
+						match(T__39);
+						setState(821);
+						((LambdaExpressionContext) _localctx).typeName = typeName();
 
-								((LambdaExpressionContext)_localctx).type =  ((LambdaExpressionContext)_localctx).typeName.ret;
+						((LambdaExpressionContext) _localctx).type = ((LambdaExpressionContext) _localctx).typeName.ret;
 
+					}
 				}
-			}
 
 
-						Environment.functionReturnStack.push(_localctx.type);
-						if (_localctx.type == null) ((LambdaExpressionContext)_localctx).type =  VoidType.instance;
-						((LambdaExpressionContext)_localctx).type =  new FunctionType(_localctx.type, _localctx.parameterTypes, _localctx.parameterNames, _localctx.hasVaList);
-						((LambdaExpressionContext)_localctx).uId =  Environment.symbolNames.defineLocalFunction("", _localctx.type);
+				Environment.functionReturnStack.push(_localctx.type);
+				if (_localctx.type == null) ((LambdaExpressionContext) _localctx).type = VoidType.instance;
+				((LambdaExpressionContext) _localctx).type = new FunctionType(_localctx.type, _localctx.parameterTypes, _localctx.parameterNames, _localctx.hasVaList);
+				((LambdaExpressionContext) _localctx).uId = Environment.symbolNames.defineLocalFunction("", _localctx.type);
 
 				setState(827);
-			((LambdaExpressionContext)_localctx).compoundStatement = compoundStatement(_localctx.parameterTypes, _localctx.parameterNames);
+				((LambdaExpressionContext) _localctx).compoundStatement = compoundStatement(_localctx.parameterTypes, _localctx.parameterNames);
 
-						((LambdaExpressionContext)_localctx).s =  ((LambdaExpressionContext)_localctx).compoundStatement.ret;
-						Environment.symbolNames.defineVariable(_localctx.uId, _localctx.type, _localctx.s);
-						_localctx.s.youAreAFrame(Environment.symbolNames.currentScope + 1);
-						Environment.functionReturnStack.pop();
-						((LambdaExpressionContext)_localctx).ret =  IdentifierExpression.getExpression(_localctx.uId);
+				((LambdaExpressionContext) _localctx).s = ((LambdaExpressionContext) _localctx).compoundStatement.ret;
+				Environment.symbolNames.defineVariable(_localctx.uId, _localctx.type, _localctx.s);
+				_localctx.s.youAreAFrame(Environment.symbolNames.currentScope + 1);
+				Environment.functionReturnStack.pop();
+				((LambdaExpressionContext) _localctx).ret = IdentifierExpression.getExpression(_localctx.uId);
 
 			}
 
-				Environment.loopStack = _localctx.loopStack;
+			Environment.loopStack = _localctx.loopStack;
 
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -3543,48 +3425,46 @@ public class Compiler2015Parser extends Parser {
 		try {
 			setState(838);
 			switch (_input.LA(1)) {
-			case DecimalConstant:
-				enterOuterAlt(_localctx, 1);
+				case DecimalConstant:
+					enterOuterAlt(_localctx, 1);
 				{
 					setState(830);
-				((ConstantContext)_localctx).DecimalConstant = match(DecimalConstant);
-				 ((ConstantContext)_localctx).ret =  IntConstant.getExpression((((ConstantContext)_localctx).DecimalConstant!=null?((ConstantContext)_localctx).DecimalConstant.getText():null), 10);
+					((ConstantContext) _localctx).DecimalConstant = match(DecimalConstant);
+					((ConstantContext) _localctx).ret = IntConstant.getExpression((((ConstantContext) _localctx).DecimalConstant != null ? ((ConstantContext) _localctx).DecimalConstant.getText() : null), 10);
 				}
 				break;
-			case OctalConstant:
-				enterOuterAlt(_localctx, 2);
+				case OctalConstant:
+					enterOuterAlt(_localctx, 2);
 				{
 					setState(832);
-				((ConstantContext)_localctx).OctalConstant = match(OctalConstant);
-				 ((ConstantContext)_localctx).ret =  IntConstant.getExpression((((ConstantContext)_localctx).OctalConstant!=null?((ConstantContext)_localctx).OctalConstant.getText():null), 8);
+					((ConstantContext) _localctx).OctalConstant = match(OctalConstant);
+					((ConstantContext) _localctx).ret = IntConstant.getExpression((((ConstantContext) _localctx).OctalConstant != null ? ((ConstantContext) _localctx).OctalConstant.getText() : null), 8);
 				}
 				break;
-			case HexadecimalConstant:
-				enterOuterAlt(_localctx, 3);
+				case HexadecimalConstant:
+					enterOuterAlt(_localctx, 3);
 				{
 					setState(834);
-				((ConstantContext)_localctx).HexadecimalConstant = match(HexadecimalConstant);
-				 ((ConstantContext)_localctx).ret =  IntConstant.getExpression((((ConstantContext)_localctx).HexadecimalConstant!=null?((ConstantContext)_localctx).HexadecimalConstant.getText():null), 16);
+					((ConstantContext) _localctx).HexadecimalConstant = match(HexadecimalConstant);
+					((ConstantContext) _localctx).ret = IntConstant.getExpression((((ConstantContext) _localctx).HexadecimalConstant != null ? ((ConstantContext) _localctx).HexadecimalConstant.getText() : null), 16);
 				}
 				break;
-			case CharacterConstant:
-				enterOuterAlt(_localctx, 4);
+				case CharacterConstant:
+					enterOuterAlt(_localctx, 4);
 				{
 					setState(836);
-				((ConstantContext)_localctx).CharacterConstant = match(CharacterConstant);
-				 ((ConstantContext)_localctx).ret =  CharConstant.getExpression((((ConstantContext)_localctx).CharacterConstant!=null?((ConstantContext)_localctx).CharacterConstant.getText():null));
+					((ConstantContext) _localctx).CharacterConstant = match(CharacterConstant);
+					((ConstantContext) _localctx).ret = CharConstant.getExpression((((ConstantContext) _localctx).CharacterConstant != null ? ((ConstantContext) _localctx).CharacterConstant.getText() : null));
 				}
 				break;
-			default:
-				throw new NoViableAltException(this);
+				default:
+					throw new NoViableAltException(this);
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -3592,78 +3472,78 @@ public class Compiler2015Parser extends Parser {
 
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
-		case 12:
-			return directDeclarator_sempred((DirectDeclaratorContext)_localctx, predIndex);
-		case 17:
-			return directAbstractDeclarator_sempred((DirectAbstractDeclaratorContext)_localctx, predIndex);
-		case 18:
-			return typedefName_sempred((TypedefNameContext)_localctx, predIndex);
-		case 49:
-			return postfixExpression_sempred((PostfixExpressionContext)_localctx, predIndex);
-		case 51:
-			return primaryExpression_sempred((PrimaryExpressionContext)_localctx, predIndex);
+			case 12:
+				return directDeclarator_sempred((DirectDeclaratorContext) _localctx, predIndex);
+			case 17:
+				return directAbstractDeclarator_sempred((DirectAbstractDeclaratorContext) _localctx, predIndex);
+			case 18:
+				return typedefName_sempred((TypedefNameContext) _localctx, predIndex);
+			case 49:
+				return postfixExpression_sempred((PostfixExpressionContext) _localctx, predIndex);
+			case 51:
+				return primaryExpression_sempred((PrimaryExpressionContext) _localctx, predIndex);
 		}
 		return true;
 	}
 
 	private boolean directDeclarator_sempred(DirectDeclaratorContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 0:
-			return precpred(_ctx, 4);
-		case 1:
-			return precpred(_ctx, 3);
-		case 2:
-			return precpred(_ctx, 2);
-		case 3:
-			return precpred(_ctx, 1);
+			case 0:
+				return precpred(_ctx, 4);
+			case 1:
+				return precpred(_ctx, 3);
+			case 2:
+				return precpred(_ctx, 2);
+			case 3:
+				return precpred(_ctx, 1);
 		}
 		return true;
 	}
 
 	private boolean directAbstractDeclarator_sempred(DirectAbstractDeclaratorContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 4:
-			return precpred(_ctx, 4);
-		case 5:
-			return precpred(_ctx, 3);
-		case 6:
-			return precpred(_ctx, 2);
-		case 7:
-			return precpred(_ctx, 1);
+			case 4:
+				return precpred(_ctx, 4);
+			case 5:
+				return precpred(_ctx, 3);
+			case 6:
+				return precpred(_ctx, 2);
+			case 7:
+				return precpred(_ctx, 1);
 		}
 		return true;
 	}
 
 	private boolean typedefName_sempred(TypedefNameContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 8:
-			return  Environment.isTypedefName(_input.LT(1).getText()) ;
+			case 8:
+				return Environment.isTypedefName(_input.LT(1).getText());
 		}
 		return true;
 	}
 
 	private boolean postfixExpression_sempred(PostfixExpressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 9:
-			return precpred(_ctx, 6);
-		case 10:
-			return precpred(_ctx, 5);
-		case 11:
-			return precpred(_ctx, 4);
-		case 12:
-			return precpred(_ctx, 3);
-		case 13:
-			return precpred(_ctx, 2);
-		case 14:
-			return precpred(_ctx, 1);
+			case 9:
+				return precpred(_ctx, 6);
+			case 10:
+				return precpred(_ctx, 5);
+			case 11:
+				return precpred(_ctx, 4);
+			case 12:
+				return precpred(_ctx, 3);
+			case 13:
+				return precpred(_ctx, 2);
+			case 14:
+				return precpred(_ctx, 1);
 		}
 		return true;
 	}
 
 	private boolean primaryExpression_sempred(PrimaryExpressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 15:
-			return  Environment.isVariable(_input.LT(1).getText()) ;
+			case 15:
+				return Environment.isVariable(_input.LT(1).getText());
 		}
 		return true;
 	}
@@ -3673,14 +3553,16 @@ public class Compiler2015Parser extends Parser {
 			super(parent, invokingState);
 		}
 
-		public TerminalNode EOF() { return getToken(Compiler2015Parser.EOF, 0); }
+		public TerminalNode EOF() {
+			return getToken(Compiler2015Parser.EOF, 0);
+		}
 
 		public List<FunctionDefinitionContext> functionDefinition() {
 			return getRuleContexts(FunctionDefinitionContext.class);
 		}
 
 		public FunctionDefinitionContext functionDefinition(int i) {
-			return getRuleContext(FunctionDefinitionContext.class,i);
+			return getRuleContext(FunctionDefinitionContext.class, i);
 		}
 
 		public List<DeclarationContext> declaration() {
@@ -3688,23 +3570,30 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public DeclarationContext declaration(int i) {
-			return getRuleContext(DeclarationContext.class,i);
+			return getRuleContext(DeclarationContext.class, i);
 		}
 
-		public List<TerminalNode> Semi() { return getTokens(Compiler2015Parser.Semi); }
+		public List<TerminalNode> Semi() {
+			return getTokens(Compiler2015Parser.Semi);
+		}
 
 		public TerminalNode Semi(int i) {
 			return getToken(Compiler2015Parser.Semi, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_compilationUnit; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_compilationUnit;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterCompilationUnit(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterCompilationUnit(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitCompilationUnit(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitCompilationUnit(this);
 		}
 	}
 
@@ -3712,9 +3601,14 @@ public class Compiler2015Parser extends Parser {
 		public DeclarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		public DeclarationContext() { }
 
-		@Override public int getRuleIndex() { return RULE_declaration; }
+		public DeclarationContext() {
+		}
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_declaration;
+		}
 
 		public void copyFrom(DeclarationContext ctx) {
 			super.copyFrom(ctx);
@@ -3723,108 +3617,136 @@ public class Compiler2015Parser extends Parser {
 
 	public static class Declaration1Context extends DeclarationContext {
 		public TypeSpecifierContext typeSpecifier;
-		public Declaration1Context(DeclarationContext ctx) { copyFrom(ctx); }
 
-		public TerminalNode Typedef() { return getToken(Compiler2015Parser.Typedef, 0); }
-
-		public TypeSpecifierContext typeSpecifier() {
-			return getRuleContext(TypeSpecifierContext.class,0);
+		public Declaration1Context(DeclarationContext ctx) {
+			copyFrom(ctx);
 		}
 
-		public TerminalNode Semi() { return getToken(Compiler2015Parser.Semi, 0); }
-
-		public DeclaratorListContext declaratorList() {
-			return getRuleContext(DeclaratorListContext.class,0);
+		public TerminalNode Typedef() {
+			return getToken(Compiler2015Parser.Typedef, 0);
 		}
-
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterDeclaration1(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitDeclaration1(this);
-		}
-	}
-
-	public static class Declaration2Context extends DeclarationContext {
-		public TypeSpecifierContext typeSpecifier;
-		public Declaration2Context(DeclarationContext ctx) { copyFrom(ctx); }
 
 		public TypeSpecifierContext typeSpecifier() {
 			return getRuleContext(TypeSpecifierContext.class, 0);
 		}
 
-		public TerminalNode Semi() { return getToken(Compiler2015Parser.Semi, 0); }
+		public TerminalNode Semi() {
+			return getToken(Compiler2015Parser.Semi, 0);
+		}
 
-		public InitDeclaratorListContext initDeclaratorList() {
-			return getRuleContext(InitDeclaratorListContext.class,0);
+		public DeclaratorListContext declaratorList() {
+			return getRuleContext(DeclaratorListContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterDeclaration2(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterDeclaration1(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitDeclaration2(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitDeclaration1(this);
+		}
+	}
+
+	public static class Declaration2Context extends DeclarationContext {
+		public TypeSpecifierContext typeSpecifier;
+
+		public Declaration2Context(DeclarationContext ctx) {
+			copyFrom(ctx);
+		}
+
+		public TypeSpecifierContext typeSpecifier() {
+			return getRuleContext(TypeSpecifierContext.class, 0);
+		}
+
+		public TerminalNode Semi() {
+			return getToken(Compiler2015Parser.Semi, 0);
+		}
+
+		public InitDeclaratorListContext initDeclaratorList() {
+			return getRuleContext(InitDeclaratorListContext.class, 0);
+		}
+
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterDeclaration2(this);
+		}
+
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitDeclaration2(this);
 		}
 	}
 
 	public static class FunctionDefinitionContext extends ParserRuleContext {
 		public FunctionType type;
 		public String name;
-		public CompoundStatement s =  null;
+		public CompoundStatement s = null;
 		public ArrayList<Type> parameterTypes;
 		public ArrayList<String> parameterNames;
-		public boolean hasVaList =  false;
-		public int uId =  -1;
-		public Stack<Loop> loopStack =  null;
-		public Type returnType =  null;
+		public boolean hasVaList = false;
+		public int uId = -1;
+		public Stack<Loop> loopStack = null;
+		public Type returnType = null;
 		public ArrayList<Type> typePassDown;
 		public ArrayList<String> namePassDown;
 		public TypeSpecifierContext typeSpecifier;
 		public DirectDeclaratorContext directDeclarator;
 		public ParameterTypeListContext parameterTypeList;
 		public CompoundStatementContext compoundStatement;
+
 		public FunctionDefinitionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 
 		public TypeSpecifierContext typeSpecifier() {
-			return getRuleContext(TypeSpecifierContext.class,0);
+			return getRuleContext(TypeSpecifierContext.class, 0);
 		}
 
 		public DirectDeclaratorContext directDeclarator() {
-			return getRuleContext(DirectDeclaratorContext.class,0);
+			return getRuleContext(DirectDeclaratorContext.class, 0);
 		}
 
-		public TerminalNode L1() { return getToken(Compiler2015Parser.L1, 0); }
+		public TerminalNode L1() {
+			return getToken(Compiler2015Parser.L1, 0);
+		}
 
-		public TerminalNode R1() { return getToken(Compiler2015Parser.R1, 0); }
+		public TerminalNode R1() {
+			return getToken(Compiler2015Parser.R1, 0);
+		}
 
 		public CompoundStatementContext compoundStatement() {
-			return getRuleContext(CompoundStatementContext.class,0);
+			return getRuleContext(CompoundStatementContext.class, 0);
 		}
 
-		public List<TerminalNode> STAR() { return getTokens(Compiler2015Parser.STAR); }
+		public List<TerminalNode> STAR() {
+			return getTokens(Compiler2015Parser.STAR);
+		}
 
 		public TerminalNode STAR(int i) {
 			return getToken(Compiler2015Parser.STAR, i);
 		}
 
 		public ParameterTypeListContext parameterTypeList() {
-			return getRuleContext(ParameterTypeListContext.class,0);
+			return getRuleContext(ParameterTypeListContext.class, 0);
 		}
 
-		@Override public int getRuleIndex() { return RULE_functionDefinition; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_functionDefinition;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterFunctionDefinition(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterFunctionDefinition(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitFunctionDefinition(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitFunctionDefinition(this);
 		}
 	}
 
@@ -3838,55 +3760,72 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public InitDeclaratorContext initDeclarator(int i) {
-			return getRuleContext(InitDeclaratorContext.class,i);
+			return getRuleContext(InitDeclaratorContext.class, i);
 		}
 
-		public List<TerminalNode> Comma() { return getTokens(Compiler2015Parser.Comma); }
+		public List<TerminalNode> Comma() {
+			return getTokens(Compiler2015Parser.Comma);
+		}
 
 		public TerminalNode Comma(int i) {
 			return getToken(Compiler2015Parser.Comma, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_initDeclaratorList; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_initDeclaratorList;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterInitDeclaratorList(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterInitDeclaratorList(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitInitDeclaratorList(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitInitDeclaratorList(this);
 		}
 	}
 
 	public static class InitDeclaratorContext extends ParserRuleContext {
 		public Type type;
 		public String name;
-		public SimpleInitializerList init =  null;
+		public SimpleInitializerList init = null;
 		public int uId;
 		public DeclaratorContext declarator;
 		public InitializerContext initializer;
+
 		public InitDeclaratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 
 		public DeclaratorContext declarator() {
-			return getRuleContext(DeclaratorContext.class,0);
+			return getRuleContext(DeclaratorContext.class, 0);
 		}
 
-		public TerminalNode EQ() { return getToken(Compiler2015Parser.EQ, 0); }
+		public TerminalNode EQ() {
+			return getToken(Compiler2015Parser.EQ, 0);
+		}
 
 		public InitializerContext initializer() {
-			return getRuleContext(InitializerContext.class,0);
+			return getRuleContext(InitializerContext.class, 0);
 		}
 
-		@Override public int getRuleIndex() { return RULE_initDeclarator; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_initDeclarator;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterInitDeclarator(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterInitDeclarator(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitInitDeclarator(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitInitDeclarator(this);
 		}
 	}
 
@@ -3894,6 +3833,7 @@ public class Compiler2015Parser extends Parser {
 		public Type ret;
 		public TypedefNameContext typedefName;
 		public StructOrUnionSpecifierContext structOrUnionSpecifier;
+
 		public TypeSpecifierContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -3903,17 +3843,22 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public StructOrUnionSpecifierContext structOrUnionSpecifier() {
-			return getRuleContext(StructOrUnionSpecifierContext.class,0);
+			return getRuleContext(StructOrUnionSpecifierContext.class, 0);
 		}
 
-		@Override public int getRuleIndex() { return RULE_typeSpecifier; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_typeSpecifier;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterTypeSpecifier(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterTypeSpecifier(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitTypeSpecifier(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitTypeSpecifier(this);
 		}
 	}
 
@@ -3921,12 +3866,18 @@ public class Compiler2015Parser extends Parser {
 		public Type ret;
 		public boolean isUnion;
 		public String name;
+
 		public StructOrUnionSpecifierContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		public StructOrUnionSpecifierContext() { }
 
-		@Override public int getRuleIndex() { return RULE_structOrUnionSpecifier; }
+		public StructOrUnionSpecifierContext() {
+		}
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_structOrUnionSpecifier;
+		}
 
 		public void copyFrom(StructOrUnionSpecifierContext ctx) {
 			super.copyFrom(ctx);
@@ -3940,70 +3891,97 @@ public class Compiler2015Parser extends Parser {
 		public StructOrUnionContext structOrUnion;
 		public Token Identifier;
 		public StructDeclarationContext structDeclaration;
-		public StructOrUnionSpecifier1Context(StructOrUnionSpecifierContext ctx) { copyFrom(ctx); }
 
-		public StructOrUnionContext structOrUnion() {
-			return getRuleContext(StructOrUnionContext.class,0);
+		public StructOrUnionSpecifier1Context(StructOrUnionSpecifierContext ctx) {
+			copyFrom(ctx);
 		}
 
-		public TerminalNode L3() { return getToken(Compiler2015Parser.L3, 0); }
+		public StructOrUnionContext structOrUnion() {
+			return getRuleContext(StructOrUnionContext.class, 0);
+		}
 
-		public TerminalNode R3() { return getToken(Compiler2015Parser.R3, 0); }
+		public TerminalNode L3() {
+			return getToken(Compiler2015Parser.L3, 0);
+		}
 
-		public TerminalNode Identifier() { return getToken(Compiler2015Parser.Identifier, 0); }
+		public TerminalNode R3() {
+			return getToken(Compiler2015Parser.R3, 0);
+		}
+
+		public TerminalNode Identifier() {
+			return getToken(Compiler2015Parser.Identifier, 0);
+		}
 
 		public List<StructDeclarationContext> structDeclaration() {
 			return getRuleContexts(StructDeclarationContext.class);
 		}
 
 		public StructDeclarationContext structDeclaration(int i) {
-			return getRuleContext(StructDeclarationContext.class,i);
+			return getRuleContext(StructDeclarationContext.class, i);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterStructOrUnionSpecifier1(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterStructOrUnionSpecifier1(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitStructOrUnionSpecifier1(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitStructOrUnionSpecifier1(this);
 		}
 	}
 
 	public static class StructOrUnionSpecifier2Context extends StructOrUnionSpecifierContext {
 		public StructOrUnionContext structOrUnion;
 		public Token Identifier;
-		public StructOrUnionSpecifier2Context(StructOrUnionSpecifierContext ctx) { copyFrom(ctx); }
 
-		public StructOrUnionContext structOrUnion() {
-			return getRuleContext(StructOrUnionContext.class,0);
+		public StructOrUnionSpecifier2Context(StructOrUnionSpecifierContext ctx) {
+			copyFrom(ctx);
 		}
 
-		public TerminalNode Identifier() { return getToken(Compiler2015Parser.Identifier, 0); }
+		public StructOrUnionContext structOrUnion() {
+			return getRuleContext(StructOrUnionContext.class, 0);
+		}
+
+		public TerminalNode Identifier() {
+			return getToken(Compiler2015Parser.Identifier, 0);
+		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterStructOrUnionSpecifier2(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterStructOrUnionSpecifier2(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitStructOrUnionSpecifier2(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitStructOrUnionSpecifier2(this);
 		}
 	}
 
 	public static class StructOrUnionContext extends ParserRuleContext {
 		public boolean isUnion;
+
 		public StructOrUnionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_structOrUnion; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_structOrUnion;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterStructOrUnion(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterStructOrUnion(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitStructOrUnion(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitStructOrUnion(this);
 		}
 	}
 
@@ -4013,67 +3991,86 @@ public class Compiler2015Parser extends Parser {
 		public TypeSpecifierContext typeSpecifier;
 		public DeclaratorContext d1;
 		public DeclaratorContext d2;
+
 		public StructDeclarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 
 		public TypeSpecifierContext typeSpecifier() {
-			return getRuleContext(TypeSpecifierContext.class,0);
+			return getRuleContext(TypeSpecifierContext.class, 0);
 		}
 
-		public TerminalNode Semi() { return getToken(Compiler2015Parser.Semi, 0); }
+		public TerminalNode Semi() {
+			return getToken(Compiler2015Parser.Semi, 0);
+		}
 
 		public List<DeclaratorContext> declarator() {
 			return getRuleContexts(DeclaratorContext.class);
 		}
 
 		public DeclaratorContext declarator(int i) {
-			return getRuleContext(DeclaratorContext.class,i);
+			return getRuleContext(DeclaratorContext.class, i);
 		}
 
-		public List<TerminalNode> Comma() { return getTokens(Compiler2015Parser.Comma); }
+		public List<TerminalNode> Comma() {
+			return getTokens(Compiler2015Parser.Comma);
+		}
 
 		public TerminalNode Comma(int i) {
 			return getToken(Compiler2015Parser.Comma, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_structDeclaration; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_structDeclaration;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterStructDeclaration(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterStructDeclaration(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitStructDeclaration(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitStructDeclaration(this);
 		}
 	}
 
 	public static class DeclaratorContext extends ParserRuleContext {
 		public String name;
-		public int n =  0;
+		public int n = 0;
 		public DirectDeclaratorContext directDeclarator;
+
 		public DeclaratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 
 		public DirectDeclaratorContext directDeclarator() {
-			return getRuleContext(DirectDeclaratorContext.class,0);
+			return getRuleContext(DirectDeclaratorContext.class, 0);
 		}
 
-		public List<TerminalNode> STAR() { return getTokens(Compiler2015Parser.STAR); }
+		public List<TerminalNode> STAR() {
+			return getTokens(Compiler2015Parser.STAR);
+		}
 
 		public TerminalNode STAR(int i) {
 			return getToken(Compiler2015Parser.STAR, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_declarator; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_declarator;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterDeclarator(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterDeclarator(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitDeclarator(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitDeclarator(this);
 		}
 	}
 
@@ -4081,22 +4078,28 @@ public class Compiler2015Parser extends Parser {
 		public Type type;
 		public String name;
 		public DeclaratorContext declarator;
+
 		public PlainDeclaratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 
 		public DeclaratorContext declarator() {
-			return getRuleContext(DeclaratorContext.class,0);
+			return getRuleContext(DeclaratorContext.class, 0);
 		}
 
-		@Override public int getRuleIndex() { return RULE_plainDeclarator; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_plainDeclarator;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterPlainDeclarator(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterPlainDeclarator(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitPlainDeclarator(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitPlainDeclarator(this);
 		}
 	}
 
@@ -4110,23 +4113,30 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public PlainDeclaratorContext plainDeclarator(int i) {
-			return getRuleContext(PlainDeclaratorContext.class,i);
+			return getRuleContext(PlainDeclaratorContext.class, i);
 		}
 
-		public List<TerminalNode> Comma() { return getTokens(Compiler2015Parser.Comma); }
+		public List<TerminalNode> Comma() {
+			return getTokens(Compiler2015Parser.Comma);
+		}
 
 		public TerminalNode Comma(int i) {
 			return getToken(Compiler2015Parser.Comma, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_declaratorList; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_declaratorList;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterDeclaratorList(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterDeclaratorList(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitDeclaratorList(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitDeclaratorList(this);
 		}
 	}
 
@@ -4140,44 +4150,53 @@ public class Compiler2015Parser extends Parser {
 		public DeclaratorContext declarator;
 		public ConstantExpressionContext constantExpression;
 		public ParameterTypeListContext parameterTypeList;
+
 		public DirectDeclaratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 
-		public TerminalNode Identifier() { return getToken(Compiler2015Parser.Identifier, 0); }
+		public TerminalNode Identifier() {
+			return getToken(Compiler2015Parser.Identifier, 0);
+		}
 
 		public DeclaratorContext declarator() {
-			return getRuleContext(DeclaratorContext.class,0);
+			return getRuleContext(DeclaratorContext.class, 0);
 		}
 
 		public ConstantExpressionContext constantExpression() {
-			return getRuleContext(ConstantExpressionContext.class,0);
+			return getRuleContext(ConstantExpressionContext.class, 0);
 		}
 
 		public DirectDeclaratorContext directDeclarator() {
-			return getRuleContext(DirectDeclaratorContext.class,0);
+			return getRuleContext(DirectDeclaratorContext.class, 0);
 		}
 
 		public ParameterTypeListContext parameterTypeList() {
-			return getRuleContext(ParameterTypeListContext.class,0);
+			return getRuleContext(ParameterTypeListContext.class, 0);
 		}
 
-		@Override public int getRuleIndex() { return RULE_directDeclarator; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_directDeclarator;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterDirectDeclarator(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterDirectDeclarator(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitDirectDeclarator(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitDirectDeclarator(this);
 		}
 	}
 
 	public static class ParameterTypeListContext extends ParserRuleContext {
 		public ArrayList<Type> types;
 		public ArrayList<String> names;
-		public boolean hasVaList =  false;
+		public boolean hasVaList = false;
 		public ParameterListContext parameterList;
+
 		public ParameterTypeListContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4186,16 +4205,24 @@ public class Compiler2015Parser extends Parser {
 			return getRuleContext(ParameterListContext.class, 0);
 		}
 
-		public TerminalNode Comma() { return getToken(Compiler2015Parser.Comma, 0); }
+		public TerminalNode Comma() {
+			return getToken(Compiler2015Parser.Comma, 0);
+		}
 
-		@Override public int getRuleIndex() { return RULE_parameterTypeList; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_parameterTypeList;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterParameterTypeList(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterParameterTypeList(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitParameterTypeList(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitParameterTypeList(this);
 		}
 	}
 
@@ -4204,6 +4231,7 @@ public class Compiler2015Parser extends Parser {
 		public ArrayList<String> names;
 		public ParameterDeclarationContext p1;
 		public ParameterDeclarationContext p2;
+
 		public ParameterListContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4213,35 +4241,48 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public ParameterDeclarationContext parameterDeclaration(int i) {
-			return getRuleContext(ParameterDeclarationContext.class,i);
+			return getRuleContext(ParameterDeclarationContext.class, i);
 		}
 
-		public List<TerminalNode> Comma() { return getTokens(Compiler2015Parser.Comma); }
+		public List<TerminalNode> Comma() {
+			return getTokens(Compiler2015Parser.Comma);
+		}
 
 		public TerminalNode Comma(int i) {
 			return getToken(Compiler2015Parser.Comma, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_parameterList; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_parameterList;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterParameterList(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterParameterList(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitParameterList(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitParameterList(this);
 		}
 	}
 
 	public static class ParameterDeclarationContext extends ParserRuleContext {
 		public Type type;
 		public String name;
+
 		public ParameterDeclarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		public ParameterDeclarationContext() { }
 
-		@Override public int getRuleIndex() { return RULE_parameterDeclaration; }
+		public ParameterDeclarationContext() {
+		}
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_parameterDeclaration;
+		}
 
 		public void copyFrom(ParameterDeclarationContext ctx) {
 			super.copyFrom(ctx);
@@ -4253,19 +4294,25 @@ public class Compiler2015Parser extends Parser {
 	public static class ParameterDeclaration1Context extends ParameterDeclarationContext {
 		public TypeSpecifierContext t1;
 		public TypeSpecifierContext typeSpecifier;
-		public ParameterDeclaration1Context(ParameterDeclarationContext ctx) { copyFrom(ctx); }
+
+		public ParameterDeclaration1Context(ParameterDeclarationContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public TypeSpecifierContext typeSpecifier() {
-			return getRuleContext(TypeSpecifierContext.class,0);
+			return getRuleContext(TypeSpecifierContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterParameterDeclaration1(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterParameterDeclaration1(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitParameterDeclaration1(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitParameterDeclaration1(this);
 		}
 	}
 
@@ -4273,73 +4320,94 @@ public class Compiler2015Parser extends Parser {
 		public TypeSpecifierContext t2;
 		public TypeSpecifierContext typeSpecifier;
 		public DeclaratorContext declarator;
-		public ParameterDeclaration2Context(ParameterDeclarationContext ctx) { copyFrom(ctx); }
+
+		public ParameterDeclaration2Context(ParameterDeclarationContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public DeclaratorContext declarator() {
-			return getRuleContext(DeclaratorContext.class,0);
+			return getRuleContext(DeclaratorContext.class, 0);
 		}
 
 		public TypeSpecifierContext typeSpecifier() {
-			return getRuleContext(TypeSpecifierContext.class,0);
+			return getRuleContext(TypeSpecifierContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterParameterDeclaration2(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterParameterDeclaration2(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitParameterDeclaration2(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitParameterDeclaration2(this);
 		}
 	}
 
 	public static class ParameterDeclaration3Context extends ParameterDeclarationContext {
 		public TypeSpecifierContext t3;
 		public TypeSpecifierContext typeSpecifier;
-		public ParameterDeclaration3Context(ParameterDeclarationContext ctx) { copyFrom(ctx); }
+
+		public ParameterDeclaration3Context(ParameterDeclarationContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public AbstractDeclaratorContext abstractDeclarator() {
-			return getRuleContext(AbstractDeclaratorContext.class,0);
+			return getRuleContext(AbstractDeclaratorContext.class, 0);
 		}
 
 		public TypeSpecifierContext typeSpecifier() {
-			return getRuleContext(TypeSpecifierContext.class,0);
+			return getRuleContext(TypeSpecifierContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterParameterDeclaration3(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterParameterDeclaration3(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitParameterDeclaration3(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitParameterDeclaration3(this);
 		}
 	}
 
 	public static class AbstractDeclaratorContext extends ParserRuleContext {
-		public int n =  0;
+		public int n = 0;
+
 		public AbstractDeclaratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 
 		public DirectAbstractDeclaratorContext directAbstractDeclarator() {
-			return getRuleContext(DirectAbstractDeclaratorContext.class,0);
+			return getRuleContext(DirectAbstractDeclaratorContext.class, 0);
 		}
 
-		@Override public int getRuleIndex() { return RULE_abstractDeclarator; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_abstractDeclarator;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterAbstractDeclarator(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterAbstractDeclarator(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitAbstractDeclarator(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitAbstractDeclarator(this);
 		}
 	}
 
 	public static class DirectAbstractDeclaratorContext extends ParserRuleContext {
 		public ConstantExpressionContext constantExpression;
 		public ParameterTypeListContext parameterTypeList;
+
 		public DirectAbstractDeclaratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4349,7 +4417,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public ConstantExpressionContext constantExpression() {
-			return getRuleContext(ConstantExpressionContext.class,0);
+			return getRuleContext(ConstantExpressionContext.class, 0);
 		}
 
 		public ParameterTypeListContext parameterTypeList() {
@@ -4357,48 +4425,69 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public DirectAbstractDeclaratorContext directAbstractDeclarator() {
-			return getRuleContext(DirectAbstractDeclaratorContext.class,0);
+			return getRuleContext(DirectAbstractDeclaratorContext.class, 0);
 		}
 
-		@Override public int getRuleIndex() { return RULE_directAbstractDeclarator; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_directAbstractDeclarator;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterDirectAbstractDeclarator(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterDirectAbstractDeclarator(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitDirectAbstractDeclarator(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitDirectAbstractDeclarator(this);
 		}
 	}
 
 	public static class TypedefNameContext extends ParserRuleContext {
 		public Type ret;
 		public Token Identifier;
+
 		public TypedefNameContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 
-		public TerminalNode Identifier() { return getToken(Compiler2015Parser.Identifier, 0); }
+		public TerminalNode Identifier() {
+			return getToken(Compiler2015Parser.Identifier, 0);
+		}
 
-		@Override public int getRuleIndex() { return RULE_typedefName; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_typedefName;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterTypedefName(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterTypedefName(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitTypedefName(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitTypedefName(this);
 		}
 	}
 
 	public static class InitializerContext extends ParserRuleContext {
 		public SimpleInitializerList ret;
+
 		public InitializerContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		public InitializerContext() { }
 
-		@Override public int getRuleIndex() { return RULE_initializer; }
+		public InitializerContext() {
+		}
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_initializer;
+		}
 
 		public void copyFrom(InitializerContext ctx) {
 			super.copyFrom(ctx);
@@ -4409,21 +4498,30 @@ public class Compiler2015Parser extends Parser {
 	public static class Initializer2Context extends InitializerContext {
 		public InitializerContext i1;
 		public InitializerContext i2;
-		public Initializer2Context(InitializerContext ctx) { copyFrom(ctx); }
 
-		public TerminalNode L3() { return getToken(Compiler2015Parser.L3, 0); }
+		public Initializer2Context(InitializerContext ctx) {
+			copyFrom(ctx);
+		}
 
-		public TerminalNode R3() { return getToken(Compiler2015Parser.R3, 0); }
+		public TerminalNode L3() {
+			return getToken(Compiler2015Parser.L3, 0);
+		}
+
+		public TerminalNode R3() {
+			return getToken(Compiler2015Parser.R3, 0);
+		}
 
 		public List<InitializerContext> initializer() {
 			return getRuleContexts(InitializerContext.class);
 		}
 
 		public InitializerContext initializer(int i) {
-			return getRuleContext(InitializerContext.class,i);
+			return getRuleContext(InitializerContext.class, i);
 		}
 
-		public List<TerminalNode> Comma() { return getTokens(Compiler2015Parser.Comma); }
+		public List<TerminalNode> Comma() {
+			return getTokens(Compiler2015Parser.Comma);
+		}
 
 		public TerminalNode Comma(int i) {
 			return getToken(Compiler2015Parser.Comma, i);
@@ -4431,29 +4529,34 @@ public class Compiler2015Parser extends Parser {
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterInitializer2(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterInitializer2(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitInitializer2(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitInitializer2(this);
 		}
 	}
 
 	public static class Initializer1Context extends InitializerContext {
 		public AssignmentExpressionContext assignmentExpression;
-		public Initializer1Context(InitializerContext ctx) { copyFrom(ctx); }
+
+		public Initializer1Context(InitializerContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public AssignmentExpressionContext assignmentExpression() {
-			return getRuleContext(AssignmentExpressionContext.class,0);
+			return getRuleContext(AssignmentExpressionContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterInitializer1(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterInitializer1(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitInitializer1(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitInitializer1(this);
 		}
 	}
 
@@ -4464,60 +4567,74 @@ public class Compiler2015Parser extends Parser {
 		public SelectionStatementContext selectionStatement;
 		public IterationStatementContext iterationStatement;
 		public JumpStatementContext jumpStatement;
+
 		public StatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 
 		public ExpressionStatementContext expressionStatement() {
-			return getRuleContext(ExpressionStatementContext.class,0);
+			return getRuleContext(ExpressionStatementContext.class, 0);
 		}
 
 		public CompoundStatementContext compoundStatement() {
-			return getRuleContext(CompoundStatementContext.class,0);
+			return getRuleContext(CompoundStatementContext.class, 0);
 		}
 
 		public SelectionStatementContext selectionStatement() {
-			return getRuleContext(SelectionStatementContext.class,0);
+			return getRuleContext(SelectionStatementContext.class, 0);
 		}
 
 		public IterationStatementContext iterationStatement() {
-			return getRuleContext(IterationStatementContext.class,0);
+			return getRuleContext(IterationStatementContext.class, 0);
 		}
 
 		public JumpStatementContext jumpStatement() {
-			return getRuleContext(JumpStatementContext.class,0);
+			return getRuleContext(JumpStatementContext.class, 0);
 		}
 
-		@Override public int getRuleIndex() { return RULE_statement; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_statement;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterStatement(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterStatement(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitStatement(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitStatement(this);
 		}
 	}
 
 	public static class ExpressionStatementContext extends ParserRuleContext {
-		public Statement ret =  null;
+		public Statement ret = null;
 		public ExpressionContext expression;
+
 		public ExpressionStatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 
 		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class, 0);
 		}
 
-		@Override public int getRuleIndex() { return RULE_expressionStatement; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_expressionStatement;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterExpressionStatement(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterExpressionStatement(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitExpressionStatement(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitExpressionStatement(this);
 		}
 	}
 
@@ -4529,23 +4646,31 @@ public class Compiler2015Parser extends Parser {
 		public ArrayList<Integer> givenVariables = new ArrayList<>();
 		public ArrayList<Integer> parameters = new ArrayList<>();
 		public StatementContext statement;
-		public CompoundStatementContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+
+		public CompoundStatementContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
 		public CompoundStatementContext(ParserRuleContext parent, int invokingState, ArrayList<Type> toDefineTypes, ArrayList<String> toDefineNames) {
 			super(parent, invokingState);
 			this.toDefineTypes = toDefineTypes;
 			this.toDefineNames = toDefineNames;
 		}
 
-		public TerminalNode L3() { return getToken(Compiler2015Parser.L3, 0); }
+		public TerminalNode L3() {
+			return getToken(Compiler2015Parser.L3, 0);
+		}
 
-		public TerminalNode R3() { return getToken(Compiler2015Parser.R3, 0); }
+		public TerminalNode R3() {
+			return getToken(Compiler2015Parser.R3, 0);
+		}
 
 		public List<DeclarationContext> declaration() {
 			return getRuleContexts(DeclarationContext.class);
 		}
 
 		public DeclarationContext declaration(int i) {
-			return getRuleContext(DeclarationContext.class,i);
+			return getRuleContext(DeclarationContext.class, i);
 		}
 
 		public List<FunctionDefinitionContext> functionDefinition() {
@@ -4553,7 +4678,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public FunctionDefinitionContext functionDefinition(int i) {
-			return getRuleContext(FunctionDefinitionContext.class,i);
+			return getRuleContext(FunctionDefinitionContext.class, i);
 		}
 
 		public List<StatementContext> statement() {
@@ -4561,60 +4686,82 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public StatementContext statement(int i) {
-			return getRuleContext(StatementContext.class,i);
+			return getRuleContext(StatementContext.class, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_compoundStatement; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_compoundStatement;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterCompoundStatement(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterCompoundStatement(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitCompoundStatement(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitCompoundStatement(this);
 		}
 	}
 
 	public static class SelectionStatementContext extends ParserRuleContext {
 		public IfStatement ret;
-		public Expression e1 =  null;
-		public Statement s1 =  null;
-		public Statement s2 =  null;
+		public Expression e1 = null;
+		public Statement s1 = null;
+		public Statement s2 = null;
 		public ExpressionContext expression;
 		public StatementContext st1;
 		public StatementContext st2;
+
 		public SelectionStatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 
-		public TerminalNode If() { return getToken(Compiler2015Parser.If, 0); }
-
-		public TerminalNode L1() { return getToken(Compiler2015Parser.L1, 0); }
-
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
+		public TerminalNode If() {
+			return getToken(Compiler2015Parser.If, 0);
 		}
 
-		public TerminalNode R1() { return getToken(Compiler2015Parser.R1, 0); }
+		public TerminalNode L1() {
+			return getToken(Compiler2015Parser.L1, 0);
+		}
+
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class, 0);
+		}
+
+		public TerminalNode R1() {
+			return getToken(Compiler2015Parser.R1, 0);
+		}
 
 		public List<StatementContext> statement() {
 			return getRuleContexts(StatementContext.class);
 		}
 
 		public StatementContext statement(int i) {
-			return getRuleContext(StatementContext.class,i);
+			return getRuleContext(StatementContext.class, i);
 		}
 
-		public TerminalNode Else() { return getToken(Compiler2015Parser.Else, 0); }
+		public TerminalNode Else() {
+			return getToken(Compiler2015Parser.Else, 0);
+		}
 
-		@Override public int getRuleIndex() { return RULE_selectionStatement; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_selectionStatement;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterSelectionStatement(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterSelectionStatement(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitSelectionStatement(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitSelectionStatement(this);
 		}
 	}
 
@@ -4622,15 +4769,21 @@ public class Compiler2015Parser extends Parser {
 		public Statement ret;
 		public WhileStatement whileS;
 		public ForStatement forS;
-		public Expression e1 =  null;
-		public Expression e2 =  null;
+		public Expression e1 = null;
+		public Expression e2 = null;
 		public Expression e3;
+
 		public IterationStatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		public IterationStatementContext() { }
 
-		@Override public int getRuleIndex() { return RULE_iterationStatement; }
+		public IterationStatementContext() {
+		}
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_iterationStatement;
+		}
 
 		public void copyFrom(IterationStatementContext ctx) {
 			super.copyFrom(ctx);
@@ -4648,22 +4801,33 @@ public class Compiler2015Parser extends Parser {
 		public ExpressionContext ex2;
 		public ExpressionContext ex3;
 		public StatementContext statement;
-		public IterationStatement2Context(IterationStatementContext ctx) { copyFrom(ctx); }
 
-		public TerminalNode For() { return getToken(Compiler2015Parser.For, 0); }
+		public IterationStatement2Context(IterationStatementContext ctx) {
+			copyFrom(ctx);
+		}
 
-		public TerminalNode L1() { return getToken(Compiler2015Parser.L1, 0); }
+		public TerminalNode For() {
+			return getToken(Compiler2015Parser.For, 0);
+		}
 
-		public List<TerminalNode> Semi() { return getTokens(Compiler2015Parser.Semi); }
+		public TerminalNode L1() {
+			return getToken(Compiler2015Parser.L1, 0);
+		}
+
+		public List<TerminalNode> Semi() {
+			return getTokens(Compiler2015Parser.Semi);
+		}
 
 		public TerminalNode Semi(int i) {
 			return getToken(Compiler2015Parser.Semi, i);
 		}
 
-		public TerminalNode R1() { return getToken(Compiler2015Parser.R1, 0); }
+		public TerminalNode R1() {
+			return getToken(Compiler2015Parser.R1, 0);
+		}
 
 		public StatementContext statement() {
-			return getRuleContext(StatementContext.class,0);
+			return getRuleContext(StatementContext.class, 0);
 		}
 
 		public List<ExpressionContext> expression() {
@@ -4671,57 +4835,78 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public ExpressionContext expression(int i) {
-			return getRuleContext(ExpressionContext.class,i);
+			return getRuleContext(ExpressionContext.class, i);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterIterationStatement2(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterIterationStatement2(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitIterationStatement2(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitIterationStatement2(this);
 		}
 	}
 
 	public static class IterationStatement1Context extends IterationStatementContext {
 		public ExpressionContext expression;
 		public StatementContext statement;
-		public IterationStatement1Context(IterationStatementContext ctx) { copyFrom(ctx); }
 
-		public TerminalNode While() { return getToken(Compiler2015Parser.While, 0); }
-
-		public TerminalNode L1() { return getToken(Compiler2015Parser.L1, 0); }
-
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
+		public IterationStatement1Context(IterationStatementContext ctx) {
+			copyFrom(ctx);
 		}
 
-		public TerminalNode R1() { return getToken(Compiler2015Parser.R1, 0); }
+		public TerminalNode While() {
+			return getToken(Compiler2015Parser.While, 0);
+		}
+
+		public TerminalNode L1() {
+			return getToken(Compiler2015Parser.L1, 0);
+		}
+
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class, 0);
+		}
+
+		public TerminalNode R1() {
+			return getToken(Compiler2015Parser.R1, 0);
+		}
 
 		public StatementContext statement() {
-			return getRuleContext(StatementContext.class,0);
+			return getRuleContext(StatementContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterIterationStatement1(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterIterationStatement1(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitIterationStatement1(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitIterationStatement1(this);
 		}
 	}
 
 	public static class JumpStatementContext extends ParserRuleContext {
 		public Statement ret;
-		public Expression e =  null;
+		public Expression e = null;
+
 		public JumpStatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		public JumpStatementContext() { }
 
-		@Override public int getRuleIndex() { return RULE_jumpStatement; }
+		public JumpStatementContext() {
+		}
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_jumpStatement;
+		}
 
 		public void copyFrom(JumpStatementContext ctx) {
 			super.copyFrom(ctx);
@@ -4731,44 +4916,56 @@ public class Compiler2015Parser extends Parser {
 	}
 
 	public static class JumpStatement1Context extends JumpStatementContext {
-		public JumpStatement1Context(JumpStatementContext ctx) { copyFrom(ctx); }
+		public JumpStatement1Context(JumpStatementContext ctx) {
+			copyFrom(ctx);
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterJumpStatement1(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterJumpStatement1(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitJumpStatement1(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitJumpStatement1(this);
 		}
 	}
 
 	public static class JumpStatement2Context extends JumpStatementContext {
-		public JumpStatement2Context(JumpStatementContext ctx) { copyFrom(ctx); }
+		public JumpStatement2Context(JumpStatementContext ctx) {
+			copyFrom(ctx);
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterJumpStatement2(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterJumpStatement2(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitJumpStatement2(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitJumpStatement2(this);
 		}
 	}
 
 	public static class JumpStatement3Context extends JumpStatementContext {
 		public ExpressionContext expression;
-		public JumpStatement3Context(JumpStatementContext ctx) { copyFrom(ctx); }
+
+		public JumpStatement3Context(JumpStatementContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterJumpStatement3(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterJumpStatement3(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitJumpStatement3(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitJumpStatement3(this);
 		}
 	}
 
@@ -4776,6 +4973,7 @@ public class Compiler2015Parser extends Parser {
 		public Expression ret;
 		public AssignmentExpressionContext a1;
 		public AssignmentExpressionContext a2;
+
 		public ExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4788,31 +4986,44 @@ public class Compiler2015Parser extends Parser {
 			return getRuleContext(AssignmentExpressionContext.class, i);
 		}
 
-		public List<TerminalNode> Comma() { return getTokens(Compiler2015Parser.Comma); }
+		public List<TerminalNode> Comma() {
+			return getTokens(Compiler2015Parser.Comma);
+		}
 
 		public TerminalNode Comma(int i) {
 			return getToken(Compiler2015Parser.Comma, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_expression; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_expression;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterExpression(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterExpression(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitExpression(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitExpression(this);
 		}
 	}
 
 	public static class AssignmentExpressionContext extends ParserRuleContext {
 		public Expression ret;
+
 		public AssignmentExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		public AssignmentExpressionContext() { }
 
-		@Override public int getRuleIndex() { return RULE_assignmentExpression; }
+		public AssignmentExpressionContext() {
+		}
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_assignmentExpression;
+		}
 
 		public void copyFrom(AssignmentExpressionContext ctx) {
 			super.copyFrom(ctx);
@@ -4841,6 +5052,7 @@ public class Compiler2015Parser extends Parser {
 			if (listener instanceof Compiler2015Listener)
 				((Compiler2015Listener) listener).enterAssignmentExpression3(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener)
@@ -4850,19 +5062,25 @@ public class Compiler2015Parser extends Parser {
 
 	public static class AssignmentExpression1Context extends AssignmentExpressionContext {
 		public LogicalOrExpressionContext logicalOrExpression;
-		public AssignmentExpression1Context(AssignmentExpressionContext ctx) { copyFrom(ctx); }
+
+		public AssignmentExpression1Context(AssignmentExpressionContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public LogicalOrExpressionContext logicalOrExpression() {
-			return getRuleContext(LogicalOrExpressionContext.class,0);
+			return getRuleContext(LogicalOrExpressionContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterAssignmentExpression1(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterAssignmentExpression1(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitAssignmentExpression1(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitAssignmentExpression1(this);
 		}
 	}
 
@@ -4870,27 +5088,33 @@ public class Compiler2015Parser extends Parser {
 		public UnaryExpressionContext a;
 		public AssignmentOperatorContext assignmentOperator;
 		public AssignmentExpressionContext b;
-		public AssignmentExpression2Context(AssignmentExpressionContext ctx) { copyFrom(ctx); }
+
+		public AssignmentExpression2Context(AssignmentExpressionContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public AssignmentOperatorContext assignmentOperator() {
-			return getRuleContext(AssignmentOperatorContext.class,0);
+			return getRuleContext(AssignmentOperatorContext.class, 0);
 		}
 
 		public UnaryExpressionContext unaryExpression() {
-			return getRuleContext(UnaryExpressionContext.class,0);
+			return getRuleContext(UnaryExpressionContext.class, 0);
 		}
 
 		public AssignmentExpressionContext assignmentExpression() {
-			return getRuleContext(AssignmentExpressionContext.class,0);
+			return getRuleContext(AssignmentExpressionContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterAssignmentExpression2(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterAssignmentExpression2(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitAssignmentExpression2(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitAssignmentExpression2(this);
 		}
 	}
 
@@ -4898,36 +5122,52 @@ public class Compiler2015Parser extends Parser {
 		public AssignmentOperatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_assignmentOperator; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_assignmentOperator;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterAssignmentOperator(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterAssignmentOperator(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitAssignmentOperator(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitAssignmentOperator(this);
 		}
 	}
 
 	public static class ConstantExpressionContext extends ParserRuleContext {
 		public Expression ret;
 		public LogicalOrExpressionContext logicalOrExpression;
+
 		public ConstantExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 
 		public LogicalOrExpressionContext logicalOrExpression() {
-			return getRuleContext(LogicalOrExpressionContext.class,0);
+			return getRuleContext(LogicalOrExpressionContext.class, 0);
 		}
 
-		@Override public int getRuleIndex() { return RULE_constantExpression; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_constantExpression;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterConstantExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterConstantExpression(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitConstantExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitConstantExpression(this);
 		}
 	}
 
@@ -4935,6 +5175,7 @@ public class Compiler2015Parser extends Parser {
 		public Expression ret;
 		public LogicalAndExpressionContext a1;
 		public LogicalAndExpressionContext a2;
+
 		public LogicalOrExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4944,23 +5185,32 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public LogicalAndExpressionContext logicalAndExpression(int i) {
-			return getRuleContext(LogicalAndExpressionContext.class,i);
+			return getRuleContext(LogicalAndExpressionContext.class, i);
 		}
 
-		public List<TerminalNode> OrOr() { return getTokens(Compiler2015Parser.OrOr); }
+		public List<TerminalNode> OrOr() {
+			return getTokens(Compiler2015Parser.OrOr);
+		}
 
 		public TerminalNode OrOr(int i) {
 			return getToken(Compiler2015Parser.OrOr, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_logicalOrExpression; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_logicalOrExpression;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterLogicalOrExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterLogicalOrExpression(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitLogicalOrExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitLogicalOrExpression(this);
 		}
 	}
 
@@ -4968,6 +5218,7 @@ public class Compiler2015Parser extends Parser {
 		public Expression ret;
 		public InclusiveOrExpressionContext a1;
 		public InclusiveOrExpressionContext a2;
+
 		public LogicalAndExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4980,20 +5231,29 @@ public class Compiler2015Parser extends Parser {
 			return getRuleContext(InclusiveOrExpressionContext.class, i);
 		}
 
-		public List<TerminalNode> AndAnd() { return getTokens(Compiler2015Parser.AndAnd); }
+		public List<TerminalNode> AndAnd() {
+			return getTokens(Compiler2015Parser.AndAnd);
+		}
 
 		public TerminalNode AndAnd(int i) {
 			return getToken(Compiler2015Parser.AndAnd, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_logicalAndExpression; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_logicalAndExpression;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterLogicalAndExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterLogicalAndExpression(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitLogicalAndExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitLogicalAndExpression(this);
 		}
 	}
 
@@ -5001,6 +5261,7 @@ public class Compiler2015Parser extends Parser {
 		public Expression ret;
 		public ExclusiveOrExpressionContext a1;
 		public ExclusiveOrExpressionContext a2;
+
 		public InclusiveOrExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5010,23 +5271,32 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public ExclusiveOrExpressionContext exclusiveOrExpression(int i) {
-			return getRuleContext(ExclusiveOrExpressionContext.class,i);
+			return getRuleContext(ExclusiveOrExpressionContext.class, i);
 		}
 
-		public List<TerminalNode> Or() { return getTokens(Compiler2015Parser.Or); }
+		public List<TerminalNode> Or() {
+			return getTokens(Compiler2015Parser.Or);
+		}
 
 		public TerminalNode Or(int i) {
 			return getToken(Compiler2015Parser.Or, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_inclusiveOrExpression; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_inclusiveOrExpression;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterInclusiveOrExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterInclusiveOrExpression(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitInclusiveOrExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitInclusiveOrExpression(this);
 		}
 	}
 
@@ -5034,6 +5304,7 @@ public class Compiler2015Parser extends Parser {
 		public Expression ret;
 		public AndExpressionContext a1;
 		public AndExpressionContext a2;
+
 		public ExclusiveOrExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5046,20 +5317,29 @@ public class Compiler2015Parser extends Parser {
 			return getRuleContext(AndExpressionContext.class, i);
 		}
 
-		public List<TerminalNode> Caret() { return getTokens(Compiler2015Parser.Caret); }
+		public List<TerminalNode> Caret() {
+			return getTokens(Compiler2015Parser.Caret);
+		}
 
 		public TerminalNode Caret(int i) {
 			return getToken(Compiler2015Parser.Caret, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_exclusiveOrExpression; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_exclusiveOrExpression;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterExclusiveOrExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterExclusiveOrExpression(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitExclusiveOrExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitExclusiveOrExpression(this);
 		}
 	}
 
@@ -5067,6 +5347,7 @@ public class Compiler2015Parser extends Parser {
 		public Expression ret;
 		public EqualityExpressionContext a1;
 		public EqualityExpressionContext a2;
+
 		public AndExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5076,23 +5357,30 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public EqualityExpressionContext equalityExpression(int i) {
-			return getRuleContext(EqualityExpressionContext.class,i);
+			return getRuleContext(EqualityExpressionContext.class, i);
 		}
 
-		public List<TerminalNode> And() { return getTokens(Compiler2015Parser.And); }
+		public List<TerminalNode> And() {
+			return getTokens(Compiler2015Parser.And);
+		}
 
 		public TerminalNode And(int i) {
 			return getToken(Compiler2015Parser.And, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_andExpression; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_andExpression;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterAndExpression(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterAndExpression(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitAndExpression(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitAndExpression(this);
 		}
 	}
 
@@ -5101,6 +5389,7 @@ public class Compiler2015Parser extends Parser {
 		public RelationalExpressionContext a1;
 		public EqualityOperatorContext op;
 		public RelationalExpressionContext a2;
+
 		public EqualityExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5110,7 +5399,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public RelationalExpressionContext relationalExpression(int i) {
-			return getRuleContext(RelationalExpressionContext.class,i);
+			return getRuleContext(RelationalExpressionContext.class, i);
 		}
 
 		public List<EqualityOperatorContext> equalityOperator() {
@@ -5118,17 +5407,24 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public EqualityOperatorContext equalityOperator(int i) {
-			return getRuleContext(EqualityOperatorContext.class,i);
+			return getRuleContext(EqualityOperatorContext.class, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_equalityExpression; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_equalityExpression;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterEqualityExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterEqualityExpression(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitEqualityExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitEqualityExpression(this);
 		}
 	}
 
@@ -5136,14 +5432,20 @@ public class Compiler2015Parser extends Parser {
 		public EqualityOperatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_equalityOperator; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_equalityOperator;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterEqualityOperator(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterEqualityOperator(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitEqualityOperator(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitEqualityOperator(this);
 		}
 	}
 
@@ -5152,6 +5454,7 @@ public class Compiler2015Parser extends Parser {
 		public ShiftExpressionContext a1;
 		public RelationalOperatorContext op;
 		public ShiftExpressionContext a2;
+
 		public RelationalExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5161,7 +5464,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public ShiftExpressionContext shiftExpression(int i) {
-			return getRuleContext(ShiftExpressionContext.class,i);
+			return getRuleContext(ShiftExpressionContext.class, i);
 		}
 
 		public List<RelationalOperatorContext> relationalOperator() {
@@ -5169,17 +5472,24 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public RelationalOperatorContext relationalOperator(int i) {
-			return getRuleContext(RelationalOperatorContext.class,i);
+			return getRuleContext(RelationalOperatorContext.class, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_relationalExpression; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_relationalExpression;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterRelationalExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterRelationalExpression(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitRelationalExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitRelationalExpression(this);
 		}
 	}
 
@@ -5187,14 +5497,22 @@ public class Compiler2015Parser extends Parser {
 		public RelationalOperatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_relationalOperator; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_relationalOperator;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterRelationalOperator(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterRelationalOperator(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitRelationalOperator(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitRelationalOperator(this);
 		}
 	}
 
@@ -5203,6 +5521,7 @@ public class Compiler2015Parser extends Parser {
 		public AdditiveExpressionContext a1;
 		public ShiftOperatorContext op;
 		public AdditiveExpressionContext a2;
+
 		public ShiftExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5212,7 +5531,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public AdditiveExpressionContext additiveExpression(int i) {
-			return getRuleContext(AdditiveExpressionContext.class,i);
+			return getRuleContext(AdditiveExpressionContext.class, i);
 		}
 
 		public List<ShiftOperatorContext> shiftOperator() {
@@ -5220,17 +5539,22 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public ShiftOperatorContext shiftOperator(int i) {
-			return getRuleContext(ShiftOperatorContext.class,i);
+			return getRuleContext(ShiftOperatorContext.class, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_shiftExpression; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_shiftExpression;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterShiftExpression(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterShiftExpression(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitShiftExpression(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitShiftExpression(this);
 		}
 	}
 
@@ -5238,14 +5562,20 @@ public class Compiler2015Parser extends Parser {
 		public ShiftOperatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_shiftOperator; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_shiftOperator;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterShiftOperator(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterShiftOperator(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitShiftOperator(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitShiftOperator(this);
 		}
 	}
 
@@ -5254,6 +5584,7 @@ public class Compiler2015Parser extends Parser {
 		public MultiplicativeExpressionContext a1;
 		public AdditiveOperatorContext op;
 		public MultiplicativeExpressionContext a2;
+
 		public AdditiveExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5263,7 +5594,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public MultiplicativeExpressionContext multiplicativeExpression(int i) {
-			return getRuleContext(MultiplicativeExpressionContext.class,i);
+			return getRuleContext(MultiplicativeExpressionContext.class, i);
 		}
 
 		public List<AdditiveOperatorContext> additiveOperator() {
@@ -5271,17 +5602,24 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public AdditiveOperatorContext additiveOperator(int i) {
-			return getRuleContext(AdditiveOperatorContext.class,i);
+			return getRuleContext(AdditiveOperatorContext.class, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_additiveExpression; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_additiveExpression;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterAdditiveExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterAdditiveExpression(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitAdditiveExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitAdditiveExpression(this);
 		}
 	}
 
@@ -5289,14 +5627,20 @@ public class Compiler2015Parser extends Parser {
 		public AdditiveOperatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_additiveOperator; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_additiveOperator;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterAdditiveOperator(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterAdditiveOperator(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitAdditiveOperator(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitAdditiveOperator(this);
 		}
 	}
 
@@ -5306,6 +5650,7 @@ public class Compiler2015Parser extends Parser {
 		public CastExpressionContext castExpression;
 		public MultiplicativeOperatorContext op;
 		public CastExpressionContext a2;
+
 		public MultiplicativeExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5315,7 +5660,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public CastExpressionContext castExpression(int i) {
-			return getRuleContext(CastExpressionContext.class,i);
+			return getRuleContext(CastExpressionContext.class, i);
 		}
 
 		public List<MultiplicativeOperatorContext> multiplicativeOperator() {
@@ -5323,17 +5668,24 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public MultiplicativeOperatorContext multiplicativeOperator(int i) {
-			return getRuleContext(MultiplicativeOperatorContext.class,i);
+			return getRuleContext(MultiplicativeOperatorContext.class, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_multiplicativeExpression; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_multiplicativeExpression;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterMultiplicativeExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterMultiplicativeExpression(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitMultiplicativeExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitMultiplicativeExpression(this);
 		}
 	}
 
@@ -5341,25 +5693,39 @@ public class Compiler2015Parser extends Parser {
 		public MultiplicativeOperatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_multiplicativeOperator; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_multiplicativeOperator;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterMultiplicativeOperator(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterMultiplicativeOperator(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitMultiplicativeOperator(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitMultiplicativeOperator(this);
 		}
 	}
 
 	public static class CastExpressionContext extends ParserRuleContext {
 		public Expression ret;
+
 		public CastExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		public CastExpressionContext() { }
 
-		@Override public int getRuleIndex() { return RULE_castExpression; }
+		public CastExpressionContext() {
+		}
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_castExpression;
+		}
 
 		public void copyFrom(CastExpressionContext ctx) {
 			super.copyFrom(ctx);
@@ -5369,57 +5735,75 @@ public class Compiler2015Parser extends Parser {
 
 	public static class CastExpression1Context extends CastExpressionContext {
 		public UnaryExpressionContext unaryExpression;
-		public CastExpression1Context(CastExpressionContext ctx) { copyFrom(ctx); }
+
+		public CastExpression1Context(CastExpressionContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public UnaryExpressionContext unaryExpression() {
-			return getRuleContext(UnaryExpressionContext.class,0);
+			return getRuleContext(UnaryExpressionContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterCastExpression1(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterCastExpression1(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitCastExpression1(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitCastExpression1(this);
 		}
 	}
 
 	public static class CastExpression2Context extends CastExpressionContext {
 		public TypeNameContext typeName;
 		public CastExpressionContext c1;
-		public CastExpression2Context(CastExpressionContext ctx) { copyFrom(ctx); }
 
-		public TerminalNode L1() { return getToken(Compiler2015Parser.L1, 0); }
-
-		public TypeNameContext typeName() {
-			return getRuleContext(TypeNameContext.class,0);
+		public CastExpression2Context(CastExpressionContext ctx) {
+			copyFrom(ctx);
 		}
 
-		public TerminalNode R1() { return getToken(Compiler2015Parser.R1, 0); }
+		public TerminalNode L1() {
+			return getToken(Compiler2015Parser.L1, 0);
+		}
+
+		public TypeNameContext typeName() {
+			return getRuleContext(TypeNameContext.class, 0);
+		}
+
+		public TerminalNode R1() {
+			return getToken(Compiler2015Parser.R1, 0);
+		}
 
 		public CastExpressionContext castExpression() {
-			return getRuleContext(CastExpressionContext.class,0);
+			return getRuleContext(CastExpressionContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterCastExpression2(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterCastExpression2(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitCastExpression2(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitCastExpression2(this);
 		}
 	}
 
 	public static class TypeNameContext extends ParserRuleContext {
 		public Type ret;
+
 		public TypeNameContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		public TypeNameContext() { }
 
-		@Override public int getRuleIndex() { return RULE_typeName; }
+		public TypeNameContext() {
+		}
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_typeName;
+		}
 
 		public void copyFrom(TypeNameContext ctx) {
 			super.copyFrom(ctx);
@@ -5429,52 +5813,66 @@ public class Compiler2015Parser extends Parser {
 
 	public static class TypeName1Context extends TypeNameContext {
 		public TypeSpecifierContext typeSpecifier;
-		public TypeName1Context(TypeNameContext ctx) { copyFrom(ctx); }
+
+		public TypeName1Context(TypeNameContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public TypeSpecifierContext typeSpecifier() {
-			return getRuleContext(TypeSpecifierContext.class,0);
+			return getRuleContext(TypeSpecifierContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterTypeName1(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterTypeName1(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitTypeName1(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitTypeName1(this);
 		}
 	}
 
 	public static class TypeName2Context extends TypeNameContext {
 		public TypeSpecifierContext typeSpecifier;
-		public TypeName2Context(TypeNameContext ctx) { copyFrom(ctx); }
+
+		public TypeName2Context(TypeNameContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public TypeSpecifierContext typeSpecifier() {
-			return getRuleContext(TypeSpecifierContext.class,0);
+			return getRuleContext(TypeSpecifierContext.class, 0);
 		}
 
 		public AbstractDeclaratorContext abstractDeclarator() {
-			return getRuleContext(AbstractDeclaratorContext.class,0);
+			return getRuleContext(AbstractDeclaratorContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterTypeName2(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterTypeName2(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitTypeName2(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitTypeName2(this);
 		}
 	}
 
 	public static class UnaryExpressionContext extends ParserRuleContext {
 		public Expression ret;
+
 		public UnaryExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		public UnaryExpressionContext() { }
 
-		@Override public int getRuleIndex() { return RULE_unaryExpression; }
+		public UnaryExpressionContext() {
+		}
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_unaryExpression;
+		}
 
 		public void copyFrom(UnaryExpressionContext ctx) {
 			super.copyFrom(ctx);
@@ -5484,45 +5882,58 @@ public class Compiler2015Parser extends Parser {
 
 	public static class UnaryExpression2Context extends UnaryExpressionContext {
 		public UnaryExpressionContext u1;
-		public UnaryExpression2Context(UnaryExpressionContext ctx) { copyFrom(ctx); }
+
+		public UnaryExpression2Context(UnaryExpressionContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public UnaryExpressionContext unaryExpression() {
-			return getRuleContext(UnaryExpressionContext.class,0);
+			return getRuleContext(UnaryExpressionContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterUnaryExpression2(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression2(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitUnaryExpression2(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression2(this);
 		}
 	}
 
 	public static class UnaryExpression1Context extends UnaryExpressionContext {
 		public PostfixExpressionContext postfixExpression;
-		public UnaryExpression1Context(UnaryExpressionContext ctx) { copyFrom(ctx); }
+
+		public UnaryExpression1Context(UnaryExpressionContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public PostfixExpressionContext postfixExpression() {
-			return getRuleContext(PostfixExpressionContext.class,0);
+			return getRuleContext(PostfixExpressionContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterUnaryExpression1(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression1(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitUnaryExpression1(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression1(this);
 		}
 	}
 
 	public static class UnaryExpression6Context extends UnaryExpressionContext {
 		public TypeNameContext typeName;
-		public UnaryExpression6Context(UnaryExpressionContext ctx) { copyFrom(ctx); }
 
-		public TerminalNode SizeOf() { return getToken(Compiler2015Parser.SizeOf, 0); }
+		public UnaryExpression6Context(UnaryExpressionContext ctx) {
+			copyFrom(ctx);
+		}
+
+		public TerminalNode SizeOf() {
+			return getToken(Compiler2015Parser.SizeOf, 0);
+		}
 
 		public TypeNameContext typeName() {
 			return getRuleContext(TypeNameContext.class, 0);
@@ -5530,70 +5941,87 @@ public class Compiler2015Parser extends Parser {
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterUnaryExpression6(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression6(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitUnaryExpression6(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression6(this);
 		}
 	}
 
 	public static class UnaryExpression5Context extends UnaryExpressionContext {
 		public Token Identifier;
-		public UnaryExpression5Context(UnaryExpressionContext ctx) { copyFrom(ctx); }
 
-		public TerminalNode SizeOf() { return getToken(Compiler2015Parser.SizeOf, 0); }
+		public UnaryExpression5Context(UnaryExpressionContext ctx) {
+			copyFrom(ctx);
+		}
 
-		public TerminalNode Identifier() { return getToken(Compiler2015Parser.Identifier, 0); }
+		public TerminalNode SizeOf() {
+			return getToken(Compiler2015Parser.SizeOf, 0);
+		}
+
+		public TerminalNode Identifier() {
+			return getToken(Compiler2015Parser.Identifier, 0);
+		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterUnaryExpression5(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression5(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitUnaryExpression5(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression5(this);
 		}
 	}
 
 	public static class UnaryExpression4Context extends UnaryExpressionContext {
 		public UnaryOperatorContext op;
 		public CastExpressionContext a2;
-		public UnaryExpression4Context(UnaryExpressionContext ctx) { copyFrom(ctx); }
+
+		public UnaryExpression4Context(UnaryExpressionContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public UnaryOperatorContext unaryOperator() {
 			return getRuleContext(UnaryOperatorContext.class, 0);
 		}
 
 		public CastExpressionContext castExpression() {
-			return getRuleContext(CastExpressionContext.class,0);
+			return getRuleContext(CastExpressionContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterUnaryExpression4(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression4(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitUnaryExpression4(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression4(this);
 		}
 	}
 
 	public static class UnaryExpression3Context extends UnaryExpressionContext {
 		public UnaryExpressionContext u2;
-		public UnaryExpression3Context(UnaryExpressionContext ctx) { copyFrom(ctx); }
+
+		public UnaryExpression3Context(UnaryExpressionContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public UnaryExpressionContext unaryExpression() {
-			return getRuleContext(UnaryExpressionContext.class,0);
+			return getRuleContext(UnaryExpressionContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterUnaryExpression3(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression3(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitUnaryExpression3(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression3(this);
 		}
 	}
 
@@ -5617,6 +6045,7 @@ public class Compiler2015Parser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression8(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression8(this);
@@ -5625,21 +6054,27 @@ public class Compiler2015Parser extends Parser {
 
 	public static class UnaryExpression7Context extends UnaryExpressionContext {
 		public UnaryExpressionContext u3;
-		public UnaryExpression7Context(UnaryExpressionContext ctx) { copyFrom(ctx); }
 
-		public TerminalNode SizeOf() { return getToken(Compiler2015Parser.SizeOf, 0); }
+		public UnaryExpression7Context(UnaryExpressionContext ctx) {
+			copyFrom(ctx);
+		}
+
+		public TerminalNode SizeOf() {
+			return getToken(Compiler2015Parser.SizeOf, 0);
+		}
 
 		public UnaryExpressionContext unaryExpression() {
-			return getRuleContext(UnaryExpressionContext.class,0);
+			return getRuleContext(UnaryExpressionContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterUnaryExpression7(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryExpression7(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitUnaryExpression7(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryExpression7(this);
 		}
 	}
 
@@ -5647,25 +6082,32 @@ public class Compiler2015Parser extends Parser {
 		public UnaryOperatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_unaryOperator; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_unaryOperator;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterUnaryOperator(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterUnaryOperator(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitUnaryOperator(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitUnaryOperator(this);
 		}
 	}
 
 	public static class PostfixExpressionContext extends ParserRuleContext {
 		public Expression ret;
-		public ArrayList<Expression> arg =  null;
+		public ArrayList<Expression> arg = null;
 		public PostfixExpressionContext p;
 		public PrimaryExpressionContext primaryExpression;
 		public ExpressionContext expression;
 		public ArgumentsContext arguments;
 		public Token Identifier;
+
 		public PostfixExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5686,16 +6128,24 @@ public class Compiler2015Parser extends Parser {
 			return getRuleContext(ArgumentsContext.class, 0);
 		}
 
-		public TerminalNode Identifier() { return getToken(Compiler2015Parser.Identifier, 0); }
+		public TerminalNode Identifier() {
+			return getToken(Compiler2015Parser.Identifier, 0);
+		}
 
-		@Override public int getRuleIndex() { return RULE_postfixExpression; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_postfixExpression;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterPostfixExpression(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterPostfixExpression(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitPostfixExpression(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitPostfixExpression(this);
 		}
 	}
 
@@ -5703,6 +6153,7 @@ public class Compiler2015Parser extends Parser {
 		public ArrayList<Expression> ret;
 		public AssignmentExpressionContext a1;
 		public AssignmentExpressionContext a2;
+
 		public ArgumentsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5712,35 +6163,48 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public AssignmentExpressionContext assignmentExpression(int i) {
-			return getRuleContext(AssignmentExpressionContext.class,i);
+			return getRuleContext(AssignmentExpressionContext.class, i);
 		}
 
-		public List<TerminalNode> Comma() { return getTokens(Compiler2015Parser.Comma); }
+		public List<TerminalNode> Comma() {
+			return getTokens(Compiler2015Parser.Comma);
+		}
 
 		public TerminalNode Comma(int i) {
 			return getToken(Compiler2015Parser.Comma, i);
 		}
 
-		@Override public int getRuleIndex() { return RULE_arguments; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_arguments;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterArguments(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterArguments(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitArguments(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitArguments(this);
 		}
 	}
 
 	public static class PrimaryExpressionContext extends ParserRuleContext {
 		public Expression ret;
 		public ArrayList<String> s;
+
 		public PrimaryExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		public PrimaryExpressionContext() { }
 
-		@Override public int getRuleIndex() { return RULE_primaryExpression; }
+		public PrimaryExpressionContext() {
+		}
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_primaryExpression;
+		}
 
 		public void copyFrom(PrimaryExpressionContext ctx) {
 			super.copyFrom(ctx);
@@ -5751,25 +6215,38 @@ public class Compiler2015Parser extends Parser {
 
 	public static class PrimaryExpression1Context extends PrimaryExpressionContext {
 		public Token Identifier;
-		public PrimaryExpression1Context(PrimaryExpressionContext ctx) { copyFrom(ctx); }
 
-		public TerminalNode Identifier() { return getToken(Compiler2015Parser.Identifier, 0); }
+		public PrimaryExpression1Context(PrimaryExpressionContext ctx) {
+			copyFrom(ctx);
+		}
+
+		public TerminalNode Identifier() {
+			return getToken(Compiler2015Parser.Identifier, 0);
+		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterPrimaryExpression1(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterPrimaryExpression1(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitPrimaryExpression1(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitPrimaryExpression1(this);
 		}
 	}
 
 	public static class PrimaryExpression3Context extends PrimaryExpressionContext {
 		public Token StringLiteral;
-		public PrimaryExpression3Context(PrimaryExpressionContext ctx) { copyFrom(ctx); }
 
-		public List<TerminalNode> StringLiteral() { return getTokens(Compiler2015Parser.StringLiteral); }
+		public PrimaryExpression3Context(PrimaryExpressionContext ctx) {
+			copyFrom(ctx);
+		}
+
+		public List<TerminalNode> StringLiteral() {
+			return getTokens(Compiler2015Parser.StringLiteral);
+		}
 
 		public TerminalNode StringLiteral(int i) {
 			return getToken(Compiler2015Parser.StringLiteral, i);
@@ -5777,104 +6254,131 @@ public class Compiler2015Parser extends Parser {
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterPrimaryExpression3(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterPrimaryExpression3(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitPrimaryExpression3(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitPrimaryExpression3(this);
 		}
 	}
 
 	public static class PrimaryExpression2Context extends PrimaryExpressionContext {
 		public ConstantContext constant;
-		public PrimaryExpression2Context(PrimaryExpressionContext ctx) { copyFrom(ctx); }
+
+		public PrimaryExpression2Context(PrimaryExpressionContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public ConstantContext constant() {
-			return getRuleContext(ConstantContext.class,0);
+			return getRuleContext(ConstantContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterPrimaryExpression2(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterPrimaryExpression2(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitPrimaryExpression2(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitPrimaryExpression2(this);
 		}
 	}
 
 	public static class PrimaryExpression5Context extends PrimaryExpressionContext {
 		public LambdaExpressionContext lambdaExpression;
-		public PrimaryExpression5Context(PrimaryExpressionContext ctx) { copyFrom(ctx); }
+
+		public PrimaryExpression5Context(PrimaryExpressionContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public LambdaExpressionContext lambdaExpression() {
-			return getRuleContext(LambdaExpressionContext.class,0);
+			return getRuleContext(LambdaExpressionContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterPrimaryExpression5(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterPrimaryExpression5(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitPrimaryExpression5(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitPrimaryExpression5(this);
 		}
 	}
 
 	public static class PrimaryExpression4Context extends PrimaryExpressionContext {
 		public ExpressionContext expression;
-		public PrimaryExpression4Context(PrimaryExpressionContext ctx) { copyFrom(ctx); }
+
+		public PrimaryExpression4Context(PrimaryExpressionContext ctx) {
+			copyFrom(ctx);
+		}
 
 		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class, 0);
 		}
 
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterPrimaryExpression4(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).enterPrimaryExpression4(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitPrimaryExpression4(this);
+			if (listener instanceof Compiler2015Listener)
+				((Compiler2015Listener) listener).exitPrimaryExpression4(this);
 		}
 	}
 
 	public static class LambdaExpressionContext extends ParserRuleContext {
 		public Expression ret;
-		public Type type =  null;
-		public CompoundStatement s =  null;
+		public Type type = null;
+		public CompoundStatement s = null;
 		public ArrayList<Type> parameterTypes;
 		public ArrayList<String> parameterNames;
-		public boolean hasVaList =  false;
-		public int uId =  -1;
-		public Stack<Loop> loopStack =  null;
+		public boolean hasVaList = false;
+		public int uId = -1;
+		public Stack<Loop> loopStack = null;
 		public ParameterTypeListContext parameterTypeList;
 		public TypeNameContext typeName;
 		public CompoundStatementContext compoundStatement;
+
 		public LambdaExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 
 		public CompoundStatementContext compoundStatement() {
-			return getRuleContext(CompoundStatementContext.class,0);
+			return getRuleContext(CompoundStatementContext.class, 0);
 		}
 
 		public ParameterTypeListContext parameterTypeList() {
-			return getRuleContext(ParameterTypeListContext.class,0);
+			return getRuleContext(ParameterTypeListContext.class, 0);
 		}
 
 		public TypeNameContext typeName() {
-			return getRuleContext(TypeNameContext.class,0);
+			return getRuleContext(TypeNameContext.class, 0);
 		}
 
-		@Override public int getRuleIndex() { return RULE_lambdaExpression; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_lambdaExpression;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterLambdaExpression(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterLambdaExpression(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitLambdaExpression(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitLambdaExpression(this);
 		}
 	}
 
@@ -5884,26 +6388,40 @@ public class Compiler2015Parser extends Parser {
 		public Token OctalConstant;
 		public Token HexadecimalConstant;
 		public Token CharacterConstant;
+
 		public ConstantContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 
-		public TerminalNode DecimalConstant() { return getToken(Compiler2015Parser.DecimalConstant, 0); }
+		public TerminalNode DecimalConstant() {
+			return getToken(Compiler2015Parser.DecimalConstant, 0);
+		}
 
-		public TerminalNode OctalConstant() { return getToken(Compiler2015Parser.OctalConstant, 0); }
+		public TerminalNode OctalConstant() {
+			return getToken(Compiler2015Parser.OctalConstant, 0);
+		}
 
-		public TerminalNode HexadecimalConstant() { return getToken(Compiler2015Parser.HexadecimalConstant, 0); }
+		public TerminalNode HexadecimalConstant() {
+			return getToken(Compiler2015Parser.HexadecimalConstant, 0);
+		}
 
-		public TerminalNode CharacterConstant() { return getToken(Compiler2015Parser.CharacterConstant, 0); }
+		public TerminalNode CharacterConstant() {
+			return getToken(Compiler2015Parser.CharacterConstant, 0);
+		}
 
-		@Override public int getRuleIndex() { return RULE_constant; }
+		@Override
+		public int getRuleIndex() {
+			return RULE_constant;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).enterConstant(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).enterConstant(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Compiler2015Listener ) ((Compiler2015Listener)listener).exitConstant(this);
+			if (listener instanceof Compiler2015Listener) ((Compiler2015Listener) listener).exitConstant(this);
 		}
 	}
 }

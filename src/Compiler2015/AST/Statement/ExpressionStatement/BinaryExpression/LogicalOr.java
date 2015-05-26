@@ -90,8 +90,7 @@ public class LogicalOr extends BinaryExpression implements Logical {
 			rightP.emitCFG(trueTo, falseTo);
 			leftP.emitCFG(trueTo, rightP.getStartNode());
 			beginCFGBlock = leftP.getStartNode();
-		}
-		else if (left instanceof Logical) { // left is Logical but right is not
+		} else if (left instanceof Logical) { // left is Logical but right is not
 			Logical leftP = (Logical) left;
 			right.emitCFG();
 			right.endCFGBlock.unconditionalNext = trueTo;
@@ -99,8 +98,7 @@ public class LogicalOr extends BinaryExpression implements Logical {
 //			right.endCFGBlock.branchIfFalse = falseTo;
 			leftP.emitCFG(trueTo, right.beginCFGBlock);
 			beginCFGBlock = leftP.getStartNode();
-		}
-		else if (right instanceof Logical) { // left is not Logical but right is
+		} else if (right instanceof Logical) { // left is not Logical but right is
 			Logical rightP = (Logical) right;
 			rightP.emitCFG(trueTo, falseTo);
 			left.emitCFG();
@@ -108,8 +106,7 @@ public class LogicalOr extends BinaryExpression implements Logical {
 			left.setBranch(right.beginCFGBlock, left.tempRegister);
 //			left.endCFGBlock.branchIfFalse = right.beginCFGBlock;
 			beginCFGBlock = left.beginCFGBlock;
-		}
-		else { // left is not Logical while right is not neither
+		} else { // left is not Logical while right is not neither
 			left.emitCFG();
 			right.emitCFG();
 			left.endCFGBlock.unconditionalNext = trueTo;

@@ -7,9 +7,6 @@ import java.util.HashSet;
 
 public final class LengauerTarjan {
 
-	public static HashSet<CFGVertex> vertices;
-	public static CFGVertex root;
-	public static int n;
 	public static VertexInfo vi[];
 
 	public static void compress(VertexInfo v) {
@@ -30,8 +27,6 @@ public final class LengauerTarjan {
 	}
 
 	public static void process(HashSet<CFGVertex> vertices, CFGVertex root, int n) {
-		LengauerTarjan.vertices = vertices;
-		LengauerTarjan.root = root;
 		vi = new VertexInfo[n + 1];
 		for (int i = 1; i <= n; ++i) vi[i] = new VertexInfo();
 		// add predecessor edges

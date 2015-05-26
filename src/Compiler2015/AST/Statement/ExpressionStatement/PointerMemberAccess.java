@@ -13,8 +13,6 @@ import Compiler2015.Type.Pointer;
 import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
 
-import java.util.HashMap;
-
 /**
  * a->b
  */
@@ -46,11 +44,6 @@ public class PointerMemberAccess extends Expression {
 	}
 
 	@Override
-	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
-		su.collectGlobalNonArrayVariablesUsed(dumpTo);
-	}
-
-	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
 		Type l = Pointer.getPointTo(su.type);
 		if (!(l instanceof StructOrUnionType))
@@ -64,8 +57,7 @@ public class PointerMemberAccess extends Expression {
 		if (this.type instanceof ArrayPointerType || this.type instanceof StructOrUnionType) {
 			tempRegister = Environment.getVirtualRegister();
 			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, su.tempRegister, new ImmediateValue(delta)));
-		}
-		else {
+		} else {
 			tempRegister = new ArrayRegister((VirtualRegister) su.tempRegister, new ImmediateValue(delta), type.sizeof());
 		}
 	}

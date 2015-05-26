@@ -12,8 +12,6 @@ import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.StructOrUnionType;
 import Compiler2015.Type.Type;
 
-import java.util.HashMap;
-
 /**
  * a.b
  */
@@ -41,11 +39,6 @@ public class MemberAccess extends Expression {
 	@Override
 	public String toString() {
 		return String.format("(.%s %s)", memberName, su.toString());
-	}
-
-	@Override
-	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
-		su.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
 
 	@Override

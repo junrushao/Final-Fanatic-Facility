@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DepthFirstSearcher {
-	public static HashSet<CFGVertex> vertices;
 	public static int timeStamp;
 
 	public static void depthFirstSearch(CFGVertex vertex) {
@@ -19,7 +18,6 @@ public class DepthFirstSearcher {
 	}
 
 	public static int process(HashSet<CFGVertex> vertices, CFGVertex root) {
-		DepthFirstSearcher.vertices = vertices;
 		timeStamp = 0;
 		vertices.stream().forEach(x -> x.id = -1);
 		depthFirstSearch(root);

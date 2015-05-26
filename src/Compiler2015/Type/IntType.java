@@ -12,11 +12,6 @@ public class IntType extends Type {
 	}
 
 	@Override
-	public int classifiedSizeof() {
-		return 4;
-	}
-
-	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof IntType;
 	}
@@ -26,6 +21,7 @@ public class IntType extends Type {
 		return "int";
 	}
 
+	@SuppressWarnings("CloneDoesntCallSuperClone")
 	@Override
 	public IntType clone() {
 		return instance;

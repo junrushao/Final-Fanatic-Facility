@@ -6,12 +6,10 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.IR.CFG.ControlFlowGraph;
-import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.IntType;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * if (e) ifTrue else ifFalse
@@ -62,8 +60,7 @@ public class IfStatement extends Statement {
 				beginCFGBlock = ifTrue.beginCFGBlock;
 				endCFGBlock = ifTrue.endCFGBlock;
 			}
-		}
-		else {
+		} else {
 			CFGVertex out = endCFGBlock = ControlFlowGraph.getNewVertex();
 			ifTrue.emitCFG();
 			if (ifTrue.endCFGBlock.unconditionalNext == null)
@@ -88,16 +85,6 @@ public class IfStatement extends Statement {
 				e.endCFGBlock.branchIfFalse = Else;
 			}
 		}
-	}
-
-	@Override
-	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
-		if (e != null)
-			e.collectGlobalNonArrayVariablesUsed(dumpTo);
-		if (ifTrue != null)
-			ifTrue.collectGlobalNonArrayVariablesUsed(dumpTo);
-		if (ifFalse != null)
-			ifFalse.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
 
 	@Override

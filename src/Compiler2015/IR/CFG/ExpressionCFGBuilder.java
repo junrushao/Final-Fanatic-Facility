@@ -15,8 +15,7 @@ public class ExpressionCFGBuilder {
 	public void addInstruction(IRInstruction i) {
 		if (t.unconditionalNext == null && t.branchIfFalse == null) {
 			t.internal.add(i);
-		}
-		else {
+		} else {
 			CFGVertex newT = ControlFlowGraph.getNewVertex();
 			if (t.unconditionalNext != null)
 				throw new CompilationError("Internal Error.");
@@ -36,15 +35,11 @@ public class ExpressionCFGBuilder {
 			t.branchIfFalse = sp.branchIfFalse;
 			sp.branchIfFalse = null;
 			t = tp;
-		}
-		else {
+		} else {
 			if (t.unconditionalNext == null)
 				t.unconditionalNext = sp;
 			t = tp;
 		}
 	}
 
-	public void addBlock(CFGVertex tp) {
-		t = tp;
-	}
 }

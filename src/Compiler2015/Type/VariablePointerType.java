@@ -4,17 +4,13 @@ import Compiler2015.Utility.Panel;
 
 public class VariablePointerType extends Pointer {
 	public Type pointTo;
+
 	public VariablePointerType(Type pointTo) {
 		this.pointTo = pointTo;
 	}
 
 	@Override
 	public int sizeof() {
-		return Panel.getPointerSize();
-	}
-
-	@Override
-	public int classifiedSizeof() {
 		return Panel.getPointerSize();
 	}
 

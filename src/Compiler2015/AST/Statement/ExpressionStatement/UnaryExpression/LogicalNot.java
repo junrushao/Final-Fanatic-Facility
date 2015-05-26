@@ -47,8 +47,7 @@ public class LogicalNot extends UnaryExpression implements Logical {
 			Logical ep = (Logical) e;
 			ep.emitCFG(falseTo, trueTo);
 			beginCFGBlock = ep.getStartNode();
-		}
-		else {
+		} else {
 			e.emitCFG();
 			e.endCFGBlock.unconditionalNext = falseTo;
 			e.endCFGBlock.branchIfFalse = trueTo;

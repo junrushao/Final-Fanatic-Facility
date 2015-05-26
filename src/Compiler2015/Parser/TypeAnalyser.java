@@ -83,8 +83,7 @@ public final class TypeAnalyser {
 					for (int i = 0; i < e.types.size(); ++i)
 						emptyNames.add("");
 					ret = new FunctionType(ret, e.types, emptyNames, e.hasVaList);
-				}
-				else {
+				} else {
 					if (e.names == null)
 						e.names = new ArrayList<>();
 					ret = new FunctionType(ret, e.types, e.names, e.hasVaList);

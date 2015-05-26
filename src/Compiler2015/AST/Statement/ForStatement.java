@@ -6,12 +6,10 @@ import Compiler2015.AST.Statement.ExpressionStatement.Expression;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.IR.CFG.ControlFlowGraph;
-import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.IntType;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * for (a; b; c) d
@@ -81,8 +79,7 @@ public class ForStatement extends Statement implements Loop {
 			a.emitCFG();
 			beginCFGBlock = a.beginCFGBlock;
 			a.endCFGBlock.unconditionalNext = loop;
-		}
-		else {
+		} else {
 			beginCFGBlock = loop;
 		}
 		if (c != null)
@@ -95,8 +92,7 @@ public class ForStatement extends Statement implements Loop {
 			if (d.endCFGBlock.unconditionalNext == null)
 				d.endCFGBlock.unconditionalNext = c.beginCFGBlock;
 			c.endCFGBlock.unconditionalNext = loop;
-		}
-		else {
+		} else {
 			if (d.endCFGBlock.unconditionalNext == null)
 				d.endCFGBlock.unconditionalNext = loop;
 		}
@@ -105,29 +101,15 @@ public class ForStatement extends Statement implements Loop {
 				Logical bp = (Logical) b;
 				bp.emitCFG(d.beginCFGBlock, out);
 				loop.unconditionalNext = bp.getStartNode();
-			}
-			else {
+			} else {
 				b.emitCFG();
 				b.endCFGBlock.unconditionalNext = d.beginCFGBlock;
 				b.endCFGBlock.branchIfFalse = out;
 				loop.unconditionalNext = b.beginCFGBlock;
 			}
-		}
-		else {
+		} else {
 			loop.unconditionalNext = d.beginCFGBlock;
 		}
-	}
-
-	@Override
-	public void collectGlobalNonArrayVariablesUsed(HashMap<Integer, VirtualRegister> dumpTo) {
-		if (a != null)
-			a.collectGlobalNonArrayVariablesUsed(dumpTo);
-		if (b != null)
-			b.collectGlobalNonArrayVariablesUsed(dumpTo);
-		if (c != null)
-			c.collectGlobalNonArrayVariablesUsed(dumpTo);
-		if (d != null)
-			d.collectGlobalNonArrayVariablesUsed(dumpTo);
 	}
 
 	@Override

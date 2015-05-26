@@ -1,7 +1,5 @@
 package Compiler2015.Type;
 
-import Compiler2015.Utility.Panel;
-
 public class FunctionPointerType extends Pointer {
 	public FunctionType pointTo;
 
@@ -17,11 +15,6 @@ public class FunctionPointerType extends Pointer {
 	@Override
 	public String toString() {
 		return "FunctionPointerType(" + pointTo.toString() + ")";
-	}
-
-	@Override
-	public int classifiedSizeof() {
-		return Panel.getPointerSize();
 	}
 
 	@Override

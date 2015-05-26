@@ -9,7 +9,6 @@ import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
 
@@ -22,8 +21,6 @@ public class Environment {
 	public static Stack<Integer> definedVariableInCurrentFrame;
 
 	public static ArrayList<SymbolTableEntry> classTable;
-	public static int totalTempRegisters;
-	public static HashMap<Integer, Integer> variableDelta;
 	public static int _pretend_being_private_sizeof;
 	public static int uIdOfPutChar;
 	public static int uIdOfGetChar;
@@ -69,8 +66,6 @@ public class Environment {
 		functionReturnStack = new Stack<>();
 		definedVariableInCurrentFrame = new Stack<>();
 		classTable = classNames.table;
-		totalTempRegisters = 0;
-		variableDelta = new HashMap<>();
 		globalNonArrayVariablesAndLocalAddressFetchedVariables = new HashSet<>();
 
 		uIdOfPutChar = symbolNames.defineVariable(
