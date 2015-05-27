@@ -23,6 +23,7 @@ import java.io.*;
 
 public class Main {
 	public InputStream inputFile = System.in;
+	public OutputStream outputFile = System.out;
 
 	public static void main(String args[]) {
 		try {
@@ -41,9 +42,14 @@ public class Main {
 			} catch (FileNotFoundException e) {
 				inputFile = System.in;
 			}
+			try {
+				outputFile = new BufferedOutputStream(new FileOutputStream("./test.s"));
+			} catch (FileNotFoundException e) {
+				outputFile = System.out;
+			}
 			Panel.prettyPrinterType = null;
 			Panel.emitAST = true;
-			Panel.emitCFG = false;
+			Panel.emitCFG = true;
 			Panel.checkMain = false;
 			return;
 		}
@@ -114,7 +120,7 @@ public class Main {
 			System.out.println(printer.toString());
 		}
 
-		PrintWriter out = new PrintWriter(System.out);
+		PrintWriter out = new PrintWriter(outputFile);
 		NaiveTranslator.generateGlobalVariables(out);
 		out.println(".text");
 		for (int i = 1, size = Environment.symbolNames.table.size(); i < size; ++i) { // prevent scanning the added registers
@@ -122,7 +128,7 @@ public class Main {
 			if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionType && entry.info != null) {
 				ControlFlowGraph.process((CompoundStatement) entry.info, entry.uId);
 				if (Panel.emitCFG)
-					System.out.println(ControlFlowGraph.toStr());
+					System.err.println(ControlFlowGraph.toStr());
 				NaiveTranslator.generateFunction(out);
 			}
 		}

@@ -1,7 +1,6 @@
 int printf(char *format, ...) {
 	va_list ap;
 	char *prev = format;
-	char *backup = format;
 	int arg, tmp, len;
 	va_start(ap, format);
 	for ( ; *format; ++format) {

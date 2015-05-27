@@ -457,8 +457,14 @@ public final class NaiveTranslator {
 					loadFromIRRegisterToTRegister(((SubtractReg) ins).rt, 1, out);
 					out.println("\tsubu $t2, $t0, $t1");
 					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+				} else if (ins instanceof NopForBranch) {
+					lastNop = ((NopForBranch) ins).rs;
+				} else if (ins instanceof Def) {
+					// do nothing
+					out.printf("");
 				} else if (ins instanceof Nop) {
-					lastNop = ((Nop) ins).rs;
+					// do nothing
+					out.printf("");
 				} else
 					throw new CompilationError("Internal Error.");
 			}

@@ -40,6 +40,16 @@ public class BitwiseNotReg extends IRInstruction {
 	}
 
 	@Override
+	public VirtualRegister[] getAllSSADef() {
+		return new VirtualRegister[]{detectVirtualRegister(rd)};
+	}
+
+	@Override
+	public VirtualRegister[] getAllSSAUse() {
+		return new VirtualRegister[]{detectVirtualRegister(rs)};
+	}
+
+	@Override
 	public String toString() {
 		return String.format("%s = ~%s", rd, rs);
 	}

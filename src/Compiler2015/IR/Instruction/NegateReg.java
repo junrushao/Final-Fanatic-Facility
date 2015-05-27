@@ -40,6 +40,16 @@ public class NegateReg extends IRInstruction {
 	}
 
 	@Override
+	public VirtualRegister[] getAllSSADef() {
+		return new VirtualRegister[]{detectVirtualRegister(rd)};
+	}
+
+	@Override
+	public VirtualRegister[] getAllSSAUse() {
+		return new VirtualRegister[0];
+	}
+
+	@Override
 	public String toString() {
 		return String.format("%s = -%s", rd, rs);
 	}

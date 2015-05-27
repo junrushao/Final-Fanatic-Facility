@@ -13,6 +13,11 @@ public class VirtualRegister implements IRRegister {
 		this.version = -1;
 	}
 
+	public VirtualRegister(int uId, int version) {
+		this.uId = uId;
+		this.version = version;
+	}
+
 	public void setVersion(int x) {
 		if (Environment.symbolNames.table.get(uId).scope != 1)
 			version = x;
@@ -48,5 +53,18 @@ public class VirtualRegister implements IRRegister {
 			e.printStackTrace();
 			throw new CompilationError("Internal Error.");
 		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		VirtualRegister register = (VirtualRegister) o;
+		return uId == register.uId && version == register.version;
+	}
+
+	@Override
+	public int hashCode() {
+		return 31 * uId + version + 1;
 	}
 }

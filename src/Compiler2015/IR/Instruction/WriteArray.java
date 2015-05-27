@@ -46,4 +46,14 @@ public class WriteArray extends IRInstruction {
 		if (rs instanceof VirtualRegister)
 			((VirtualRegister) rs).setVersion(version[0]);
 	}
+
+	@Override
+	public VirtualRegister[] getAllSSADef() {
+		return new VirtualRegister[]{new VirtualRegister(0, memoryVersion)};
+	}
+
+	@Override
+	public VirtualRegister[] getAllSSAUse() {
+		return new VirtualRegister[]{detectVirtualRegister(rd.a), detectVirtualRegister(rd.b), detectVirtualRegister(rs)};
+	}
 }

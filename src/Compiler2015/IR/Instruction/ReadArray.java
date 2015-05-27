@@ -37,6 +37,16 @@ public class ReadArray extends IRInstruction {
 	}
 
 	@Override
+	public VirtualRegister[] getAllSSADef() {
+		return new VirtualRegister[]{detectVirtualRegister(rd)};
+	}
+
+	@Override
+	public VirtualRegister[] getAllSSAUse() {
+		return new VirtualRegister[]{detectVirtualRegister(rs.a), detectVirtualRegister(rs.b), new VirtualRegister(0, memoryVersion)};
+	}
+
+	@Override
 	public String toString() {
 		return "ReadArray " + rd + " = " + rs + " -> M = " + memoryVersion;
 	}

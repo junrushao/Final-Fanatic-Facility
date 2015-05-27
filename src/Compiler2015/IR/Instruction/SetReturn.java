@@ -35,4 +35,14 @@ public class SetReturn extends IRInstruction {
 		if (v0 instanceof VirtualRegister)
 			((VirtualRegister) v0).setVersion(version[0]);
 	}
+
+	@Override
+	public VirtualRegister[] getAllSSADef() {
+		return new VirtualRegister[0];
+	}
+
+	@Override
+	public VirtualRegister[] getAllSSAUse() {
+		return new VirtualRegister[]{detectVirtualRegister(v0)};
+	}
 }

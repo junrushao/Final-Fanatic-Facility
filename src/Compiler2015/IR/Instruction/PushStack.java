@@ -40,4 +40,14 @@ public class PushStack extends IRInstruction {
 		if (push instanceof VirtualRegister)
 			((VirtualRegister) push).setVersion(version[0]);
 	}
+
+	@Override
+	public VirtualRegister[] getAllSSADef() {
+		return new VirtualRegister[0];
+	}
+
+	@Override
+	public VirtualRegister[] getAllSSAUse() {
+		return new VirtualRegister[]{detectVirtualRegister(push)};
+	}
 }

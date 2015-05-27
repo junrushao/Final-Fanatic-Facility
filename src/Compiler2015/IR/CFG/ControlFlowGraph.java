@@ -3,10 +3,16 @@ package Compiler2015.IR.CFG;
 import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.Instruction.Nop;
+import Compiler2015.IR.Analyser.DataFlow;
+import Compiler2015.IR.Analyser.DeadCodeElimination;
+import Compiler2015.IR.IRRegister.VirtualRegister;
+import Compiler2015.IR.Instruction.Def;
+import Compiler2015.IR.Instruction.IRInstruction;
+import Compiler2015.IR.Instruction.NopForBranch;
 import Compiler2015.IR.StaticSingleAssignment.LengauerTarjan;
 import Compiler2015.Type.FunctionType;
 import Compiler2015.Type.Type;
+import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
@@ -73,14 +79,44 @@ public class ControlFlowGraph {
 				x.branchRegister = x.internal.get(x.internal.size() - 1).rd.clone();
 			}
 			if (x.branchIfFalse != null) {
-				x.internal.add(new Nop(x.branchRegister));
+				x.internal.add(new NopForBranch(x.branchRegister));
 				x.branchRegister = null;
 			}
 		});
 
 		mergeBlocks();
 		splitEdges();
+		buildGraph();
+		defineExternalVariables();
 
+		DeadCodeElimination.process();
+		DataFlow.analyse();
+		LengauerTarjan.process(vertices, root, vertices.size());
+/*
+		// insert phi-functions
+		RegisterManager rm = new RegisterManager(body.givenVariables, root);
+		PhiInserter phiInserter = new PhiInserter(vertices, rm);
+		phiInserter.process();
+*/
+	}
+
+	public static void defineExternalVariables() {
+		ArrayList<IRInstruction> instructions = scope.givenVariables.stream().map(x -> new Def(new VirtualRegister(x))).collect(Collectors.toCollection(ArrayList::new));
+		Environment.symbolNames.table.stream().filter(e ->
+						e != null && e.scope == 1 && (e.type == Tokens.VARIABLE || e.type == Tokens.STRING_CONSTANT)
+		).forEach(e -> instructions.add(new Def(new VirtualRegister(e.uId))));
+		instructions.add(new Def(new VirtualRegister(0)));
+		instructions.addAll(root.internal);
+		root.internal = instructions;
+	}
+
+	public static void buildGraph() {
+		int n = DepthFirstSearcher.process(vertices, root);
+		List<CFGVertex> unreachable = vertices.stream().filter(x -> x.id == -1).collect(Collectors.toList());
+		unreachable.stream().forEach(vertices::remove);
+		if (vertices.size() != n)
+			throw new CompilationError("Internal Error.");
+		vertices.forEach(v -> v.predecessor = new HashMap<>());
 		vertices.stream().filter(v -> v.id != -1).forEach(v -> {
 			if (v.unconditionalNext != null)
 				v.unconditionalNext.predecessor.put(v, null);
@@ -91,14 +127,6 @@ public class ControlFlowGraph {
 			final int[] cnt = {0};
 			v.predecessor.entrySet().stream().forEach(e -> e.setValue(cnt[0]++));
 		});
-
-		LengauerTarjan.process(vertices, root, vertices.size());
-/*
-		// insert phi-functions
-		RegisterManager rm = new RegisterManager(body.givenVariables, root);
-		PhiInserter phiInserter = new PhiInserter(vertices, rm);
-		phiInserter.process();
-*/
 	}
 
 	public static void splitEdges() {

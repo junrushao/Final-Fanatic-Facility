@@ -39,6 +39,19 @@ public class PhiFunction extends IRInstruction {
 	}
 
 	@Override
+	public VirtualRegister[] getAllSSADef() {
+		return new VirtualRegister[]{detectVirtualRegister(rd)};
+	}
+
+	@Override
+	public VirtualRegister[] getAllSSAUse() {
+		VirtualRegister ret[] = new VirtualRegister[rs.length];
+		for (int i = 0; i < rs.length; ++i)
+			ret[i] = detectVirtualRegister(ret[i]);
+		return ret;
+	}
+
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(rd).append(" = phi(");

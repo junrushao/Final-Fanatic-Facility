@@ -1,5 +1,6 @@
 package Compiler2015.Utility;
 
+import java.util.HashSet;
 import java.util.List;
 
 public final class Utility {
@@ -47,5 +48,27 @@ public final class Utility {
 			sep = ", ";
 		}
 		return sb.append("}").toString();
+	}
+
+	public static class SetOperation<T> {
+		public HashSet<T> kickOut(HashSet<T> a, HashSet<T> b) {
+			HashSet<T> result = new HashSet<>(a);
+			b.stream().filter(result::contains).forEach(result::remove);
+			return result;
+		}
+
+		public HashSet<T> unionInto(HashSet<T> into, HashSet<T> from) {
+			from.forEach(into::add);
+			return into;
+		}
+
+		public boolean equal(HashSet<T> a, HashSet<T> b) {
+			if (a.size() != b.size())
+				return false;
+			for (T x : a)
+				if (!b.contains(x))
+					return false;
+			return true;
+		}
 	}
 }

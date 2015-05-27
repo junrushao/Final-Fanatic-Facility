@@ -3,30 +3,27 @@ package Compiler2015.IR.Instruction;
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 
-/**
- * rd = rs
- */
-public class Move extends IRInstruction {
+public class NopForBranch extends IRInstruction {
+
 	public IRRegister rs;
 
-	public Move(VirtualRegister rd, IRRegister rs) {
-		this.rd = rd.clone();
-		this.rs = rs.clone();
+	public NopForBranch(IRRegister rs) {
+		this.rd = null;
+		this.rs = rs;
 	}
 
 	@Override
 	public int[] getAllDef() {
-		return new int[]{rd.getUId()};
+		return new int[0];
 	}
 
 	@Override
 	public int[] getAllUse() {
-		return new int[]{rs.getUId()};
+		return new int[]{rs instanceof VirtualRegister ? rs.getUId() : -1};
 	}
 
 	@Override
 	public void setAllDefVersion(int[] version) {
-		rd.setVersion(version[0]);
 	}
 
 	@Override
@@ -37,7 +34,7 @@ public class Move extends IRInstruction {
 
 	@Override
 	public VirtualRegister[] getAllSSADef() {
-		return new VirtualRegister[]{detectVirtualRegister(rd)};
+		return new VirtualRegister[0];
 	}
 
 	@Override
@@ -47,6 +44,6 @@ public class Move extends IRInstruction {
 
 	@Override
 	public String toString() {
-		return "Move " + rd + " = " + rs;
+		return "NopForBranch " + rs;
 	}
 }

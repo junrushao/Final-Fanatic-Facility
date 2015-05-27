@@ -38,6 +38,8 @@ public class CompoundStatement extends Statement {
 	}
 
 	public void youAreAFrame(int currentScope) {
+//		System.err.println("givenVariables = " + givenVariables);
+		givenVariables = new ArrayList<>();
 		while (!Environment.definedVariableInCurrentFrame.isEmpty()) {
 			int uId = Environment.definedVariableInCurrentFrame.peek();
 			SymbolTableEntry e = Environment.symbolNames.table.get(uId);
@@ -46,6 +48,7 @@ public class CompoundStatement extends Statement {
 			Environment.definedVariableInCurrentFrame.pop();
 			givenVariables.add(uId);
 		}
+//		System.err.println("givenVariables = " + givenVariables);
 	}
 
 	public void addInitializers() {

@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class CFGVertex {
+	public ArrayList<IRInstruction> phiBlock = new ArrayList<>();
 	public ArrayList<IRInstruction> internal = new ArrayList<>();
 	public CFGVertex branchIfFalse = null;
 	public CFGVertex unconditionalNext = null;
@@ -22,13 +23,16 @@ public class CFGVertex {
 	public HashMap<CFGVertex, Integer> predecessor = new HashMap<>();
 	public HashSet<CFGVertex> dominanceFrontier = new HashSet<>();
 	public ArrayList<CFGVertex> children = new ArrayList<>();
-	public HashMap<Integer, PhiFunction> phis = new HashMap<>();
+
+	public HashSet<VirtualRegister> liveOut;
+	public HashSet<VirtualRegister> uEVar;
+	public HashSet<VirtualRegister> varKill;
 
 	protected CFGVertex() {
 	}
 
 	public void addPhi(int x) {
-		phis.put(x, new PhiFunction(predecessor.size(), new VirtualRegister(x)));
+		phiBlock.add(new PhiFunction(predecessor.size(), new VirtualRegister(x)));
 	}
 
 	@Override
@@ -38,10 +42,7 @@ public class CFGVertex {
 			sb.append(Utility.getIndent(2)).append("--> ").append(unconditionalNext.id).append(Utility.NEW_LINE);
 		if (branchIfFalse != null)
 			sb.append(Utility.getIndent(2)).append("--(BEQ 0)--> ").append(branchIfFalse.id).append("  ").append(branchRegister).append(Utility.NEW_LINE);
-		phis.entrySet().stream().forEach(
-				x -> sb.append(Utility.getIndent(2))
-						.append(new VirtualRegister(x.getKey()).toString())
-						.append("_").append(x.getValue().toString()).append(Utility.NEW_LINE));
+		phiBlock.stream().forEach(x -> sb.append(Utility.getIndent(2)).append(x).append(Utility.NEW_LINE));
 		internal.stream().forEach(x -> sb.append(Utility.getIndent(2)).append(x).append(Utility.NEW_LINE));
 		return sb.toString();
 	}

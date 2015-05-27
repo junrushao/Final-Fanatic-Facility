@@ -9,6 +9,7 @@ import Compiler2015.IR.IRRegister.VirtualRegister;
  */
 public class Call extends IRInstruction {
 	public IRRegister func;
+	public int memoryVersion = 0;
 
 	public Call(IRRegister func) {
 		this.rd = null;
@@ -21,8 +22,8 @@ public class Call extends IRInstruction {
 	}
 
 	@Override
-	public int[] getAllDef() {
-		return new int[0];
+	public int[] getAllDef() { // a function call might change memory
+		return new int[]{0};
 	}
 
 	@Override
@@ -32,11 +33,22 @@ public class Call extends IRInstruction {
 
 	@Override
 	public void setAllDefVersion(int[] version) {
+		memoryVersion = version[0];
 	}
 
 	@Override
 	public void setAllUseVersion(int[] version) {
 		if (func instanceof VirtualRegister)
 			((VirtualRegister) func).setVersion(version[0]);
+	}
+
+	@Override
+	public VirtualRegister[] getAllSSADef() {
+		return new VirtualRegister[]{new VirtualRegister(0, memoryVersion)};
+	}
+
+	@Override
+	public VirtualRegister[] getAllSSAUse() {
+		return new VirtualRegister[]{detectVirtualRegister(func)};
 	}
 }
