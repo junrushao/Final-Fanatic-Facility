@@ -17,32 +17,42 @@ public class SetReturn extends IRInstruction {
 	}
 
 	@Override
-	public int[] getAllDef() {
+	public int[] getAllDefUId() {
 		return new int[0];
 	}
 
 	@Override
-	public int[] getAllUse() {
+	public int[] getAllUseUId() {
 		return new int[]{v0.getUId()};
 	}
 
 	@Override
-	public void setAllDefVersion(int[] version) {
-	}
-
-	@Override
-	public void setAllUseVersion(int[] version) {
-		if (v0 instanceof VirtualRegister)
-			((VirtualRegister) v0).setVersion(version[0]);
-	}
-
-	@Override
-	public VirtualRegister[] getAllSSADef() {
+	public VirtualRegister[] getAllDefVR() {
 		return new VirtualRegister[0];
 	}
 
 	@Override
-	public VirtualRegister[] getAllSSAUse() {
+	public VirtualRegister[] getAllUseVR() {
 		return new VirtualRegister[]{detectVirtualRegister(v0)};
+	}
+
+	@Override
+	public IRRegister[] getAllDef() {
+		return new IRRegister[0];
+	}
+
+	@Override
+	public void setAllDef(IRRegister[] version) {
+	}
+
+	@Override
+	public IRRegister[] getAllUse() {
+		return new IRRegister[]{v0.clone()};
+	}
+
+	@Override
+	public void setAllUse(IRRegister[] version) {
+		if (version[0] != null)
+			v0 = version[0];
 	}
 }

@@ -44,7 +44,7 @@ public class ReturnStatement extends Statement {
 				throw new CompilationError("Internal Error.");
 //			endCFGBlock.internal.add(Pop.instance);
 		}
-		endCFGBlock.unconditionalNext = ControlFlowGraph.outBody;
+		endCFGBlock.unconditionalNext = ControlFlowGraph.sink;
 	}
 
 	@Override

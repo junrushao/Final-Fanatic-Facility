@@ -146,15 +146,15 @@ public class Assign extends BinaryExpression {
 				builder.addInstruction(new ReadArray(t, new ArrayRegister((VirtualRegister) right.tempRegister, new ImmediateValue(i), registerSize)));
 				builder.addInstruction(new WriteArray(new ArrayRegister((VirtualRegister) left.tempRegister, new ImmediateValue(i), registerSize), t));
 			}
-			tempRegister = left.tempRegister.clone();
+			tempRegister = right.tempRegister.clone();
 		} else if (left.tempRegister instanceof ArrayRegister) {
 			right.readInArrayRegister(builder);
 			builder.addInstruction(new WriteArray((ArrayRegister) left.tempRegister, right.tempRegister));
-			tempRegister = left.tempRegister.clone();
+			tempRegister = right.tempRegister.clone();
 		} else if (left.tempRegister instanceof VirtualRegister) {
 			right.readInArrayRegister(builder);
 			builder.addInstruction(new Move((VirtualRegister) left.tempRegister, right.tempRegister));
-			tempRegister = left.tempRegister.clone();
+			tempRegister = right.tempRegister.clone();
 		} else
 			throw new CompilationError("Internal Error.");
 	}

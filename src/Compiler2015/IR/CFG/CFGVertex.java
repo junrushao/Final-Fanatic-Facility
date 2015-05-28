@@ -20,7 +20,7 @@ public class CFGVertex {
 	public int id = 0;
 	public CFGVertex parent = null;
 	public CFGVertex idom = null;
-	public HashMap<CFGVertex, Integer> predecessor = new HashMap<>();
+	public HashMap<CFGVertex, Integer> predecessor;
 	public HashSet<CFGVertex> dominanceFrontier = new HashSet<>();
 	public ArrayList<CFGVertex> children = new ArrayList<>();
 

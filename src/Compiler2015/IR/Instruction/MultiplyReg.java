@@ -20,36 +20,47 @@ public class MultiplyReg extends IRInstruction {
 	}
 
 	@Override
-	public int[] getAllDef() {
+	public int[] getAllDefUId() {
 		return new int[]{rd.getUId()};
 	}
 
 	@Override
-	public int[] getAllUse() {
+	public int[] getAllUseUId() {
 		return new int[]{rs.getUId(), rt.getUId()};
 	}
 
 	@Override
-	public void setAllDefVersion(int[] version) {
-		rd.setVersion(version[0]);
-	}
-
-	@Override
-	public void setAllUseVersion(int[] version) {
-		if (rs instanceof VirtualRegister)
-			((VirtualRegister) rs).setVersion(version[0]);
-		if (rt instanceof VirtualRegister)
-			((VirtualRegister) rt).setVersion(version[1]);
-	}
-
-	@Override
-	public VirtualRegister[] getAllSSADef() {
+	public VirtualRegister[] getAllDefVR() {
 		return new VirtualRegister[]{detectVirtualRegister(rd)};
 	}
 
 	@Override
-	public VirtualRegister[] getAllSSAUse() {
+	public VirtualRegister[] getAllUseVR() {
 		return new VirtualRegister[]{detectVirtualRegister(rs), detectVirtualRegister(rt)};
+	}
+
+	@Override
+	public IRRegister[] getAllDef() {
+		return new IRRegister[]{rd.clone()};
+	}
+
+	@Override
+	public void setAllDef(IRRegister[] version) {
+		if (version[0] != null)
+			rd = (VirtualRegister) version[0].clone();
+	}
+
+	@Override
+	public IRRegister[] getAllUse() {
+		return new IRRegister[]{rs.clone(), rt.clone()};
+	}
+
+	@Override
+	public void setAllUse(IRRegister[] version) {
+		if (version[0] != null)
+			rs = version[0].clone();
+		if (version[1] != null)
+			rt = version[1].clone();
 	}
 
 	@Override

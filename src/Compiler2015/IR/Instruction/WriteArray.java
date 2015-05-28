@@ -11,7 +11,7 @@ import Compiler2015.IR.IRRegister.VirtualRegister;
 public class WriteArray extends IRInstruction {
 	public ArrayRegister rd;
 	public IRRegister rs;
-	public int memoryVersion = 0;
+	public int memoryVersion = -1;
 
 	public WriteArray(ArrayRegister rd, IRRegister rs) {
 		if (rs instanceof ArrayRegister)
@@ -26,34 +26,46 @@ public class WriteArray extends IRInstruction {
 	}
 
 	@Override
-	public int[] getAllDef() {
+	public int[] getAllDefUId() {
 		return new int[]{0};
 	}
 
 	@Override
-	public int[] getAllUse() {
+	public int[] getAllUseUId() {
 		return new int[]{rd.a.getUId(), rd.b.getUId(), rs.getUId()};
 	}
 
 	@Override
-	public void setAllDefVersion(int[] version) {
-		memoryVersion = version[0];
-	}
-
-	@Override
-	public void setAllUseVersion(int[] version) {
-		rd.a.setVersion(version[0]);
-		if (rs instanceof VirtualRegister)
-			((VirtualRegister) rs).setVersion(version[0]);
-	}
-
-	@Override
-	public VirtualRegister[] getAllSSADef() {
+	public VirtualRegister[] getAllDefVR() {
 		return new VirtualRegister[]{new VirtualRegister(0, memoryVersion)};
 	}
 
 	@Override
-	public VirtualRegister[] getAllSSAUse() {
+	public VirtualRegister[] getAllUseVR() {
 		return new VirtualRegister[]{detectVirtualRegister(rd.a), detectVirtualRegister(rd.b), detectVirtualRegister(rs)};
+	}
+
+	@Override
+	public IRRegister[] getAllDef() {
+		return new IRRegister[]{new VirtualRegister(0, memoryVersion)};
+	}
+
+	@Override
+	public void setAllDef(IRRegister[] version) {
+		if (version[0] != null)
+			memoryVersion = ((VirtualRegister) version[0]).version;
+	}
+
+	@Override
+	public IRRegister[] getAllUse() {
+		return new IRRegister[]{rd.a, rd.b, rs};
+	}
+
+	@Override
+	public void setAllUse(IRRegister[] version) {
+		if (version[0] != null)
+			rd.a = (VirtualRegister) version[0].clone();
+		if (version[2] != null)
+			rs = version[2].clone();
 	}
 }

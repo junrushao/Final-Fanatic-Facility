@@ -1,5 +1,6 @@
 package Compiler2015.IR.Instruction;
 
+import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 
@@ -7,48 +8,68 @@ public class PhiFunction extends IRInstruction {
 	IRRegister rs[];
 
 	public PhiFunction(int n, VirtualRegister rd) {
-		this.rd = rd;
-		this.rs = new VirtualRegister[n];
+		this.rd = rd.clone();
+		this.rs = new IRRegister[n];
 		for (int i = 0; i < n; ++i)
 			rs[i] = rd.clone();
 	}
 
 	@Override
-	public int[] getAllDef() {
+	public int[] getAllDefUId() {
 		return new int[]{rd.getUId()};
 	}
 
 	@Override
-	public int[] getAllUse() {
+	public int[] getAllUseUId() {
 		int use[] = new int[rs.length];
 		for (int i = 0; i < rs.length; ++i)
 			use[i] = rs[i].getUId();
 		return use;
 	}
 
-	@Override
-	public void setAllDefVersion(int[] version) {
-		rd.setVersion(version[0]);
+	public void setUse(int i, IRRegister newOne) {
+		if (newOne == null)
+			throw new CompilationError("Internal Error.");
+		rs[i] = newOne;
 	}
 
 	@Override
-	public void setAllUseVersion(int[] version) {
-		for (int i = 0; i < rs.length; ++i)
-			if (rs[i] instanceof VirtualRegister)
-				((VirtualRegister) rs[i]).setVersion(version[i]);
-	}
-
-	@Override
-	public VirtualRegister[] getAllSSADef() {
+	public VirtualRegister[] getAllDefVR() {
 		return new VirtualRegister[]{detectVirtualRegister(rd)};
 	}
 
 	@Override
-	public VirtualRegister[] getAllSSAUse() {
+	public VirtualRegister[] getAllUseVR() {
 		VirtualRegister ret[] = new VirtualRegister[rs.length];
 		for (int i = 0; i < rs.length; ++i)
-			ret[i] = detectVirtualRegister(ret[i]);
+			ret[i] = detectVirtualRegister(rs[i]);
 		return ret;
+	}
+
+	@Override
+	public IRRegister[] getAllDef() {
+		return new IRRegister[]{rd.clone()};
+	}
+
+	@Override
+	public void setAllDef(IRRegister[] version) {
+		if (version[0] != null)
+			rd = (VirtualRegister) version[0];
+	}
+
+	@Override
+	public IRRegister[] getAllUse() {
+		IRRegister ret[] = new IRRegister[rs.length];
+		for (int i = 0; i < rs.length; ++i)
+			ret[i] = rs[i].clone();
+		return ret;
+	}
+
+	@Override
+	public void setAllUse(IRRegister[] version) {
+		for (int i = 0; i < rs.length; ++i)
+			if (version[i] != null)
+				rs[i] = version[i];
 	}
 
 	@Override

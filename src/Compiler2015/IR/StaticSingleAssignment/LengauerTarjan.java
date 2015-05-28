@@ -69,7 +69,7 @@ public final class LengauerTarjan {
 			v.me.idom = v.idom.me;
 		}
 		vertices.forEach(v -> {
-			if (v != root) { // not root
+			if (v != root) { // not source
 				v.idom.children.add(v);
 			}
 		});

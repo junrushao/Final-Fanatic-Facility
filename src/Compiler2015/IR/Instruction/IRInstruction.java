@@ -7,17 +7,21 @@ public abstract class IRInstruction {
 
 	public VirtualRegister rd;
 
-	public abstract int[] getAllDef();
+	public abstract int[] getAllDefUId();
 
-	public abstract int[] getAllUse();
+	public abstract int[] getAllUseUId();
 
-	public abstract void setAllDefVersion(int version[]);
+	public abstract VirtualRegister[] getAllDefVR();
 
-	public abstract void setAllUseVersion(int version[]);
+	public abstract VirtualRegister[] getAllUseVR();
 
-	public abstract VirtualRegister[] getAllSSADef();
+	public abstract IRRegister[] getAllDef();
 
-	public abstract VirtualRegister[] getAllSSAUse();
+	public abstract void setAllDef(IRRegister version[]);
+
+	public abstract IRRegister[] getAllUse();
+
+	public abstract void setAllUse(IRRegister version[]);
 
 	public VirtualRegister detectVirtualRegister(IRRegister r) {
 		if (r instanceof VirtualRegister)

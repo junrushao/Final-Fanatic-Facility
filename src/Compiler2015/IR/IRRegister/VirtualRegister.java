@@ -19,8 +19,7 @@ public class VirtualRegister implements IRRegister {
 	}
 
 	public void setVersion(int x) {
-		if (Environment.symbolNames.table.get(uId).scope != 1)
-			version = x;
+		version = x;
 	}
 
 	@Override

@@ -28,4 +28,17 @@ public class ImmediateValue implements IRRegister {
 			throw new CompilationError("Internal Error.");
 		}
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ImmediateValue that = (ImmediateValue) o;
+		return a == that.a;
+	}
+
+	@Override
+	public int hashCode() {
+		return a;
+	}
 }

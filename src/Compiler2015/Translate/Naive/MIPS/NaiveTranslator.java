@@ -317,11 +317,11 @@ public final class NaiveTranslator {
 							out.printf("\taddiu $sp, $sp, %d%s", sizeOfExtraArguments, Utility.NEW_LINE);
 					}
 				} else if (ins instanceof FetchReturn) {
-					storeFromPhysicalRegisterToIRRegister("$v0", ins.getAllDef()[0], out);
+					storeFromPhysicalRegisterToIRRegister("$v0", ins.getAllDefUId()[0], out);
 					sizeOfAllArguments = sizeOfExtraArguments = 0;
 				} else if (ins instanceof Move) {
 					loadFromIRRegisterToTRegister(((Move) ins).rs, 0, out);
-					storeFromTRegisterToIRRegister(0, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(0, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof PushStack) {
 					PushStack pushIns = (PushStack) ins;
 					int size = pushIns.pushType.sizeof();
@@ -354,7 +354,7 @@ public final class NaiveTranslator {
 					}
 				} else if (ins instanceof ReadArray) {
 					loadFromIRRegisterToTRegister(((ReadArray) ins).rs, 0, out);
-					storeFromTRegisterToIRRegister(0, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(0, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof WriteArray) {
 					loadFromIRRegisterToTRegister(((WriteArray) ins).rs, 1, out);
 					loadFromIRRegisterToTRegister(((WriteArray) ins).rd.a, 0, out);
@@ -373,90 +373,90 @@ public final class NaiveTranslator {
 					loadFromIRRegisterToTRegister(((AddReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((AddReg) ins).rt, 1, out);
 					out.println("\taddu $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof BitwiseAndReg) {
 					loadFromIRRegisterToTRegister(((BitwiseAndReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((BitwiseAndReg) ins).rt, 1, out);
 					out.println("\tand $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof BitwiseNotReg) {
 					loadFromIRRegisterToTRegister(((BitwiseNotReg) ins).rs, 0, out);
 					out.println("\tnot $t1, $t0");
-					storeFromTRegisterToIRRegister(1, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(1, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof BitwiseOrReg) {
 					loadFromIRRegisterToTRegister(((BitwiseOrReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((BitwiseOrReg) ins).rt, 1, out);
 					out.println("\tor $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof BitwiseXORReg) {
 					loadFromIRRegisterToTRegister(((BitwiseXORReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((BitwiseXORReg) ins).rt, 1, out);
 					out.println("\txor $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof DivideReg) {
 					loadFromIRRegisterToTRegister(((DivideReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((DivideReg) ins).rt, 1, out);
 					out.println("\tdiv $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof ModuloReg) {
 					loadFromIRRegisterToTRegister(((ModuloReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((ModuloReg) ins).rt, 1, out);
 					out.println("\trem $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof MultiplyReg) {
 					loadFromIRRegisterToTRegister(((MultiplyReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((MultiplyReg) ins).rt, 1, out);
 					out.println("\tmul $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof NegateReg) {
 					loadFromIRRegisterToTRegister(((NegateReg) ins).rs, 0, out);
 					out.println("\tneg $t1, $t0");
-					storeFromTRegisterToIRRegister(1, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(1, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof SetEqualTo) {
 					loadFromIRRegisterToTRegister(((SetEqualTo) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((SetEqualTo) ins).rt, 1, out);
 					out.println("\tseq $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof SetGE) {
 					loadFromIRRegisterToTRegister(((SetGE) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((SetGE) ins).rt, 1, out);
 					out.println("\tsge $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof SetGreaterThan) {
 					loadFromIRRegisterToTRegister(((SetGreaterThan) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((SetGreaterThan) ins).rt, 1, out);
 					out.println("\tsgt $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof SetLE) {
 					loadFromIRRegisterToTRegister(((SetLE) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((SetLE) ins).rt, 1, out);
 					out.println("\tsle $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof SetLessThan) {
 					loadFromIRRegisterToTRegister(((SetLessThan) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((SetLessThan) ins).rt, 1, out);
 					out.println("\tslt $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof SetNotEqual) {
 					loadFromIRRegisterToTRegister(((SetNotEqual) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((SetNotEqual) ins).rt, 1, out);
 					out.println("\tsne $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof ShiftLeftReg) {
 					loadFromIRRegisterToTRegister(((ShiftLeftReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((ShiftLeftReg) ins).rt, 1, out);
 					out.println("\tsll $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof ShiftRightReg) { // sra
 					loadFromIRRegisterToTRegister(((ShiftRightReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((ShiftRightReg) ins).rt, 1, out);
 					out.println("\tsra $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof SubtractReg) {
 					loadFromIRRegisterToTRegister(((SubtractReg) ins).rs, 0, out);
 					loadFromIRRegisterToTRegister(((SubtractReg) ins).rt, 1, out);
 					out.println("\tsubu $t2, $t0, $t1");
-					storeFromTRegisterToIRRegister(2, ins.getAllDef()[0], out);
+					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
 				} else if (ins instanceof NopForBranch) {
 					lastNop = ((NopForBranch) ins).rs;
 				} else if (ins instanceof Def) {
@@ -521,9 +521,9 @@ public final class NaiveTranslator {
 		ControlFlowGraph.parameterDelta = new HashMap<>();
 		for (CFGVertex vertex : ControlFlowGraph.vertices) {
 			for (IRInstruction ins : vertex.internal) {
-				for (int uId : ins.getAllDef())
+				for (int uId : ins.getAllDefUId())
 					classifyVirtualRegister(uId);
-				for (int uId : ins.getAllUse())
+				for (int uId : ins.getAllUseUId())
 					classifyVirtualRegister(uId);
 			}
 		}
@@ -547,7 +547,7 @@ public final class NaiveTranslator {
 	}
 
 	public static void classifyVirtualRegister(int uId) {
-		if (uId == -1 || uId == 0)
+		if (uId == -1 || uId == 0 || uId == -2)
 			return;
 		SymbolTableEntry e = Environment.symbolNames.table.get(uId);
 		if (e.scope <= 1)

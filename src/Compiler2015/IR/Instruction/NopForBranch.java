@@ -9,37 +9,47 @@ public class NopForBranch extends IRInstruction {
 
 	public NopForBranch(IRRegister rs) {
 		this.rd = null;
-		this.rs = rs;
+		this.rs = rs.clone();
 	}
 
 	@Override
-	public int[] getAllDef() {
+	public int[] getAllDefUId() {
 		return new int[0];
 	}
 
 	@Override
-	public int[] getAllUse() {
+	public int[] getAllUseUId() {
 		return new int[]{rs instanceof VirtualRegister ? rs.getUId() : -1};
 	}
 
 	@Override
-	public void setAllDefVersion(int[] version) {
-	}
-
-	@Override
-	public void setAllUseVersion(int[] version) {
-		if (rs instanceof VirtualRegister)
-			((VirtualRegister) rs).setVersion(version[0]);
-	}
-
-	@Override
-	public VirtualRegister[] getAllSSADef() {
+	public VirtualRegister[] getAllDefVR() {
 		return new VirtualRegister[0];
 	}
 
 	@Override
-	public VirtualRegister[] getAllSSAUse() {
+	public VirtualRegister[] getAllUseVR() {
 		return new VirtualRegister[]{detectVirtualRegister(rs)};
+	}
+
+	@Override
+	public IRRegister[] getAllDef() {
+		return new IRRegister[0];
+	}
+
+	@Override
+	public void setAllDef(IRRegister[] version) {
+	}
+
+	@Override
+	public IRRegister[] getAllUse() {
+		return new IRRegister[]{rs.clone()};
+	}
+
+	@Override
+	public void setAllUse(IRRegister[] version) {
+		if (version[0] != null)
+			rs = version[0];
 	}
 
 	@Override

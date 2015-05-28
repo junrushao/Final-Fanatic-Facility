@@ -84,6 +84,7 @@ public class Main {
 		argumentsInspect(args);
 
 		loadLibraries();
+
 		// open input file
 		ANTLRInputStream input = null;
 		try {

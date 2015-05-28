@@ -3,13 +3,13 @@ package Compiler2015.IR.CFG;
 import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.Analyser.DataFlow;
-import Compiler2015.IR.Analyser.DeadCodeElimination;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.Def;
 import Compiler2015.IR.Instruction.IRInstruction;
 import Compiler2015.IR.Instruction.NopForBranch;
-import Compiler2015.IR.StaticSingleAssignment.LengauerTarjan;
+import Compiler2015.IR.Optimizer.NaiveDeadCodeElimination;
+import Compiler2015.IR.StaticSingleAssignment.PhiPlacer;
+import Compiler2015.IR.StaticSingleAssignment.SSADestroyer;
 import Compiler2015.Type.FunctionType;
 import Compiler2015.Type.Type;
 import Compiler2015.Utility.Tokens;
@@ -26,7 +26,7 @@ public class ControlFlowGraph {
 
 	public static HashSet<CFGVertex> vertices;
 
-	public static CFGVertex root, outBody;
+	public static CFGVertex source, sink;
 	public static int nowUId;
 	public static int tempVertexCount;
 	public static CompoundStatement scope;
@@ -38,7 +38,7 @@ public class ControlFlowGraph {
 
 	static {
 		vertices = new HashSet<>();
-		root = outBody = null;
+		source = sink = null;
 		nowUId = 0;
 	}
 
@@ -62,14 +62,14 @@ public class ControlFlowGraph {
 		ControlFlowGraph.scope = body;
 		returnType = ((FunctionType) Environment.symbolNames.table.get(uId).ref).returnType;
 
-		root = null;
-		outBody = ControlFlowGraph.getNewVertex();
+		source = null;
+		sink = ControlFlowGraph.getNewVertex();
 
 		// emit control flow graph
 		body.emitCFG();
-		root = body.beginCFGBlock;
+		source = body.beginCFGBlock;
 		if (body.endCFGBlock.unconditionalNext == null)
-			body.endCFGBlock.unconditionalNext = outBody;
+			body.endCFGBlock.unconditionalNext = sink;
 
 		// add if condition
 		vertices.stream().forEach(x -> {
@@ -84,20 +84,23 @@ public class ControlFlowGraph {
 			}
 		});
 
+		// prune CFG
 		mergeBlocks();
 		splitEdges();
 		buildGraph();
+
+		// def external variables and parameters passed at source
 		defineExternalVariables();
 
-		DeadCodeElimination.process();
-		DataFlow.analyse();
-		LengauerTarjan.process(vertices, root, vertices.size());
-/*
-		// insert phi-functions
-		RegisterManager rm = new RegisterManager(body.givenVariables, root);
-		PhiInserter phiInserter = new PhiInserter(vertices, rm);
-		phiInserter.process();
-*/
+		// do dead code elimination
+		NaiveDeadCodeElimination.process(true);
+
+		// insert phi functions
+		PhiPlacer.process();
+
+		// destroy ssa
+		SSADestroyer.process();
+		mergeBlocks();
 	}
 
 	public static void defineExternalVariables() {
@@ -106,16 +109,20 @@ public class ControlFlowGraph {
 						e != null && e.scope == 1 && (e.type == Tokens.VARIABLE || e.type == Tokens.STRING_CONSTANT)
 		).forEach(e -> instructions.add(new Def(new VirtualRegister(e.uId))));
 		instructions.add(new Def(new VirtualRegister(0)));
-		instructions.addAll(root.internal);
-		root.internal = instructions;
+		instructions.addAll(source.internal);
+		source.internal = instructions;
 	}
 
 	public static void buildGraph() {
-		int n = DepthFirstSearcher.process(vertices, root);
+		int n = DepthFirstSearcher.process(vertices, source);
 		List<CFGVertex> unreachable = vertices.stream().filter(x -> x.id == -1).collect(Collectors.toList());
 		unreachable.stream().forEach(vertices::remove);
 		if (vertices.size() != n)
 			throw new CompilationError("Internal Error.");
+		if (sink.id == -1) { // unreachable sink
+			sink.id = vertices.size() + 1;
+			vertices.add(sink);
+		}
 		vertices.forEach(v -> v.predecessor = new HashMap<>());
 		vertices.stream().filter(v -> v.id != -1).forEach(v -> {
 			if (v.unconditionalNext != null)
@@ -130,7 +137,7 @@ public class ControlFlowGraph {
 	}
 
 	public static void splitEdges() {
-		int n = DepthFirstSearcher.process(vertices, root);
+		int n = DepthFirstSearcher.process(vertices, source);
 		List<CFGVertex> unreachable = vertices.stream().filter(x -> x.id == -1).collect(Collectors.toList());
 		unreachable.stream().forEach(vertices::remove);
 		if (vertices.size() != n)
@@ -170,7 +177,7 @@ public class ControlFlowGraph {
 				}
 			}
 		vertices.addAll(added);
-		n = DepthFirstSearcher.process(vertices, root);
+		n = DepthFirstSearcher.process(vertices, source);
 		unreachable = vertices.stream().filter(x -> x.id == -1).collect(Collectors.toList());
 		unreachable.stream().forEach(vertices::remove);
 		if (vertices.size() != n)
@@ -181,7 +188,7 @@ public class ControlFlowGraph {
 		boolean changed;
 		do {
 			changed = false;
-			int n = DepthFirstSearcher.process(vertices, root);
+			int n = DepthFirstSearcher.process(vertices, source);
 			List<CFGVertex> unreachable = vertices.stream().filter(x -> x.id == -1).collect(Collectors.toList());
 			unreachable.stream().forEach(vertices::remove);
 			if (vertices.size() != n)
@@ -202,7 +209,7 @@ public class ControlFlowGraph {
 			for (CFGVertex x : vertices) {
 				if (x.unconditionalNext != null && x.branchIfFalse == null) {
 					CFGVertex y = x.unconditionalNext;
-					if (y != outBody && inDegree[y.id] == 1) {
+					if (y != sink && inDegree[y.id] == 1) {
 						x.internal.addAll(y.internal);
 						x.unconditionalNext = y.unconditionalNext;
 						x.branchIfFalse = y.branchIfFalse;
@@ -216,13 +223,15 @@ public class ControlFlowGraph {
 	}
 
 	public static String toStr() {
+		if (nowUId == 6)
+			return "CFG of printf omitted";
 		StringBuilder sb = new StringBuilder();
 		sb.append("CFG of Function #").append(nowUId).append(Utility.NEW_LINE);
 		sb.append(Utility.getIndent(1)).
-				append("in = ").append(root.id).
-				append(", out = ").append(outBody.id).
+				append("in = ").append(source.id).
+				append(", out = ").append(sink.id).
 				append(Utility.NEW_LINE);
-		DepthFirstSearcher.getReachable(vertices, root).stream().forEach(x -> sb.append(x.toString()));
+		DepthFirstSearcher.getReachable(vertices, source).stream().forEach(x -> sb.append(x.toString()));
 		return sb.toString();
 	}
 }

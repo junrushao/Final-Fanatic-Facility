@@ -9,7 +9,7 @@ import Compiler2015.IR.IRRegister.VirtualRegister;
  */
 public class Call extends IRInstruction {
 	public IRRegister func;
-	public int memoryVersion = 0;
+	public int memoryVersion = -1;
 
 	public Call(IRRegister func) {
 		this.rd = null;
@@ -22,33 +22,43 @@ public class Call extends IRInstruction {
 	}
 
 	@Override
-	public int[] getAllDef() { // a function call might change memory
+	public int[] getAllDefUId() { // a function call might change memory
 		return new int[]{0};
 	}
 
 	@Override
-	public int[] getAllUse() {
+	public int[] getAllUseUId() {
 		return new int[]{func.getUId()};
 	}
 
 	@Override
-	public void setAllDefVersion(int[] version) {
-		memoryVersion = version[0];
-	}
-
-	@Override
-	public void setAllUseVersion(int[] version) {
-		if (func instanceof VirtualRegister)
-			((VirtualRegister) func).setVersion(version[0]);
-	}
-
-	@Override
-	public VirtualRegister[] getAllSSADef() {
+	public VirtualRegister[] getAllDefVR() {
 		return new VirtualRegister[]{new VirtualRegister(0, memoryVersion)};
 	}
 
 	@Override
-	public VirtualRegister[] getAllSSAUse() {
+	public VirtualRegister[] getAllUseVR() {
 		return new VirtualRegister[]{detectVirtualRegister(func)};
+	}
+
+	@Override
+	public IRRegister[] getAllDef() {
+		return new IRRegister[]{new VirtualRegister(0, memoryVersion)};
+	}
+
+	@Override
+	public void setAllDef(IRRegister[] version) {
+		memoryVersion = ((VirtualRegister) version[0]).version;
+	}
+
+	@Override
+	public IRRegister[] getAllUse() {
+		return new IRRegister[]{func.clone()};
+	}
+
+	@Override
+	public void setAllUse(IRRegister[] version) {
+		if (version[0] != null)
+			func = version[0];
 	}
 }
