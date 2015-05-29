@@ -1,33 +1,22 @@
-package Compiler2015.IR.Instruction;
+package Compiler2015.IR.Instruction.TwoAddressInstruction;
 
-import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.IRRegister;
-import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
+import Compiler2015.IR.Instruction.IRInstruction;
 
 /**
- * rd = -rs
+ * rd = rs
  */
-public class NegateReg extends IRInstruction {
-	public IRRegister rs;
+public class Move extends TwoAddressInstruction {
 
-	private NegateReg(VirtualRegister rd, IRRegister rs) {
+	public Move(VirtualRegister rd, IRRegister rs) {
 		this.rd = rd.clone();
 		this.rs = rs.clone();
 	}
 
-	public static IRInstruction getExpression(VirtualRegister rd, IRRegister rs) {
-		if (rs instanceof ArrayRegister)
-			throw new CompilationError("Internal Error.");
-		if (rs instanceof ImmediateValue)
-			return new Move(rd, new ImmediateValue(-((ImmediateValue) rs).a));
-		return new NegateReg(rd, rs);
-	}
-
 	@Override
 	public IRInstruction getExpression() {
-		return getExpression(rd, rs);
+		return this;
 	}
 
 	@Override
@@ -47,7 +36,7 @@ public class NegateReg extends IRInstruction {
 
 	@Override
 	public VirtualRegister[] getAllUseVR() {
-		return new VirtualRegister[0];
+		return new VirtualRegister[]{detectVirtualRegister(rs)};
 	}
 
 	@Override
@@ -57,20 +46,28 @@ public class NegateReg extends IRInstruction {
 
 	@Override
 	public void setAllDef(IRRegister[] version) {
-		rd = (VirtualRegister) version[0];
+		if (version[0] != null)
+			rd = (VirtualRegister) version[0];
 	}
 
 	@Override
 	public IRRegister[] getAllUse() {
-		return new IRRegister[0];
+		return new IRRegister[]{rs.clone()};
 	}
 
 	@Override
 	public void setAllUse(IRRegister[] version) {
+		if (version[0] != null)
+			rs = version[0];
 	}
 
 	@Override
 	public String toString() {
-		return String.format("%s = -%s", rd, rs);
+		return "Move " + rd + " = " + rs;
+	}
+
+	@Override
+	public String toMIPSName() {
+		return "move";
 	}
 }

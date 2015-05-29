@@ -2,6 +2,8 @@ package Compiler2015.RegisterAllocator;
 
 public class MachineRegister {
 	public final static MachineRegister[] availableMachineRegisters = new MachineRegister[]{
+//			new MachineRegister(0, "$0"),
+//			new MachineRegister(1, "$at"),
 //			new MachineRegister(2, "$v0"),
 			new MachineRegister(3, "$v1"),
 //			new MachineRegister(4, "$a0"),
@@ -33,13 +35,23 @@ public class MachineRegister {
 //			new MachineRegister(31, "$ra")
 	};
 	public static int K;
+
+	static {
+		K = availableMachineRegisters.length;
+		System.err.println("K = availableMachineRegisters.length = " + K);
+		for (int i = 0; i < availableMachineRegisters.length; ++i)
+			availableMachineRegisters[i].order = i;
+	}
+
 	public int idInMIPS;
 	public String name;
 	public int order;
+	public MachineRegister tmp1 = new MachineRegister(31, "$ra");
+	public MachineRegister tmp2 = new MachineRegister(2, "$v0");
+	public MachineRegister tmp3 = new MachineRegister(4, "$a0");
 
 	private MachineRegister(int idInMIPS, String name) {
 		this.idInMIPS = idInMIPS;
 		this.name = name;
-		this.order = K++;
 	}
 }

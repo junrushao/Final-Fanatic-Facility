@@ -14,7 +14,6 @@ import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
@@ -24,15 +23,10 @@ public class ControlFlowGraph {
 
 	public FunctionTableEntry functionTableEntry;
 
-	// allocate vertices
+	// for vertices allocation
 	public int tempVertexCount;
 	public HashSet<CFGVertex> vertices;
 	public CFGVertex source, sink;
-
-	// delta of $sp
-	public HashMap<Integer, Integer> tempDelta;
-	public HashMap<Integer, Integer> parameterDelta;
-	public int frameSize;
 
 	public ControlFlowGraph(FunctionTableEntry functionTableEntry) {
 		ControlFlowGraph.instance = this;

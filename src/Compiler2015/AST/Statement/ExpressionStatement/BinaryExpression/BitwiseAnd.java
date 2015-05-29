@@ -7,7 +7,7 @@ import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.IRRegister.VirtualRegister;
-import Compiler2015.IR.Instruction.BitwiseAndReg;
+import Compiler2015.IR.Instruction.ThreeAddressInstruction.BitwiseAndReg;
 import Compiler2015.Type.*;
 
 /**

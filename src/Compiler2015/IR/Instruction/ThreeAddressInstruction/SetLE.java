@@ -1,18 +1,19 @@
-package Compiler2015.IR.Instruction;
+package Compiler2015.IR.Instruction.ThreeAddressInstruction;
 
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
+import Compiler2015.IR.Instruction.IRInstruction;
+import Compiler2015.IR.Instruction.TwoAddressInstruction.Move;
 
 /**
- * rd = rs << rt
+ * rd = rs <= rt
  */
-public class ShiftLeftReg extends IRInstruction {
-	public IRRegister rs, rt;
+public class SetLE extends ThreeAddressInstruction {
 
-	private ShiftLeftReg(VirtualRegister rd, IRRegister rs, IRRegister rt) {
+	private SetLE(VirtualRegister rd, IRRegister rs, IRRegister rt) {
 		this.rd = rd.clone();
 		this.rs = rs.clone();
 		this.rt = rt.clone();
@@ -22,13 +23,13 @@ public class ShiftLeftReg extends IRInstruction {
 		if (rs instanceof ArrayRegister || rt instanceof ArrayRegister)
 			throw new CompilationError("Internal Error");
 		if (rs instanceof ImmediateValue && rt instanceof ImmediateValue)
-			return new Move(rd, new ImmediateValue(((ImmediateValue) rs).a << ((ImmediateValue) rt).a));
+			return new Move(rd, new ImmediateValue((((ImmediateValue) rs).a <= ((ImmediateValue) rt).a) ? 1 : 0));
 		if (rs instanceof ImmediateValue) {
 			IRRegister tmp = rs;
 			rs = rt;
 			rt = tmp;
 		}
-		return new ShiftLeftReg(rd, rs, rt);
+		return new SetLE(rd, rs, rt);
 	}
 
 	public IRInstruction getExpression() {
@@ -81,6 +82,11 @@ public class ShiftLeftReg extends IRInstruction {
 
 	@Override
 	public String toString() {
-		return String.format("%s = %s << %s", rd, rs, rt);
+		return String.format("%s = %s <= %s", rd, rs, rt);
+	}
+
+	@Override
+	public String toMIPSName() {
+		return "sle";
 	}
 }

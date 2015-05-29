@@ -8,7 +8,7 @@ import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.ReadArray;
-import Compiler2015.IR.Instruction.SubtractReg;
+import Compiler2015.IR.Instruction.ThreeAddressInstruction.SubtractReg;
 import Compiler2015.IR.Instruction.WriteArray;
 import Compiler2015.Type.*;
 

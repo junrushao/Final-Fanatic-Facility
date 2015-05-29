@@ -7,9 +7,9 @@ import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.LowerSemiLattice;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.IRInstruction;
-import Compiler2015.IR.Instruction.Move;
 import Compiler2015.IR.Instruction.Nop;
 import Compiler2015.IR.Instruction.PhiFunction;
+import Compiler2015.IR.Instruction.TwoAddressInstruction.Move;
 import Compiler2015.IR.Optimizer.DataFlow;
 import Compiler2015.IR.Optimizer.EliminateNop;
 

@@ -1,17 +1,16 @@
-package Compiler2015.IR.Instruction;
+package Compiler2015.IR.Instruction.TwoAddressInstruction;
 
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
+import Compiler2015.IR.Instruction.IRInstruction;
 
 /**
  * rd = ~rs
  */
-public class BitwiseNotReg extends IRInstruction {
-	public IRRegister rs;
-
+public class BitwiseNotReg extends TwoAddressInstruction {
 	private BitwiseNotReg(VirtualRegister rd, IRRegister rs) {
 		this.rd = rd.clone();
 		this.rs = rs.clone();
@@ -75,5 +74,10 @@ public class BitwiseNotReg extends IRInstruction {
 	@Override
 	public String toString() {
 		return String.format("%s = ~%s", rd, rs);
+	}
+
+	@Override
+	public String toMIPSName() {
+		return "not";
 	}
 }

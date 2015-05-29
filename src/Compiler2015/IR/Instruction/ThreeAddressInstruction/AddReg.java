@@ -1,18 +1,19 @@
-package Compiler2015.IR.Instruction;
+package Compiler2015.IR.Instruction.ThreeAddressInstruction;
 
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
+import Compiler2015.IR.Instruction.IRInstruction;
+import Compiler2015.IR.Instruction.TwoAddressInstruction.Move;
 
 /**
- * rd = rs % rt
+ * rd = rs + rt
  */
-public class ModuloReg extends IRInstruction {
-	public IRRegister rs, rt;
+public class AddReg extends ThreeAddressInstruction {
 
-	private ModuloReg(VirtualRegister rd, IRRegister rs, IRRegister rt) {
+	private AddReg(VirtualRegister rd, IRRegister rs, IRRegister rt) {
 		this.rd = rd.clone();
 		this.rs = rs.clone();
 		this.rt = rt.clone();
@@ -21,16 +22,19 @@ public class ModuloReg extends IRInstruction {
 	public static IRInstruction getExpression(VirtualRegister rd, IRRegister rs, IRRegister rt) {
 		if (rs instanceof ArrayRegister || rt instanceof ArrayRegister)
 			throw new CompilationError("Internal Error");
-		if (rs instanceof ImmediateValue && ((ImmediateValue) rs).a == 0)
-			throw new CompilationError("There would be runtime division by zero");
 		if (rs instanceof ImmediateValue && rt instanceof ImmediateValue)
-			return new Move(rd, new ImmediateValue(((ImmediateValue) rs).a % ((ImmediateValue) rt).a));
+			return new Move(rd, new ImmediateValue(((ImmediateValue) rs).a + ((ImmediateValue) rt).a));
 		if (rs instanceof ImmediateValue) {
 			IRRegister tmp = rs;
 			rs = rt;
 			rt = tmp;
 		}
-		return new ModuloReg(rd, rs, rt);
+		if (rs instanceof VirtualRegister && rt instanceof VirtualRegister && rs.hashCode() > rt.hashCode()) {
+			IRRegister tmp = rs;
+			rs = rt;
+			rt = tmp;
+		}
+		return new AddReg(rd, rs, rt);
 	}
 
 	public IRInstruction getExpression() {
@@ -83,6 +87,11 @@ public class ModuloReg extends IRInstruction {
 
 	@Override
 	public String toString() {
-		return String.format("%s = %s %% %s", rd, rs, rt);
+		return String.format("%s = %s + %s", rd, rs, rt);
+	}
+
+	@Override
+	public String toMIPSName() {
+		return "addu";
 	}
 }
