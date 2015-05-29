@@ -52,7 +52,7 @@ public class MemberAccess extends Expression {
 		int delta = structType.memberDelta.get(memberName);
 		if (this.type instanceof ArrayPointerType || this.type instanceof StructOrUnionType) {
 			tempRegister = Environment.getVirtualRegister();
-			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, su.tempRegister, new ImmediateValue(delta)));
+			builder.addInstruction(AddReg.getExpression((VirtualRegister) tempRegister, su.tempRegister, new ImmediateValue(delta)));
 		} else {
 			tempRegister = new ArrayRegister((VirtualRegister) su.tempRegister, new ImmediateValue(delta), type.sizeof());
 		}

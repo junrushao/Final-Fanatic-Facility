@@ -144,7 +144,7 @@ public class Add extends BinaryExpression {
 		right.emitCFG(builder);
 		right.readInArrayRegister(builder);
 		tempRegister = Environment.getVirtualRegister();
-		builder.addInstruction(new AddReg((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
+		builder.addInstruction(AddReg.getExpression((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
 
 	@Override

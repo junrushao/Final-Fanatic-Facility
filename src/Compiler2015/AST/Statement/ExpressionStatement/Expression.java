@@ -36,7 +36,7 @@ public abstract class Expression extends Statement implements Cloneable {
 		if (left instanceof ImmediateValue && right instanceof ImmediateValue) {
 			builder.addInstruction(new Move(ret, new ImmediateValue(((ImmediateValue) left).a * ((ImmediateValue) right).a)));
 		} else {
-			builder.addInstruction(new MultiplyReg(ret, left, right));
+			builder.addInstruction(MultiplyReg.getExpression(ret, left, right));
 		}
 		return ret;
 	}
@@ -57,7 +57,7 @@ public abstract class Expression extends Statement implements Cloneable {
 			throw new CompilationError("Internal Error.");
 		if (this.tempRegister instanceof ArrayRegister) {
 			VirtualRegister newRegister = Environment.getVirtualRegister();
-			builder.addInstruction(new AddReg(newRegister, ((ArrayRegister) tempRegister).a, ((ArrayRegister) tempRegister).b));
+			builder.addInstruction(AddReg.getExpression(newRegister, ((ArrayRegister) tempRegister).a, ((ArrayRegister) tempRegister).b));
 			tempRegister = newRegister;
 		}
 	}

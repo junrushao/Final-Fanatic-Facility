@@ -147,7 +147,7 @@ public class BitwiseAnd extends BinaryExpression {
 		right.emitCFG(builder);
 		right.readInArrayRegister(builder);
 		tempRegister = Environment.getVirtualRegister();
-		builder.addInstruction(new BitwiseAndReg((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
+		builder.addInstruction(BitwiseAndReg.getExpression((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
 
 	@Override

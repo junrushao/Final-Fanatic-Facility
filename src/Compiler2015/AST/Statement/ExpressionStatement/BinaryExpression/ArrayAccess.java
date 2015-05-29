@@ -150,12 +150,12 @@ public class ArrayAccess extends BinaryExpression {
 			left.convertArrayRegisterToPointer(builder);
 			tempRegister = Environment.getVirtualRegister();
 			VirtualRegister delta = getTypeDelta(builder, right.tempRegister, new ImmediateValue(type.sizeof()));
-			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, left.tempRegister, delta));
+			builder.addInstruction(AddReg.getExpression((VirtualRegister) tempRegister, left.tempRegister, delta));
 		} else if (this.type instanceof ArrayPointerType || this.type instanceof StructOrUnionType) {
 			left.readInArrayRegister(builder);
 			tempRegister = Environment.getVirtualRegister();
 			VirtualRegister delta = getTypeDelta(builder, right.tempRegister, new ImmediateValue(type.sizeof()));
-			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, left.tempRegister, delta));
+			builder.addInstruction(AddReg.getExpression((VirtualRegister) tempRegister, left.tempRegister, delta));
 		} else if (right.tempRegister instanceof ImmediateValue) {
 			left.readInArrayRegister(builder);
 			tempRegister = new ArrayRegister((VirtualRegister) left.tempRegister,
@@ -165,7 +165,7 @@ public class ArrayAccess extends BinaryExpression {
 			left.readInArrayRegister(builder);
 			VirtualRegister address = Environment.getVirtualRegister();
 			VirtualRegister delta = getTypeDelta(builder, right.tempRegister, new ImmediateValue(type.sizeof()));
-			builder.addInstruction(new AddReg(address, left.tempRegister, delta));
+			builder.addInstruction(AddReg.getExpression(address, left.tempRegister, delta));
 			tempRegister = new ArrayRegister(address, new ImmediateValue(0), type.sizeof());
 		} else
 			throw new CompilationError("Internal Error.");
@@ -177,8 +177,8 @@ public class ArrayAccess extends BinaryExpression {
 			if (this.type instanceof StructOrUnionType) {
 				VirtualRegister newRegister = Environment.getVirtualRegister();
 				VirtualRegister r = Environment.getVirtualRegister();
-				builder.addInstruction(new MultiplyReg(r, right.tempRegister, new ImmediateValue(type.sizeof())));
-				builder.addInstruction(new AddReg(newRegister, tempRegister, r));
+				builder.addInstruction(MultiplyReg.getExpression(r, right.tempRegister, new ImmediateValue(type.sizeof())));
+				builder.addInstruction(AddReg.getExpression(newRegister, tempRegister, r));
 				tempRegister = newRegister;
 			} else {
 				VirtualRegister newReg = Environment.getVirtualRegister();

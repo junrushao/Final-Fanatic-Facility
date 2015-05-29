@@ -50,7 +50,7 @@ public final class DataFlow {
 				for (CFGVertex m : new CFGVertex[]{v.unconditionalNext, v.branchIfFalse}) {
 					if (m != null) {
 						setOperation.unionInto(v.liveOut, m.uEVar);
-						setOperation.unionInto(v.liveOut, setOperation.kickOut(m.liveOut, m.varKill));
+						setOperation.unionInto(v.liveOut, setOperation.subtract(m.liveOut, m.varKill));
 					}
 				}
 				if (!setOperation.equal(originalLiveOut, v.liveOut))

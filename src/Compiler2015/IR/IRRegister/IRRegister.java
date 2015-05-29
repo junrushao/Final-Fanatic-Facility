@@ -7,4 +7,10 @@ public interface IRRegister extends Cloneable {
 	String toString();
 
 	IRRegister clone();
+
+	@Override
+	int hashCode();
+
+	@Override
+	boolean equals(Object o);
 }

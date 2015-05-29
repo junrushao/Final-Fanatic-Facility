@@ -1,5 +1,7 @@
 package Compiler2015.IR.Instruction;
 
+import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 
@@ -12,6 +14,8 @@ public class Call extends IRInstruction {
 	public int memoryVersion = -1;
 
 	public Call(IRRegister func) {
+		if (func instanceof ArrayRegister)
+			throw new CompilationError("Internal Error.");
 		this.rd = null;
 		this.func = func.clone();
 	}
@@ -19,6 +23,11 @@ public class Call extends IRInstruction {
 	@Override
 	public String toString() {
 		return "Call " + func;
+	}
+
+	@Override
+	public IRInstruction getExpression() {
+		return this;
 	}
 
 	@Override

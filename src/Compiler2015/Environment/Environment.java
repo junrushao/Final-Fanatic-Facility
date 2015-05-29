@@ -170,4 +170,9 @@ public class Environment {
 		if (e == null)
 			throw new CompilationError("No main exists.");
 	}
+
+	public static boolean isArrayLike(int uId) {
+		SymbolTableEntry e = symbolNames.table.get(uId);
+		return e.type == Tokens.STRING_CONSTANT || (e.type == Tokens.VARIABLE && e.ref instanceof ArrayPointerType);
+	}
 }

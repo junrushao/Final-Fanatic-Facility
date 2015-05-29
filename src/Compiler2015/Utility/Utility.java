@@ -2,6 +2,7 @@ package Compiler2015.Utility;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class Utility {
 
@@ -51,10 +52,18 @@ public final class Utility {
 	}
 
 	public static class SetOperation<T> {
-		public HashSet<T> kickOut(HashSet<T> a, HashSet<T> b) {
+		public HashSet<T> subtract(HashSet<T> a, HashSet<T> b) {
+			return a.stream().filter(x -> !b.contains(x)).collect(Collectors.toCollection(HashSet::new));
+		}
+
+		public HashSet<T> union(HashSet<T> a, HashSet<T> b) {
 			HashSet<T> result = new HashSet<>(a);
-			b.stream().filter(result::contains).forEach(result::remove);
+			b.forEach(result::add);
 			return result;
+		}
+
+		public HashSet<T> intersect(HashSet<T> a, HashSet<T> b) {
+			return a.stream().filter(b::contains).collect(Collectors.toCollection(HashSet::new));
 		}
 
 		public HashSet<T> unionInto(HashSet<T> into, HashSet<T> from) {

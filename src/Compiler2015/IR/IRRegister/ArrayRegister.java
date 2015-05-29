@@ -16,6 +16,22 @@ public class ArrayRegister implements IRRegister {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ArrayRegister that = (ArrayRegister) o;
+		return bitLen == that.bitLen && a.equals(that.a) && b.equals(that.b);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = a.hashCode();
+		result = 31 * result + b.hashCode();
+		result = 31 * result + bitLen;
+		return result;
+	}
+
+	@Override
 	public int getUId() {
 		throw new CompilationError("Internal Error.");
 	}

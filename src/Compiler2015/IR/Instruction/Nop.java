@@ -11,6 +11,11 @@ public class Nop extends IRInstruction {
 	}
 
 	@Override
+	public IRInstruction getExpression() {
+		return instance;
+	}
+
+	@Override
 	public int[] getAllDefUId() {
 		return new int[0];
 	}

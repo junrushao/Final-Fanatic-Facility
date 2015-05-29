@@ -148,7 +148,7 @@ public class BitwiseOr extends BinaryExpression {
 		right.emitCFG(builder);
 		right.readInArrayRegister(builder);
 		tempRegister = Environment.getVirtualRegister();
-		builder.addInstruction(new BitwiseOrReg((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
+		builder.addInstruction(BitwiseOrReg.getExpression((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
 
 	@Override

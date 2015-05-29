@@ -48,12 +48,12 @@ public class PostfixSelfInc extends UnaryExpression {
 		if (e.tempRegister instanceof VirtualRegister) {
 			tempRegister = Environment.getVirtualRegister();
 			builder.addInstruction(new Move((VirtualRegister) tempRegister, e.tempRegister));
-			builder.addInstruction(new AddReg((VirtualRegister) e.tempRegister, e.tempRegister, v));
+			builder.addInstruction(AddReg.getExpression((VirtualRegister) e.tempRegister, e.tempRegister, v));
 		} else if (e.tempRegister instanceof ArrayRegister) {
 			tempRegister = Environment.getVirtualRegister();
 			VirtualRegister t2 = Environment.getVirtualRegister();
 			builder.addInstruction(new ReadArray((VirtualRegister) tempRegister, (ArrayRegister) e.tempRegister));
-			builder.addInstruction(new AddReg(t2, tempRegister, v));
+			builder.addInstruction(AddReg.getExpression(t2, tempRegister, v));
 			builder.addInstruction(new WriteArray((ArrayRegister) e.tempRegister, t2));
 		} else
 			throw new CompilationError("Internal Error.");

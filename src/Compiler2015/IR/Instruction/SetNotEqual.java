@@ -3,6 +3,7 @@ package Compiler2015.IR.Instruction;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.IRRegister;
+import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 
 /**
@@ -12,11 +13,31 @@ public class SetNotEqual extends IRInstruction {
 	public IRRegister rs, rt;
 
 	public SetNotEqual(VirtualRegister rd, IRRegister rs, IRRegister rt) {
-		if (rs instanceof ArrayRegister || rt instanceof ArrayRegister)
-			throw new CompilationError("Internal Error.");
 		this.rd = rd.clone();
 		this.rs = rs.clone();
 		this.rt = rt.clone();
+	}
+
+	public static IRInstruction getExpression(VirtualRegister rd, IRRegister rs, IRRegister rt) {
+		if (rs instanceof ArrayRegister || rt instanceof ArrayRegister)
+			throw new CompilationError("Internal Error");
+		if (rs instanceof ImmediateValue && rt instanceof ImmediateValue)
+			return new Move(rd, new ImmediateValue((((ImmediateValue) rs).a != ((ImmediateValue) rt).a) ? 1 : 0));
+		if (rs instanceof ImmediateValue) {
+			IRRegister tmp = rs;
+			rs = rt;
+			rt = tmp;
+		}
+		if (rs instanceof VirtualRegister && rt instanceof VirtualRegister && rs.hashCode() > rt.hashCode()) {
+			IRRegister tmp = rs;
+			rs = rt;
+			rt = tmp;
+		}
+		return new SetNotEqual(rd, rs, rt);
+	}
+
+	public IRInstruction getExpression() {
+		return getExpression(rd, rs, rt);
 	}
 
 	@Override

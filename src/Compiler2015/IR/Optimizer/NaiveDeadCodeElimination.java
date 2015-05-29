@@ -11,11 +11,10 @@ import java.util.ArrayList;
 public final class NaiveDeadCodeElimination {
 
 	public static boolean usedAfter(ArrayList<IRInstruction> list, int pos, VirtualRegister r) {
-		for (int i = pos, size = list.size(); i < size; ++i) {
+		for (int i = pos, size = list.size(); i < size; ++i)
 			for (VirtualRegister rp : list.get(i).getAllUseVR())
 				if (r.equals(rp))
 					return true;
-		}
 		return false;
 	}
 

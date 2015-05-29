@@ -233,7 +233,7 @@ public final class NaiveTranslator {
 						out.printf("\taddiu $t%d, $sp, %d%s", reg, getDelta(uId), Utility.NEW_LINE);
 					else {
 						out.printf("\tli $t%d, %d%s", reg, delta, Utility.NEW_LINE);
-						out.printf("\tadd $t%d, $sp, $t%d%s", reg, reg, Utility.NEW_LINE);
+						out.printf("\taddu $t%d, $sp, $t%d%s", reg, reg, Utility.NEW_LINE);
 					}
 				} else
 					out.printf("\tlw $t%d, %d($sp)%s", reg, getDelta(uId), Utility.NEW_LINE);
@@ -280,12 +280,15 @@ public final class NaiveTranslator {
 			out.println("main:");
 
 		out.println(getFunctionLabel());
+/*
 		if (-32768 <= ControlFlowGraph.frameSize && ControlFlowGraph.frameSize <= 32767)
 			out.println("\taddiu $sp, $sp, -" + ControlFlowGraph.frameSize);
 		else {
 			out.printf("\tli $t0, -%d%s", ControlFlowGraph.frameSize, Utility.NEW_LINE);
 			out.println("\taddu $sp, $sp, $t0");
 		}
+*/
+		out.println("\taddu $sp, $sp, " + (-ControlFlowGraph.frameSize));
 		out.println("\tsw $ra, 4($sp)");
 
 		ArrayList<CFGVertex> sequence = NaiveSequentializer.process();
@@ -484,12 +487,15 @@ public final class NaiveTranslator {
 		}
 
 		out.println("\tlw $ra, 4($sp)");
+/*
 		if (-32768 <= ControlFlowGraph.frameSize && ControlFlowGraph.frameSize <= 32767)
 			out.println("\taddiu $sp, $sp, " + ControlFlowGraph.frameSize);
 		else {
 			out.printf("\tli $t0, %d%s", ControlFlowGraph.frameSize, Utility.NEW_LINE);
 			out.println("\taddu $sp, $sp, $t0");
 		}
+*/
+		out.println("\taddu $sp, $sp, " + (ControlFlowGraph.frameSize));
 		out.println("\tjr $ra");
 	}
 
@@ -547,7 +553,7 @@ public final class NaiveTranslator {
 	}
 
 	public static void classifyVirtualRegister(int uId) {
-		if (uId == -1 || uId == 0 || uId == -2)
+		if (uId == -1 || uId == 0 || uId == -2 || uId == -3)
 			return;
 		SymbolTableEntry e = Environment.symbolNames.table.get(uId);
 		if (e.scope <= 1)

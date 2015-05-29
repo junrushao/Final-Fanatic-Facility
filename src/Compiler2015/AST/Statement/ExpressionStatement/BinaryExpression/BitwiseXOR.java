@@ -148,7 +148,7 @@ public class BitwiseXOR extends BinaryExpression {
 		right.emitCFG(builder);
 		right.readInArrayRegister(builder);
 		tempRegister = Environment.getVirtualRegister();
-		builder.addInstruction(new BitwiseXORReg((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
+		builder.addInstruction(BitwiseXORReg.getExpression((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
 
 	@Override

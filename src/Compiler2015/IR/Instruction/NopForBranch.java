@@ -1,5 +1,7 @@
 package Compiler2015.IR.Instruction;
 
+import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 
@@ -8,8 +10,15 @@ public class NopForBranch extends IRInstruction {
 	public IRRegister rs;
 
 	public NopForBranch(IRRegister rs) {
+		if (rs instanceof ArrayRegister)
+			throw new CompilationError("Internal Error.");
 		this.rd = null;
 		this.rs = rs.clone();
+	}
+
+	@Override
+	public IRInstruction getExpression() {
+		return this;
 	}
 
 	@Override

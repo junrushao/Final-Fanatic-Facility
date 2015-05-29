@@ -17,7 +17,7 @@ int printf(char *format, ...) {
 			else if (*format == 's')
 				___yzgysjr_lib_putstring(va_arg(ap, char *));
 			else {
-				len = *(++format)-'0';
+				len = *(++format) - '0';
 				++format;
 				arg = va_arg(ap, int);
 				if (arg < 0) {
@@ -27,7 +27,7 @@ int printf(char *format, ...) {
 				}
 				for (tmp = arg; tmp; tmp /= 10)
 					--len;
-				for (; len > 0; --len)
+				for ( ; len > 0; --len)
 					putchar('0');
 				if (arg)
 					___yzgysjr_lib_putint(arg);

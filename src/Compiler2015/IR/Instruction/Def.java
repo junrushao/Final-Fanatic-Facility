@@ -10,6 +10,11 @@ public class Def extends IRInstruction {
 	}
 
 	@Override
+	public IRInstruction getExpression() {
+		return this;
+	}
+
+	@Override
 	public int[] getAllDefUId() {
 		return new int[]{rd.getUId()};
 	}

@@ -84,7 +84,7 @@ public class LessThan extends BinaryExpression {
 		right.emitCFG(builder);
 		right.readInArrayRegister(builder);
 		tempRegister = Environment.getVirtualRegister();
-		builder.addInstruction(new SetLessThan((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
+		builder.addInstruction(SetLessThan.getExpression((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
 
 	@Override

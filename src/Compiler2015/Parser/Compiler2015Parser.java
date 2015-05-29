@@ -1517,7 +1517,7 @@ public class Compiler2015Parser extends Parser {
 						setState(357);
 						match(R2);
 						TypeAnalyser.addArray(((DirectAbstractDeclaratorContext) _localctx).constantExpression.ret);
-					}
+				}
 					break;
 					case 4: {
 						setState(360);
@@ -3150,7 +3150,7 @@ public class Compiler2015Parser extends Parser {
 									setState(764);
 									((PostfixExpressionContext) _localctx).Identifier = match(Identifier);
 									((PostfixExpressionContext) _localctx).ret = PointerMemberAccess.getExpression(((PostfixExpressionContext) _localctx).p.ret, (((PostfixExpressionContext) _localctx).Identifier != null ? ((PostfixExpressionContext) _localctx).Identifier.getText() : null));
-								}
+						}
 								break;
 								case 5: {
 									_localctx = new PostfixExpressionContext(_parentctx, _parentState);

@@ -85,7 +85,7 @@ public class LE extends BinaryExpression {
 		right.emitCFG(builder);
 		right.readInArrayRegister(builder);
 		tempRegister = Environment.getVirtualRegister();
-		builder.addInstruction(new SetLE((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
+		builder.addInstruction(SetLE.getExpression((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
 
 	@Override

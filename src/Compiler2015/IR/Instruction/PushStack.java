@@ -1,5 +1,7 @@
 package Compiler2015.IR.Instruction;
 
+import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.Type;
@@ -10,6 +12,8 @@ public class PushStack extends IRInstruction {
 	public Type pushType;
 
 	public PushStack(IRRegister push, boolean isExtra, Type pushType) {
+		if (push instanceof ArrayRegister)
+			throw new CompilationError("Internal Error.");
 		this.rd = null;
 		this.push = push.clone();
 		this.isExtra = isExtra;
@@ -19,6 +23,11 @@ public class PushStack extends IRInstruction {
 	@Override
 	public String toString() {
 		return "Push " + push;
+	}
+
+	@Override
+	public IRInstruction getExpression() {
+		return this;
 	}
 
 	@Override

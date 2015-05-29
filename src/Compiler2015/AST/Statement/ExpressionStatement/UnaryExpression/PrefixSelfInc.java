@@ -46,11 +46,11 @@ public class PrefixSelfInc extends UnaryExpression {
 			throw new CompilationError("Internal Error.");
 		if (e.tempRegister instanceof VirtualRegister) {
 			tempRegister = e.tempRegister.clone();
-			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, e.tempRegister, v));
+			builder.addInstruction(AddReg.getExpression((VirtualRegister) tempRegister, e.tempRegister, v));
 		} else if (e.tempRegister instanceof ArrayRegister) {
 			tempRegister = Environment.getVirtualRegister();
 			builder.addInstruction(new ReadArray((VirtualRegister) tempRegister, (ArrayRegister) e.tempRegister));
-			builder.addInstruction(new AddReg((VirtualRegister) tempRegister, tempRegister, v));
+			builder.addInstruction(AddReg.getExpression((VirtualRegister) tempRegister, tempRegister, v));
 			builder.addInstruction(new WriteArray((ArrayRegister) e.tempRegister, tempRegister));
 		} else
 			throw new CompilationError("Internal Error.");

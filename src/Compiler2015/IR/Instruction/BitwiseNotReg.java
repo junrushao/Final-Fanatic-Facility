@@ -3,6 +3,7 @@ package Compiler2015.IR.Instruction;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.IRRegister.ArrayRegister;
 import Compiler2015.IR.IRRegister.IRRegister;
+import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 
 /**
@@ -11,11 +12,22 @@ import Compiler2015.IR.IRRegister.VirtualRegister;
 public class BitwiseNotReg extends IRInstruction {
 	public IRRegister rs;
 
-	public BitwiseNotReg(VirtualRegister rd, IRRegister rs) {
-		if (rs instanceof ArrayRegister)
-			throw new CompilationError("Internal Error.");
+	private BitwiseNotReg(VirtualRegister rd, IRRegister rs) {
 		this.rd = rd.clone();
 		this.rs = rs.clone();
+	}
+
+	public static IRInstruction getExpression(VirtualRegister rd, IRRegister rs) {
+		if (rs instanceof ArrayRegister)
+			throw new CompilationError("Internal Error.");
+		if (rs instanceof ImmediateValue)
+			return new Move(rd, new ImmediateValue(~((ImmediateValue) rs).a));
+		return new BitwiseNotReg(rd, rs);
+	}
+
+	@Override
+	public IRInstruction getExpression() {
+		return getExpression(rd, rs);
 	}
 
 	@Override

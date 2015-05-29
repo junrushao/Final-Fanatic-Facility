@@ -85,7 +85,7 @@ public class EqualTo extends BinaryExpression {
 		right.emitCFG(builder);
 		right.readInArrayRegister(builder);
 		tempRegister = Environment.getVirtualRegister();
-		builder.addInstruction(new SetEqualTo((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
+		builder.addInstruction(SetEqualTo.getExpression((VirtualRegister) tempRegister, left.tempRegister, right.tempRegister));
 	}
 
 	@Override

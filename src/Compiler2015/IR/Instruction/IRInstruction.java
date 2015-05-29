@@ -7,6 +7,8 @@ public abstract class IRInstruction {
 
 	public VirtualRegister rd;
 
+	public abstract IRInstruction getExpression();
+
 	public abstract int[] getAllDefUId();
 
 	public abstract int[] getAllUseUId();

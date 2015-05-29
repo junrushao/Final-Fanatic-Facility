@@ -87,7 +87,7 @@ public class ControlFlowGraph {
 		// prune CFG
 		mergeBlocks();
 		splitEdges();
-		buildGraph();
+		reCalculateGraphInfo();
 
 		// def external variables and parameters passed at source
 		defineExternalVariables();
@@ -113,7 +113,7 @@ public class ControlFlowGraph {
 		source.internal = instructions;
 	}
 
-	public static void buildGraph() {
+	public static void reCalculateGraphInfo() {
 		int n = DepthFirstSearcher.process(vertices, source);
 		List<CFGVertex> unreachable = vertices.stream().filter(x -> x.id == -1).collect(Collectors.toList());
 		unreachable.stream().forEach(vertices::remove);
