@@ -45,10 +45,10 @@ public class WhileStatement extends Statement implements Loop {
 			a = new CompoundStatement(new ArrayList<>(0), new ArrayList<>(0), new ArrayList<>(0), new ArrayList<>(0));
 		if (v != null) {
 			if (v == 0) {
-				beginCFGBlock = endCFGBlock = ControlFlowGraph.getNewVertex();
+				beginCFGBlock = endCFGBlock = ControlFlowGraph.instance.getNewVertex();
 			} else {
-				CFGVertex loop = beginCFGBlock = ControlFlowGraph.getNewVertex();
-				endCFGBlock = ControlFlowGraph.getNewVertex();
+				CFGVertex loop = beginCFGBlock = ControlFlowGraph.instance.getNewVertex();
+				endCFGBlock = ControlFlowGraph.instance.getNewVertex();
 				a.emitCFG();
 				beginCFGBlock.unconditionalNext = a.beginCFGBlock;
 				if (a.endCFGBlock.unconditionalNext == null)
@@ -56,8 +56,8 @@ public class WhileStatement extends Statement implements Loop {
 			}
 			return;
 		}
-		CFGVertex loop = beginCFGBlock = ControlFlowGraph.getNewVertex();
-		CFGVertex out = endCFGBlock = ControlFlowGraph.getNewVertex();
+		CFGVertex loop = beginCFGBlock = ControlFlowGraph.instance.getNewVertex();
+		CFGVertex out = endCFGBlock = ControlFlowGraph.instance.getNewVertex();
 		a.emitCFG();
 		if (a.endCFGBlock.unconditionalNext == null)
 			a.endCFGBlock.unconditionalNext = loop;

@@ -1,5 +1,6 @@
 package Compiler2015.Environment;
 
+import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.AST.Statement.ExpressionStatement.CastExpression;
 import Compiler2015.AST.Statement.Loop;
 import Compiler2015.Exception.CompilationError;
@@ -9,6 +10,7 @@ import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
 
@@ -28,6 +30,8 @@ public class Environment {
 	public static int uIdOfPutString;
 	public static int uIdOfPutInt;
 	public static HashSet<Integer> globalNonArrayVariablesAndLocalAddressFetchedVariables;
+
+	public static HashMap<Integer, FunctionTableEntry> functionTable;
 
 	static {
 		init();
@@ -67,6 +71,7 @@ public class Environment {
 		definedVariableInCurrentFrame = new Stack<>();
 		classTable = classNames.table;
 		globalNonArrayVariablesAndLocalAddressFetchedVariables = new HashSet<>();
+		functionTable = new HashMap<>();
 
 		uIdOfPutChar = symbolNames.defineVariable(
 				"putchar",
@@ -174,5 +179,13 @@ public class Environment {
 	public static boolean isArrayLike(int uId) {
 		SymbolTableEntry e = symbolNames.table.get(uId);
 		return e.type == Tokens.STRING_CONSTANT || (e.type == Tokens.VARIABLE && e.ref instanceof ArrayPointerType);
+	}
+
+	public static void generateFunctionTable() {
+		for (int i = 1, size = Environment.symbolNames.table.size(); i < size; ++i) {
+			SymbolTableEntry entry = Environment.symbolNames.table.get(i);
+			if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionType && entry.info != null)
+				functionTable.put(entry.uId, new FunctionTableEntry(entry.uId, entry.name, ((FunctionType) entry.ref), entry, ((CompoundStatement) entry.info)));
+		}
 	}
 }

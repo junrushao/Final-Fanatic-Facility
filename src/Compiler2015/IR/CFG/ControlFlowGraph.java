@@ -2,7 +2,7 @@ package Compiler2015.IR.CFG;
 
 import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.Environment.Environment;
-import Compiler2015.Exception.CompilationError;
+import Compiler2015.Environment.FunctionTableEntry;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.Def;
 import Compiler2015.IR.Instruction.IRInstruction;
@@ -10,66 +10,43 @@ import Compiler2015.IR.Instruction.NopForBranch;
 import Compiler2015.IR.Optimizer.NaiveDeadCodeElimination;
 import Compiler2015.IR.StaticSingleAssignment.PhiPlacer;
 import Compiler2015.IR.StaticSingleAssignment.SSADestroyer;
-import Compiler2015.Type.FunctionType;
-import Compiler2015.Type.Type;
 import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ControlFlowGraph {
 
-	public static HashSet<CFGVertex> vertices;
+	public static ControlFlowGraph instance = null;
 
-	public static CFGVertex source, sink;
-	public static int nowUId;
-	public static int tempVertexCount;
-	public static CompoundStatement scope;
-	public static Type returnType;
+	public FunctionTableEntry functionTableEntry;
 
-	public static HashMap<Integer, Integer> tempDelta;
-	public static HashMap<Integer, Integer> parameterDelta;
-	public static int frameSize;
+	// allocate vertices
+	public int tempVertexCount;
+	public HashSet<CFGVertex> vertices;
+	public CFGVertex source, sink;
 
-	static {
-		vertices = new HashSet<>();
-		source = sink = null;
-		nowUId = 0;
-	}
+	// delta of $sp
+	public HashMap<Integer, Integer> tempDelta;
+	public HashMap<Integer, Integer> parameterDelta;
+	public int frameSize;
 
-	public static CFGVertex getNewVertex() {
-		CFGVertex ret = new CFGVertex();
-		vertices.add(ret);
-		ret.id = tempVertexCount++;
-		return ret;
-	}
-
-	public static CFGVertex getNewTempVertex() {
-		CFGVertex ret = new CFGVertex();
-		ret.id = -1;
-		return ret;
-	}
-
-	public static void process(CompoundStatement body, int uId) {
-		nowUId = uId;
-		tempVertexCount = 0;
-		vertices.clear();
-		ControlFlowGraph.scope = body;
-		returnType = ((FunctionType) Environment.symbolNames.table.get(uId).ref).returnType;
-
-		source = null;
-		sink = ControlFlowGraph.getNewVertex();
+	public ControlFlowGraph(FunctionTableEntry functionTableEntry) {
+		ControlFlowGraph.instance = this;
+		this.functionTableEntry = functionTableEntry;
+		this.tempVertexCount = 0;
+		this.vertices = new HashSet<>();
+		this.source = null;
+		this.sink = getNewVertex();
 
 		// emit control flow graph
-		body.emitCFG();
-		source = body.beginCFGBlock;
-		if (body.endCFGBlock.unconditionalNext == null)
-			body.endCFGBlock.unconditionalNext = sink;
+		functionTableEntry.scope.emitCFG();
+		source = functionTableEntry.scope.beginCFGBlock;
+		if (functionTableEntry.scope.endCFGBlock.unconditionalNext == null)
+			functionTableEntry.scope.endCFGBlock.unconditionalNext = sink;
 
 		// add if condition
 		vertices.stream().forEach(x -> {
@@ -85,148 +62,54 @@ public class ControlFlowGraph {
 		});
 
 		// prune CFG
-		mergeBlocks();
-		splitEdges();
-		reCalculateGraphInfo();
+		GraphManipulate.mergeBlocks(this);
+		GraphManipulate.splitEdges(this);
+		GraphManipulate.reCalculateGraphInfo(this);
 
-		// def external variables and parameters passed at source
+		// define external variables and parameters passed at source
 		defineExternalVariables();
 
 		// do dead code elimination
-		NaiveDeadCodeElimination.process(true);
+		NaiveDeadCodeElimination.process(this, true);
 
 		// insert phi functions
-		PhiPlacer.process();
+		PhiPlacer.process(this);
 
 		// destroy ssa
-		SSADestroyer.process();
-		mergeBlocks();
+		SSADestroyer.process(this);
+		GraphManipulate.mergeBlocks(this);
+
+		ControlFlowGraph.instance = null;
 	}
 
-	public static void defineExternalVariables() {
+	public void defineExternalVariables() {
+		CompoundStatement scope = functionTableEntry.scope;
 		ArrayList<IRInstruction> instructions = scope.givenVariables.stream().map(x -> new Def(new VirtualRegister(x))).collect(Collectors.toCollection(ArrayList::new));
-		Environment.symbolNames.table.stream().filter(e ->
-						e != null && e.scope == 1 && (e.type == Tokens.VARIABLE || e.type == Tokens.STRING_CONSTANT)
-		).forEach(e -> instructions.add(new Def(new VirtualRegister(e.uId))));
+		Environment.symbolNames.table.stream().filter(e -> e != null && e.scope == 1 && (e.type == Tokens.VARIABLE || e.type == Tokens.STRING_CONSTANT)).forEach(e -> instructions.add(new Def(new VirtualRegister(e.uId))));
 		instructions.add(new Def(new VirtualRegister(0)));
 		instructions.addAll(source.internal);
 		source.internal = instructions;
 	}
 
-	public static void reCalculateGraphInfo() {
-		int n = DepthFirstSearcher.process(vertices, source);
-		List<CFGVertex> unreachable = vertices.stream().filter(x -> x.id == -1).collect(Collectors.toList());
-		unreachable.stream().forEach(vertices::remove);
-		if (vertices.size() != n)
-			throw new CompilationError("Internal Error.");
-		if (sink.id == -1) { // unreachable sink
-			sink.id = vertices.size() + 1;
-			vertices.add(sink);
-		}
-		vertices.forEach(v -> v.predecessor = new HashMap<>());
-		vertices.stream().filter(v -> v.id != -1).forEach(v -> {
-			if (v.unconditionalNext != null)
-				v.unconditionalNext.predecessor.put(v, null);
-			if (v.branchIfFalse != null)
-				v.branchIfFalse.predecessor.put(v, null);
-		});
-		vertices.forEach(v -> {
-			final int[] cnt = {0};
-			v.predecessor.entrySet().stream().forEach(e -> e.setValue(cnt[0]++));
-		});
+	public CFGVertex getNewVertex() {
+		CFGVertex ret = new CFGVertex();
+		vertices.add(ret);
+		ret.id = tempVertexCount++;
+		return ret;
 	}
 
-	public static void splitEdges() {
-		int n = DepthFirstSearcher.process(vertices, source);
-		List<CFGVertex> unreachable = vertices.stream().filter(x -> x.id == -1).collect(Collectors.toList());
-		unreachable.stream().forEach(vertices::remove);
-		if (vertices.size() != n)
-			throw new CompilationError("Internal Error.");
-		int inDegree[] = new int[n + 1];
-		int outDegree[] = new int[n + 1];
-		ArrayList<CFGVertex> added = new ArrayList<>();
-		for (CFGVertex x : vertices) {
-			final int finalN = n;
-			Stream.of(x.unconditionalNext, x.branchIfFalse).filter(y -> y != null).forEach(
-					y -> {
-						if (!(1 <= x.id && x.id <= finalN))
-							throw new CompilationError("Internal Error.");
-						if (!(1 <= y.id && y.id <= finalN))
-							throw new CompilationError("Internal Error.");
-						++outDegree[x.id];
-						++inDegree[y.id];
-					}
-			);
-		}
-		for (CFGVertex x : vertices)
-			if (x.unconditionalNext != null && x.branchIfFalse != null) {
-				CFGVertex y, z;
-				y = x.unconditionalNext;
-				if (inDegree[y.id] > 1) {
-					z = getNewTempVertex();
-					x.unconditionalNext = z;
-					z.unconditionalNext = y;
-					added.add(z);
-				}
-				y = x.branchIfFalse;
-				if (inDegree[y.id] > 1) {
-					z = getNewTempVertex();
-					x.branchIfFalse = z;
-					z.unconditionalNext = y;
-					added.add(z);
-				}
-			}
-		vertices.addAll(added);
-		n = DepthFirstSearcher.process(vertices, source);
-		unreachable = vertices.stream().filter(x -> x.id == -1).collect(Collectors.toList());
-		unreachable.stream().forEach(vertices::remove);
-		if (vertices.size() != n)
-			throw new CompilationError("Internal Error.");
+	public CFGVertex getNewTempVertex() {
+		CFGVertex ret = new CFGVertex();
+		ret.id = -1;
+		return ret;
 	}
 
-	public static void mergeBlocks() {
-		boolean changed;
-		do {
-			changed = false;
-			int n = DepthFirstSearcher.process(vertices, source);
-			List<CFGVertex> unreachable = vertices.stream().filter(x -> x.id == -1).collect(Collectors.toList());
-			unreachable.stream().forEach(vertices::remove);
-			if (vertices.size() != n)
-				throw new CompilationError("Internal Error.");
-			int inDegree[] = new int[n + 1];
-			int outDegree[] = new int[n + 1];
-			for (CFGVertex x : vertices)
-				Stream.of(x.unconditionalNext, x.branchIfFalse).filter(y -> y != null).forEach(
-						y -> {
-							if (!(1 <= x.id && x.id <= n))
-								throw new CompilationError("Internal Error.");
-							if (!(1 <= y.id && y.id <= n))
-								throw new CompilationError("Internal Error.");
-							++outDegree[x.id];
-							++inDegree[y.id];
-						}
-				);
-			for (CFGVertex x : vertices) {
-				if (x.unconditionalNext != null && x.branchIfFalse == null) {
-					CFGVertex y = x.unconditionalNext;
-					if (y != sink && inDegree[y.id] == 1) {
-						x.internal.addAll(y.internal);
-						x.unconditionalNext = y.unconditionalNext;
-						x.branchIfFalse = y.branchIfFalse;
-						changed = true;
-						vertices.remove(y);
-						break;
-					}
-				}
-			}
-		} while (changed);
-	}
-
-	public static String toStr() {
-		if (nowUId == 6)
+	@Override
+	public String toString() {
+		if (functionTableEntry.uId == 6)
 			return "CFG of printf omitted";
 		StringBuilder sb = new StringBuilder();
-		sb.append("CFG of Function #").append(nowUId).append(Utility.NEW_LINE);
+		sb.append("CFG of Function #").append(functionTableEntry.uId).append(Utility.NEW_LINE);
 		sb.append(Utility.getIndent(1)).
 				append("in = ").append(source.id).
 				append(", out = ").append(sink.id).

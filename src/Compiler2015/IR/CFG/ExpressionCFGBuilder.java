@@ -9,14 +9,14 @@ public class ExpressionCFGBuilder {
 	public CFGVertex s, t;
 
 	public ExpressionCFGBuilder() {
-		s = t = ControlFlowGraph.getNewVertex();
+		s = t = ControlFlowGraph.instance.getNewVertex();
 	}
 
 	public void addInstruction(IRInstruction i) {
 		if (t.unconditionalNext == null && t.branchIfFalse == null) {
 			t.internal.add(i);
 		} else {
-			CFGVertex newT = ControlFlowGraph.getNewVertex();
+			CFGVertex newT = ControlFlowGraph.instance.getNewVertex();
 			if (t.unconditionalNext != null)
 				throw new CompilationError("Internal Error.");
 			t.unconditionalNext = newT;

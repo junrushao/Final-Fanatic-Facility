@@ -1,8 +1,7 @@
 package Compiler2015;
 
-import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.Environment.Environment;
-import Compiler2015.Environment.SymbolTableEntry;
+import Compiler2015.Environment.FunctionTableEntry;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.Parser.Compiler2015Lexer;
@@ -11,15 +10,14 @@ import Compiler2015.Parser.ParseErrorListener;
 import Compiler2015.Parser.PrettyPrinterListener;
 import Compiler2015.Translate.ASTModifier;
 import Compiler2015.Translate.Naive.MIPS.NaiveTranslator;
-import Compiler2015.Type.FunctionType;
 import Compiler2015.Utility.Panel;
-import Compiler2015.Utility.Tokens;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.io.*;
+import java.util.Map;
 
 public class Main {
 	public InputStream inputFile = System.in;
@@ -121,17 +119,21 @@ public class Main {
 			System.out.println(printer.toString());
 		}
 
+		// construct function table & control flow graph, optimize
+		Environment.generateFunctionTable();
+		for (Map.Entry<Integer, FunctionTableEntry> e : Environment.functionTable.entrySet()) {
+			e.getValue().cfg = new ControlFlowGraph(e.getValue());
+			if (Panel.emitCFG)
+				System.out.println(e.getValue().cfg);
+		}
+
+		// translate to MIPS
 		PrintWriter out = new PrintWriter(outputFile);
 		NaiveTranslator.generateGlobalVariables(out);
 		out.println(".text");
-		for (int i = 1, size = Environment.symbolNames.table.size(); i < size; ++i) { // prevent scanning the added registers
-			SymbolTableEntry entry = Environment.symbolNames.table.get(i);
-			if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionType && entry.info != null) {
-				ControlFlowGraph.process((CompoundStatement) entry.info, entry.uId);
-				if (Panel.emitCFG)
-					System.err.println(ControlFlowGraph.toStr());
-				NaiveTranslator.generateFunction(out);
-			}
+		for (Map.Entry<Integer, FunctionTableEntry> e : Environment.functionTable.entrySet()) {
+			FunctionTableEntry function = e.getValue();
+			new NaiveTranslator(function.cfg).generateFunction(out);
 		}
 		out.close();
 	}

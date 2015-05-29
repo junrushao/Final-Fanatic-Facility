@@ -49,7 +49,7 @@ public class IfStatement extends Statement {
 		if (v != null) {
 			if (v == 0) {
 				if (ifFalse == null) {
-					beginCFGBlock = endCFGBlock = ControlFlowGraph.getNewVertex();
+					beginCFGBlock = endCFGBlock = ControlFlowGraph.instance.getNewVertex();
 				} else {
 					ifFalse.emitCFG();
 					beginCFGBlock = ifFalse.beginCFGBlock;
@@ -61,7 +61,7 @@ public class IfStatement extends Statement {
 				endCFGBlock = ifTrue.endCFGBlock;
 			}
 		} else {
-			CFGVertex out = endCFGBlock = ControlFlowGraph.getNewVertex();
+			CFGVertex out = endCFGBlock = ControlFlowGraph.instance.getNewVertex();
 			ifTrue.emitCFG();
 			if (ifTrue.endCFGBlock.unconditionalNext == null)
 				ifTrue.endCFGBlock.unconditionalNext = out;

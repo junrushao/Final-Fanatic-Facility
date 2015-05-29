@@ -19,6 +19,8 @@ import java.util.HashSet;
 import java.util.Stack;
 
 public final class PhiPlacer {
+	public static ControlFlowGraph graph;
+
 	public static HashSet<Integer> allVariables;
 	public static HashMap<Integer, Stack<IRRegister>> stack;
 	public static HashMap<Integer, Integer> count;
@@ -121,14 +123,14 @@ public final class PhiPlacer {
 			}});
 			count.put(x, 0);
 		}
-		renameVariables(ControlFlowGraph.source);
+		renameVariables(graph.source);
 	}
 
 	public static void insertPhiFunctions() {
-		DataFlow.livenessAnalysis();
+		DataFlow.livenessAnalysis(graph);
 		HashMap<CFGVertex, Integer> inserted = new HashMap<>();
 		HashMap<CFGVertex, Integer> work = new HashMap<>();
-		for (CFGVertex b : ControlFlowGraph.vertices) {
+		for (CFGVertex b : graph.vertices) {
 			inserted.put(b, -1);
 			work.put(b, -1);
 		}
@@ -136,7 +138,7 @@ public final class PhiPlacer {
 		Stack<CFGVertex> worklist = new Stack<>();
 		for (int v : allVariables) {
 			VirtualRegister rv = new VirtualRegister(v);
-			for (CFGVertex x : ControlFlowGraph.vertices) {
+			for (CFGVertex x : graph.vertices) {
 				boolean defV = x.varKill.contains(rv);
 				if (defV) {
 					worklist.push(x);
@@ -162,17 +164,27 @@ public final class PhiPlacer {
 		}
 	}
 
-	public static void process() {
-		LengauerTarjan.process(ControlFlowGraph.vertices, ControlFlowGraph.source, ControlFlowGraph.vertices.size());
+	public static void process(ControlFlowGraph graph) {
+		PhiPlacer.graph = graph;
+		LengauerTarjan.process(graph);
 		collectRegistersUsed();
 		insertPhiFunctions();
 		renameVariables();
-		EliminateNop.process();
+		EliminateNop.process(graph);
+
+		freeMemory();
+	}
+
+	public static void freeMemory() {
+		graph = null;
+		allVariables = null;
+		stack = null;
+		count = null;
 	}
 
 	public static void collectRegistersUsed() {
 		allVariables = new HashSet<>();
-		for (CFGVertex b : ControlFlowGraph.vertices)
+		for (CFGVertex b : graph.vertices)
 			for (IRInstruction ins : b.internal) {
 				for (int x : ins.getAllDefUId())
 					if (x >= 0)

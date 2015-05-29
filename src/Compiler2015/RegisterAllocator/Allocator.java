@@ -86,8 +86,8 @@ public class Allocator {
 		me.update(position);
 	}
 
-	public void process() {
-		DFSInDominatorTree(ControlFlowGraph.source);
+	public void process(ControlFlowGraph graph) {
+		DFSInDominatorTree(graph.source);
 		int positionCount = buildIntervals();
 		int ptr = 0;
 		for (int i = 1; i <= positionCount; ++i) {

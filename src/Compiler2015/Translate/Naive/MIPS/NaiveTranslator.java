@@ -26,14 +26,10 @@ import java.util.Map;
 
 public final class NaiveTranslator {
 
-	public static String getFunctionLabel() {
-		return String.format("___global___uId_%d___name_%s:",
-				ControlFlowGraph.nowUId, Environment.symbolNames.table.get(ControlFlowGraph.nowUId).name);
-	}
+	public ControlFlowGraph graph;
 
-	public static String getFunctionLabelName(int uId) {
-		return String.format("___global___uId_%d___name_%s",
-				uId, Environment.symbolNames.table.get(uId).name);
+	public NaiveTranslator(ControlFlowGraph graph) {
+		this.graph = graph;
 	}
 
 	public static String getGlobalVariableLabel(int uId) {
@@ -50,18 +46,6 @@ public final class NaiveTranslator {
 
 	public static String getStringConstantLabelName(int uId) {
 		return String.format("___global___uId_%d", uId);
-	}
-
-	public static String getVertexLabel(int id) {
-		if (id < 0)
-			return String.format("___function___uId_%d___vertex_neg_%d:", ControlFlowGraph.nowUId, -id);
-		return String.format("___function___uId_%d___vertex_%d:", ControlFlowGraph.nowUId, id);
-	}
-
-	public static String getVertexLabelName(int id) {
-		if (id < 0)
-			return String.format("___function___uId_%d___vertex_neg_%d", ControlFlowGraph.nowUId, -id);
-		return String.format("___function___uId_%d___vertex_%d", ControlFlowGraph.nowUId, id);
 	}
 
 	public static void generateGlobalVariables(PrintWriter out) {
@@ -199,15 +183,60 @@ public final class NaiveTranslator {
 		out.println("\t.align 2");
 	}
 
-	public static int getDelta(int uId) {
-		if (ControlFlowGraph.tempDelta.containsKey(uId))
-			return ControlFlowGraph.tempDelta.get(uId);
-		if (ControlFlowGraph.parameterDelta.containsKey(uId))
-			return ControlFlowGraph.parameterDelta.get(uId);
+	public static void generateLibraryFunction(int uId, PrintWriter out) {
+		if (uId == Environment.uIdOfPutInt) {
+			out.println("\tlw $a0, -4($sp)");
+			out.println("\tli $v0, 1");
+			out.println("\tsyscall");
+		} else if (uId == Environment.uIdOfPutString) {
+			out.println("\tlw $a0, -4($sp)");
+			out.println("\tli $v0, 4");
+			out.println("\tsyscall");
+		} else if (uId == Environment.uIdOfMalloc) {
+			out.println("\tlw $a0, -4($sp)");
+			out.println("\tli $v0, 9");
+			out.println("\tsyscall");
+		} else if (uId == Environment.uIdOfGetChar) {
+			out.println("\tli $v0, 12");
+			out.println("\tsyscall");
+		} else if (uId == Environment.uIdOfPutChar) {
+			out.println("\tlw $a0, -4($sp)");
+			out.println("\tli $v0, 11");
+			out.println("\tsyscall");
+		}
+	}
+
+	public String getFunctionLabel() {
+		return String.format("___global___uId_%d___name_%s:",
+				graph.functionTableEntry.uId, Environment.symbolNames.table.get(graph.functionTableEntry.uId).name);
+	}
+
+	public String getFunctionLabelName(int uId) {
+		return String.format("___global___uId_%d___name_%s",
+				uId, Environment.symbolNames.table.get(uId).name);
+	}
+
+	public String getVertexLabel(int id) {
+		if (id < 0)
+			return String.format("___function___uId_%d___vertex_neg_%d:", graph.functionTableEntry.uId, -id);
+		return String.format("___function___uId_%d___vertex_%d:", graph.functionTableEntry.uId, id);
+	}
+
+	public String getVertexLabelName(int id) {
+		if (id < 0)
+			return String.format("___function___uId_%d___vertex_neg_%d", graph.functionTableEntry.uId, -id);
+		return String.format("___function___uId_%d___vertex_%d", graph.functionTableEntry.uId, id);
+	}
+
+	public int getDelta(int uId) {
+		if (graph.tempDelta.containsKey(uId))
+			return graph.tempDelta.get(uId);
+		if (graph.parameterDelta.containsKey(uId))
+			return graph.parameterDelta.get(uId);
 		throw new CompilationError("Internal Error.");
 	}
 
-	public static void loadFromIRRegisterToTRegister(IRRegister from, int reg, PrintWriter out) {
+	public void loadFromIRRegisterToTRegister(IRRegister from, int reg, PrintWriter out) {
 		if (from instanceof ImmediateValue) {
 			out.printf("\tli $t%d, %d%s", reg, ((ImmediateValue) from).a, Utility.NEW_LINE);
 		} else if (from instanceof VirtualRegister) {
@@ -252,11 +281,11 @@ public final class NaiveTranslator {
 			throw new CompilationError("Internal Error.");
 	}
 
-	public static void storeFromTRegisterToIRRegister(int reg, int uId, PrintWriter out) {
+	public void storeFromTRegisterToIRRegister(int reg, int uId, PrintWriter out) {
 		storeFromPhysicalRegisterToIRRegister("$t" + reg, uId, out);
 	}
 
-	public static void storeFromPhysicalRegisterToIRRegister(String reg, int uId, PrintWriter out) {
+	public void storeFromPhysicalRegisterToIRRegister(String reg, int uId, PrintWriter out) {
 		SymbolTableEntry e = Environment.symbolNames.table.get(uId);
 		if (e.scope == 1) { // global variables: all global variables are arrays
 			if (e.type == Tokens.STRING_CONSTANT)
@@ -273,25 +302,17 @@ public final class NaiveTranslator {
 			out.printf("\tsw %s, %d($sp)%s", reg, getDelta(uId), Utility.NEW_LINE);
 	}
 
-	public static void generateFunction(PrintWriter out) {
+	public void generateFunction(PrintWriter out) {
 		scanVirtualRegister(); // calculate space of stack frame
 
-		if (Environment.symbolNames.table.get(ControlFlowGraph.nowUId).name.equals("main"))
+		if (Environment.symbolNames.table.get(graph.functionTableEntry.uId).name.equals("main"))
 			out.println("main:");
 
 		out.println(getFunctionLabel());
-/*
-		if (-32768 <= ControlFlowGraph.frameSize && ControlFlowGraph.frameSize <= 32767)
-			out.println("\taddiu $sp, $sp, -" + ControlFlowGraph.frameSize);
-		else {
-			out.printf("\tli $t0, -%d%s", ControlFlowGraph.frameSize, Utility.NEW_LINE);
-			out.println("\taddu $sp, $sp, $t0");
-		}
-*/
-		out.println("\taddu $sp, $sp, " + (-ControlFlowGraph.frameSize));
+		out.println("\taddu $sp, $sp, " + (-graph.frameSize));
 		out.println("\tsw $ra, 4($sp)");
 
-		ArrayList<CFGVertex> sequence = NaiveSequentializer.process();
+		ArrayList<CFGVertex> sequence = NaiveSequentializer.process(graph);
 		int sizeOfAllArguments = 0;
 		int sizeOfExtraArguments = 0;
 		IRRegister lastNop = null;
@@ -485,47 +506,15 @@ public final class NaiveTranslator {
 				out.printf("\tj %s%s", getVertexLabelName(vertex.unconditionalNext.id), Utility.NEW_LINE);
 			}
 		}
-
 		out.println("\tlw $ra, 4($sp)");
-/*
-		if (-32768 <= ControlFlowGraph.frameSize && ControlFlowGraph.frameSize <= 32767)
-			out.println("\taddiu $sp, $sp, " + ControlFlowGraph.frameSize);
-		else {
-			out.printf("\tli $t0, %d%s", ControlFlowGraph.frameSize, Utility.NEW_LINE);
-			out.println("\taddu $sp, $sp, $t0");
-		}
-*/
-		out.println("\taddu $sp, $sp, " + (ControlFlowGraph.frameSize));
+		out.println("\taddu $sp, $sp, " + (graph.frameSize));
 		out.println("\tjr $ra");
 	}
 
-	public static void generateLibraryFunction(int uId, PrintWriter out) {
-		if (uId == Environment.uIdOfPutInt) {
-			out.println("\tlw $a0, -4($sp)");
-			out.println("\tli $v0, 1");
-			out.println("\tsyscall");
-		} else if (uId == Environment.uIdOfPutString) {
-			out.println("\tlw $a0, -4($sp)");
-			out.println("\tli $v0, 4");
-			out.println("\tsyscall");
-		} else if (uId == Environment.uIdOfMalloc) {
-			out.println("\tlw $a0, -4($sp)");
-			out.println("\tli $v0, 9");
-			out.println("\tsyscall");
-		} else if (uId == Environment.uIdOfGetChar) {
-			out.println("\tli $v0, 12");
-			out.println("\tsyscall");
-		} else if (uId == Environment.uIdOfPutChar) {
-			out.println("\tlw $a0, -4($sp)");
-			out.println("\tli $v0, 11");
-			out.println("\tsyscall");
-		}
-	}
-
-	public static void scanVirtualRegister() {
-		ControlFlowGraph.tempDelta = new HashMap<>();
-		ControlFlowGraph.parameterDelta = new HashMap<>();
-		for (CFGVertex vertex : ControlFlowGraph.vertices) {
+	public void scanVirtualRegister() {
+		graph.tempDelta = new HashMap<>();
+		graph.parameterDelta = new HashMap<>();
+		for (CFGVertex vertex : graph.vertices) {
 			for (IRInstruction ins : vertex.internal) {
 				for (int uId : ins.getAllDefUId())
 					classifyVirtualRegister(uId);
@@ -533,32 +522,32 @@ public final class NaiveTranslator {
 					classifyVirtualRegister(uId);
 			}
 		}
-		ControlFlowGraph.frameSize = Panel.getRegisterSize() * 2; // [0, 3] for $fp, [4, 7] for $ra
-		for (Map.Entry<Integer, Integer> entry : ControlFlowGraph.tempDelta.entrySet()) {
-			entry.setValue(ControlFlowGraph.frameSize);
+		graph.frameSize = Panel.getRegisterSize() * 2; // [0, 3] for $fp, [4, 7] for $ra
+		for (Map.Entry<Integer, Integer> entry : graph.tempDelta.entrySet()) {
+			entry.setValue(graph.frameSize);
 			int uId = entry.getKey();
 			SymbolTableEntry e = Environment.symbolNames.table.get(uId);
 			if (e.type == Tokens.VARIABLE)
-				ControlFlowGraph.frameSize += Utility.align(((Type) e.ref).sizeof());
+				graph.frameSize += Utility.align(((Type) e.ref).sizeof());
 			else if (e.type == Tokens.TEMPORARY_REGISTER)
-				ControlFlowGraph.frameSize += Panel.getRegisterSize();
+				graph.frameSize += Panel.getRegisterSize();
 			else
 				throw new CompilationError("Internal Error.");
 		}
-		ControlFlowGraph.frameSize += Utility.align(ControlFlowGraph.returnType.sizeof()); // for return value
-		for (int uId : ControlFlowGraph.scope.parametersUId) {
-			ControlFlowGraph.parameterDelta.put(uId, ControlFlowGraph.frameSize);
-			ControlFlowGraph.frameSize += Utility.align(((Type) Environment.symbolNames.table.get(uId).ref).sizeof());
+		graph.frameSize += Utility.align(graph.functionTableEntry.definition.returnType.sizeof());
+		for (int uId : graph.functionTableEntry.scope.parametersUId) {
+			graph.parameterDelta.put(uId, graph.frameSize);
+			graph.frameSize += Utility.align(((Type) Environment.symbolNames.table.get(uId).ref).sizeof());
 		}
 	}
 
-	public static void classifyVirtualRegister(int uId) {
+	public void classifyVirtualRegister(int uId) {
 		if (uId == -1 || uId == 0 || uId == -2 || uId == -3)
 			return;
 		SymbolTableEntry e = Environment.symbolNames.table.get(uId);
 		if (e.scope <= 1)
 			return;
-		if (!ControlFlowGraph.scope.parametersUId.contains(uId))
-			ControlFlowGraph.tempDelta.put(uId, -1);
+		if (!graph.functionTableEntry.scope.parametersUId.contains(uId))
+			graph.tempDelta.put(uId, -1);
 	}
 }

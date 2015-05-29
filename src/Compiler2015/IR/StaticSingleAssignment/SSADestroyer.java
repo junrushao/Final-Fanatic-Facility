@@ -15,6 +15,7 @@ import Compiler2015.Utility.Tokens;
 import java.util.HashMap;
 
 public final class SSADestroyer {
+	public static ControlFlowGraph graph;
 	public static HashMap<VirtualRegister, Integer> mapFromSSARegisterToSimpleRegister;
 
 	public static void placeBeforeNopForBranch(CFGVertex b, IRInstruction ins) {
@@ -33,7 +34,7 @@ public final class SSADestroyer {
 	}
 
 	public static void destroyPhiFunctions() {
-		for (CFGVertex v : ControlFlowGraph.vertices)
+		for (CFGVertex v : graph.vertices)
 			for (int instructionCount = 0, size = v.phiBlock.size(); instructionCount < size; ++instructionCount) {
 				if (v.phiBlock.get(instructionCount) instanceof PhiFunction) {
 					PhiFunction ins = (PhiFunction) v.phiBlock.get(instructionCount);
@@ -49,7 +50,7 @@ public final class SSADestroyer {
 					v.phiBlock.set(instructionCount, Nop.instance);
 				}
 			}
-		EliminateNop.process();
+		EliminateNop.process(graph);
 	}
 
 	public static IRRegister renameVirtualRegisters(IRRegister reg) {
@@ -107,15 +108,19 @@ public final class SSADestroyer {
 
 	public static void renameVirtualRegisters() {
 		mapFromSSARegisterToSimpleRegister = new HashMap<>();
-		for (CFGVertex v : ControlFlowGraph.vertices) {
+		for (CFGVertex v : graph.vertices) {
 			v.phiBlock.forEach(SSADestroyer::renameVirtualRegisters);
 			v.internal.forEach(SSADestroyer::renameVirtualRegisters);
 		}
 	}
 
-	public static void process() {
-		EliminateNop.process();
+	public static void process(ControlFlowGraph graph) {
+		SSADestroyer.graph = graph;
+
+		EliminateNop.process(graph);
 		destroyPhiFunctions();
 		renameVirtualRegisters();
+
+		mapFromSSARegisterToSimpleRegister = null;
 	}
 }

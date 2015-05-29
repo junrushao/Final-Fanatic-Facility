@@ -31,7 +31,7 @@ public class ReturnStatement extends Statement {
 	@Override
 	public void emitCFG() {
 		if (e == null) {
-			beginCFGBlock = endCFGBlock = ControlFlowGraph.getNewVertex();
+			beginCFGBlock = endCFGBlock = ControlFlowGraph.instance.getNewVertex();
 //			endCFGBlock.internal.add(Pop.instance);
 		} else {
 			ExpressionCFGBuilder builder = new ExpressionCFGBuilder();
@@ -44,7 +44,7 @@ public class ReturnStatement extends Statement {
 				throw new CompilationError("Internal Error.");
 //			endCFGBlock.internal.add(Pop.instance);
 		}
-		endCFGBlock.unconditionalNext = ControlFlowGraph.sink;
+		endCFGBlock.unconditionalNext = ControlFlowGraph.instance.sink;
 	}
 
 	@Override

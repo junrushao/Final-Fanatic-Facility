@@ -1525,7 +1525,7 @@ public class Compiler2015Parser extends Parser {
 						setState(361);
 						match(R1);
 						TypeAnalyser.addParameter();
-					}
+				}
 					break;
 					case 5: {
 						setState(363);
@@ -3163,7 +3163,7 @@ public class Compiler2015Parser extends Parser {
 									setState(767);
 									match(T__33);
 									((PostfixExpressionContext) _localctx).ret = PostfixSelfInc.getExpression(((PostfixExpressionContext) _localctx).p.ret);
-								}
+						}
 								break;
 								case 6: {
 									_localctx = new PostfixExpressionContext(_parentctx, _parentState);

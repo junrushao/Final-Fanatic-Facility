@@ -1,6 +1,7 @@
 package Compiler2015.IR.StaticSingleAssignment;
 
 import Compiler2015.IR.CFG.CFGVertex;
+import Compiler2015.IR.CFG.ControlFlowGraph;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,7 +27,11 @@ public final class LengauerTarjan {
 		return v.best;
 	}
 
-	public static void process(HashSet<CFGVertex> vertices, CFGVertex root, int n) {
+	public static void process(ControlFlowGraph graph) {
+		HashSet<CFGVertex> vertices = graph.vertices;
+		CFGVertex root = graph.source;
+		int n = vertices.size();
+
 		vi = new VertexInfo[n + 1];
 		for (int i = 1; i <= n; ++i) vi[i] = new VertexInfo();
 		// add predecessor edges
@@ -80,6 +85,7 @@ public final class LengauerTarjan {
 				for (VertexInfo prev : toAdd.pred)
 					for (VertexInfo here = prev; here != toAdd.idom; here = here.idom)
 						here.me.dominanceFrontier.add(toAdd.me);
+		vi = null;
 	}
 
 	public static class VertexInfo {

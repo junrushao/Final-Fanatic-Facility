@@ -10,13 +10,13 @@ import java.util.HashSet;
 
 public final class DataFlow {
 
-	public static void livenessAnalysis() {
+	public static void livenessAnalysis(ControlFlowGraph graph) {
 		// memory is taken into consideration
-		int n = ControlFlowGraph.vertices.size();
+		int n = graph.vertices.size();
 		Utility.SetOperation<VirtualRegister> setOperation = new Utility.SetOperation<>();
 
 		CFGVertex vertices[] = new CFGVertex[n + 1];
-		for (CFGVertex v : ControlFlowGraph.vertices) {
+		for (CFGVertex v : graph.vertices) {
 			vertices[v.id] = v;
 			v.uEVar = new HashSet<>();
 			v.varKill = new HashSet<>();

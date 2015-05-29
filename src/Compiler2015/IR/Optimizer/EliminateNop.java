@@ -14,8 +14,8 @@ public final class EliminateNop {
 		return (ArrayList<IRInstruction>) block.stream().filter(ins -> !(ins instanceof Nop)).collect(Collectors.toList());
 	}
 
-	public static void process() {
-		for (CFGVertex block : ControlFlowGraph.vertices) {
+	public static void process(ControlFlowGraph graph) {
+		for (CFGVertex block : graph.vertices) {
 			block.phiBlock = eliminateNop(block.phiBlock);
 			block.internal = eliminateNop(block.internal);
 		}

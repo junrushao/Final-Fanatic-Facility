@@ -18,11 +18,11 @@ public final class NaiveDeadCodeElimination {
 		return false;
 	}
 
-	public static int onePass(boolean deleteDef) {
+	public static int onePass(ControlFlowGraph graph, boolean deleteDef) {
 		int deleted = 0;
-		DataFlow.livenessAnalysis();
+		DataFlow.livenessAnalysis(graph);
 		// def not used below in the same block, and not live out the block
-		for (CFGVertex block : ControlFlowGraph.vertices) {
+		for (CFGVertex block : graph.vertices) {
 			for (int i = 0, size = block.phiBlock.size(); i < size; ++i) {
 				boolean allDefUseless = true;
 				IRInstruction ins = block.phiBlock.get(i);
@@ -96,13 +96,13 @@ public final class NaiveDeadCodeElimination {
 				}
 			}
 		}
-		EliminateNop.process();
+		EliminateNop.process(graph);
 		return deleted;
 	}
 
-	public static void process(boolean deleteDef) {
+	public static void process(ControlFlowGraph graph, boolean deleteDef) {
 		for (int deleted; ; ) {
-			deleted = NaiveDeadCodeElimination.onePass(deleteDef);
+			deleted = NaiveDeadCodeElimination.onePass(graph, deleteDef);
 			if (deleted == 0)
 				break;
 		}

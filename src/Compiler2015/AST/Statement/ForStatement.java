@@ -58,8 +58,8 @@ public class ForStatement extends Statement implements Loop {
 
 	@Override
 	public void emitCFG() {
-		CFGVertex out = endCFGBlock = ControlFlowGraph.getNewVertex();
-		loop = ControlFlowGraph.getNewVertex();
+		CFGVertex out = endCFGBlock = ControlFlowGraph.instance.getNewVertex();
+		loop = ControlFlowGraph.instance.getNewVertex();
 		Integer vb = Constant.toInt(b);
 		if (vb != null) {
 			if (vb == 0) {
@@ -68,7 +68,7 @@ public class ForStatement extends Statement implements Loop {
 					beginCFGBlock = a.beginCFGBlock;
 					endCFGBlock = a.endCFGBlock;
 				} else {
-					beginCFGBlock = endCFGBlock = ControlFlowGraph.getNewVertex();
+					beginCFGBlock = endCFGBlock = ControlFlowGraph.instance.getNewVertex();
 				}
 				return;
 			} else {
