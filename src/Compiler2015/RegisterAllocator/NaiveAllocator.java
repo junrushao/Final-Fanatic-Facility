@@ -30,6 +30,7 @@ public class NaiveAllocator extends BaseAllocator {
 						mapping.put(r.uId, null);
 			}
 		}
-	}
 
+		collectPhysicalRegistersUsed();
+	}
 }

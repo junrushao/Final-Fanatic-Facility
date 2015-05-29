@@ -6,7 +6,7 @@ import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.IRInstruction;
-import Compiler2015.IR.Instruction.TwoAddressInstruction.Move;
+import Compiler2015.IR.Instruction.Move;
 
 /**
  * rd = rs / rt
@@ -26,11 +26,6 @@ public class DivideReg extends ThreeAddressInstruction {
 			throw new CompilationError("There would be runtime division by zero.");
 		if (rs instanceof ImmediateValue && rt instanceof ImmediateValue)
 			return new Move(rd, new ImmediateValue(((ImmediateValue) rs).a / ((ImmediateValue) rt).a));
-		if (rs instanceof ImmediateValue) {
-			IRRegister tmp = rs;
-			rs = rt;
-			rt = tmp;
-		}
 		return new DivideReg(rd, rs, rt);
 	}
 

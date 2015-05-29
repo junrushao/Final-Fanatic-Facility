@@ -6,7 +6,7 @@ import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.IRInstruction;
-import Compiler2015.IR.Instruction.TwoAddressInstruction.Move;
+import Compiler2015.IR.Instruction.Move;
 
 /**
  * rd = rs + rt

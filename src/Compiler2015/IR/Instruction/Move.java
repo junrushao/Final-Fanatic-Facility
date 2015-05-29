@@ -1,13 +1,13 @@
-package Compiler2015.IR.Instruction.TwoAddressInstruction;
+package Compiler2015.IR.Instruction;
 
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
-import Compiler2015.IR.Instruction.IRInstruction;
 
 /**
  * rd = rs
  */
-public class Move extends TwoAddressInstruction {
+public class Move extends IRInstruction {
+	public IRRegister rs;
 
 	public Move(VirtualRegister rd, IRRegister rs) {
 		this.rd = rd.clone();
@@ -64,10 +64,5 @@ public class Move extends TwoAddressInstruction {
 	@Override
 	public String toString() {
 		return "Move " + rd + " = " + rs;
-	}
-
-	@Override
-	public String toMIPSName() {
-		return "move";
 	}
 }

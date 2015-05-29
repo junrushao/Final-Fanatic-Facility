@@ -9,8 +9,9 @@ import Compiler2015.IR.Instruction.IRInstruction;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Allocator extends BaseAllocator {
-	public Allocator(ControlFlowGraph graph) {
+public class LinearScanAllocator extends BaseAllocator {
+
+	public LinearScanAllocator(ControlFlowGraph graph) {
 		super(graph);
 		ActivePool activePool = new ActivePool();
 		ArrayList<CFGVertex> blockList = new ArrayList<>();
@@ -26,6 +27,7 @@ public class Allocator extends BaseAllocator {
 			activePool.removeInterval(i);
 		}
 		mapping = activePool.physicalRegister;
+		collectPhysicalRegistersUsed();
 	}
 
 	public static void updatePosition(int uId, int position, HashMap<Integer, Interval> intervals) {
@@ -69,6 +71,7 @@ public class Allocator extends BaseAllocator {
 		}
 
 		public int getFree() {
+			//	TODO : should pick randomly
 			for (int i = 0; i < occupied.length; ++i)
 				if (!occupied[i])
 					return i;

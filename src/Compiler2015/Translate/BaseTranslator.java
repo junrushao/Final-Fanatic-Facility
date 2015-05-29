@@ -7,31 +7,25 @@ import Compiler2015.AST.Statement.ExpressionStatement.StringConstant;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
-import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.IR.CFG.ControlFlowGraph;
-import Compiler2015.IR.Instruction.IRInstruction;
+import Compiler2015.RegisterAllocator.BaseAllocator;
 import Compiler2015.Type.*;
-import Compiler2015.Utility.Panel;
 import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class BaseTranslator {
 	public ControlFlowGraph graph;
 
-	public HashMap<Integer, Integer> tempDelta;
-	public HashMap<Integer, Integer> parameterDelta;
-	public int frameSize;
+	public BaseAllocator allocator;
+	public PrintWriter out;
 
-	public BaseTranslator(ControlFlowGraph graph) {
+	public BaseTranslator(ControlFlowGraph graph, PrintWriter out) {
 		this.graph = graph;
-		this.tempDelta = new HashMap<>();
-		this.parameterDelta = new HashMap<>();
-		this.frameSize = 0;
+		this.allocator = graph.functionTableEntry.allocator;
+		this.out = out;
 	}
 
 	public static String getGlobalVariableLabel(int uId) {
@@ -207,51 +201,13 @@ public abstract class BaseTranslator {
 		return String.format("___function___uId_%d___vertex_%d", graph.functionTableEntry.uId, id);
 	}
 
-	public void scanVirtualRegister() {
-		for (CFGVertex vertex : graph.vertices) {
-			for (IRInstruction ins : vertex.internal) {
-				for (int uId : ins.getAllDefUId())
-					classifyVirtualRegister(uId);
-				for (int uId : ins.getAllUseUId())
-					classifyVirtualRegister(uId);
-			}
-		}
-		frameSize = Panel.getRegisterSize() * 33; // [0, 3] for $ra
-		for (Map.Entry<Integer, Integer> entry : tempDelta.entrySet()) {
-			entry.setValue(frameSize);
-			int uId = entry.getKey();
-			SymbolTableEntry e = Environment.symbolNames.table.get(uId);
-			if (e.type == Tokens.VARIABLE)
-				frameSize += Utility.align(((Type) e.ref).sizeof());
-			else if (e.type == Tokens.TEMPORARY_REGISTER)
-				frameSize += Panel.getRegisterSize();
-			else
-				throw new CompilationError("Internal Error.");
-		}
-		frameSize += Utility.align(graph.functionTableEntry.definition.returnType.sizeof());
-		for (int uId : graph.functionTableEntry.scope.parametersUId) {
-			parameterDelta.put(uId, frameSize);
-			frameSize += Utility.align(((Type) Environment.symbolNames.table.get(uId).ref).sizeof());
-		}
-	}
-
-	public void classifyVirtualRegister(int uId) {
-		if (uId == -1 || uId == 0 || uId == -2 || uId == -3)
-			return;
-		SymbolTableEntry e = Environment.symbolNames.table.get(uId);
-		if (e.scope <= 1)
-			return;
-		if (!graph.functionTableEntry.scope.parametersUId.contains(uId))
-			tempDelta.put(uId, -1);
-	}
-
 	public int getDelta(int uId) {
-		if (tempDelta.containsKey(uId))
-			return tempDelta.get(uId);
-		if (parameterDelta.containsKey(uId))
-			return parameterDelta.get(uId);
+		if (graph.tempDelta.containsKey(uId))
+			return graph.tempDelta.get(uId);
+		if (graph.parameterDelta.containsKey(uId))
+			return graph.parameterDelta.get(uId);
 		throw new CompilationError("Internal Error.");
 	}
 
-	public abstract void generateFunction(PrintWriter out);
+	public abstract void generateFunction();
 }

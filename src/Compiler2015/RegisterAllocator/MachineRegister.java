@@ -31,14 +31,17 @@ public class MachineRegister {
 			new MachineRegister(26, "$k0"),
 			new MachineRegister(27, "$k1"),
 			new MachineRegister(28, "$gp"),
+//			new MachineRegister(29, "$sp"),
 			new MachineRegister(30, "$fp"),
 //			new MachineRegister(31, "$ra")
 	};
 	public static int K;
+	public static MachineRegister tmp1 = new MachineRegister(31, "$ra");
+	public static MachineRegister tmp2 = new MachineRegister(2, "$v0");
+	public static MachineRegister tmp3 = new MachineRegister(4, "$a0");
 
 	static {
 		K = availableMachineRegisters.length;
-		System.err.println("K = availableMachineRegisters.length = " + K);
 		for (int i = 0; i < availableMachineRegisters.length; ++i)
 			availableMachineRegisters[i].order = i;
 	}
@@ -46,12 +49,15 @@ public class MachineRegister {
 	public int idInMIPS;
 	public String name;
 	public int order;
-	public MachineRegister tmp1 = new MachineRegister(31, "$ra");
-	public MachineRegister tmp2 = new MachineRegister(2, "$v0");
-	public MachineRegister tmp3 = new MachineRegister(4, "$a0");
 
 	private MachineRegister(int idInMIPS, String name) {
 		this.idInMIPS = idInMIPS;
 		this.name = name;
+		this.order = Integer.MIN_VALUE / 4;
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 }

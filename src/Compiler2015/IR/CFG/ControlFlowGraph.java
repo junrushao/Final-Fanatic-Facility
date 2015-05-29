@@ -3,6 +3,8 @@ package Compiler2015.IR.CFG;
 import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.FunctionTableEntry;
+import Compiler2015.Environment.SymbolTableEntry;
+import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.Def;
 import Compiler2015.IR.Instruction.IRInstruction;
@@ -10,11 +12,15 @@ import Compiler2015.IR.Instruction.NopForBranch;
 import Compiler2015.IR.Optimizer.NaiveDeadCodeElimination;
 import Compiler2015.IR.StaticSingleAssignment.PhiPlacer;
 import Compiler2015.IR.StaticSingleAssignment.SSADestroyer;
+import Compiler2015.Type.Type;
+import Compiler2015.Utility.Panel;
 import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ControlFlowGraph {
@@ -28,6 +34,10 @@ public class ControlFlowGraph {
 	public HashSet<CFGVertex> vertices;
 	public CFGVertex source, sink;
 
+	public HashMap<Integer, Integer> tempDelta;
+	public HashMap<Integer, Integer> parameterDelta;
+	public int frameSize;
+
 	public ControlFlowGraph(FunctionTableEntry functionTableEntry) {
 		ControlFlowGraph.instance = this;
 		this.functionTableEntry = functionTableEntry;
@@ -35,6 +45,10 @@ public class ControlFlowGraph {
 		this.vertices = new HashSet<>();
 		this.source = null;
 		this.sink = getNewVertex();
+
+		this.tempDelta = new HashMap<>();
+		this.parameterDelta = new HashMap<>();
+		this.frameSize = 0;
 
 		// emit control flow graph
 		functionTableEntry.scope.emitCFG();
@@ -71,9 +85,26 @@ public class ControlFlowGraph {
 
 		// destroy ssa
 		SSADestroyer.process(this);
+
 		GraphManipulate.mergeBlocks(this);
+		scanVirtualRegister();
 
 		ControlFlowGraph.instance = null;
+	}
+
+	public void touchGraph() {
+		for (CFGVertex block : vertices) {
+			for (int i = 0, size = block.phiBlock.size(); i < size; ++i) {
+				IRInstruction before = block.phiBlock.get(i);
+				IRInstruction after = before.getExpression();
+				block.phiBlock.set(i, after);
+			}
+			for (int i = 0, size = block.internal.size(); i < size; ++i) {
+				IRInstruction before = block.internal.get(i);
+				IRInstruction after = before.getExpression();
+				block.internal.set(i, after);
+			}
+		}
 	}
 
 	public void defineExternalVariables() {
@@ -96,6 +127,44 @@ public class ControlFlowGraph {
 		CFGVertex ret = new CFGVertex();
 		ret.id = -1;
 		return ret;
+	}
+
+	public void scanVirtualRegister() {
+		for (CFGVertex vertex : vertices) {
+			for (IRInstruction ins : vertex.internal) {
+				for (int uId : ins.getAllDefUId())
+					classifyVirtualRegister(uId);
+				for (int uId : ins.getAllUseUId())
+					classifyVirtualRegister(uId);
+			}
+		}
+		frameSize = Panel.getRegisterSize() * 33; // [0, 3] for $ra
+		for (Map.Entry<Integer, Integer> entry : tempDelta.entrySet()) {
+			entry.setValue(frameSize);
+			int uId = entry.getKey();
+			SymbolTableEntry e = Environment.symbolNames.table.get(uId);
+			if (e.type == Tokens.VARIABLE)
+				frameSize += Utility.align(((Type) e.ref).sizeof());
+			else if (e.type == Tokens.TEMPORARY_REGISTER)
+				frameSize += Panel.getRegisterSize();
+			else
+				throw new CompilationError("Internal Error.");
+		}
+		frameSize += Utility.align(functionTableEntry.definition.returnType.sizeof());
+		for (int uId : functionTableEntry.scope.parametersUId) {
+			parameterDelta.put(uId, frameSize);
+			frameSize += Utility.align(((Type) Environment.symbolNames.table.get(uId).ref).sizeof());
+		}
+	}
+
+	public void classifyVirtualRegister(int uId) {
+		if (uId == -1 || uId == 0 || uId == -2 || uId == -3)
+			return;
+		SymbolTableEntry e = Environment.symbolNames.table.get(uId);
+		if (e.scope <= 1)
+			return;
+		if (!functionTableEntry.scope.parametersUId.contains(uId))
+			tempDelta.put(uId, -1);
 	}
 
 	@Override

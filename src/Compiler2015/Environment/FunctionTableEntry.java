@@ -2,6 +2,7 @@ package Compiler2015.Environment;
 
 import Compiler2015.AST.Statement.CompoundStatement;
 import Compiler2015.IR.CFG.ControlFlowGraph;
+import Compiler2015.RegisterAllocator.BaseAllocator;
 import Compiler2015.Type.FunctionType;
 
 public class FunctionTableEntry {
@@ -11,6 +12,7 @@ public class FunctionTableEntry {
 	public SymbolTableEntry symbolTableEntry;
 	public CompoundStatement scope;
 	public ControlFlowGraph cfg;
+	public BaseAllocator allocator;
 
 	public FunctionTableEntry(int uId, String name, FunctionType definition, SymbolTableEntry symbolTableEntry, CompoundStatement scope) {
 		this.uId = uId;
@@ -19,5 +21,6 @@ public class FunctionTableEntry {
 		this.symbolTableEntry = symbolTableEntry;
 		this.scope = scope;
 		this.cfg = null;
+		this.allocator = null;
 	}
 }

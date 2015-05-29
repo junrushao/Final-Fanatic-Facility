@@ -6,14 +6,14 @@ import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.IRInstruction;
-import Compiler2015.IR.Instruction.TwoAddressInstruction.Move;
+import Compiler2015.IR.Instruction.Move;
 
 /**
  * rd = rs > rt
  */
 public class SetGreaterThan extends ThreeAddressInstruction {
 
-	private SetGreaterThan(VirtualRegister rd, IRRegister rs, IRRegister rt) {
+	protected SetGreaterThan(VirtualRegister rd, IRRegister rs, IRRegister rt) {
 		this.rd = rd.clone();
 		this.rs = rs.clone();
 		this.rt = rt.clone();
@@ -24,11 +24,8 @@ public class SetGreaterThan extends ThreeAddressInstruction {
 			throw new CompilationError("Internal Error");
 		if (rs instanceof ImmediateValue && rt instanceof ImmediateValue)
 			return new Move(rd, new ImmediateValue((((ImmediateValue) rs).a > ((ImmediateValue) rt).a) ? 1 : 0));
-		if (rs instanceof ImmediateValue) {
-			IRRegister tmp = rs;
-			rs = rt;
-			rt = tmp;
-		}
+		if (rs instanceof ImmediateValue)
+			return new SetLessThan(rd, rt, rs);
 		return new SetGreaterThan(rd, rs, rt);
 	}
 

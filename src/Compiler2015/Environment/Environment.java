@@ -76,7 +76,7 @@ public class Environment {
 		uIdOfPutChar = symbolNames.defineVariable(
 				"putchar",
 				new FunctionType(
-						IntType.instance,
+						VoidType.instance,
 						new ArrayList<Type>() {{
 							add(IntType.instance);
 						}},
@@ -175,16 +175,18 @@ public class Environment {
 		if (e == null)
 			throw new CompilationError("No main exists.");
 	}
+/*
 
 	public static boolean isArrayLike(int uId) {
 		SymbolTableEntry e = symbolNames.table.get(uId);
 		return e.type == Tokens.STRING_CONSTANT || (e.type == Tokens.VARIABLE && e.ref instanceof ArrayPointerType);
 	}
+*/
 
 	public static void generateFunctionTable() {
 		for (int i = 1, size = Environment.symbolNames.table.size(); i < size; ++i) {
 			SymbolTableEntry entry = Environment.symbolNames.table.get(i);
-			if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionType && entry.info != null)
+			if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionType)
 				functionTable.put(entry.uId, new FunctionTableEntry(entry.uId, entry.name, ((FunctionType) entry.ref), entry, ((CompoundStatement) entry.info)));
 		}
 	}

@@ -11,7 +11,6 @@ import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.*;
 import Compiler2015.IR.Instruction.ThreeAddressInstruction.ThreeAddressInstruction;
-import Compiler2015.IR.Instruction.TwoAddressInstruction.Move;
 import Compiler2015.IR.Instruction.TwoAddressInstruction.TwoAddressInstruction;
 import Compiler2015.Translate.BaseTranslator;
 import Compiler2015.Type.ArrayPointerType;
@@ -26,8 +25,8 @@ import java.util.ArrayList;
 
 public final class NaiveTranslator extends BaseTranslator {
 
-	public NaiveTranslator(ControlFlowGraph graph) {
-		super(graph);
+	public NaiveTranslator(ControlFlowGraph graph, PrintWriter out) {
+		super(graph, out);
 	}
 
 	public void generateLibraryFunction(int uId, PrintWriter out) {
@@ -108,25 +107,26 @@ public final class NaiveTranslator extends BaseTranslator {
 			if (e.type == Tokens.STRING_CONSTANT)
 				throw new CompilationError("Internal Error.");
 			else if (e.type == Tokens.VARIABLE) {
+				throw new CompilationError("Internal Error.");
+/*
 				out.printf("\tla $v1, %s%s", getGlobalVariableLabelName(uId), Utility.NEW_LINE);
 				if (!(e.ref instanceof FunctionType || e.ref instanceof ArrayPointerType || e.ref instanceof StructOrUnionType))
 					out.printf("\tsw %s, 0($v1)%s", reg, Utility.NEW_LINE);
 				else
 					throw new CompilationError("Internal Error.");
+*/
 			} else
 				throw new CompilationError("Internal Error.");
 		} else
 			out.printf("\tsw %s, %d($sp)%s", reg, getDelta(uId), Utility.NEW_LINE);
 	}
 
-	public void generateFunction(PrintWriter out) {
-		scanVirtualRegister(); // calculate space of stack frame
-
+	public void generateFunction() {
 		if (Environment.symbolNames.table.get(graph.functionTableEntry.uId).name.equals("main"))
 			out.println("main:");
 
 		out.println(getFunctionLabel());
-		out.println("\taddu $sp, $sp, " + (-frameSize));
+		out.println("\taddu $sp, $sp, " + (-graph.frameSize));
 		out.println("\tsw $ra, 128($sp)");
 
 		ArrayList<CFGVertex> sequence = NaiveSequentializer.process(graph);
@@ -144,7 +144,7 @@ public final class NaiveTranslator extends BaseTranslator {
 					loadFromIRRegisterToTRegister(((ThreeAddressInstruction) ins).rt, 1, out);
 					out.printf("\t%s $t2, $t0, $t1%s", ((ThreeAddressInstruction) ins).toMIPSName(), Utility.NEW_LINE);
 					storeFromTRegisterToIRRegister(2, ins.getAllDefUId()[0], out);
-				} else if (ins instanceof TwoAddressInstruction && !(ins instanceof Move)) {
+				} else if (ins instanceof TwoAddressInstruction) {
 					loadFromIRRegisterToTRegister(((TwoAddressInstruction) ins).rs, 0, out);
 					out.printf("\t%s $t1, $t0%s", ((TwoAddressInstruction) ins).toMIPSName(), Utility.NEW_LINE);
 					storeFromTRegisterToIRRegister(1, ins.getAllDefUId()[0], out);
@@ -245,7 +245,7 @@ public final class NaiveTranslator extends BaseTranslator {
 			}
 		}
 		out.println("\tlw $ra, 128($sp)");
-		out.println("\taddu $sp, $sp, " + frameSize);
+		out.println("\taddu $sp, $sp, " + graph.frameSize);
 		out.println("\tjr $ra");
 	}
 }

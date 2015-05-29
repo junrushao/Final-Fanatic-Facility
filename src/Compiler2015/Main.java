@@ -8,8 +8,10 @@ import Compiler2015.Parser.Compiler2015Lexer;
 import Compiler2015.Parser.Compiler2015Parser;
 import Compiler2015.Parser.ParseErrorListener;
 import Compiler2015.Parser.PrettyPrinterListener;
+import Compiler2015.RegisterAllocator.NaiveAllocator;
 import Compiler2015.Translate.ASTModifier;
 import Compiler2015.Translate.Naive.MIPS.NaiveTranslator;
+import Compiler2015.Translate.SimpleTranslator;
 import Compiler2015.Utility.Panel;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -47,7 +49,7 @@ public class Main {
 			}
 			Panel.prettyPrinterType = null;
 			Panel.emitAST = true;
-			Panel.emitCFG = true;
+			Panel.emitCFG = false;
 			Panel.checkMain = false;
 			return;
 		}
@@ -122,9 +124,13 @@ public class Main {
 		// construct function table & control flow graph, optimize
 		Environment.generateFunctionTable();
 		for (Map.Entry<Integer, FunctionTableEntry> e : Environment.functionTable.entrySet()) {
-			e.getValue().cfg = new ControlFlowGraph(e.getValue());
+			if (e.getValue().scope == null)
+				continue;
+			FunctionTableEntry entry = e.getValue();
+			entry.cfg = new ControlFlowGraph(entry);
+			entry.allocator = new NaiveAllocator(entry.cfg);
 			if (Panel.emitCFG)
-				System.out.println(e.getValue().cfg);
+				System.out.println(entry.cfg);
 		}
 
 		// translate to MIPS
@@ -133,7 +139,8 @@ public class Main {
 		out.println(".text");
 		for (Map.Entry<Integer, FunctionTableEntry> e : Environment.functionTable.entrySet()) {
 			FunctionTableEntry function = e.getValue();
-			new NaiveTranslator(function.cfg).generateFunction(out);
+			if (function.scope != null)
+				new SimpleTranslator(function.cfg, out).generateFunction();
 		}
 		out.close();
 	}

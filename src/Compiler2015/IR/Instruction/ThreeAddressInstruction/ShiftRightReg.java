@@ -6,7 +6,7 @@ import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.IRInstruction;
-import Compiler2015.IR.Instruction.TwoAddressInstruction.Move;
+import Compiler2015.IR.Instruction.Move;
 
 /**
  * rd = rs >> rt
@@ -24,11 +24,6 @@ public class ShiftRightReg extends ThreeAddressInstruction {
 			throw new CompilationError("Internal Error");
 		if (rs instanceof ImmediateValue && rt instanceof ImmediateValue)
 			return new Move(rd, new ImmediateValue(((ImmediateValue) rs).a >> ((ImmediateValue) rt).a));
-		if (rs instanceof ImmediateValue) {
-			IRRegister tmp = rs;
-			rs = rt;
-			rt = tmp;
-		}
 		return new ShiftRightReg(rd, rs, rt);
 	}
 

@@ -5,7 +5,6 @@ import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.*;
-import Compiler2015.IR.Instruction.TwoAddressInstruction.Move;
 
 import java.util.ArrayList;
 

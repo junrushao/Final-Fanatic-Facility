@@ -1,4 +1,4 @@
-int printf(char *format, ...) {
+void printf(char *format, ...) {
 	va_list ap;
 	char *prev = format;
 	int arg, tmp, len;
