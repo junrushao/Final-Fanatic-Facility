@@ -21,8 +21,32 @@ public class WriteArray extends IRInstruction {
 	}
 
 	@Override
+	public WriteArray clone() {
+		WriteArray ret = (WriteArray) super.clone();
+		ret.rd = ret.rd.clone();
+		ret.rs = ret.rs.clone();
+		return ret;
+	}
+
+	@Override
 	public String toString() {
 		return "WriteArray " + rd + " = " + rs + " -> M = " + memoryVersion;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		WriteArray that = (WriteArray) o;
+		return memoryVersion == that.memoryVersion && rd.equals(that.rd) && rs.equals(that.rs);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = rd.hashCode();
+		result = 31 * result + rs.hashCode();
+		result = 31 * result + memoryVersion;
+		return result;
 	}
 
 	@Override

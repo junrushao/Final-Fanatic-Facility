@@ -1,9 +1,10 @@
 package Compiler2015.IR.Instruction;
 
+import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 
-public abstract class IRInstruction {
+public abstract class IRInstruction implements Cloneable {
 
 	public VirtualRegister rd;
 
@@ -33,4 +34,20 @@ public abstract class IRInstruction {
 
 	@Override
 	public abstract String toString();
+
+	@Override
+	public IRInstruction clone() {
+		try {
+			return (IRInstruction) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			throw new CompilationError("Internal Error.");
+		}
+	}
+
+	@Override
+	public abstract int hashCode();
+
+	@Override
+	public abstract boolean equals(Object o);
 }

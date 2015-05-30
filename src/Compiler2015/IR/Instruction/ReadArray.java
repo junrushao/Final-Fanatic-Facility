@@ -68,4 +68,28 @@ public class ReadArray extends IRInstruction {
 	public String toString() {
 		return "ReadArray " + rd + " = " + rs + " -> M = " + memoryVersion;
 	}
+
+	@Override
+	public ReadArray clone() {
+		ReadArray ret = (ReadArray) super.clone();
+		ret.rd = ret.rd.clone();
+		ret.rs = ret.rs.clone();
+		return ret;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ReadArray readArray = (ReadArray) o;
+		return memoryVersion == readArray.memoryVersion && rd.equals(readArray.rd) && rs.equals(readArray.rs);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = rd.hashCode();
+		result = 31 * result + rs.hashCode();
+		result = 31 * result + memoryVersion;
+		return result;
+	}
 }

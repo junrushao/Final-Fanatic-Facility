@@ -26,6 +26,8 @@ public class ModuloReg extends ThreeAddressInstruction {
 			throw new CompilationError("There would be runtime division by zero");
 		if (rs instanceof ImmediateValue && rt instanceof ImmediateValue)
 			return new Move(rd, new ImmediateValue(((ImmediateValue) rs).a % ((ImmediateValue) rt).a));
+		if (rt instanceof ImmediateValue && ((ImmediateValue) rt).a == 1)
+			return new Move(rd, new ImmediateValue(0));
 		return new ModuloReg(rd, rs, rt);
 	}
 

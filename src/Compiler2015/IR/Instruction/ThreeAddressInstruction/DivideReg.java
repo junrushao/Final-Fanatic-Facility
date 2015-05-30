@@ -26,6 +26,8 @@ public class DivideReg extends ThreeAddressInstruction {
 			throw new CompilationError("There would be runtime division by zero.");
 		if (rs instanceof ImmediateValue && rt instanceof ImmediateValue)
 			return new Move(rd, new ImmediateValue(((ImmediateValue) rs).a / ((ImmediateValue) rt).a));
+		if (rt instanceof ImmediateValue && ((ImmediateValue) rt).a == 1)
+			return new Move(rd, rs);
 		return new DivideReg(rd, rs, rt);
 	}
 

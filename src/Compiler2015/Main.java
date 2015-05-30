@@ -9,7 +9,6 @@ import Compiler2015.Parser.Compiler2015Parser;
 import Compiler2015.Parser.ParseErrorListener;
 import Compiler2015.Parser.PrettyPrinterListener;
 import Compiler2015.RegisterAllocator.InterferenceGraphColoring;
-import Compiler2015.RegisterAllocator.MachineRegister;
 import Compiler2015.Translate.ASTModifier;
 import Compiler2015.Translate.Naive.MIPS.NaiveTranslator;
 import Compiler2015.Translate.SimpleTranslator;
@@ -130,12 +129,6 @@ public class Main {
 			FunctionTableEntry entry = e.getValue();
 			entry.cfg = new ControlFlowGraph(entry);
 			entry.allocator = new InterferenceGraphColoring(entry.cfg);
-			if (Panel.DEBUG && Panel.emitCFG && entry.uId != 6) {
-				System.out.println("correspondence");
-				for (Map.Entry<Integer, MachineRegister> ee : entry.allocator.mapping.entrySet())
-					System.out.println(ee.getKey() + " : " + ee.getValue());
-				System.out.println(entry.cfg);
-			}
 		}
 
 		// translate to MIPS

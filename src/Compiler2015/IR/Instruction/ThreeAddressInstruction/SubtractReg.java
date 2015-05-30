@@ -24,6 +24,8 @@ public class SubtractReg extends ThreeAddressInstruction {
 			throw new CompilationError("Internal Error");
 		if (rs instanceof ImmediateValue && rt instanceof ImmediateValue)
 			return new Move(rd, new ImmediateValue(((ImmediateValue) rs).a - ((ImmediateValue) rt).a));
+		if (rt instanceof ImmediateValue && ((ImmediateValue) rt).a == 0)
+			return new Move(rd, rs);
 		return new SubtractReg(rd, rs, rt);
 	}
 

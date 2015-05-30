@@ -29,6 +29,8 @@ public class VirtualRegister implements IRRegister {
 
 	@Override
 	public String toString() {
+		if (uId < 0)
+			return "$" + uId;
 		String res;
 		SymbolTableEntry e = Environment.symbolNames.table.get(uId);
 		if (e == null)

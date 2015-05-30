@@ -10,6 +10,26 @@ public class Def extends IRInstruction {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Def def = (Def) o;
+		return rd.equals(def.rd);
+	}
+
+	@Override
+	public int hashCode() {
+		return rd.hashCode();
+	}
+
+	@Override
+	public Def clone() {
+		Def ret = (Def) super.clone();
+		ret.rd = ret.rd.clone();
+		return ret;
+	}
+
+	@Override
 	public IRInstruction getExpression() {
 		return this;
 	}

@@ -150,9 +150,11 @@ public final class SimpleTranslator extends BaseTranslator {
 		out.println(getFunctionLabel());
 		out.println("\tsw $ra, 128($sp)");
 
-		// save registers
-		for (MachineRegister reg : allocator.physicalRegistersUsed)
-			out.printf("\tsw %s %d($sp)%s", reg, reg.order * Panel.getRegisterSize(), Utility.NEW_LINE);
+		if (!Environment.symbolNames.table.get(graph.functionTableEntry.uId).name.equals("main")) {
+			// save registers
+			for (MachineRegister reg : allocator.physicalRegistersUsed)
+				out.printf("\tsw %s %d($sp)%s", reg, reg.order * Panel.getRegisterSize(), Utility.NEW_LINE);
+		}
 
 		// put blocks in a sequence
 		ArrayList<CFGVertex> sequence = NaiveSequentializer.process(graph);
@@ -191,8 +193,12 @@ public final class SimpleTranslator extends BaseTranslator {
 					writeBackIfSpilled(i.rd, pRd);
 				} else if (ins instanceof Move) {
 					Move i = (Move) ins;
-					MachineRegister pRs = getRegisterToRead(i.rs, MachineRegister.tmp1);
-					moveFromPhysicalRegisterToVirtualRegister(pRs.name, i.rd);
+					if (i.rs instanceof ImmediateValue && allocator.mapping.get(i.rd.uId) != null) {
+						out.printf("\tli %s, %s%s", allocator.mapping.get(i.rd.uId), ((ImmediateValue) i.rs).a, Utility.NEW_LINE);
+					} else {
+						MachineRegister pRs = getRegisterToRead(i.rs, MachineRegister.tmp1);
+						moveFromPhysicalRegisterToVirtualRegister(pRs.name, i.rd);
+					}
 				} else if (ins instanceof ReadArray) {
 					ReadArray i = (ReadArray) ins;
 					String instruction = i.rs.bitLen == 1 ? "lb" : "lw";
@@ -298,8 +304,8 @@ public final class SimpleTranslator extends BaseTranslator {
 					throw new CompilationError("Internal Error.");
 				out.println();
 				out.println("#\tbranchIfFalse " + lastNopForBranch);
-				moveFromIRRegisterToPhysicalRegister(lastNopForBranch.rs, MachineRegister.tmp1.name);
-				out.printf("\tbeq %s, $0, %s%s", MachineRegister.tmp1, getVertexLabelName(vertex.branchIfFalse.id), Utility.NEW_LINE);
+				MachineRegister reg = getRegisterToRead(lastNopForBranch.rs, MachineRegister.tmp1);
+				out.printf("\tbeq %s, $0, %s%s", reg, getVertexLabelName(vertex.branchIfFalse.id), Utility.NEW_LINE);
 			}
 			if (vertex.unconditionalNext != null && !(itrBlock + 1 < itrEnd && sequence.get(itrBlock + 1).id == vertex.unconditionalNext.id)) {
 				out.println();
@@ -308,8 +314,11 @@ public final class SimpleTranslator extends BaseTranslator {
 			}
 		}
 
-		for (MachineRegister reg : allocator.physicalRegistersUsed)
-			out.printf("\tlw %s, %d($sp)%s", reg, reg.order * Panel.getRegisterSize(), Utility.NEW_LINE);
+		// load saved registers
+		if (!Environment.symbolNames.table.get(graph.functionTableEntry.uId).name.equals("main")) {
+			for (MachineRegister reg : allocator.physicalRegistersUsed)
+				out.printf("\tlw %s, %d($sp)%s", reg, reg.order * Panel.getRegisterSize(), Utility.NEW_LINE);
+		}
 
 		// exit a function
 		out.println("\tlw $ra, 128($sp)");
@@ -353,18 +362,13 @@ public final class SimpleTranslator extends BaseTranslator {
 				out.println("\tsyscall");
 			} else throw new CompilationError("Internal Error.");
 		} else {
-			FunctionTableEntry caller = graph.functionTableEntry;
 			FunctionTableEntry callee = Environment.functionTable.get(funcUId);
-//			HashSet<MachineRegister> bothUsedRegister = new Utility.SetOperation<MachineRegister>().intersect(caller.allocator.physicalRegistersUsed, callee.allocator.physicalRegistersUsed);
 
 			int sizeOfAllArguments = 0;
 			int sizeOfExtraArguments = 0;
 
-//			Stack<Integer> parametersUId = new Stack<>();
-//			callee.scope.parametersUId.forEach(parametersUId::push);
 			for (int itr = beginPosition; itr < positionOfCall; ++itr) {
 				PushStack i = (PushStack) internal.get(itr);
-//				int pUId = i.isExtra ? -1 : parametersUId.pop();
 				int size = i.pushType.sizeof();
 				sizeOfAllArguments += Math.max(Panel.getRegisterSize(), size);
 				if (i.isExtra)
@@ -376,14 +380,7 @@ public final class SimpleTranslator extends BaseTranslator {
 						out.printf("\tlw %s, %d(%s)%s", MachineRegister.tmp2, j, MachineRegister.tmp1, Utility.NEW_LINE);
 						out.printf("\tsw %s, -%d($sp)%s", MachineRegister.tmp2, sizeOfAllArguments - j, Utility.NEW_LINE);
 					}
-				} /*else if (pUId == -1 || callee.allocator.mapping.get(pUId) == null) { // spilled
-					String insName = size == 1 ? "sb" : "sw";
-					MachineRegister pPush = getRegisterToRead(i.push, MachineRegister.tmp1);
-					out.printf("\t%s %s, -%d($sp)%s", insName, pPush, sizeOfAllArguments, Utility.NEW_LINE);
 				} else {
-					MachineRegister to = callee.allocator.mapping.get(pUId);
-					moveFromIRRegisterToPhysicalRegister(i.push, to.name);
-				}*/ else {
 					String insName = size == 1 ? "sb" : "sw";
 					MachineRegister pPush = getRegisterToRead(i.push, MachineRegister.tmp1);
 					out.printf("\t%s %s, -%d($sp)%s", insName, pPush, sizeOfAllArguments, Utility.NEW_LINE);

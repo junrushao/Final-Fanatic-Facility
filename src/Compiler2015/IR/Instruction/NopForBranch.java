@@ -65,4 +65,24 @@ public class NopForBranch extends IRInstruction {
 	public String toString() {
 		return "NopForBranch " + rs;
 	}
+
+	@Override
+	public int hashCode() {
+		return rs.hashCode();
+	}
+
+	@Override
+	public NopForBranch clone() {
+		NopForBranch nop = (NopForBranch) super.clone();
+		nop.rs = nop.rs.clone();
+		return nop;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		NopForBranch that = (NopForBranch) o;
+		return rs.equals(that.rs);
+	}
 }

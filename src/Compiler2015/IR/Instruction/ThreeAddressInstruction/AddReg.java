@@ -29,6 +29,8 @@ public class AddReg extends ThreeAddressInstruction {
 			rs = rt;
 			rt = tmp;
 		}
+		if (rt instanceof ImmediateValue && ((ImmediateValue) rt).a == 0)
+			return new Move(rd, rs);
 		if (rs instanceof VirtualRegister && rt instanceof VirtualRegister && rs.hashCode() > rt.hashCode()) {
 			IRRegister tmp = rs;
 			rs = rt;

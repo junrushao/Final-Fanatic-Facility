@@ -16,6 +16,13 @@ public class SetReturn extends IRInstruction {
 	}
 
 	@Override
+	public SetReturn clone() {
+		SetReturn ret = (SetReturn) super.clone();
+		ret.v0 = ret.v0.clone();
+		return ret;
+	}
+
+	@Override
 	public String toString() {
 		return "SetReturn " + v0;
 	}
@@ -63,5 +70,18 @@ public class SetReturn extends IRInstruction {
 	public void setAllUse(IRRegister[] version) {
 		if (version[0] != null)
 			v0 = version[0];
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		SetReturn setReturn = (SetReturn) o;
+		return v0.equals(setReturn.v0);
+	}
+
+	@Override
+	public int hashCode() {
+		return v0.hashCode();
 	}
 }

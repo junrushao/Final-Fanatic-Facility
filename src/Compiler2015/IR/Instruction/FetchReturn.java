@@ -10,6 +10,26 @@ public class FetchReturn extends IRInstruction {
 	}
 
 	@Override
+	public int hashCode() {
+		return rd.hashCode();
+	}
+
+	@Override
+	public FetchReturn clone() {
+		FetchReturn ret = (FetchReturn) super.clone();
+		ret.rd = ret.rd.clone();
+		return ret;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		FetchReturn fetch = (FetchReturn) o;
+		return rd.equals(fetch.rd);
+	}
+
+	@Override
 	public IRInstruction getExpression() {
 		return this;
 	}

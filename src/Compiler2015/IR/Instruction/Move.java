@@ -65,4 +65,25 @@ public class Move extends IRInstruction {
 	public String toString() {
 		return "Move " + rd + " = " + rs;
 	}
+
+	@Override
+	public int hashCode() {
+		return rd.hashCode() * 31 + rs.hashCode();
+	}
+
+	@Override
+	public Move clone() {
+		Move move = (Move) super.clone();
+		move.rd = move.rd.clone();
+		move.rs = move.rs.clone();
+		return move;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Move move = (Move) o;
+		return rd.equals(move.rd) && rs.equals(move.rs);
+	}
 }

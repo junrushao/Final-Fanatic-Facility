@@ -26,6 +26,29 @@ public class PushStack extends IRInstruction {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		PushStack pushStack = (PushStack) o;
+		return isExtra == pushStack.isExtra && !(push != null ? !push.equals(pushStack.push) : pushStack.push != null) && !(pushType != null ? !pushType.equals(pushStack.pushType) : pushStack.pushType != null);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = push != null ? push.hashCode() : 0;
+		result = 31 * result + (isExtra ? 1 : 0);
+		result = 31 * result + (pushType != null ? pushType.hashCode() : 0);
+		return result;
+	}
+
+	@Override
+	public PushStack clone() {
+		PushStack push = (PushStack) super.clone();
+		push.push = push.push.clone();
+		return push;
+	}
+
+	@Override
 	public IRInstruction getExpression() {
 		return this;
 	}

@@ -10,6 +10,7 @@ import Compiler2015.IR.Instruction.Def;
 import Compiler2015.IR.Instruction.IRInstruction;
 import Compiler2015.IR.Instruction.NopForBranch;
 import Compiler2015.IR.Optimizer.NaiveDeadCodeElimination;
+import Compiler2015.IR.Optimizer.SSABased.CommonExpressionElimination;
 import Compiler2015.IR.StaticSingleAssignment.PhiPlacer;
 import Compiler2015.IR.StaticSingleAssignment.SSADestroyer;
 import Compiler2015.Type.Type;
@@ -77,18 +78,23 @@ public class ControlFlowGraph {
 		// define external variables and parameters passed at source
 		defineExternalVariables();
 
-		// do dead code elimination
+		this.touchGraph();
+		// do naive dead code elimination
 		NaiveDeadCodeElimination.process(this, true);
+		this.touchGraph();
 
 		// insert phi functions
 		PhiPlacer.process(this);
 
+		new CommonExpressionElimination(this);
+
 		// destroy ssa
 		SSADestroyer.process(this);
 
-		GraphManipulate.mergeBlocks(this);
-		scanVirtualRegister();
+		NaiveDeadCodeElimination.process(this, true);
+		this.touchGraph();
 
+		scanVirtualRegister();
 		ControlFlowGraph.instance = null;
 	}
 

@@ -7,6 +7,7 @@ import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.IRInstruction;
 import Compiler2015.IR.Instruction.Move;
+import Compiler2015.IR.Instruction.TwoAddressInstruction.NegateReg;
 
 /**
  * rd = rs * rt
@@ -29,6 +30,12 @@ public class MultiplyReg extends ThreeAddressInstruction {
 			rs = rt;
 			rt = tmp;
 		}
+		if (rt instanceof ImmediateValue && ((ImmediateValue) rt).a == 0)
+			return new Move(rd, new ImmediateValue(0));
+		if (rt instanceof ImmediateValue && ((ImmediateValue) rt).a == 1)
+			return new Move(rd, rs);
+		if (rt instanceof ImmediateValue && ((ImmediateValue) rt).a == -1)
+			return NegateReg.getExpression(rd, rs);
 		if (rs instanceof VirtualRegister && rt instanceof VirtualRegister && rs.hashCode() > rt.hashCode()) {
 			IRRegister tmp = rs;
 			rs = rt;

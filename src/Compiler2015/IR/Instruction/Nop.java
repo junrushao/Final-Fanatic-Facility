@@ -57,4 +57,15 @@ public class Nop extends IRInstruction {
 	public String toString() {
 		return "Nop";
 	}
+
+	@Override
+	public int hashCode() {
+		return 0;
+	}
+
+	@SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
+	@Override
+	public boolean equals(Object o) {
+		return true;
+	}
 }

@@ -13,7 +13,7 @@ import Compiler2015.IR.Instruction.Move;
  */
 public class NegateReg extends TwoAddressInstruction {
 
-	private NegateReg(VirtualRegister rd, IRRegister rs) {
+	protected NegateReg(VirtualRegister rd, IRRegister rs) {
 		this.rd = rd.clone();
 		this.rs = rs.clone();
 	}

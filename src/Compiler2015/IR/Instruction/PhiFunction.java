@@ -5,7 +5,7 @@ import Compiler2015.IR.IRRegister.IRRegister;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 
 public class PhiFunction extends IRInstruction {
-	IRRegister rs[];
+	public IRRegister rs[];
 
 	public PhiFunction(int n, VirtualRegister rd) {
 		this.rd = rd.clone();
@@ -78,6 +78,16 @@ public class PhiFunction extends IRInstruction {
 	}
 
 	@Override
+	public PhiFunction clone() {
+		PhiFunction ret = (PhiFunction) super.clone();
+		ret.rd = ret.rd.clone();
+		ret.rs = new IRRegister[rs.length];
+		for (int i = 0; i < ret.rs.length; ++i)
+			ret.rs[i] = rs[i].clone();
+		return ret;
+	}
+
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(rd).append(" = phi(");
@@ -87,5 +97,27 @@ public class PhiFunction extends IRInstruction {
 			sb.append(rs[i]);
 		}
 		return sb.append(")").toString();
+	}
+
+	@Override
+	public int hashCode() {
+//		System.err.println("Calculating hashCode of PhiFunction " + toString());
+		int result = rd.hashCode();
+		for (IRRegister r : rs)
+			result = result * 31 + r.hashCode();
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		PhiFunction that = (PhiFunction) o;
+		if (!rd.equals(that.rd))
+			return false;
+		for (int i = 0; i < rs.length; ++i)
+			if (!rs[i].equals(that.rs[i]))
+				return false;
+		return true;
 	}
 }

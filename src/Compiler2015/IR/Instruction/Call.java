@@ -21,8 +21,30 @@ public class Call extends IRInstruction {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Call call = (Call) o;
+		return memoryVersion == call.memoryVersion && func.equals(call.func);
+	}
+
+	@Override
+	public Call clone() {
+		Call ret = (Call) super.clone();
+		ret.func = ret.func.clone();
+		return ret;
+	}
+
+	@Override
 	public String toString() {
 		return "Call " + func;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = func.hashCode();
+		result = result * 31 + memoryVersion;
+		return result;
 	}
 
 	@Override
