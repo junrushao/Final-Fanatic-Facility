@@ -113,6 +113,17 @@ public class FunctionCall extends Expression {
 		return ret;
 	}
 
+	@Override
+	public Expression rebuild() {
+		function = function.rebuild();
+		for (int i = 0; i < argumentExpressionList.length; ++i)
+			argumentExpressionList[i] = argumentExpressionList[i].rebuild();
+		for (int i = 0; i < vaList.length; ++i)
+			vaList[i] = vaList[i].rebuild();
+		Expression e = analysisPrintf();
+		return e == null ? this : e;
+	}
+
 	public void putString(String c, int begin, int end, Stack<FunctionCall> callSequence) {
 		// [begin, end)
 		if (begin == end - 1) {
@@ -136,71 +147,63 @@ public class FunctionCall extends Expression {
 			throw new CompilationError("Internal Error.");
 	}
 
-	@Override
-	public Expression rebuild() {
-		function = function.rebuild();
-		for (int i = 0; i < argumentExpressionList.length; ++i)
-			argumentExpressionList[i] = argumentExpressionList[i].rebuild();
-		for (int i = 0; i < vaList.length; ++i)
-			vaList[i] = vaList[i].rebuild();
-
-		if (function instanceof IdentifierExpression && ((IdentifierExpression) function).uId == Environment.uIdOfPrintf && argumentExpressionList[0] instanceof StringConstant) {
-			// do printf analysis
-			String c = ((StringConstant) argumentExpressionList[0]).c;
-			for (int i = 0; i <= 9; ++i)
-				if (c.contains("%." + Integer.toString(i) + "d"))
-					return this;
-				else if (c.contains("%0" + Integer.toString(i) + "d"))
-					return this;
-			Stack<FunctionCall> callSequence = new Stack<>();
-			int prev = 0, ptr = 0, cnt = 0;
-			for (; ptr < c.length(); ++ptr)
-				if (c.charAt(ptr) == '%') {
-					if (prev < ptr)
-						putString(c, prev, ptr, callSequence);
-					++ptr;
-					if (c.charAt(ptr) == 'd') {
-						callSequence.push(new FunctionCall(
-										new IdentifierExpression(Environment.uIdOfPutInt, VoidType.instance),
-										new Expression[]{vaList[cnt++]},
-										null,
-										VoidType.instance)
-						);
-					} else if (c.charAt(ptr) == 'c') {
-						callSequence.push(new FunctionCall(
-										new IdentifierExpression(Environment.uIdOfPutChar, VoidType.instance),
-										new Expression[]{vaList[cnt++]},
-										null,
-										VoidType.instance)
-						);
-					} else if (c.charAt(ptr) == 's') {
-						callSequence.push(new FunctionCall(
-										new IdentifierExpression(Environment.uIdOfPutString, VoidType.instance),
-										new Expression[]{vaList[cnt++]},
-										null,
-										VoidType.instance)
-						);
-					} else {
-						throw new CompilationError("Not supported printf analysis.");
-//						return this;
-					}
-					prev = ptr + 1;
+	public Expression analysisPrintf() {
+		if (!(function instanceof IdentifierExpression))
+			return null;
+		if (((IdentifierExpression) function).uId != Environment.uIdOfPrintf)
+			return null;
+		if (!(argumentExpressionList[0] instanceof StringConstant))
+			return null;
+		String c = ((StringConstant) argumentExpressionList[0]).c;
+		for (int i = 0; i <= 9; ++i)
+			if (c.contains("%." + Integer.toString(i) + "d"))
+				return null;
+			else if (c.contains("%0" + Integer.toString(i) + "d"))
+				return null;
+		Stack<FunctionCall> callSequence = new Stack<>();
+		int prev = 0, ptr = 0, cnt = 0;
+		for (; ptr < c.length(); ++ptr)
+			if (c.charAt(ptr) == '%') {
+				if (prev < ptr)
+					putString(c, prev, ptr, callSequence);
+				++ptr;
+				if (c.charAt(ptr) == 'd') {
+					callSequence.push(new FunctionCall(
+									new IdentifierExpression(Environment.uIdOfPutInt, VoidType.instance),
+									new Expression[]{vaList[cnt++]},
+									null,
+									VoidType.instance)
+					);
+				} else if (c.charAt(ptr) == 'c') {
+					callSequence.push(new FunctionCall(
+									new IdentifierExpression(Environment.uIdOfPutChar, VoidType.instance),
+									new Expression[]{vaList[cnt++]},
+									null,
+									VoidType.instance)
+					);
+				} else if (c.charAt(ptr) == 's') {
+					callSequence.push(new FunctionCall(
+									new IdentifierExpression(Environment.uIdOfPutString, VoidType.instance),
+									new Expression[]{vaList[cnt++]},
+									null,
+									VoidType.instance)
+					);
+				} else {
+					throw new CompilationError("Not supported printf analysis.");
 				}
-			if (prev < c.length())
-				putString(c, prev, c.length(), callSequence);
-			if (callSequence.size() == 0)
-				return this;
-			if (callSequence.size() == 1)
-				return callSequence.pop();
-			Expression t2 = callSequence.pop();
-			Expression t1 = callSequence.pop();
-			Expression ret = new CommaExpression(t1, t2);
-			while (!callSequence.isEmpty()) {
-				t1 = callSequence.pop();
-				ret = new CommaExpression(t1, ret);
+				prev = ptr + 1;
 			}
-			return ret;
-		}
-		return this;
+		if (prev < c.length())
+			putString(c, prev, c.length(), callSequence);
+		if (callSequence.size() == 0)
+			return null;
+		if (callSequence.size() == 1)
+			return callSequence.pop();
+		Expression t2 = callSequence.pop();
+		Expression t1 = callSequence.pop();
+		Expression ret = new CommaExpression(t1, t2);
+		while (!callSequence.isEmpty())
+			ret = new CommaExpression(callSequence.pop(), ret);
+		return ret;
 	}
 }

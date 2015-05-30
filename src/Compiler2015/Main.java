@@ -2,6 +2,7 @@ package Compiler2015;
 
 import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.FunctionTableEntry;
+import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.Parser.Compiler2015Lexer;
@@ -162,7 +163,11 @@ public class Main {
 		parser.removeErrorListeners();
 		parser.addErrorListener(new ParseErrorListener());
 		parser.compilationUnit();
-
-		Environment.symbolNames.table.stream().filter(e -> e != null && e.scope == 1 && e.type == Tokens.VARIABLE && e.ref instanceof FunctionType && e.name.equals("printf")).forEach(e -> Environment.uIdOfPrintf = e.uId);
+		for (int i = 1, size = Environment.symbolNames.table.size(); i < size; ++i) {
+			SymbolTableEntry e = Environment.symbolNames.table.get(i);
+			if (e.scope == 1 && e.name.equals("printf") && e.type == Tokens.VARIABLE && e.ref instanceof FunctionType) {
+				Environment.uIdOfPrintf = e.uId;
+			}
+		}
 	}
 }

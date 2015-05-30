@@ -13,7 +13,6 @@ public final class Panel {
 	public static boolean emitCFG = false;
 	public static boolean checkMain = false;
 	public static boolean emitAST = false;
-	public static boolean enableFunctionPointer = false;
 	public static String prettyPrinterType = null;
 	public static String architecture = MIPS;
 
