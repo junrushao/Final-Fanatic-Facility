@@ -23,8 +23,6 @@ import Compiler2015.Utility.Utility;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Stack;
 
 public final class SimpleTranslator extends BaseTranslator {
 
@@ -100,7 +98,7 @@ public final class SimpleTranslator extends BaseTranslator {
 		if (to instanceof VirtualRegister) {
 			VirtualRegister writeBack = ((VirtualRegister) to);
 			if (allocator.mapping.get(writeBack.uId) != null)
-				out.printf("\tmove %s, %s%s", from, allocator.mapping.get(writeBack.uId), Utility.NEW_LINE);
+				out.printf("\tmove %s, %s%s", allocator.mapping.get(writeBack.uId), from, Utility.NEW_LINE);
 			else {
 				SymbolTableEntry e = Environment.symbolNames.table.get(writeBack.uId);
 				if (e.scope == 1) // global variables: all global variables are arrays
@@ -151,6 +149,10 @@ public final class SimpleTranslator extends BaseTranslator {
 		// enter a function
 		out.println(getFunctionLabel());
 		out.println("\tsw $ra, 128($sp)");
+
+		// save registers
+		for (MachineRegister reg : allocator.physicalRegistersUsed)
+			out.printf("\tsw %s %d($sp)%s", reg, reg.order * Panel.getRegisterSize(), Utility.NEW_LINE);
 
 		// put blocks in a sequence
 		ArrayList<CFGVertex> sequence = NaiveSequentializer.process(graph);
@@ -208,9 +210,11 @@ public final class SimpleTranslator extends BaseTranslator {
 						// local array
 						if (e.ref instanceof ArrayPointerType || e.ref instanceof StructOrUnionType) {
 							out.printf("\t%s %s, %d(%s)%s", instruction, pC, getDelta(a.uId) + b.a, "$sp", Utility.NEW_LINE);
-						} else {
+						} else if (allocator.mapping.get(a.uId) == null) {
 							out.printf("\tlw %s, %d($sp)%s", MachineRegister.tmp2, getDelta(a.uId), Utility.NEW_LINE);
 							out.printf("\t%s %s, %d(%s)%s", instruction, pC, b.a, MachineRegister.tmp2, Utility.NEW_LINE);
+						} else {
+							out.printf("\t%s %s, %d(%s)%s", instruction, pC, b.a, allocator.mapping.get(a.uId), Utility.NEW_LINE);
 						}
 					}
 					writeBackIfSpilled(i.rd, pC);
@@ -229,9 +233,12 @@ public final class SimpleTranslator extends BaseTranslator {
 						// local array
 						if (e.ref instanceof ArrayPointerType || e.ref instanceof StructOrUnionType) {
 							out.printf("\t%s %s, %d(%s)%s", instruction, pC, getDelta(a.uId) + b.a, "$sp", Utility.NEW_LINE);
-						} else {
+						} else if (allocator.mapping.get(a.uId) == null) {
+							// spilled
 							out.printf("\tlw %s, %d($sp)%s", MachineRegister.tmp2, getDelta(a.uId), Utility.NEW_LINE);
 							out.printf("\t%s %s, %d(%s)%s", instruction, pC, b.a, MachineRegister.tmp2, Utility.NEW_LINE);
+						} else {
+							out.printf("\t%s %s, %d(%s)%s", instruction, pC, b.a, allocator.mapping.get(a.uId), Utility.NEW_LINE);
 						}
 					}
 				} else if (ins instanceof SetReturn) {
@@ -241,8 +248,26 @@ public final class SimpleTranslator extends BaseTranslator {
 					// do nothing
 					out.printf("");
 				} else if (ins instanceof Def) {
-					// do nothing
-					out.printf("");
+					Def i = (Def) ins;
+					VirtualRegister readIn = i.rd;
+					if (readIn.uId > 0 && allocator.mapping.get(readIn.uId) != null) {
+						// not spilled, should be read in
+						MachineRegister to = allocator.mapping.get(readIn.uId);
+						SymbolTableEntry e = Environment.symbolNames.table.get(readIn.uId);
+						if (e.scope == 1) { // global variables: all global variables are arrays, read a pointer to it
+							if (e.type == Tokens.STRING_CONSTANT)
+								out.printf("\tla %s, %s%s", to, getStringConstantLabelName(readIn.uId), Utility.NEW_LINE);
+							else if (e.type == Tokens.VARIABLE)
+								out.printf("\tla %s, %s%s", to, getGlobalVariableLabelName(readIn.uId), Utility.NEW_LINE);
+							else
+								throw new CompilationError("Internal Error.");
+						} else { // local variables
+							if (e.ref instanceof ArrayPointerType || e.ref instanceof StructOrUnionType)
+								out.printf("\taddu %s, $sp, %d%s", to, getDelta(readIn.uId), Utility.NEW_LINE);
+							else
+								out.printf("\tlw %s, %d($sp)%s", to, getDelta(readIn.uId), Utility.NEW_LINE);
+						}
+					}
 				} else if (ins instanceof NopForBranch) {
 					lastNopForBranch = (NopForBranch) ins;
 				} else if (ins instanceof PushStack || ins instanceof Call) {
@@ -282,6 +307,9 @@ public final class SimpleTranslator extends BaseTranslator {
 				out.printf("\tj %s%s", getVertexLabelName(vertex.unconditionalNext.id), Utility.NEW_LINE);
 			}
 		}
+
+		for (MachineRegister reg : allocator.physicalRegistersUsed)
+			out.printf("\tlw %s, %d($sp)%s", reg, reg.order * Panel.getRegisterSize(), Utility.NEW_LINE);
 
 		// exit a function
 		out.println("\tlw $ra, 128($sp)");
@@ -327,18 +355,16 @@ public final class SimpleTranslator extends BaseTranslator {
 		} else {
 			FunctionTableEntry caller = graph.functionTableEntry;
 			FunctionTableEntry callee = Environment.functionTable.get(funcUId);
-			HashSet<MachineRegister> bothUsedRegister = new Utility.SetOperation<MachineRegister>().intersect(caller.allocator.physicalRegistersUsed, callee.allocator.physicalRegistersUsed);
-			for (MachineRegister reg : bothUsedRegister)
-				out.printf("\tsw %d($sp)%s", reg.order * Panel.getRegisterSize(), Utility.NEW_LINE);
+//			HashSet<MachineRegister> bothUsedRegister = new Utility.SetOperation<MachineRegister>().intersect(caller.allocator.physicalRegistersUsed, callee.allocator.physicalRegistersUsed);
 
 			int sizeOfAllArguments = 0;
 			int sizeOfExtraArguments = 0;
 
-			Stack<Integer> parametersUId = new Stack<>();
-			callee.scope.parametersUId.forEach(parametersUId::push);
+//			Stack<Integer> parametersUId = new Stack<>();
+//			callee.scope.parametersUId.forEach(parametersUId::push);
 			for (int itr = beginPosition; itr < positionOfCall; ++itr) {
 				PushStack i = (PushStack) internal.get(itr);
-				int pUId = i.isExtra ? -1 : parametersUId.pop();
+//				int pUId = i.isExtra ? -1 : parametersUId.pop();
 				int size = i.pushType.sizeof();
 				sizeOfAllArguments += Math.max(Panel.getRegisterSize(), size);
 				if (i.isExtra)
@@ -350,13 +376,17 @@ public final class SimpleTranslator extends BaseTranslator {
 						out.printf("\tlw %s, %d(%s)%s", MachineRegister.tmp2, j, MachineRegister.tmp1, Utility.NEW_LINE);
 						out.printf("\tsw %s, -%d($sp)%s", MachineRegister.tmp2, sizeOfAllArguments - j, Utility.NEW_LINE);
 					}
-				} else if (pUId == -1 || callee.allocator.mapping.get(pUId) == null) { // spilled
+				} /*else if (pUId == -1 || callee.allocator.mapping.get(pUId) == null) { // spilled
 					String insName = size == 1 ? "sb" : "sw";
 					MachineRegister pPush = getRegisterToRead(i.push, MachineRegister.tmp1);
 					out.printf("\t%s %s, -%d($sp)%s", insName, pPush, sizeOfAllArguments, Utility.NEW_LINE);
 				} else {
 					MachineRegister to = callee.allocator.mapping.get(pUId);
 					moveFromIRRegisterToPhysicalRegister(i.push, to.name);
+				}*/ else {
+					String insName = size == 1 ? "sb" : "sw";
+					MachineRegister pPush = getRegisterToRead(i.push, MachineRegister.tmp1);
+					out.printf("\t%s %s, -%d($sp)%s", insName, pPush, sizeOfAllArguments, Utility.NEW_LINE);
 				}
 			}
 
@@ -364,8 +394,6 @@ public final class SimpleTranslator extends BaseTranslator {
 			out.printf("\tjal %s%s", getFunctionLabelName(funcUId), Utility.NEW_LINE);
 			out.printf("\taddu $sp, $sp, %d%s", callee.cfg.frameSize + sizeOfExtraArguments, Utility.NEW_LINE);
 
-			for (MachineRegister reg : bothUsedRegister)
-				out.printf("\tlw %d($sp)%s", reg.order * Panel.getRegisterSize(), Utility.NEW_LINE);
 		}
 	}
 

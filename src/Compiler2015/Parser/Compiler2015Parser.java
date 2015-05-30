@@ -1535,7 +1535,7 @@ public class Compiler2015Parser extends Parser {
 						setState(365);
 						match(R1);
 						TypeAnalyser.addParameter(((DirectAbstractDeclaratorContext) _localctx).parameterTypeList.types, ((DirectAbstractDeclaratorContext) _localctx).parameterTypeList.names, ((DirectAbstractDeclaratorContext) _localctx).parameterTypeList.hasVaList);
-					}
+				}
 					break;
 				}
 				_ctx.stop = _input.LT(-1);
@@ -3176,7 +3176,7 @@ public class Compiler2015Parser extends Parser {
 									setState(770);
 									match(T__34);
 									((PostfixExpressionContext) _localctx).ret = PostfixSelfDec.getExpression(((PostfixExpressionContext) _localctx).p.ret);
-								}
+						}
 								break;
 							}
 						}

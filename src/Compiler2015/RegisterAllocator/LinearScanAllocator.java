@@ -1,5 +1,6 @@
 package Compiler2015.RegisterAllocator;
 
+import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.CFG.CFGVertex;
 import Compiler2015.IR.CFG.ControlFlowGraph;
@@ -30,7 +31,7 @@ public class LinearScanAllocator extends BaseAllocator {
 		collectPhysicalRegistersUsed();
 	}
 
-	public static void updatePosition(int uId, int position, HashMap<Integer, Interval> intervals) {
+	public void updatePosition(int uId, int position, HashMap<Integer, Interval> intervals) {
 		if (!intervals.containsKey(uId))
 			intervals.put(uId, new Interval(uId));
 		Interval me = intervals.get(uId);
@@ -85,6 +86,10 @@ public class LinearScanAllocator extends BaseAllocator {
 			return;
 		}
 */
+			if (Environment.functionTable.containsKey(i.uId)) {
+				spillIt(i.uId);
+				return;
+			}
 			intervals.add(i);
 			if (intervals.size() <= MachineRegister.K)
 				allocateRegister(i.uId);

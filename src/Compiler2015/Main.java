@@ -8,7 +8,8 @@ import Compiler2015.Parser.Compiler2015Lexer;
 import Compiler2015.Parser.Compiler2015Parser;
 import Compiler2015.Parser.ParseErrorListener;
 import Compiler2015.Parser.PrettyPrinterListener;
-import Compiler2015.RegisterAllocator.NaiveAllocator;
+import Compiler2015.RegisterAllocator.InterferenceGraphColoring;
+import Compiler2015.RegisterAllocator.MachineRegister;
 import Compiler2015.Translate.ASTModifier;
 import Compiler2015.Translate.Naive.MIPS.NaiveTranslator;
 import Compiler2015.Translate.SimpleTranslator;
@@ -49,7 +50,7 @@ public class Main {
 			}
 			Panel.prettyPrinterType = null;
 			Panel.emitAST = true;
-			Panel.emitCFG = false;
+			Panel.emitCFG = true;
 			Panel.checkMain = false;
 			return;
 		}
@@ -128,9 +129,13 @@ public class Main {
 				continue;
 			FunctionTableEntry entry = e.getValue();
 			entry.cfg = new ControlFlowGraph(entry);
-			entry.allocator = new NaiveAllocator(entry.cfg);
-			if (Panel.emitCFG)
+			entry.allocator = new InterferenceGraphColoring(entry.cfg);
+			if (Panel.DEBUG && Panel.emitCFG && entry.uId != 6) {
+				System.out.println("correspondence");
+				for (Map.Entry<Integer, MachineRegister> ee : entry.allocator.mapping.entrySet())
+					System.out.println(ee.getKey() + " : " + ee.getValue());
 				System.out.println(entry.cfg);
+			}
 		}
 
 		// translate to MIPS
