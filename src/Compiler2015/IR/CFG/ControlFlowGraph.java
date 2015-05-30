@@ -5,10 +5,12 @@ import Compiler2015.Environment.Environment;
 import Compiler2015.Environment.FunctionTableEntry;
 import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.IRRegister.ImmediateValue;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.Def;
 import Compiler2015.IR.Instruction.IRInstruction;
 import Compiler2015.IR.Instruction.NopForBranch;
+import Compiler2015.IR.Instruction.ThreeAddressInstruction.AddReg;
 import Compiler2015.IR.Optimizer.NaiveDeadCodeElimination;
 import Compiler2015.IR.Optimizer.SSABased.CommonExpressionElimination;
 import Compiler2015.IR.StaticSingleAssignment.PhiPlacer;
@@ -98,6 +100,10 @@ public class ControlFlowGraph {
 		ControlFlowGraph.instance = null;
 	}
 
+	public boolean isAddRegisterImmediate(IRInstruction i) {
+		return i instanceof AddReg && ((AddReg) i).rt instanceof ImmediateValue;
+	}
+
 	public void touchGraph() {
 		for (CFGVertex block : vertices) {
 			for (int i = 0, size = block.phiBlock.size(); i < size; ++i) {
@@ -105,9 +111,23 @@ public class ControlFlowGraph {
 				IRInstruction after = before.getExpression();
 				block.phiBlock.set(i, after);
 			}
+			AddReg lastIns = null;
 			for (int i = 0, size = block.internal.size(); i < size; ++i) {
 				IRInstruction before = block.internal.get(i);
 				IRInstruction after = before.getExpression();
+
+				if (lastIns != null && isAddRegisterImmediate(after)) {
+					if (lastIns.rt.equals(((AddReg) after).rs)) {
+						int i1 = ((ImmediateValue) lastIns.rt).a;
+						int i2 = ((ImmediateValue) ((AddReg) after).rt).a;
+						after = AddReg.getExpression(after.rd, lastIns.rs, new ImmediateValue(i1 + i2));
+					}
+				}
+
+				if (isAddRegisterImmediate(after))
+					lastIns = (AddReg) after;
+				else
+					lastIns = null;
 				block.internal.set(i, after);
 			}
 		}
