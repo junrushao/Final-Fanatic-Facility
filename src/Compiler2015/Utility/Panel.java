@@ -9,7 +9,7 @@ public final class Panel {
 	public final static String MIPS = "-mips";
 	public final static String X86 = "-x86";
 	public final static String JVM = "-jvm";
-	public final static boolean DEBUG = true;
+	public final static boolean DEBUG = false;
 	public static boolean emitCFG = false;
 	public static boolean checkMain = false;
 	public static boolean emitAST = false;

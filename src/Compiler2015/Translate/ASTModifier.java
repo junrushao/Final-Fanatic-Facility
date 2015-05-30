@@ -3,6 +3,7 @@ package Compiler2015.Translate;
 import Compiler2015.AST.Initializer;
 import Compiler2015.AST.Statement.Statement;
 import Compiler2015.Environment.Environment;
+import Compiler2015.Environment.SymbolTableEntry;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.Type.ArrayPointerType;
 import Compiler2015.Type.FunctionType;
@@ -42,8 +43,11 @@ public final class ASTModifier {
 				}
 		);
 		// rebuild all compound statements of function
-		Environment.symbolNames.table.stream().filter(e -> e != null && e.type == Tokens.VARIABLE && e.ref instanceof FunctionType && e.info != null).forEach(
-				e -> e.info = ((Statement) e.info).rebuild()
-		);
+		for (int i = 1, size = Environment.symbolNames.table.size(); i < size; ++i) {
+			SymbolTableEntry e = Environment.symbolNames.table.get(i);
+			if (e.type == Tokens.VARIABLE && e.ref instanceof FunctionType && e.info != null) {
+				e.info = ((Statement) e.info).rebuild();
+			}
+		}
 	}
 }
