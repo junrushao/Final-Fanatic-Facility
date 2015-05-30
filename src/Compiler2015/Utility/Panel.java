@@ -9,10 +9,11 @@ public final class Panel {
 	public final static String MIPS = "-mips";
 	public final static String X86 = "-x86";
 	public final static String JVM = "-jvm";
-	public final static boolean DEBUG = false;
+	public final static boolean DEBUG = true;
 	public static boolean emitCFG = false;
 	public static boolean checkMain = false;
 	public static boolean emitAST = false;
+	public static boolean enableFunctionPointer = false;
 	public static String prettyPrinterType = null;
 	public static String architecture = MIPS;
 

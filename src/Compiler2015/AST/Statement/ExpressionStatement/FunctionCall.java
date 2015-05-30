@@ -7,14 +7,12 @@ import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.Call;
 import Compiler2015.IR.Instruction.FetchReturn;
 import Compiler2015.IR.Instruction.PushStack;
-import Compiler2015.Type.ArrayPointerType;
-import Compiler2015.Type.FunctionPointerType;
-import Compiler2015.Type.FunctionType;
-import Compiler2015.Type.Type;
+import Compiler2015.Type.*;
 import Compiler2015.Utility.Utility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Stack;
 
 /**
  * f(...)
@@ -115,6 +113,29 @@ public class FunctionCall extends Expression {
 		return ret;
 	}
 
+	public void putString(String c, int begin, int end, Stack<FunctionCall> callSequence) {
+		// [begin, end)
+		if (begin == end - 1) {
+			char chr = c.charAt(begin);
+			callSequence.push(new FunctionCall(
+							new IdentifierExpression(Environment.uIdOfPutChar, VoidType.instance),
+							new Expression[]{new CharConstant(chr)},
+							null,
+							VoidType.instance)
+			);
+		} else if (begin < end - 1) {
+			String sub = c.substring(begin, end);
+			StringConstant toPrint = new StringConstant(sub);
+			callSequence.push(new FunctionCall(
+							new IdentifierExpression(Environment.uIdOfPutString, VoidType.instance),
+							new Expression[]{toPrint},
+							null,
+							VoidType.instance)
+			);
+		} else
+			throw new CompilationError("Internal Error.");
+	}
+
 	@Override
 	public Expression rebuild() {
 		function = function.rebuild();
@@ -122,6 +143,64 @@ public class FunctionCall extends Expression {
 			argumentExpressionList[i] = argumentExpressionList[i].rebuild();
 		for (int i = 0; i < vaList.length; ++i)
 			vaList[i] = vaList[i].rebuild();
+
+		if (function instanceof IdentifierExpression && ((IdentifierExpression) function).uId == Environment.uIdOfPrintf && argumentExpressionList[0] instanceof StringConstant) {
+			// do printf analysis
+			String c = ((StringConstant) argumentExpressionList[0]).c;
+			for (int i = 0; i <= 9; ++i)
+				if (c.contains("%." + Integer.toString(i) + "d"))
+					return this;
+				else if (c.contains("%0" + Integer.toString(i) + "d"))
+					return this;
+			Stack<FunctionCall> callSequence = new Stack<>();
+			int prev = 0, ptr = 0, cnt = 0;
+			for (; ptr < c.length(); ++ptr)
+				if (c.charAt(ptr) == '%') {
+					if (prev < ptr)
+						putString(c, prev, ptr, callSequence);
+					++ptr;
+					if (c.charAt(ptr) == 'd') {
+						callSequence.push(new FunctionCall(
+										new IdentifierExpression(Environment.uIdOfPutInt, VoidType.instance),
+										new Expression[]{vaList[cnt++]},
+										null,
+										VoidType.instance)
+						);
+					} else if (c.charAt(ptr) == 'c') {
+						callSequence.push(new FunctionCall(
+										new IdentifierExpression(Environment.uIdOfPutChar, VoidType.instance),
+										new Expression[]{vaList[cnt++]},
+										null,
+										VoidType.instance)
+						);
+					} else if (c.charAt(ptr) == 's') {
+						callSequence.push(new FunctionCall(
+										new IdentifierExpression(Environment.uIdOfPutString, VoidType.instance),
+										new Expression[]{vaList[cnt++]},
+										null,
+										VoidType.instance)
+						);
+					} else {
+						throw new CompilationError("Not supported printf analysis.");
+//						return this;
+					}
+					prev = ptr + 1;
+				}
+			if (prev < c.length())
+				putString(c, prev, c.length(), callSequence);
+			if (callSequence.size() == 0)
+				return this;
+			if (callSequence.size() == 1)
+				return callSequence.pop();
+			Expression t2 = callSequence.pop();
+			Expression t1 = callSequence.pop();
+			Expression ret = new CommaExpression(t1, t2);
+			while (!callSequence.isEmpty()) {
+				t1 = callSequence.pop();
+				ret = new CommaExpression(t1, ret);
+			}
+			return ret;
+		}
 		return this;
 	}
 }

@@ -29,6 +29,7 @@ public class Environment {
 	public static int uIdOfMalloc;
 	public static int uIdOfPutString;
 	public static int uIdOfPutInt;
+	public static int uIdOfPrintf;
 	public static HashSet<Integer> globalNonArrayVariablesAndLocalAddressFetchedVariables;
 
 	public static HashMap<Integer, FunctionTableEntry> functionTable;
@@ -124,7 +125,7 @@ public class Environment {
 				new FunctionType(
 						VoidType.instance,
 						new ArrayList<Type>() {{
-							add(new VariablePointerType(CharType.instance));
+							add(IntType.instance);
 						}},
 						new ArrayList<String>() {{
 							add("c");

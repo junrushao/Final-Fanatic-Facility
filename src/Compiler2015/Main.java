@@ -12,7 +12,9 @@ import Compiler2015.RegisterAllocator.InterferenceGraphColoring;
 import Compiler2015.Translate.ASTModifier;
 import Compiler2015.Translate.Naive.MIPS.NaiveTranslator;
 import Compiler2015.Translate.SimpleTranslator;
+import Compiler2015.Type.FunctionType;
 import Compiler2015.Utility.Panel;
+import Compiler2015.Utility.Tokens;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RuleContext;
@@ -160,5 +162,7 @@ public class Main {
 		parser.removeErrorListeners();
 		parser.addErrorListener(new ParseErrorListener());
 		parser.compilationUnit();
+
+		Environment.symbolNames.table.stream().filter(e -> e != null && e.scope == 1 && e.type == Tokens.VARIABLE && e.ref instanceof FunctionType && e.name.equals("printf")).forEach(e -> Environment.uIdOfPrintf = e.uId);
 	}
 }
