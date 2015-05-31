@@ -53,32 +53,45 @@ public class Main {
 			Panel.prettyPrinterType = null;
 			Panel.emitAST = true;
 			Panel.emitCFG = true;
-			Panel.checkMain = false;
 			return;
 		}
 		for (String s : args) {
-			if (s.equals(Panel.msPrinter)) {
-				Panel.prettyPrinterType = Panel.msPrinter;
-			} else if (s.equals(Panel.krPrinter)) {
-				Panel.prettyPrinterType = Panel.krPrinter;
-			} else if (s.equals("-emit-ast")) {
-				Panel.emitAST = true;
-			} else if (!s.startsWith("-")) {
-				try {
-					inputFile = new BufferedInputStream(new FileInputStream(s));
-				} catch (FileNotFoundException e) {
-					System.err.println("File not exist, will use stdin as input.");
-					inputFile = System.in;
-				}
-			} else if (s.equals(Panel.MIPS)) {
-				Panel.architecture = Panel.MIPS;
-			} else if (s.equals(Panel.JVM)) {
-				Panel.architecture = Panel.JVM;
-			} else if (s.equals(Panel.X86)) {
-				Panel.architecture = Panel.X86;
-			} else {
-				System.err.println("Unknown arg: " + s);
+			boolean fetch = false;
+			switch (s) {
+				case Panel.msPrinter:
+					Panel.prettyPrinterType = Panel.msPrinter;
+					fetch = true;
+					break;
+				case Panel.krPrinter:
+					Panel.prettyPrinterType = Panel.krPrinter;
+					fetch = true;
+					break;
+				case "-emit-ast":
+					Panel.emitAST = true;
+					fetch = true;
+					break;
+				case "-emit-cfg":
+					Panel.emitCFG = true;
+					fetch = true;
+					break;
+				case "-emit-ssa":
+					Panel.emitSSA = true;
+					fetch = true;
+					break;
+				case "-emit-optimized-ssa":
+					Panel.emitOptimizedSSA = true;
+					fetch = true;
+					break;
+				case "-emit-optimized-cfg":
+					Panel.emitOptimizedCFG = true;
+					fetch = true;
+					break;
+				default:
+					System.err.println("Unknown arg: " + s);
+					break;
 			}
+			if (fetch)
+				break;
 		}
 	}
 
@@ -105,15 +118,12 @@ public class Main {
 		parser.addErrorListener(new ParseErrorListener());
 		RuleContext tree = parser.compilationUnit();
 
-		// final check
-		if (Panel.checkMain)
-			Environment.finalCheck();
-
 		ASTModifier.process();
 
 		// emit AST
 		if (Panel.emitAST) {
 			System.out.println(Environment.toStr());
+			return;
 		}
 
 		// pretty printer
@@ -122,7 +132,12 @@ public class Main {
 			PrettyPrinterListener printer = new PrettyPrinterListener(tokens);
 			walker.walk(printer, tree);
 			System.out.println(printer.toString());
+			return;
 		}
+
+		// final check
+		if (Panel.checkMain)
+			Environment.finalCheck();
 
 		// construct function table & control flow graph, optimize
 		Environment.generateFunctionTable();
@@ -133,6 +148,9 @@ public class Main {
 			entry.cfg = new ControlFlowGraph(entry);
 			entry.allocator = new InterferenceGraphColoring(entry.cfg);
 		}
+
+		if (Panel.emitSSA || Panel.emitCFG || Panel.emitOptimizedSSA || Panel.emitOptimizedCFG)
+			return;
 
 		// translate to MIPS
 		PrintWriter out = new PrintWriter(outputFile);

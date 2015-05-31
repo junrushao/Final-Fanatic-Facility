@@ -745,8 +745,8 @@ locals [ Type type = null, CompoundStatement s = null, ArrayList<Type> parameter
 	Environment.loopStack = $loopStack;
 }
 	:
-	'[' ']'
-		'(' (parameterTypeList
+	L2 R2
+		L1 (parameterTypeList
 			{
 				$parameterTypes = $parameterTypeList.types;
 				$parameterNames = $parameterTypeList.names;
@@ -757,8 +757,8 @@ locals [ Type type = null, CompoundStatement s = null, ArrayList<Type> parameter
 					if (name == null || name.equals(""))
 						throw new CompilationError("No parameter name.");
 			}
-		)? ')'
-		('->' typeName
+		)? R1
+		(POINTER typeName
 			{
 				$type = $typeName.ret;
 			}
@@ -809,6 +809,7 @@ Or : '|';
 Caret : '^';
 And : '&';
 SizeOf : 'sizeof';
+POINTER : '->';
 
 Identifier
 	:	IdentifierNondigit

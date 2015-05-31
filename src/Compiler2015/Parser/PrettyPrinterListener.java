@@ -53,6 +53,11 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 		configs.get(n).nl = true;
 	}
 
+	public void setNonNL(int n) {
+		ensureCapacity(n);
+		configs.get(n).nl = false;
+	}
+
 	public String convertComment(String s) {
 		if (s.startsWith("/*"))
 			return s;
@@ -502,5 +507,19 @@ public class PrettyPrinterListener extends Compiler2015BaseListener {
 		int n = list.size();
 		for (int i = 1; i < n; ++i)
 			setWSL(list.get(i).getSymbol().getTokenIndex());
+	}
+
+	@Override
+	public void enterLambdaExpression(Compiler2015Parser.LambdaExpressionContext ctx) {
+		++indent;
+	}
+
+	@Override
+	public void exitLambdaExpression(Compiler2015Parser.LambdaExpressionContext ctx) {
+		setIndent(ctx.L2().getSymbol().getTokenIndex(), indent);
+		setWSL(ctx.POINTER().getSymbol().getTokenIndex());
+		setWSR(ctx.POINTER().getSymbol().getTokenIndex());
+		setNonNL(ctx.compoundStatement.getStop().getTokenIndex());
+		--indent;
 	}
 }

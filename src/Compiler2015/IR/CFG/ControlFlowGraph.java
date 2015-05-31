@@ -80,6 +80,9 @@ public class ControlFlowGraph {
 		// define external variables and parameters passed at source
 		defineExternalVariables();
 
+		if (Panel.emitCFG)
+			System.out.println(this.toString());
+
 		this.touchGraph();
 		// do naive dead code elimination
 		NaiveDeadCodeElimination.process(this, true);
@@ -88,13 +91,22 @@ public class ControlFlowGraph {
 		// insert phi functions
 		PhiPlacer.process(this);
 
+		if (Panel.emitSSA)
+			System.out.println(this.toString());
+
 		new CommonExpressionElimination(this);
+
+		if (Panel.emitOptimizedSSA)
+			System.out.println(this.toString());
 
 		// destroy ssa
 		SSADestroyer.process(this);
 
 		NaiveDeadCodeElimination.process(this, true);
 		this.touchGraph();
+
+		if (Panel.emitOptimizedCFG)
+			System.out.println(this.toString());
 
 		scanVirtualRegister();
 		ControlFlowGraph.instance = null;
@@ -195,8 +207,6 @@ public class ControlFlowGraph {
 
 	@Override
 	public String toString() {
-		if (functionTableEntry.uId == 6)
-			return "CFG of printf omitted";
 		StringBuilder sb = new StringBuilder();
 		sb.append("CFG of Function #").append(functionTableEntry.uId).append(Utility.NEW_LINE);
 		sb.append(Utility.getIndent(1)).
