@@ -157,11 +157,11 @@ public final class NaiveTranslator extends BaseTranslator {
 					else {
 						if (sizeOfExtraArguments != 0)
 							out.printf("\taddiu $sp, $sp, -%d%s", sizeOfExtraArguments, Utility.NEW_LINE);
-						if (Environment.symbolNames.table.get(func.uId).type == Tokens.VARIABLE) {
+						if (Environment.symbolNames.table.get(func.uId).type == Tokens.VARIABLE && Environment.symbolNames.table.get(func.uId).ref instanceof FunctionType) {
 							out.printf("\tjal %s%s", getFunctionLabelName(func.uId), Utility.NEW_LINE);
 						} else {
 							loadFromIRRegisterToTRegister(func, 0, out);
-							out.printf("\tjal $t0%s", Utility.NEW_LINE);
+							out.printf("\tjalr $t0%s", Utility.NEW_LINE);
 						}
 						if (sizeOfExtraArguments != 0)
 							out.printf("\taddiu $sp, $sp, %d%s", sizeOfExtraArguments, Utility.NEW_LINE);

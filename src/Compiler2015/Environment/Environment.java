@@ -6,6 +6,7 @@ import Compiler2015.AST.Statement.Loop;
 import Compiler2015.Exception.CompilationError;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.Type.*;
+import Compiler2015.Utility.Panel;
 import Compiler2015.Utility.Tokens;
 import Compiler2015.Utility.Utility;
 
@@ -176,6 +177,13 @@ public class Environment {
 			SymbolTableEntry entry = Environment.symbolNames.table.get(i);
 			if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionType)
 				functionTable.put(entry.uId, new FunctionTableEntry(entry.uId, entry.name, ((FunctionType) entry.ref), entry, ((CompoundStatement) entry.info)));
+		}
+		for (int i = 1, size = Environment.symbolNames.table.size(); i < size; ++i) {
+			SymbolTableEntry entry = Environment.symbolNames.table.get(i);
+			if (entry.type == Tokens.VARIABLE && entry.ref instanceof FunctionPointerType) {
+				Panel.enableFunctionPointer = true;
+				break;
+			}
 		}
 	}
 }

@@ -36,9 +36,10 @@ public class MachineRegister {
 //			new MachineRegister(31, "$ra")
 	};
 	public static int K;
-	public static MachineRegister tmp1 = new MachineRegister(31, "$ra");
-	public static MachineRegister tmp2 = new MachineRegister(2, "$v0");
-	public static MachineRegister tmp3 = new MachineRegister(4, "$a0");
+	public static MachineRegister tmp1 = new MachineRegister(2, "$v0");
+	public static MachineRegister tmp2 = new MachineRegister(4, "$a0");
+	//	public static MachineRegister tmp3 = new MachineRegister(31, "$ra");
+	public static MachineRegister zero = new MachineRegister(0, "$0");
 
 	static {
 		K = availableMachineRegisters.length;

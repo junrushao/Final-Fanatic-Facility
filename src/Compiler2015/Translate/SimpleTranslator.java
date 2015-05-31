@@ -71,6 +71,8 @@ public final class SimpleTranslator extends BaseTranslator {
 			}
 			return candidate;
 		} else if (reg instanceof ImmediateValue) {
+			if (((ImmediateValue) reg).a == 0)
+				return MachineRegister.zero;
 			out.printf("\tli %s, %d%s", candidate, ((ImmediateValue) reg).a, Utility.NEW_LINE);
 			return candidate;
 		} else
@@ -148,7 +150,8 @@ public final class SimpleTranslator extends BaseTranslator {
 
 		// enter a function
 		out.println(getFunctionLabel());
-		out.println("\tsw $ra, 128($sp)");
+		if (!graph.functionTableEntry.isLeaf)
+			out.println("\tsw $ra, 128($sp)");
 
 		if (!Environment.symbolNames.table.get(graph.functionTableEntry.uId).name.equals("main")) {
 			// save registers
@@ -321,7 +324,8 @@ public final class SimpleTranslator extends BaseTranslator {
 		}
 
 		// exit a function
-		out.println("\tlw $ra, 128($sp)");
+		if (!graph.functionTableEntry.isLeaf)
+			out.println("\tlw $ra, 128($sp)");
 
 		if (Environment.symbolNames.table.get(graph.functionTableEntry.uId).name.equals("main")) {
 			out.printf("\taddu $sp, $sp, %d%s", graph.frameSize, Utility.NEW_LINE);

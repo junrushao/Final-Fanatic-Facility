@@ -2,6 +2,7 @@ package Compiler2015.AST.Statement.ExpressionStatement;
 
 import Compiler2015.Environment.Environment;
 import Compiler2015.Exception.CompilationError;
+import Compiler2015.IR.CFG.ControlFlowGraph;
 import Compiler2015.IR.CFG.ExpressionCFGBuilder;
 import Compiler2015.IR.IRRegister.VirtualRegister;
 import Compiler2015.IR.Instruction.Call;
@@ -84,6 +85,7 @@ public class FunctionCall extends Expression {
 
 	@Override
 	public void emitCFG(ExpressionCFGBuilder builder) {
+		ControlFlowGraph.instance.functionTableEntry.isLeaf = false;
 		function.emitCFG(builder);
 		for (Expression e : argumentExpressionList) {
 			e.emitCFG(builder);

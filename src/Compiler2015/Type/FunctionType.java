@@ -23,11 +23,6 @@ public class FunctionType extends Type {
 			throw new CompilationError("A function should not return a function.");
 		if (!Environment.isCompleteType(returnType))
 			throw new CompilationError("Incomplete type.");
-/*
-		if (parameterNames.size() != 0 && (new HashSet<>(parameterNames).size()) != parameterNames.size())
-			throw new CompilationError("parameter should have different names");
-*/
-
 		for (int i = 0, n = parameterTypes.size(); i < n; ++i) {
 			Type t = parameterTypes.get(i);
 			if (t instanceof ArrayPointerType)
@@ -42,7 +37,7 @@ public class FunctionType extends Type {
 
 	@Override
 	public int sizeof() {
-		return 1;
+		return 4;
 	}
 
 	@Override

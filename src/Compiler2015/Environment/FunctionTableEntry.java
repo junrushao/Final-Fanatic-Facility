@@ -13,6 +13,7 @@ public class FunctionTableEntry {
 	public CompoundStatement scope;
 	public ControlFlowGraph cfg;
 	public BaseAllocator allocator;
+	public boolean isLeaf;
 
 	public FunctionTableEntry(int uId, String name, FunctionType definition, SymbolTableEntry symbolTableEntry, CompoundStatement scope) {
 		this.uId = uId;
@@ -22,5 +23,6 @@ public class FunctionTableEntry {
 		this.scope = scope;
 		this.cfg = null;
 		this.allocator = null;
+		this.isLeaf = true;
 	}
 }

@@ -83,30 +83,31 @@ public class ControlFlowGraph {
 		if (Panel.emitCFG)
 			System.out.println(this.toString());
 
-		this.touchGraph();
-		// do naive dead code elimination
-		NaiveDeadCodeElimination.process(this, true);
-		this.touchGraph();
+		if (!Panel.enableFunctionPointer) {
+			// do optimization
+			this.touchGraph();
+			// do naive dead code elimination
+			NaiveDeadCodeElimination.process(this, true);
+			this.touchGraph();
+			// insert phi functions
+			PhiPlacer.process(this);
 
-		// insert phi functions
-		PhiPlacer.process(this);
+			if (Panel.emitSSA)
+				System.out.println(this.toString());
 
-		if (Panel.emitSSA)
-			System.out.println(this.toString());
+			new CommonExpressionElimination(this);
 
-		new CommonExpressionElimination(this);
+			if (Panel.emitOptimizedSSA)
+				System.out.println(this.toString());
 
-		if (Panel.emitOptimizedSSA)
-			System.out.println(this.toString());
+			// destroy ssa
+			SSADestroyer.process(this);
+			NaiveDeadCodeElimination.process(this, true);
+			this.touchGraph();
 
-		// destroy ssa
-		SSADestroyer.process(this);
-
-		NaiveDeadCodeElimination.process(this, true);
-		this.touchGraph();
-
-		if (Panel.emitOptimizedCFG)
-			System.out.println(this.toString());
+			if (Panel.emitOptimizedCFG)
+				System.out.println(this.toString());
+		}
 
 		scanVirtualRegister();
 		ControlFlowGraph.instance = null;

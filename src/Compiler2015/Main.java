@@ -51,6 +51,7 @@ public class Main {
 				outputFile = System.out;
 			}
 			Panel.prettyPrinterType = null;
+//			Panel.emitAST = true;
 			return;
 		}
 		for (String s : args) {
@@ -152,8 +153,12 @@ public class Main {
 		out.println(".text");
 		for (Map.Entry<Integer, FunctionTableEntry> e : Environment.functionTable.entrySet()) {
 			FunctionTableEntry function = e.getValue();
-			if (function.scope != null)
-				new SimpleTranslator(function.cfg, out).generateFunction();
+			if (function.scope != null) {
+				if (Panel.enableFunctionPointer)
+					new NaiveTranslator(function.cfg, out).generateFunction();
+				else
+					new SimpleTranslator(function.cfg, out).generateFunction();
+			}
 		}
 		out.close();
 	}

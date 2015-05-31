@@ -5,3 +5,4 @@ input.c
 test.s
 *.out
 *.in
+*.swp

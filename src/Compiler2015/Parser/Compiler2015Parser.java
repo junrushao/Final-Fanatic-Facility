@@ -3751,7 +3751,7 @@ public class Compiler2015Parser extends Parser {
 		public Declaration2Context(DeclarationContext ctx) { copyFrom(ctx); }
 
 		public TypeSpecifierContext typeSpecifier() {
-			return getRuleContext(TypeSpecifierContext.class,0);
+			return getRuleContext(TypeSpecifierContext.class, 0);
 		}
 
 		public TerminalNode Semi() { return getToken(Compiler2015Parser.Semi, 0); }
@@ -3898,7 +3898,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public TypedefNameContext typedefName() {
-			return getRuleContext(TypedefNameContext.class,0);
+			return getRuleContext(TypedefNameContext.class, 0);
 		}
 
 		public StructOrUnionSpecifierContext structOrUnionSpecifier() {
@@ -4017,7 +4017,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public TypeSpecifierContext typeSpecifier() {
-			return getRuleContext(TypeSpecifierContext.class,0);
+			return getRuleContext(TypeSpecifierContext.class, 0);
 		}
 
 		public TerminalNode Semi() { return getToken(Compiler2015Parser.Semi, 0); }
@@ -4027,7 +4027,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public DeclaratorContext declarator(int i) {
-			return getRuleContext(DeclaratorContext.class,i);
+			return getRuleContext(DeclaratorContext.class, i);
 		}
 
 		public List<TerminalNode> Comma() { return getTokens(Compiler2015Parser.Comma); }
@@ -4146,7 +4146,7 @@ public class Compiler2015Parser extends Parser {
 		public TerminalNode Identifier() { return getToken(Compiler2015Parser.Identifier, 0); }
 
 		public DeclaratorContext declarator() {
-			return getRuleContext(DeclaratorContext.class,0);
+			return getRuleContext(DeclaratorContext.class, 0);
 		}
 
 		public ConstantExpressionContext constantExpression() {
@@ -4154,11 +4154,11 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public DirectDeclaratorContext directDeclarator() {
-			return getRuleContext(DirectDeclaratorContext.class,0);
+			return getRuleContext(DirectDeclaratorContext.class, 0);
 		}
 
 		public ParameterTypeListContext parameterTypeList() {
-			return getRuleContext(ParameterTypeListContext.class,0);
+			return getRuleContext(ParameterTypeListContext.class, 0);
 		}
 
 		@Override public int getRuleIndex() { return RULE_directDeclarator; }
@@ -4182,7 +4182,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public ParameterListContext parameterList() {
-			return getRuleContext(ParameterListContext.class,0);
+			return getRuleContext(ParameterListContext.class, 0);
 		}
 
 		public TerminalNode Comma() { return getToken(Compiler2015Parser.Comma, 0); }
@@ -4255,7 +4255,7 @@ public class Compiler2015Parser extends Parser {
 		public ParameterDeclaration1Context(ParameterDeclarationContext ctx) { copyFrom(ctx); }
 
 		public TypeSpecifierContext typeSpecifier() {
-			return getRuleContext(TypeSpecifierContext.class,0);
+			return getRuleContext(TypeSpecifierContext.class, 0);
 		}
 
 		@Override
@@ -4322,7 +4322,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public DirectAbstractDeclaratorContext directAbstractDeclarator() {
-			return getRuleContext(DirectAbstractDeclaratorContext.class,0);
+			return getRuleContext(DirectAbstractDeclaratorContext.class, 0);
 		}
 
 		@Override public int getRuleIndex() { return RULE_abstractDeclarator; }
@@ -4344,7 +4344,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public AbstractDeclaratorContext abstractDeclarator() {
-			return getRuleContext(AbstractDeclaratorContext.class,0);
+			return getRuleContext(AbstractDeclaratorContext.class, 0);
 		}
 
 		public ConstantExpressionContext constantExpression() {
@@ -4352,11 +4352,11 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public ParameterTypeListContext parameterTypeList() {
-			return getRuleContext(ParameterTypeListContext.class,0);
+			return getRuleContext(ParameterTypeListContext.class, 0);
 		}
 
 		public DirectAbstractDeclaratorContext directAbstractDeclarator() {
-			return getRuleContext(DirectAbstractDeclaratorContext.class,0);
+			return getRuleContext(DirectAbstractDeclaratorContext.class, 0);
 		}
 
 		@Override public int getRuleIndex() { return RULE_directAbstractDeclarator; }
@@ -4443,7 +4443,7 @@ public class Compiler2015Parser extends Parser {
 		public Initializer1Context(InitializerContext ctx) { copyFrom(ctx); }
 
 		public AssignmentExpressionContext assignmentExpression() {
-			return getRuleContext(AssignmentExpressionContext.class,0);
+			return getRuleContext(AssignmentExpressionContext.class, 0);
 		}
 
 		@Override
@@ -4699,7 +4699,7 @@ public class Compiler2015Parser extends Parser {
 		public TerminalNode R1() { return getToken(Compiler2015Parser.R1, 0); }
 
 		public StatementContext statement() {
-			return getRuleContext(StatementContext.class,0);
+			return getRuleContext(StatementContext.class, 0);
 		}
 
 		@Override
@@ -4784,7 +4784,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public AssignmentExpressionContext assignmentExpression(int i) {
-			return getRuleContext(AssignmentExpressionContext.class,i);
+			return getRuleContext(AssignmentExpressionContext.class, i);
 		}
 
 		public List<TerminalNode> Comma() { return getTokens(Compiler2015Parser.Comma); }
@@ -4865,7 +4865,7 @@ public class Compiler2015Parser extends Parser {
 		public AssignmentExpression2Context(AssignmentExpressionContext ctx) { copyFrom(ctx); }
 
 		public AssignmentOperatorContext assignmentOperator() {
-			return getRuleContext(AssignmentOperatorContext.class,0);
+			return getRuleContext(AssignmentOperatorContext.class, 0);
 		}
 
 		public UnaryExpressionContext unaryExpression() {
@@ -4873,7 +4873,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public AssignmentExpressionContext assignmentExpression() {
-			return getRuleContext(AssignmentExpressionContext.class,0);
+			return getRuleContext(AssignmentExpressionContext.class, 0);
 		}
 
 		@Override
@@ -4969,7 +4969,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public InclusiveOrExpressionContext inclusiveOrExpression(int i) {
-			return getRuleContext(InclusiveOrExpressionContext.class,i);
+			return getRuleContext(InclusiveOrExpressionContext.class, i);
 		}
 
 		public List<TerminalNode> AndAnd() { return getTokens(Compiler2015Parser.AndAnd); }
@@ -5035,7 +5035,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public AndExpressionContext andExpression(int i) {
-			return getRuleContext(AndExpressionContext.class,i);
+			return getRuleContext(AndExpressionContext.class, i);
 		}
 
 		public List<TerminalNode> Caret() { return getTokens(Compiler2015Parser.Caret); }
@@ -5255,7 +5255,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public MultiplicativeExpressionContext multiplicativeExpression(int i) {
-			return getRuleContext(MultiplicativeExpressionContext.class,i);
+			return getRuleContext(MultiplicativeExpressionContext.class, i);
 		}
 
 		public List<AdditiveOperatorContext> additiveOperator() {
@@ -5263,7 +5263,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public AdditiveOperatorContext additiveOperator(int i) {
-			return getRuleContext(AdditiveOperatorContext.class,i);
+			return getRuleContext(AdditiveOperatorContext.class, i);
 		}
 
 		@Override public int getRuleIndex() { return RULE_additiveExpression; }
@@ -5307,7 +5307,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public CastExpressionContext castExpression(int i) {
-			return getRuleContext(CastExpressionContext.class,i);
+			return getRuleContext(CastExpressionContext.class, i);
 		}
 
 		public List<MultiplicativeOperatorContext> multiplicativeOperator() {
@@ -5315,7 +5315,7 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public MultiplicativeOperatorContext multiplicativeOperator(int i) {
-			return getRuleContext(MultiplicativeOperatorContext.class,i);
+			return getRuleContext(MultiplicativeOperatorContext.class, i);
 		}
 
 		@Override public int getRuleIndex() { return RULE_multiplicativeExpression; }
@@ -5554,7 +5554,7 @@ public class Compiler2015Parser extends Parser {
 		public UnaryExpression4Context(UnaryExpressionContext ctx) { copyFrom(ctx); }
 
 		public UnaryOperatorContext unaryOperator() {
-			return getRuleContext(UnaryOperatorContext.class,0);
+			return getRuleContext(UnaryOperatorContext.class, 0);
 		}
 
 		public CastExpressionContext castExpression() {
@@ -5576,7 +5576,7 @@ public class Compiler2015Parser extends Parser {
 		public UnaryExpression3Context(UnaryExpressionContext ctx) { copyFrom(ctx); }
 
 		public UnaryExpressionContext unaryExpression() {
-			return getRuleContext(UnaryExpressionContext.class,0);
+			return getRuleContext(UnaryExpressionContext.class, 0);
 		}
 
 		@Override
@@ -5658,19 +5658,19 @@ public class Compiler2015Parser extends Parser {
 		}
 
 		public PrimaryExpressionContext primaryExpression() {
-			return getRuleContext(PrimaryExpressionContext.class,0);
+			return getRuleContext(PrimaryExpressionContext.class, 0);
 		}
 
 		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class, 0);
 		}
 
 		public PostfixExpressionContext postfixExpression() {
-			return getRuleContext(PostfixExpressionContext.class,0);
+			return getRuleContext(PostfixExpressionContext.class, 0);
 		}
 
 		public ArgumentsContext arguments() {
-			return getRuleContext(ArgumentsContext.class,0);
+			return getRuleContext(ArgumentsContext.class, 0);
 		}
 
 		public TerminalNode Identifier() { return getToken(Compiler2015Parser.Identifier, 0); }
@@ -5813,7 +5813,7 @@ public class Compiler2015Parser extends Parser {
 		public PrimaryExpression4Context(PrimaryExpressionContext ctx) { copyFrom(ctx); }
 
 		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class, 0);
 		}
 
 		@Override
