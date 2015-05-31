@@ -1,0 +1,2832 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{xcolor}
+\usepackage{ctex}
+\DeclareRobustCommand\nobreakspace{\leavevmode\nobreak\ }
+\usepackage{authblk}
+
+\author{\kaishu Junru Shao 邵俊儒 \thanks{Class ID: F1324004. Student ID:5130309028.}}
+\affil{\small{ACM Honored Class\\ Zhiyuan College \\ Shanghai Jiao Tong University} }
+\date{\today}
+\end_preamble
+\options UTF8
+\use_default_options true
+\begin_modules
+theorems-ams-bytype
+theorems-ams-extended-bytype
+customHeadersFooters
+\end_modules
+\maintain_unincluded_children false
+\language chinese-simplified
+\language_package none
+\inputencoding utf8-plain
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format pdf4
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 10
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2.7cm
+\topmargin 2.7cm
+\rightmargin 2.7cm
+\bottommargin 2.7cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle fancy
+\listings_params "basicstyle={\ttfamily},breaklines=true,commentstyle={\color{red!50!green!50!blue!50}},escapeinside={``},extendedchars=false,frame=single,keywordstyle={\color{blue!70}},language=C,numbers=left,rulesepcolor={\color{red!20!green!20!blue!20}},xleftmargin={2.0em},xrightmargin={2.0em}"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Left Header
+Report for Final Fanatic Facility
+\end_layout
+
+\begin_layout Right Header
+Junru Shao
+\end_layout
+
+\begin_layout Title
+
+\series bold
+Final Fanatic Facility
+\begin_inset Newline newline
+\end_inset
+
+A Well-Organized Modern C Compiler
+\end_layout
+
+\begin_layout Abstract
+This is a report for my implementation of a C language compiler, which generates
+ simple C code from MIPS assembly code.
+ The compiler is implemented in Java and supports major feathers of C.
+ Implementation of Static Single Assignment (SSA), interference graph coloring
+ register allocation, and superior design of interface which leads to its
+ portability is the three main outstanding points of my compiler, which
+ distinguish itself from other compilers.
+ The first section of the report contains detailed explaination of symbol
+ table design, abstract syntax tree design.
+ Section 2 introduces comprehensively my intermediate representations.
+ Section 3 gives a general view of my optimization, mainly SSA-based optimizatio
+n, while register allocation is also included.
+ Section 4 list the usage of FFF, my compiler, as required by TAs.
+ The last section draws a conclusion of my compiler.
+\end_layout
+
+\begin_layout Abstract
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Symbol Table Design, Lexer, Parser, Semantic Check
+\end_layout
+
+\begin_layout Subsection
+Parser and Variadic Functions
+\end_layout
+
+\begin_layout Standard
+FFF makes good use of the existing parser, ANTLR 4.5, eliminating the need
+ to reinvent the wheel.
+ In order to support complicated types, I rewrote the grammar given in the
+ course home page.
+ This stage is somehow long, trivial and boring, as well does not differ
+ much from others who also supports complicated type analysis.
+\end_layout
+
+\begin_layout Standard
+The highlight is that FFF supports variadic functions, who has indefinite
+ number of arguments.
+ In fact, FFF uses internal library StdLib.c, to define the function int
+ printf(char *, ...
+ ) .
+ The function is hand-written by myself and is listed below.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+int printf(char *format, ...) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    va_list ap;
+\end_layout
+
+\begin_layout Plain Layout
+
+    char *prev = format;
+\end_layout
+
+\begin_layout Plain Layout
+
+    int arg, tmp, len;
+\end_layout
+
+\begin_layout Plain Layout
+
+    va_start(ap, format);
+\end_layout
+
+\begin_layout Plain Layout
+
+    for ( ; *format; ++format) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        if (*format == '%') {
+\end_layout
+
+\begin_layout Plain Layout
+
+            *format = 0;
+\end_layout
+
+\begin_layout Plain Layout
+
+            ___yzgysjr_lib_putstring(prev);
+\end_layout
+
+\begin_layout Plain Layout
+
+            *format = '%';
+\end_layout
+
+\begin_layout Plain Layout
+
+            ++format;
+\end_layout
+
+\begin_layout Plain Layout
+
+            if (*format == 'd')
+\end_layout
+
+\begin_layout Plain Layout
+
+                ___yzgysjr_lib_putint(va_arg(ap, int));
+\end_layout
+
+\begin_layout Plain Layout
+
+            else if (*format == 'c')
+\end_layout
+
+\begin_layout Plain Layout
+
+                putchar(va_arg(ap, char));
+\end_layout
+
+\begin_layout Plain Layout
+
+            else if (*format == 's')
+\end_layout
+
+\begin_layout Plain Layout
+
+                ___yzgysjr_lib_putstring(va_arg(ap, char *));
+\end_layout
+
+\begin_layout Plain Layout
+
+            else {
+\end_layout
+
+\begin_layout Plain Layout
+
+                len = *(++format)-'0';
+\end_layout
+
+\begin_layout Plain Layout
+
+                ++format;
+\end_layout
+
+\begin_layout Plain Layout
+
+                arg = va_arg(ap, int);
+\end_layout
+
+\begin_layout Plain Layout
+
+                if (arg < 0) {
+\end_layout
+
+\begin_layout Plain Layout
+
+                    arg = -arg;
+\end_layout
+
+\begin_layout Plain Layout
+
+                    --len;
+\end_layout
+
+\begin_layout Plain Layout
+
+                    putchar('-');
+\end_layout
+
+\begin_layout Plain Layout
+
+                }
+\end_layout
+
+\begin_layout Plain Layout
+
+                for (tmp = arg; tmp; tmp /= 10)
+\end_layout
+
+\begin_layout Plain Layout
+
+                    --len;
+\end_layout
+
+\begin_layout Plain Layout
+
+                for (; len > 0; --len)
+\end_layout
+
+\begin_layout Plain Layout
+
+                    putchar('0');
+\end_layout
+
+\begin_layout Plain Layout
+
+                if (arg)
+\end_layout
+
+\begin_layout Plain Layout
+
+                    ___yzgysjr_lib_putint(arg);
+\end_layout
+
+\begin_layout Plain Layout
+
+            }
+\end_layout
+
+\begin_layout Plain Layout
+
+            prev = format + 1;
+\end_layout
+
+\begin_layout Plain Layout
+
+        }
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    ___yzgysjr_lib_putstring(prev);
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+My implementation of va_list, va_start, va_arg is identical to the standard
+ one, which uses define expansion.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+#define _INTSIZEOF(n) ((sizeof(n)+sizeof(int)-1)&~(sizeof(int)-1))
+\end_layout
+
+\begin_layout Plain Layout
+
+#define va_start(ap, v) (ap = (va_list)&v + _INTSIZEOF(v))
+\end_layout
+
+\begin_layout Plain Layout
+
+#define va_arg(ap, t) (*(t *)((ap += _INTSIZEOF(t)) - _INTSIZEOF(t)))
+\end_layout
+
+\begin_layout Plain Layout
+
+typedef char *va_list;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Symbol Table Entries
+\end_layout
+
+\begin_layout Standard
+Symbol table is carefully designed in FFF.
+ The compiler communicate with symbol table from beginning of lexing to
+ the end of translating to MIPS assembly.
+\end_layout
+
+\begin_layout Standard
+Every entry in the function table has the following fields.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Java"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+public class SymbolTableEntry {
+\end_layout
+
+\begin_layout Plain Layout
+
+    public int uId;
+\end_layout
+
+\begin_layout Plain Layout
+
+    public String name;
+\end_layout
+
+\begin_layout Plain Layout
+
+    public int scope;
+\end_layout
+
+\begin_layout Plain Layout
+
+    public Tokens type;
+\end_layout
+
+\begin_layout Plain Layout
+
+    public Object ref;
+\end_layout
+
+\begin_layout Plain Layout
+
+    public Object info;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+FFF uses 
+\shape italic
+uId
+\shape default
+,short for universal identifier, to represent a symbol.
+ Field 
+\shape italic
+name
+\shape default
+ is simple the name of the symbol, empty or null if the symbol is anonymous.
+ Field 
+\shape italic
+scope
+\shape default
+ is the nested depth of the symbol.
+ The next three fields are relatively important and reflects the philosophy
+ of FFF Compiler.
+\end_layout
+
+\begin_layout Standard
+Note that I used the word ``universal'', every symbol, even virtual registers,
+ are stored in symbol table.
+ Details are shown in the following table.
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="3">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Enum Tokens type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Object ref
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Object info
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+VARIABLE
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+initializer
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+TYPEDEF_NAME
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+null
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+STRUCT_OR_UNION
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+reference to the type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+declaration status
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+STRING_CONSTANT
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+the string
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+null
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+TEMPORARY_REGISTER
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+null
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+null
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Explanation for declaration status: The operations in symbol table could
+ be considered to has two main steps:
+\end_layout
+
+\begin_layout Description
+Declaration Declare that some symbol exists.
+\end_layout
+
+\begin_layout Description
+Definition Define clearly and completely.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Standard
+Additionally, environment in FFF contains two symbol tables, handling structs
+ and other variables separately.
+\end_layout
+
+\begin_layout Standard
+The most important thing is that 
+\series bold
+a function is also a considered as a variable
+\series default
+.
+ This design benefits a lot in the functional programming, although FFF
+ only support simple higher-order functions.
+\end_layout
+
+\begin_layout Subsection
+Complicated Type Analyser
+\end_layout
+
+\begin_layout Standard
+FFF maintains a stack to analyse complicated types, for more details, see
+ Compiler2015.Parser.TypeAnalyser.java.
+ The following code is from Manfan Yin, a good person who helped me a lot.
+ FFF can resolve it easily and generate correct MIPS code.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+struct A {
+\end_layout
+
+\begin_layout Plain Layout
+
+	int x, y;
+\end_layout
+
+\begin_layout Plain Layout
+
+	struct B {
+\end_layout
+
+\begin_layout Plain Layout
+
+		int i, j;
+\end_layout
+
+\begin_layout Plain Layout
+
+	} b;
+\end_layout
+
+\begin_layout Plain Layout
+
+	struct A *next;
+\end_layout
+
+\begin_layout Plain Layout
+
+};
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* a function that returns a pointer to function */
+\end_layout
+
+\begin_layout Plain Layout
+
+int (*func(int flag, int (*f)(), int (*g)()))() {
+\end_layout
+
+\begin_layout Plain Layout
+
+	if (flag) return f;
+\end_layout
+
+\begin_layout Plain Layout
+
+	else return g;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+int main() {
+\end_layout
+
+\begin_layout Plain Layout
+
+	struct A a;
+\end_layout
+
+\begin_layout Plain Layout
+
+	/* the follow types are distinctly different */
+\end_layout
+
+\begin_layout Plain Layout
+
+	int a0[10][20]; /* two-dimensional array */
+\end_layout
+
+\begin_layout Plain Layout
+
+	int (*a1)[20]; /* a pointer to array */
+\end_layout
+
+\begin_layout Plain Layout
+
+	int *a2[20]; /* an array of pointers */
+\end_layout
+
+\begin_layout Plain Layout
+
+	int **a3; /* pointer to pointer */
+\end_layout
+
+\begin_layout Plain Layout
+
+	/* pointer to a function */
+\end_layout
+
+\begin_layout Plain Layout
+
+	int (*f)(), (*h)();
+\end_layout
+
+\begin_layout Plain Layout
+
+	/* function declaration, not a variable */
+\end_layout
+
+\begin_layout Plain Layout
+
+	int (*g(int ***e[10]))();
+\end_layout
+
+\begin_layout Plain Layout
+
+	/* complex type casting is also supported */
+\end_layout
+
+\begin_layout Plain Layout
+
+	f = (int (*)())(0x12345678);
+\end_layout
+
+\begin_layout Plain Layout
+
+	f = func(1, f, main); /* f */
+\end_layout
+
+\begin_layout Plain Layout
+
+	h = func(0, f, main); /* main */
+\end_layout
+
+\begin_layout Plain Layout
+
+	/* 0 1 */
+\end_layout
+
+\begin_layout Plain Layout
+
+	printf("%d %d
+\backslash
+n", f == main, h == main);
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Abstract Syntax Tree Design
+\end_layout
+
+\begin_layout Standard
+Humor: There is an old saying that an AST who is not an IR is not a good
+ AST, an AST who is not different from CST, is not different from salted
+ fish.
+\end_layout
+
+\begin_layout Standard
+While parsing, all variables, declarations, definitions and types, are stored
+ in the AST.
+ A typical CST or AST may contain declarations, types, and initializers.
+ With the support of symbol table, any declaration is redundant to show
+ in AST, so is definition and types.
+ For convinience, I also convert initializer to a list of position-value
+ pairs, where position indicates the subscript index of variable in an array
+ the initializer initializes, and value is the expression to initialize
+ the variable.
+\end_layout
+
+\begin_layout Standard
+In all, AST in FFF only contains Statements.
+ Below is the hierarchy of FFF's AST superclass.
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Quotation
+
+Statement 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ ASTNode
+\end_layout
+
+\begin_layout Quotation
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+ExpressionStatement
+\end_layout
+
+\begin_layout Quotation
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+(omitted)
+\end_layout
+
+\begin_layout Quotation
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+BreakStatement 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ Statement
+\end_layout
+
+\begin_layout Quotation
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+CompoundStatement 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ Statement
+\end_layout
+
+\begin_layout Quotation
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+ContinueStatement 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ Statement
+\end_layout
+
+\begin_layout Quotation
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+ForStatement 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ Statement
+\end_layout
+
+\begin_layout Quotation
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+IfStatement 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ Statement
+\end_layout
+
+\begin_layout Quotation
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+ReturnStatement 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ Statement
+\end_layout
+
+\begin_layout Quotation
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+WhileStatement 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ Statement
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that the AST is actually an Intermediate Representation, we could do
+ interpretation, optimization, or generate assembly code directly from the
+ AST with no difficulty.
+\end_layout
+
+\begin_layout Standard
+The construction of AST is a perfect example of communication with symbol
+ table.
+\end_layout
+
+\begin_layout Section
+Intermediate Representation
+\end_layout
+
+\begin_layout Subsection
+Intermediate Representation Tree
+\end_layout
+
+\begin_layout Standard
+As mentioned above, AST in FFF is in fact a IR tree.
+ This is the first version of my IR.
+ I only do constant expression elimination on the tree, and immediately
+ convert it into the second form of IR: control flow graph.
+ Especially, generating stack machine code is a direct translation, which
+ means generating code for JVM is easy.
+ Due to the limited time, I did not write this part of bonus.
+\end_layout
+
+\begin_layout Subsection
+Control Flow Graph
+\end_layout
+
+\begin_layout Standard
+A control flow graph (CFG) in is a representation, using graph notation,
+ of all paths that might be traversed through a program during its execution.
+\end_layout
+
+\begin_layout Standard
+Each vertex in CFG should have at most one conditional jump instruction,
+ and the instruction must be placed at the end of the vertex.
+ Thus, every vertex in CFG has at most two outcome edges.
+ This is the second IR in FFF Compiler.
+ To simplify the problem, FFF Compiler use 
+\shape italic
+unconditionalGoto
+\shape default
+ and 
+\shape italic
+branchIfFalse
+\shape default
+ to represent two outcome edges, and the criterion of conditional branch
+ is save in the virtual register called 
+\shape italic
+branchRegister
+\shape default
+.
+\end_layout
+
+\begin_layout Subsection
+Linear IR Instruction Embedded in CFG
+\end_layout
+
+\begin_layout Standard
+In the internal of vertex of CFG, there are linear instructions.
+ I design several kinds of IR instructions, mostly for convenience of SSA
+ construction, optimization and assembly translation.
+ Here is the hierarchy:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\lang chinese-simplified
+ThreeAddressInstruction 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ IRInstruction
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\lang chinese-simplified
+(omitted)
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\lang chinese-simplified
+TwoAddressInstruction 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ IRInstruction
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\lang chinese-simplified
+(omitted)
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\lang chinese-simplified
+Call 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ IRInstruction
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\lang chinese-simplified
+Def 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ IRInstruction
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\lang chinese-simplified
+FetchReturn 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ IRInstruction
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\lang chinese-simplified
+Move 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ IRInstruction
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\lang chinese-simplified
+Nop 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ IRInstruction
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\lang chinese-simplified
+NopForBranch 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ IRInstruction
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\lang chinese-simplified
+PhiFunction 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ IRInstruction
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\lang chinese-simplified
+PushStack 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ IRInstruction
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\lang chinese-simplified
+ReadArray 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ IRInstruction
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\lang chinese-simplified
+SetReturn 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ IRInstruction
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\lang chinese-simplified
+WriteArray 
+\series bold
+\color blue
+extends
+\series default
+\color inherit
+ IRInstruction
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+vspace{.4cm}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note: Def is used for global variables and parameters passed in in SSA construct
+ion.
+ PhiFunction, NopForBranch is used in SSA optimization.
+\end_layout
+
+\begin_layout Standard
+In IR, we also should use virtual registers, I design the super class IRRegister
+, and four kinds of IRRegister.
+ The first kind is VirtualRegister, the usual one.
+ The second kind is ImmediateValue, in convenience to represent immediate
+ value.
+ The third kind is array register, a combination of VirtualRegister and
+ ImmediateValue, which might be used to represent memory access (In IR of
+ FFF, only ReadArray and WriteArray could access memory).
+\end_layout
+
+\begin_layout Subsection
+Static Single Assignment Form
+\end_layout
+
+\begin_layout Standard
+SSA is a property of IR, which requires that each variable is assigned exactly
+ once, and every variable is defined before it is used.
+ That is the reason why I use Def as an IRInstruction.
+\end_layout
+
+\begin_layout Standard
+SSA is a modern technic in the field of compiler.
+ I am the only one in our class who fully implemented SSA and optimizations
+ based on SSA.
+ I do not tend to describe what is SSA and how to construct and destruct
+ SSA, which of these are easy to be found in any modern books about compiler.
+\end_layout
+
+\begin_layout Standard
+An industrial compiler should guarantee its compiler's theoretical time
+ complexity.
+ Thus FFF uses 
+\series bold
+Lengauer-Tarjan Algorithm
+\series default
+ to build dominator tree.
+ After calculating dominance frontiers, FFF implements the 
+\series bold
+Fully Pruned Minimal SSA
+\series default
+ insertion technic.
+ These two algorithms are the best known algorithm in this field.
+\end_layout
+
+\begin_layout Section
+Alias Analysis, Optimization and Register Allocation
+\end_layout
+
+\begin_layout Subsection
+Alias Analysis
+\end_layout
+
+\begin_layout Standard
+FFF does not tend to spill all the variables that there exists some pointer
+ refering to it.
+ On the other hand, it perform some operation on the AST and symbol table,
+ changing a variable to an array containing only this variable, force it
+ to access memory.
+ Redundant memory access could be eliminated applying SSA on the whole memory,
+ consider the memory as a single big variable.
+\end_layout
+
+\begin_layout Standard
+For example, consider the following code fragment:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+int a, *b;
+\end_layout
+
+\begin_layout Plain Layout
+
+b = &a;
+\end_layout
+
+\begin_layout Plain Layout
+
+a = 1;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It will be converted to the following:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+int a[1], *b;
+\end_layout
+
+\begin_layout Plain Layout
+
+b = a;
+\end_layout
+
+\begin_layout Plain Layout
+
+a[0] = 1;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Global Dead Code Elimination
+\end_layout
+
+\begin_layout Standard
+In SSA, dead code elimination is rather easy, consider the simplified def-use
+ chain.
+ One def has no use can be easily eliminated.
+\end_layout
+
+\begin_layout Standard
+However, before constructing SSA, I performs naive dead code elimination,
+ using LiveOut set.
+ Detailed explanation could be seen on any compiler books.
+\end_layout
+
+\begin_layout Subsection
+Global Copy Folding while Constructing SSA
+\end_layout
+
+\begin_layout Standard
+There exists a little trick for SSA construction that copy folding (copy
+ propagation) could be done during the renaming stage, because a variable
+ is defined only through its dominators or 
+\begin_inset Formula $\phi$
+\end_inset
+
+ function.
+ Therefore, during the depth-first walking in dominator tree, FFF maintains
+ the renaming stack, if 
+\begin_inset Formula $x\leftarrow\text{Copy}(y)$
+\end_inset
+
+, it pushes 
+\begin_inset Formula $y$
+\end_inset
+
+ to 
+\begin_inset Formula $x$
+\end_inset
+
+'s stack.
+ The pseudocode is presented below.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+function rename(X)
+\end_layout
+
+\begin_layout Plain Layout
+
+    for each statement A in block X do
+\end_layout
+
+\begin_layout Plain Layout
+
+        if A is not phi function statement
+\end_layout
+
+\begin_layout Plain Layout
+
+            for variable v in use(A)
+\end_layout
+
+\begin_layout Plain Layout
+
+                replace v with Top(Stack(v))
+\end_layout
+
+\begin_layout Plain Layout
+
+            end for
+\end_layout
+
+\begin_layout Plain Layout
+
+        end if
+\end_layout
+
+\begin_layout Plain Layout
+
+        for each variable v in def(A) do
+\end_layout
+
+\begin_layout Plain Layout
+
+            if A is CopyStatement v = vr
+\end_layout
+
+\begin_layout Plain Layout
+
+                PushStack(vr, Stack(v))
+\end_layout
+
+\begin_layout Plain Layout
+
+                Set A as Nop
+\end_layout
+
+\begin_layout Plain Layout
+
+            else
+\end_layout
+
+\begin_layout Plain Layout
+
+                get new name for v as v_new
+\end_layout
+
+\begin_layout Plain Layout
+
+                PushStack(v_new, Stack(v))
+\end_layout
+
+\begin_layout Plain Layout
+
+                replace v with v_new
+\end_layout
+
+\begin_layout Plain Layout
+
+            end if
+\end_layout
+
+\begin_layout Plain Layout
+
+        end for
+\end_layout
+
+\begin_layout Plain Layout
+
+    end for
+\end_layout
+
+\begin_layout Plain Layout
+
+    for each block Y in succ(X) do
+\end_layout
+
+\begin_layout Plain Layout
+
+        replace parameter v of phi function in Y with v_new
+\end_layout
+
+\begin_layout Plain Layout
+
+    end for
+\end_layout
+
+\begin_layout Plain Layout
+
+    for each block Y in childOfDominatorTree(X) do
+\end_layout
+
+\begin_layout Plain Layout
+
+        rename(Y)
+\end_layout
+
+\begin_layout Plain Layout
+
+    end for
+\end_layout
+
+\begin_layout Plain Layout
+
+    Pop all variables pushed while processing X
+\end_layout
+
+\begin_layout Plain Layout
+
+end function
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Global Common Subexpression Elimination: with Copy Propagation, Constant
+ Propagation
+\end_layout
+
+\begin_layout Standard
+After SSA construction, we could do common subexpression elimination, like
+ copy folding in SSA construction, we can do copy propagation and constant
+ propagation along with subexpression elimination, the approach is easy:
+ walking on the dominator tree, maintain two tables, one for expression
+ and the other for copy.
+\end_layout
+
+\begin_layout Subsection
+Interference Graph Coloring Register Allocation
+\end_layout
+
+\begin_layout Standard
+Linear scan register allocation is boring for me.
+ In order to test the performance of graph coloring, I use a naive approach,
+ color the graph bottom-up.
+\end_layout
+
+\begin_layout Standard
+First, we need to construct the interference graph.
+ We do a data-flow analysis and find interferences from the last instruction
+ of a block to the first one, maintaining a set LiveNow representing the
+ variables live at the current instruction.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+for each block b do
+\end_layout
+
+\begin_layout Plain Layout
+
+    LiveNow = LiveOut(b)
+\end_layout
+
+\begin_layout Plain Layout
+
+    for each operation op do
+\end_layout
+
+\begin_layout Plain Layout
+
+        for each x in LiveNow do
+\end_layout
+
+\begin_layout Plain Layout
+
+            add interference edge (x, def(op))
+\end_layout
+
+\begin_layout Plain Layout
+
+        end for
+\end_layout
+
+\begin_layout Plain Layout
+
+        remove def(op) from LiveNow
+\end_layout
+
+\begin_layout Plain Layout
+
+        add use(op) to LiveNow
+\end_layout
+
+\begin_layout Plain Layout
+
+    end for
+\end_layout
+
+\begin_layout Plain Layout
+
+end for
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+After interference graph is built up, FFF colors the graph intuitively and
+ tries to minimize the spill cost.
+ In fact, SSA cut the live ranges of variables automatically, which result
+ in the good performance of this interference graph coloring.
+\end_layout
+
+\begin_layout Subsection
+Performance Outline
+\end_layout
+
+\begin_layout Standard
+I did not optimizations other than the ones described above, but the running
+ speed is rather fast.
+\end_layout
+
+\begin_layout Section
+Usage of Compiler
+\end_layout
+
+\begin_layout Subsection
+Instruction to Compile
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=bash"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$CCHK < input.c > assem.s
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Dumping Information
+\end_layout
+
+\begin_layout Standard
+Note that do not combine arguments together, my argument parser only parse
+ the first recognisable argument.
+\end_layout
+
+\begin_layout Subsubsection
+Dumping AST with Symbol Table
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=bash"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$CCHK -emit-ast < input.c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Dumping Basic Control Flow Graph
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=bash"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$CCHK -emit-ast < input.c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Dumping Control Flow Graph in SSA Form
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=bash"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$CCHK -emit-ssa < input.c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Dumping Control Flow Graph after Optimization Based on SSA
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=bash"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$CCHK -emit-optimized-ssa < input.c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Dumping Control Flow Graph after SSA destroyed
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=bash"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$CCHK -emit-optimized-cfg < input.c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Using Pretty Printer
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=bash"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$CCHK -printer=kr < input.c # for ms style pretty printer
+\end_layout
+
+\begin_layout Plain Layout
+
+$CCHK -printer=ms < input.c # for k&r style pretty printer
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Pointers to Functions
+\end_layout
+
+\begin_layout Standard
+The compiler automatically support pointer to functions.
+\end_layout
+
+\begin_layout Subsection
+Higher-Order Functions
+\end_layout
+
+\begin_layout Standard
+The compiler automatically support higher-order functions.
+\end_layout
+
+\begin_layout Subsection
+Comprehensive Examples for All Bonus I Wrote
+\end_layout
+
+\begin_layout Standard
+This is a program of quicksort modified from the given testcases.
+\end_layout
+
+\begin_layout Section
+Conclusion
+\end_layout
+
+\begin_layout Standard
+Final Fanatic Facility (FFF) is a satisfying compiler that truly based on
+ SSA form.
+ This is the only compiler that really uses SSA in our class.
+\end_layout
+
+\begin_layout Section
+Thanks
+\end_layout
+
+\begin_layout Standard
+First, I should thank all of our TAs for their hard work, and providing
+ us kindly this chance to change our limit.
+\end_layout
+
+\begin_layout Standard
+I would like to thank Manfan Yin for his generous help.
+\end_layout
+
+\begin_layout Standard
+I would like to thank Jian Weng for his accompanying.
+\end_layout
+
+\end_body
+\end_document
