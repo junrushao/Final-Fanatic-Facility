@@ -1,0 +1,208 @@
+CFG of Function #6
+	in = 1, out = 29
+	Vertex~24
+		--> 13
+		M_13 = phi(M_14, M_12)
+	Vertex~2
+		--> 3
+		--(BEQ 0)--> 28  null
+		M_1 = phi(M_0, M_21)
+		#8_1 = phi($19_0, #8_5)
+		#9_1 = phi($18_0, #9_2)
+		ReadArray $74_0 = #7_0[0](len = 4) -> M = 1
+		ReadArray $75_0 = $74_0[0](len = 1) -> M = 1
+		NopForBranch $75_0
+	Vertex~29
+	Vertex~19
+		--> 20
+	Vertex~5
+		--> 6
+		$25_0 = #8_1 + 4
+		$26_0 = $25_0 - 4
+		ReadArray $27_0 = $26_0[0](len = 4) -> M = 5
+		Push $27_0
+		Call #5_0
+		Fetch Return: $28_0
+	Vertex~3
+		--> 4
+		--(BEQ 0)--> 27  null
+		$73_0 = $75_0 == 37
+		NopForBranch $73_0
+	Vertex~8
+		--> 9
+		--(BEQ 0)--> 11  null
+		$61_0 = $63_0 == 99
+		NopForBranch $61_0
+	Vertex~20
+		--> 21
+		--(BEQ 0)--> 22  null
+		M_12 = phi(M_11, M_15)
+		#12_2 = phi(#12_1, #12_3)
+		$50_0 = #12_2 > 0
+		NopForBranch $50_0
+	Vertex~10
+		--> 6
+		M_7 = phi(M_18, M_8)
+		#8_2 = phi(#8_3, $29_0)
+	Vertex~9
+		--> 10
+		$29_0 = #8_1 + 4
+		$30_0 = $29_0 - 4
+		ReadArray $31_0 = $30_0[0](len = 1) -> M = 5
+		Push $31_0
+		Call #1_0
+		Fetch Return: $32_0
+	Vertex~14
+		--> 15
+		--(BEQ 0)--> 26  null
+		$37_1 = $62_0 + 1
+		WriteArray #7_0[0](len = 4) = $37_1 -> M = 9
+		ReadArray $38_0 = $37_1[0](len = 1) -> M = 9
+		$40_0 = $38_0 - 48
+		ReadArray $41_0 = #7_0[0](len = 4) -> M = 9
+		$41_1 = $41_0 + 1
+		WriteArray #7_0[0](len = 4) = $41_1 -> M = 10
+		$42_0 = #8_1 + 4
+		$43_0 = $42_0 - 4
+		ReadArray $44_0 = $43_0[0](len = 4) -> M = 10
+		$47_0 = $44_0 < 0
+		NopForBranch $47_0
+	Vertex~1
+		--> 2
+		Def #9_0
+		Def #8_0
+		Def #7_0
+		Def #1_0
+		Def #4_0
+		Def #5_0
+		Def M_0
+		ReadArray $18_0 = #7_0[0](len = 4) -> M = 0
+		$19_0 = #7_0 + 4
+	Vertex~11
+		--> 12
+		--(BEQ 0)--> 14  null
+		$56_0 = $63_0 == 115
+		NopForBranch $56_0
+	Vertex~23
+		--> 24
+		Push #10_0
+		Call #5_0
+		Fetch Return: $51_0
+	Vertex~16
+		--> 17
+		M_11 = phi(M_10, M_16)
+		#10_0 = phi($44_0, $45_0)
+		#12_0 = phi($40_0, #12_5)
+	Vertex~28
+		--> 29
+		Push #9_1
+		Call #4_0
+		Fetch Return: $76_0
+	Vertex~12
+		--> 13
+		$33_0 = #8_1 + 4
+		$34_0 = $33_0 - 4
+		ReadArray $35_0 = $34_0[0](len = 4) -> M = 5
+		Push $35_0
+		Call #4_0
+		Fetch Return: $36_0
+	Vertex~18
+		--> 17
+		#12_4 = #12_1 - 1
+		$48_0 = #11_0 / 10
+	Vertex~6
+		--> 7
+		M_19 = phi(M_6, M_7)
+		#8_4 = phi($25_0, #8_2)
+		ReadArray $67_0 = #7_0[0](len = 4) -> M = 19
+		$68_0 = $67_0 + 1
+	Vertex~13
+		--> 10
+		M_18 = phi(M_17, M_13)
+		#8_3 = phi($33_0, $42_0)
+	Vertex~17
+		--> 18
+		--(BEQ 0)--> 19  null
+		#11_0 = phi($48_0, #10_0)
+		#12_1 = phi(#12_4, #12_0)
+		NopForBranch #11_0
+	Vertex~26
+		--> 16
+	Vertex~27
+		--> 7
+	Vertex~4
+		--> 5
+		--(BEQ 0)--> 8  null
+		WriteArray $74_0[0](len = 1) = 0 -> M = 2
+		Push #9_1
+		Call #4_0
+		Fetch Return: $22_0
+		ReadArray $23_0 = #7_0[0](len = 4) -> M = 3
+		WriteArray $23_0[0](len = 1) = 37 -> M = 4
+		ReadArray $24_0 = #7_0[0](len = 4) -> M = 4
+		$24_1 = $24_0 + 1
+		WriteArray #7_0[0](len = 4) = $24_1 -> M = 5
+		ReadArray $62_0 = #7_0[0](len = 4) -> M = 5
+		ReadArray $63_0 = $62_0[0](len = 1) -> M = 5
+		$66_0 = $63_0 == 100
+		NopForBranch $66_0
+	Vertex~7
+		--> 2
+		M_20 = phi(M_19, M_1)
+		#8_5 = phi(#8_4, #8_1)
+		#9_2 = phi($68_0, #9_1)
+		ReadArray $20_0 = #7_0[0](len = 4) -> M = 20
+		$20_1 = $20_0 + 1
+		WriteArray #7_0[0](len = 4) = $20_1 -> M = 21
+	Vertex~15
+		--> 16
+		$45_0 = -#10
+		#12_5 = $40_0 - 1
+		Push 45
+		Call #1_0
+		Fetch Return: $46_0
+	Vertex~25
+		--> 24
+	Vertex~22
+		--> 23
+		--(BEQ 0)--> 25  null
+		NopForBranch #10_0
+	Vertex~21
+		--> 20
+		Push 48
+		Call #1_0
+		Fetch Return: $49_0
+		#12_3 = #12_2 - 1
+
+CFG of Function #13
+	in = 1, out = 8
+	Vertex~2
+		--> 3
+		--(BEQ 0)--> 7  null
+		#14_1 = phi(#14_2, 1)
+		#15_1 = phi(#15_2, #15_0)
+		$136_0 = #14_1 <= 5
+		NopForBranch $136_0
+	Vertex~4
+		--> 5
+	Vertex~5
+		--> 2
+		#15_2 = phi(3, 1)
+		#14_2 = #14_1 + 1
+	Vertex~7
+		--> 8
+		SetReturn 0
+	Vertex~3
+		--> 4
+		--(BEQ 0)--> 6  null
+		$135_0 = #14_1 < #15_1
+		NopForBranch $135_0
+	Vertex~6
+		--> 5
+	Vertex~8
+	Vertex~1
+		--> 2
+		Def #15_0
+		Def #14_0
+		Def M_0
+
