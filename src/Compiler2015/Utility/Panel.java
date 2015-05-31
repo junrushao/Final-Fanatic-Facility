@@ -4,9 +4,8 @@ public final class Panel {
 	public final static String msPrinter = "-printer=ms";
 	public final static String krPrinter = "-printer=kr";
 
-	public final static boolean DEBUG = false;
+	public final static boolean DEBUG = true;
 	public static boolean emitCFG = false;
-	public static boolean checkMain = true;
 	public static boolean emitAST = false;
 	public static boolean emitSSA = false;
 	public static boolean emitOptimizedSSA = false;

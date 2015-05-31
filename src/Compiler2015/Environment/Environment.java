@@ -171,19 +171,6 @@ public class Environment {
 		return "Struct & Union:" + Utility.NEW_LINE + classNames.toString() + "Symbols:" + Utility.NEW_LINE + symbolNames.toString();
 	}
 
-	public static void finalCheck() {
-		SymbolTableEntry e = symbolNames.queryName("main");
-		if (e == null)
-			throw new CompilationError("No main exists.");
-	}
-/*
-
-	public static boolean isArrayLike(int uId) {
-		SymbolTableEntry e = symbolNames.table.get(uId);
-		return e.type == Tokens.STRING_CONSTANT || (e.type == Tokens.VARIABLE && e.ref instanceof ArrayPointerType);
-	}
-*/
-
 	public static void generateFunctionTable() {
 		for (int i = 1, size = Environment.symbolNames.table.size(); i < size; ++i) {
 			SymbolTableEntry entry = Environment.symbolNames.table.get(i);

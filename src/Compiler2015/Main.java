@@ -51,8 +51,6 @@ public class Main {
 				outputFile = System.out;
 			}
 			Panel.prettyPrinterType = null;
-			Panel.emitAST = true;
-			Panel.emitCFG = true;
 			return;
 		}
 		for (String s : args) {
@@ -134,10 +132,6 @@ public class Main {
 			System.out.println(printer.toString());
 			return;
 		}
-
-		// final check
-		if (Panel.checkMain)
-			Environment.finalCheck();
 
 		// construct function table & control flow graph, optimize
 		Environment.generateFunctionTable();
