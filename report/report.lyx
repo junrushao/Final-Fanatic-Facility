@@ -479,7 +479,7 @@ FFF uses
 \shape italic
 uId
 \shape default
-,short for universal identifier, to represent a symbol.
+, short for universal identifier, to represent a symbol.
  Field 
 \shape italic
 name
@@ -945,7 +945,6 @@ height_special "totalheight"
 status open
 
 \begin_layout Quotation
-
 Statement 
 \series bold
 \color blue
@@ -956,7 +955,6 @@ extends
 \end_layout
 
 \begin_layout Quotation
-
 \begin_inset space \space{}
 \end_inset
 
@@ -992,7 +990,6 @@ ExpressionStatement
 \end_layout
 
 \begin_layout Quotation
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1060,7 +1057,6 @@ ExpressionStatement
 \end_layout
 
 \begin_layout Quotation
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1102,7 +1098,6 @@ extends
 \end_layout
 
 \begin_layout Quotation
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1144,7 +1139,6 @@ extends
 \end_layout
 
 \begin_layout Quotation
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1186,7 +1180,6 @@ extends
 \end_layout
 
 \begin_layout Quotation
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1228,7 +1221,6 @@ extends
 \end_layout
 
 \begin_layout Quotation
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1270,7 +1262,6 @@ extends
 \end_layout
 
 \begin_layout Quotation
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1312,7 +1303,6 @@ extends
 \end_layout
 
 \begin_layout Quotation
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1456,7 +1446,6 @@ height_special "totalheight"
 status open
 
 \begin_layout Plain Layout
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1488,8 +1477,6 @@ status open
 \begin_inset space \space{}
 \end_inset
 
-
-\lang chinese-simplified
 ThreeAddressInstruction 
 \series bold
 \color blue
@@ -1500,7 +1487,6 @@ extends
 \end_layout
 
 \begin_layout Plain Layout
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1564,13 +1550,10 @@ extends
 \begin_inset space \space{}
 \end_inset
 
-
-\lang chinese-simplified
 (omitted)
 \end_layout
 
 \begin_layout Plain Layout
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1602,8 +1585,6 @@ extends
 \begin_inset space \space{}
 \end_inset
 
-
-\lang chinese-simplified
 TwoAddressInstruction 
 \series bold
 \color blue
@@ -1614,7 +1595,6 @@ extends
 \end_layout
 
 \begin_layout Plain Layout
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1678,13 +1658,10 @@ extends
 \begin_inset space \space{}
 \end_inset
 
-
-\lang chinese-simplified
 (omitted)
 \end_layout
 
 \begin_layout Plain Layout
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1716,8 +1693,6 @@ extends
 \begin_inset space \space{}
 \end_inset
 
-
-\lang chinese-simplified
 Call 
 \series bold
 \color blue
@@ -1728,7 +1703,6 @@ extends
 \end_layout
 
 \begin_layout Plain Layout
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1760,8 +1734,6 @@ extends
 \begin_inset space \space{}
 \end_inset
 
-
-\lang chinese-simplified
 Def 
 \series bold
 \color blue
@@ -1772,7 +1744,6 @@ extends
 \end_layout
 
 \begin_layout Plain Layout
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1804,8 +1775,6 @@ extends
 \begin_inset space \space{}
 \end_inset
 
-
-\lang chinese-simplified
 FetchReturn 
 \series bold
 \color blue
@@ -1816,7 +1785,6 @@ extends
 \end_layout
 
 \begin_layout Plain Layout
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1848,8 +1816,6 @@ extends
 \begin_inset space \space{}
 \end_inset
 
-
-\lang chinese-simplified
 Move 
 \series bold
 \color blue
@@ -1860,7 +1826,6 @@ extends
 \end_layout
 
 \begin_layout Plain Layout
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1892,8 +1857,6 @@ extends
 \begin_inset space \space{}
 \end_inset
 
-
-\lang chinese-simplified
 Nop 
 \series bold
 \color blue
@@ -1904,7 +1867,6 @@ extends
 \end_layout
 
 \begin_layout Plain Layout
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1936,8 +1898,6 @@ extends
 \begin_inset space \space{}
 \end_inset
 
-
-\lang chinese-simplified
 NopForBranch 
 \series bold
 \color blue
@@ -1948,7 +1908,6 @@ extends
 \end_layout
 
 \begin_layout Plain Layout
-
 \begin_inset space \space{}
 \end_inset
 
@@ -1980,8 +1939,6 @@ extends
 \begin_inset space \space{}
 \end_inset
 
-
-\lang chinese-simplified
 PhiFunction 
 \series bold
 \color blue
@@ -1992,7 +1949,6 @@ extends
 \end_layout
 
 \begin_layout Plain Layout
-
 \begin_inset space \space{}
 \end_inset
 
@@ -2024,8 +1980,6 @@ extends
 \begin_inset space \space{}
 \end_inset
 
-
-\lang chinese-simplified
 PushStack 
 \series bold
 \color blue
@@ -2036,7 +1990,6 @@ extends
 \end_layout
 
 \begin_layout Plain Layout
-
 \begin_inset space \space{}
 \end_inset
 
@@ -2068,8 +2021,6 @@ extends
 \begin_inset space \space{}
 \end_inset
 
-
-\lang chinese-simplified
 ReadArray 
 \series bold
 \color blue
@@ -2080,7 +2031,6 @@ extends
 \end_layout
 
 \begin_layout Plain Layout
-
 \begin_inset space \space{}
 \end_inset
 
@@ -2112,8 +2062,6 @@ extends
 \begin_inset space \space{}
 \end_inset
 
-
-\lang chinese-simplified
 SetReturn 
 \series bold
 \color blue
@@ -2124,7 +2072,6 @@ extends
 \end_layout
 
 \begin_layout Plain Layout
-
 \begin_inset space \space{}
 \end_inset
 
@@ -2156,8 +2103,6 @@ extends
 \begin_inset space \space{}
 \end_inset
 
-
-\lang chinese-simplified
 WriteArray 
 \series bold
 \color blue
@@ -2615,8 +2560,218 @@ Performance Outline
 \end_layout
 
 \begin_layout Standard
-I did not optimizations other than the ones described above, but the running
- speed is rather fast.
+I did not do optimizations other than the ones described above, but the
+ running speed is rather fast.
+\end_layout
+
+\begin_layout Standard
+Here is some good example of performance.
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="4">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Testcase name
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Threshold
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+My instructions
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Optimization rate
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+expr
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+30000 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1457 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+95.143%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+hanoi
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+180000
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+71132
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+60.482%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+hanoi2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+500000
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+204782
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+59.044%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+heapsort
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+13000000
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5764220
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+55.660%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -2644,161 +2799,452 @@ $CCHK < input.c > assem.s
 \end_layout
 
 \begin_layout Subsection
-Dumping Information
-\end_layout
-
-\begin_layout Standard
-Note that do not combine arguments together, my argument parser only parse
- the first recognisable argument.
-\end_layout
-
-\begin_layout Subsubsection
-Dumping AST with Symbol Table
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "language=bash"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-$CCHK -emit-ast < input.c
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-Dumping Basic Control Flow Graph
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "language=bash"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-$CCHK -emit-ast < input.c
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-Dumping Control Flow Graph in SSA Form
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "language=bash"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-$CCHK -emit-ssa < input.c
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-Dumping Control Flow Graph after Optimization Based on SSA
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "language=bash"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-$CCHK -emit-optimized-ssa < input.c
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-Dumping Control Flow Graph after SSA destroyed
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "language=bash"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-$CCHK -emit-optimized-cfg < input.c
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection
-Using Pretty Printer
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-lstparams "language=bash"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-$CCHK -printer=kr < input.c # for ms style pretty printer
-\end_layout
-
-\begin_layout Plain Layout
-
-$CCHK -printer=ms < input.c # for k&r style pretty printer
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection
-Pointers to Functions
-\end_layout
-
-\begin_layout Standard
-The compiler automatically support pointer to functions.
-\end_layout
-
-\begin_layout Subsection
-Higher-Order Functions
-\end_layout
-
-\begin_layout Standard
-The compiler automatically support higher-order functions.
-\end_layout
-
-\begin_layout Subsection
 Comprehensive Examples for All Bonus I Wrote
 \end_layout
 
+\begin_layout Subsubsection
+Pretty Printer, Typedef & Undimensioned Array, Function Pointer, Higher
+ Order Functions
+\end_layout
+
 \begin_layout Standard
-This is a program of quicksort modified from the given testcases.
+Here is the modified quicksort program originally from the testcases.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+#include <stdio.h> 
+\end_layout
+
+\begin_layout Plain Layout
+
+typedef int (*T)(int, int); 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+int lessThan(int a, // asdasda 
+\end_layout
+
+\begin_layout Plain Layout
+
+	int b) 
+\end_layout
+
+\begin_layout Plain Layout
+
+{ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	return a < b  ; 
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+void quickSort(int a[],  //asdadsasadasdasd 
+\end_layout
+
+\begin_layout Plain Layout
+
+	// QAQ T_T 
+\end_layout
+
+\begin_layout Plain Layout
+
+	int l, int r, //we 
+\end_layout
+
+\begin_layout Plain Layout
+
+	T /*memeda*/ f) { 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	int i = l, j = r, x = a[(l + r) / 2]; 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+while (i <= j) 
+\end_layout
+
+\begin_layout Plain Layout
+
+	{ 
+\end_layout
+
+\begin_layout Plain Layout
+
+		while (f(a[i], x)) i++; 
+\end_layout
+
+\begin_layout Plain Layout
+
+	while (f(x, a[j])) 
+\end_layout
+
+\begin_layout Plain Layout
+
+		j--; 
+\end_layout
+
+\begin_layout Plain Layout
+
+		if (i <= j)                   { 
+\end_layout
+
+\begin_layout Plain Layout
+
+	int temp= a[i]; 
+\end_layout
+
+\begin_layout Plain Layout
+
+		a[i] = a[j]; 
+\end_layout
+
+\begin_layout Plain Layout
+
+			a[j] = temp; 
+\end_layout
+
+\begin_layout Plain Layout
+
+		++i; 
+\end_layout
+
+\begin_layout Plain Layout
+
+		--j; 
+\end_layout
+
+\begin_layout Plain Layout
+
+		}	}
+\end_layout
+
+\begin_layout Plain Layout
+
+	if (l < j) quickSort(a, l, j, f);if (i < r) quickSort(a, i, r, f); 
+\end_layout
+
+\begin_layout Plain Layout
+
+//	return 1; 
+\end_layout
+
+\begin_layout Plain Layout
+
+} 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+int main() // oh my lich main 
+\end_layout
+
+\begin_layout Plain Layout
+
+{  // oh my lich wengjian 
+\end_layout
+
+\begin_layout Plain Layout
+
+	int a[10100];
+\end_layout
+
+\begin_layout Plain Layout
+
+	int n = 10000;
+\end_layout
+
+\begin_layout Plain Layout
+
+	int i;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	int localLessThan(int a, int b) { 
+\end_layout
+
+\begin_layout Plain Layout
+
+		return a < b; 
+\end_layout
+
+\begin_layout Plain Layout
+
+	} 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	for (i = 1; i <= n; i++)
+\end_layout
+
+\begin_layout Plain Layout
+
+		a[i] = n + 1 - i;
+\end_layout
+
+\begin_layout Plain Layout
+
+	quickSort(a, 1, n, lessThan); 
+\end_layout
+
+\begin_layout Plain Layout
+
+	quickSort(a, 1, n, [](int a, int b) -> int { return a < b; }  ); 
+\end_layout
+
+\begin_layout Plain Layout
+
+	quickSort(a, 1, n, localLessThan); 
+\end_layout
+
+\begin_layout Plain Layout
+
+	for (i = 1; i <= n; i++) 
+\end_layout
+
+\begin_layout Plain Layout
+
+		printf("%d ", a[i]); 
+\end_layout
+
+\begin_layout Plain Layout
+
+	printf("
+\backslash
+n"); 
+\end_layout
+
+\begin_layout Plain Layout
+
+	return 0;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When typing
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$CCHK -printer=kr < quicksort.c # for ms style pretty printer
+\end_layout
+
+\begin_layout Plain Layout
+
+$CCHK -printer=ms < quicksort.c # for k&r style pretty printer
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+FFF will produce the formatted files to the screen, see prettyKr.c and prettyMs.c
+ for details.
+\end_layout
+
+\begin_layout Standard
+In the definition of quicksort, note that a is an undimensioned array.
+\end_layout
+
+\begin_layout Standard
+In function main, we call the quicksort 3 times, the first time using function
+ pointer, the second time using higher-order function, and the last time
+ using local-function.
+\end_layout
+
+\begin_layout Standard
+When typing 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$CCHK < quicksort.c > assem.s
+\end_layout
+
+\begin_layout Plain Layout
+
+spim -f assem.s > output.out
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The program will produce right results.
+\end_layout
+
+\begin_layout Subsubsection
+Dumping information aboud AST, CFG and SSA
+\end_layout
+
+\begin_layout Standard
+For convenience, we use a shorter file for.c.
+\end_layout
+
+\begin_layout Standard
+The command
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=bash"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$CCHK -emit-ast < for.c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+will output the AST into screen, see ast for details.
+\end_layout
+
+\begin_layout Standard
+The command
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=bash"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$CCHK -emit-cfg < for.c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+will output the CFG into screen, see cfg for details.
+\end_layout
+
+\begin_layout Standard
+The command
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=bash"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$CCHK -emit-optimized-ssa < for.c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+will output the optimized ssa into screen, see opt-ssa for details.
+\end_layout
+
+\begin_layout Standard
+The command
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=bash"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$CCHK -emit-optimized-cfg < for.c
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+will output the optimized cfg into screen, see opt-cfg for details.
 \end_layout
 
 \begin_layout Section

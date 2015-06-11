@@ -1,0 +1,212 @@
+CFG of Function #6
+	in = 1, out = 29
+	Vertex~24
+		--> 13
+		Move $78 = $77
+	Vertex~2
+		--> 3
+		--(BEQ 0)--> 28  null
+		ReadArray $79 = #7[0](len = 4) -> M = -1
+		ReadArray $80 = $79[0](len = 1) -> M = -1
+		NopForBranch $80
+	Vertex~29
+	Vertex~19
+		--> 20
+		Move $82 = $81
+	Vertex~5
+		--> 6
+		$84 = $83 + 4
+		$85 = $84 - 4
+		ReadArray $86 = $85[0](len = 4) -> M = -1
+		Push $86
+		Call #5
+		Fetch Return: $87
+		Move $88 = $84
+	Vertex~3
+		--> 4
+		--(BEQ 0)--> 27  null
+		$89 = $80 == 37
+		NopForBranch $89
+	Vertex~8
+		--> 9
+		--(BEQ 0)--> 11  null
+		$91 = $90 == 99
+		NopForBranch $91
+	Vertex~20
+		--> 21
+		--(BEQ 0)--> 22  null
+		$92 = $82 > 0
+		NopForBranch $92
+	Vertex~10
+		--> 6
+		Move $88 = $93
+	Vertex~9
+		--> 10
+		$94 = $83 + 4
+		$95 = $94 - 4
+		ReadArray $96 = $95[0](len = 1) -> M = -1
+		Push $96
+		Call #1
+		Fetch Return: $97
+		Move $93 = $94
+	Vertex~14
+		--> 15
+		--(BEQ 0)--> 26  null
+		$99 = $98 + 1
+		WriteArray #7[0](len = 4) = $99 -> M = -1
+		ReadArray $100 = $99[0](len = 1) -> M = -1
+		$101 = $100 - 48
+		ReadArray $102 = #7[0](len = 4) -> M = -1
+		$103 = $102 + 1
+		WriteArray #7[0](len = 4) = $103 -> M = -1
+		$77 = $83 + 4
+		$104 = $77 - 4
+		ReadArray $105 = $104[0](len = 4) -> M = -1
+		$106 = $105 < 0
+		NopForBranch $106
+	Vertex~1
+		--> 2
+		Def #7
+		Def #1
+		Def #4
+		Def #5
+		Def M
+		ReadArray $107 = #7[0](len = 4) -> M = -1
+		$108 = #7 + 4
+		Move $83 = $108
+		Move $109 = $107
+	Vertex~11
+		--> 12
+		--(BEQ 0)--> 14  null
+		$110 = $90 == 115
+		NopForBranch $110
+	Vertex~23
+		--> 24
+		Push #10
+		Call #5
+		Fetch Return: $111
+	Vertex~16
+		--> 17
+		Move #11 = #10
+		Move $81 = #12
+	Vertex~28
+		--> 29
+		Push $109
+		Call #4
+		Fetch Return: $112
+	Vertex~12
+		--> 13
+		$113 = $83 + 4
+		$114 = $113 - 4
+		ReadArray $115 = $114[0](len = 4) -> M = -1
+		Push $115
+		Call #4
+		Fetch Return: $116
+		Move $78 = $113
+	Vertex~18
+		--> 17
+		$117 = $81 - 1
+		$118 = #11 / 10
+		Move #11 = $118
+		Move $81 = $117
+	Vertex~6
+		--> 7
+		ReadArray $119 = #7[0](len = 4) -> M = -1
+		$120 = $119 + 1
+		Move $121 = $88
+		Move $122 = $120
+	Vertex~13
+		--> 10
+		Move $93 = $78
+	Vertex~17
+		--> 18
+		--(BEQ 0)--> 19  null
+		NopForBranch #11
+	Vertex~26
+		--> 16
+		Move #10 = $105
+		Move #12 = $101
+	Vertex~27
+		--> 7
+		Move $121 = $83
+		Move $122 = $109
+	Vertex~4
+		--> 5
+		--(BEQ 0)--> 8  null
+		WriteArray $79[0](len = 1) = 0 -> M = -1
+		Push $109
+		Call #4
+		Fetch Return: $123
+		ReadArray $124 = #7[0](len = 4) -> M = -1
+		WriteArray $124[0](len = 1) = 37 -> M = -1
+		ReadArray $125 = #7[0](len = 4) -> M = -1
+		$126 = $125 + 1
+		WriteArray #7[0](len = 4) = $126 -> M = -1
+		ReadArray $98 = #7[0](len = 4) -> M = -1
+		ReadArray $90 = $98[0](len = 1) -> M = -1
+		$127 = $90 == 100
+		NopForBranch $127
+	Vertex~7
+		--> 2
+		ReadArray $128 = #7[0](len = 4) -> M = -1
+		$129 = $128 + 1
+		WriteArray #7[0](len = 4) = $129 -> M = -1
+		Move $83 = $121
+		Move $109 = $122
+	Vertex~15
+		--> 16
+		$130 = -#10
+		$131 = $101 - 1
+		Push 45
+		Call #1
+		Fetch Return: $132
+		Move #10 = $130
+		Move #12 = $131
+	Vertex~25
+		--> 24
+	Vertex~22
+		--> 23
+		--(BEQ 0)--> 25  null
+		NopForBranch #10
+	Vertex~21
+		--> 20
+		Push 48
+		Call #1
+		Fetch Return: $133
+		$134 = $82 - 1
+		Move $82 = $134
+
+CFG of Function #13
+	in = 1, out = 8
+	Vertex~2
+		--> 3
+		--(BEQ 0)--> 7  null
+		$138 = $137 <= 5
+		NopForBranch $138
+	Vertex~4
+		--> 5
+		Move $139 = 3
+	Vertex~5
+		--> 2
+		$140 = $137 + 1
+		Move $137 = $140
+		Move $141 = $139
+	Vertex~7
+		--> 8
+		SetReturn 0
+	Vertex~3
+		--> 4
+		--(BEQ 0)--> 6  null
+		$142 = $137 < $141
+		NopForBranch $142
+	Vertex~6
+		--> 5
+		Move $139 = 1
+	Vertex~8
+	Vertex~1
+		--> 2
+		Def #15
+		Def M
+		Move $137 = 1
+		Move $141 = #15
+

@@ -1,0 +1,98 @@
+Struct & Union:
+Symbols:
+	#1: Variable(name = putchar, type = FunctionType(return = void, parameter = {<int, c>}))
+	#2: Variable(name = getchar, type = FunctionType(return = int, parameter = {}))
+	#3: Variable(name = malloc, type = FunctionType(return = int, parameter = {<int, c>}))
+	#4: Variable(name = ___yzgysjr_lib_putstring, type = FunctionType(return = void, parameter = {<Pointer(char), c>}))
+	#5: Variable(name = ___yzgysjr_lib_putint, type = FunctionType(return = void, parameter = {<int, c>}))
+	#6: Variable(name = printf, type = FunctionType(return = int, parameter = {<Pointer(char), format>}, ...))
+	{
+		Variable(#7, Array[1](Pointer(char)), format)
+		Variable(#8, Pointer(char), ap)
+		Variable(#9, Pointer(char), prev)
+		Variable(#10, int, arg)
+		Variable(#11, int, tmp)
+		Variable(#12, int, len)
+		(= #9 ([] #7 0))
+		(= #8 (+ (CastTo int #7) 4))
+		FOR
+			null
+			([] ([] #7 0) 0)
+			(Prefix ++ ([] #7 0))
+			{
+				IF
+					(== (CastTo int ([] ([] #7 0) 0)) (CastTo int %))
+					{
+						(= ([] ([] #7 0) 0) 0)
+						(Call #4 {#9} {})
+						(= ([] ([] #7 0) 0) %)
+						(Prefix ++ ([] #7 0))
+						IF
+							(== (CastTo int ([] ([] #7 0) 0)) (CastTo int d))
+							(Call #5 {([] (CastTo Pointer(int) (CastTo Pointer(char) (- (CastTo int (= #8 (CastTo Pointer(char) (+ (CastTo int #8) 4)))) 4))) 0)} {})
+							IF
+								(== (CastTo int ([] ([] #7 0) 0)) (CastTo int c))
+								(Call #1 {([] (CastTo Pointer(char) (- (CastTo int (= #8 (CastTo Pointer(char) (+ (CastTo int #8) 4)))) 4)) 0)} {})
+								IF
+									(== (CastTo int ([] ([] #7 0) 0)) (CastTo int s))
+									(Call #4 {([] (CastTo Pointer(Pointer(char)) (CastTo Pointer(char) (- (CastTo int (= #8 (CastTo Pointer(char) (+ (CastTo int #8) 4)))) 4))) 0)} {})
+									{
+										(= #12 (- (CastTo int ([] (Prefix ++ ([] #7 0)) 0)) 48))
+										(Prefix ++ ([] #7 0))
+										(= #10 ([] (CastTo Pointer(int) (CastTo Pointer(char) (- (CastTo int (= #8 (CastTo Pointer(char) (+ (CastTo int #8) 4)))) 4))) 0))
+										IF
+											(< #10 0)
+											{
+												(= #10 (- #10))
+												(Prefix -- #12)
+												(Call #1 {-} {})
+											}
+											null
+										FOR
+											(= #11 #10)
+											#11
+											(= #11 (/ #11 10))
+											(Prefix -- #12)
+										FOR
+											null
+											(> #12 0)
+											(Prefix -- #12)
+											(Call #1 {0} {})
+										IF
+											#10
+											(Call #5 {#10} {})
+											null
+									}
+						(= #9 (CastTo Pointer(char) (+ (CastTo int ([] #7 0)) 1)))
+					}
+					null
+			}
+		(Call #4 {#9} {})
+	}
+	#13: Variable(name = main, type = FunctionType(return = int, parameter = {}))
+	{
+		Variable(#16, int, b)
+		Variable(#17, int, c)
+		Variable(#14, int, i)
+		Variable(#15, int, a)
+		FOR
+			(= #14 1)
+			(<= #14 5)
+			(Prefix ++ #14)
+			{
+				IF
+					(< #14 #15)
+					{
+						(= #15 3)
+						(= #16 2)
+						(= #17 1)
+					}
+					{
+						(= #15 1)
+						(= #16 2)
+						(= #17 3)
+					}
+			}
+		return 0
+	}
+
