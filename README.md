@@ -1,4 +1,4 @@
-Final Fanatic Facility: A Castrated Compiler for C
+Final Fanatic Facility: A Compiler for C
 ===========================
 
 Please see report for detailed description.
